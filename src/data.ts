@@ -14,17 +14,19 @@ export const INITIAL_LISTINGS: Listing[] = [
     weekendPremium: 15,
     cleaningFee: 25000,
     securityDeposit: 150000,
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCli9xKwNM01h_LS2ci3K6e5WmRJ3sSNtgZWv2hP5EfXIM9-bt6ANNqiAcYwrC1om0CPU2BGiTol4cr9QyK70ZVe4T2GKl183txsrANwtrlFD8MLA7ZCOvxvBDe6gefIZqDD54QAStibNCPBlosY6D_tdt-qxJguTfDTBxeJXuTnDqcJoH-3wMY-lXD6qTM_Z4Lr2z3ECb-KDNAecokieCqymRG2vEfXdAUpFph62NxOCj3p5DcWe9BgbkIlMcpw7mKwAAUHBddKh1O",
+    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1000",
     images: [
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCli9xKwNM01h_LS2ci3K6e5WmRJ3sSNtgZWv2hP5EfXIM9-bt6ANNqiAcYwrC1om0CPU2BGiTol4cr9QyK70ZVe4T2GKl183txsrANwtrlFD8MLA7ZCOvxvBDe6gefIZqDD54QAStibNCPBlosY6D_tdt-qxJguTfDTBxeJXuTnDqcJoH-3wMY-lXD6qTM_Z4Lr2z3ECb-KDNAecokieCqymRG2vEfXdAUpFph62NxOCj3p5DcWe9BgbkIlMcpw7mKwAAUHBddKh1O",
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBJ2GGWFNwuBO2JM2bYf-QFEBP5nlp9knwLAIEbuxzj4ld_7CfhmUboRV3Ih7CVn_cIyrr_4X1CctHurZYPJbDxPLcuNMAlgZ8E7GyLfuIZd0L6TiIH6JL4qxE0S6LH3dMbrqgFBA03tV_nv4ZYAyrn6SxvsPQIXQbaDeHNvc4U7p0dKE_MVLgA3pA2eXUVxVCT1kqKk61Iy5V8EtXhKI2oGFsLpYuJKl_0DR9wGJZd3pAuZVlzm1NLpNPC1R-jcDjf_0MBaI235ER6"
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1000",
+      "https://images.unsplash.com/photo-1600566752355-f9baa0245eb7?auto=format&fit=crop&q=80&w=1000"
     ],
     amenities: ["24/7 Power", "Infinity Pool", "Private Chef", "Concierge", "High-Speed Wi-Fi", "Private Gym"],
     ownerId: "emeka-anene",
     isActive: true,
     reviewsCount: 32,
     rating: 4.9,
-    aiMatchPercent: 98
+    aiMatchPercent: 98,
+    createdAt: "2024-01-01T00:00:00Z",
+    updatedAt: "2024-01-01T00:00:00Z"
   },
   {
     id: "lagoon-view-villa",
@@ -39,17 +41,19 @@ export const INITIAL_LISTINGS: Listing[] = [
     weekendPremium: 15,
     cleaningFee: 35000,
     securityDeposit: 250000,
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuC6zhFqIAth02rl8RLgo1AL8t4tKcs3xKf_jgxfbPcHNKqxRbZlhqPp0-bf8uwC-srgxFqYyFQTo9DkruyQZCd6KwohNkAUKKFl6N9RaF4mldR7c-UibrxiUylmPLGrk5TKq4iPgb3b_vPCBhn92R_v44qWXCv92xY3BoQ66qQsRDAQCt66Nef4IfzChQBG-OTg_caLRx30vAym1R96pkaI0fysoFDiejNCCADFc9yF4aK9pMsqvh0N5n5vtssAKzhpeR2xQq2Zch9N",
+    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1000",
     images: [
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuC6zhFqIAth02rl8RLgo1AL8t4tKcs3xKf_jgxfbPcHNKqxRbZlhqPp0-bf8uwC-srgxFqYyFQTo9DkruyQZCd6KwohNkAUKKFl6N9RaF4mldR7c-UibrxiUylmPLGrk5TKq4iPgb3b_vPCBhn92R_v44qWXCv92xY3BoQ66qQsRDAQCt66Nef4IfzChQBG-OTg_caLRx30vAym1R96pkaI0fysoFDiejNCCADFc9yF4aK9pMsqvh0N5n5vtssAKzhpeR2xQq2Zch9N",
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCl531HUrzoxd5qsppge9MY1u4gFm4U5WzK8BUtWenT_MzMJgZK4Jdzh1JqPUmQ4MjSsW9NarG4tljrVBo3SZXa1Df3Qz4ibpQPwIKjKFkTdiLySFUdJV47Y1kplw11rAEJRmr9VcMQuJJevGWAmy0Eegs-wBaKc8bxh5jbk5qPK1E9BW6n1JinVG8K3v9yrl4Sv12ZFrWbXkcFUZrVW0yWIE_1bqY6lTWf-QF3ArfSp-fe2UdCUNCunF8wMvKna4i4sJUpfkztgYOf"
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1000",
+      "https://images.unsplash.com/photo-1600566752355-f9baa0245eb7?auto=format&fit=crop&q=80&w=1000"
     ],
     amenities: ["24/7 Power", "Infinity Pool", "Private Chef", "Concierge", "High-Speed Wi-Fi", "Yacht Access", "Wine Cellar"],
     ownerId: "emeka-anene",
     isActive: true,
     reviewsCount: 18,
     rating: 4.8,
-    aiMatchPercent: 94
+    aiMatchPercent: 94,
+    createdAt: "2024-01-01T00:00:00Z",
+    updatedAt: "2024-01-01T00:00:00Z"
   },
   {
     id: "eko-loft",
@@ -64,17 +68,187 @@ export const INITIAL_LISTINGS: Listing[] = [
     weekendPremium: 10,
     cleaningFee: 15000,
     securityDeposit: 80000,
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDi_cQDOnAzgGcO6_cbASiqCtiJmVs6EL4CDMSQ-3ixfZgB9SGSEAr0ei_YaH9e9AEYhtY7qFlDJn9oRuNkVyMhi6_G4y7v5Zat7F4TrJtlLG9aLvPeKmA-fI962i4cTCw5cVQEfahfe7AyrTQerw1ir4hne3OWPURHNTk2XDCG1XE--IvYMDUiRVC6Tg0NMgGCmiwNNjdfTNqLXpCdq4zjwNcZDPPq5u2IRrgwI55aafFKzPeefuI0PWumocNHp4LFCDcScC2Z8RFf",
+    image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=1000",
     images: [
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDi_cQDOnAzgGcO6_cbASiqCtiJmVs6EL4CDMSQ-3ixfZgB9SGSEAr0ei_YaH9e9AEYhtY7qFlDJn9oRuNkVyMhi6_G4y7v5Zat7F4TrJtlLG9aLvPeKmA-fI962i4cTCw5cVQEfahfe7AyrTQerw1ir4hne3OWPURHNTk2XDCG1XE--IvYMDUiRVC6Tg0NMgGCmiwNNjdfTNqLXpCdq4zjwNcZDPPq5u2IRrgwI55aafFKzPeefuI0PWumocNHp4LFCDcScC2Z8RFf",
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBAeMFOGa4JpdRK7_5LVZqpuKg-VIcEg6j-VvO7nv3XHUh-zq8M_mvYIsH1PCyUsEAJ5jF_cyGl0rFDYNUEuGiMZPyAuCEmEY09WpITALZ4eUxf-Xl7XTaN0kmgacm92FzHK2AYI5UiyNVHr7wGQhAiOrOSFyHKkG-PzlAJoHN7QMjMiQisnWqbtyPmCdBUSZrhsiWoWjbnlz4LUzIreLn7tnXcPhqwZBbvXh6vJxhyJ4BmOic-g8Q8nCWnJkP5_WRPKqkaflu599Dq"
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=1000",
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&q=80&w=1000"
     ],
     amenities: ["24/7 Power", "High-Speed Wi-Fi", "Concierge", "Safety-pact Lock system", "Acoustic Shielding"],
     ownerId: "emeka-anene",
     isActive: true,
     reviewsCount: 45,
     rating: 4.7,
-    aiMatchPercent: 91
+    aiMatchPercent: 91,
+    createdAt: "2024-01-01T00:00:00Z",
+    updatedAt: "2024-01-01T00:00:00Z"
+  },
+  {
+    id: "ekpo-apartment",
+    title: "Ekpo - Luxury 1-Bedroom",
+    description: "Our Unique Studio Bedroom Apartment with Swimming Pool, Smartlock Door, complimentary breakfast, and Gym 😍✨",
+    category: "Serviced Apartment",
+    location: "Lekki Phase 1",
+    bedrooms: 1,
+    bathrooms: 1,
+    maxGuests: 2,
+    nightlyRate: 180000,
+    weekendPremium: 15,
+    cleaningFee: 15000,
+    securityDeposit: 50000,
+    image: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80&w=1000",
+    images: ["https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80&w=1000"],
+    amenities: ["24/7 Power Supply", "Treated Water Supply", "High-Profile Security", "Unlimited Internet", "DSTV & Netflix", "Housekeeping Service", "Swimming Pool", "Fully Equipped Gym"],
+    ownerId: "emeka-anene",
+    isActive: true,
+    reviewsCount: 12,
+    rating: 4.8,
+    aiMatchPercent: 95,
+    createdAt: "2024-01-01T00:00:00Z",
+    updatedAt: "2024-01-01T00:00:00Z"
+  },
+  {
+    id: "whitestone-2br",
+    title: "Whitestone - Luxury 2BR",
+    description: "Luxury 2bedroom Apartment with swimming pool",
+    category: "Luxury Villa",
+    location: "Lekki Phase 1",
+    bedrooms: 2,
+    bathrooms: 2,
+    maxGuests: 4,
+    nightlyRate: 270000,
+    weekendPremium: 15,
+    cleaningFee: 20000,
+    securityDeposit: 100000,
+    image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=1000",
+    images: ["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=1000"],
+    amenities: ["Swimming Pool", "Luxury Living"],
+    ownerId: "emeka-anene",
+    isActive: true,
+    reviewsCount: 8,
+    rating: 4.7,
+    aiMatchPercent: 90,
+    createdAt: "2024-01-01T00:00:00Z",
+    updatedAt: "2024-01-01T00:00:00Z"
+  },
+  {
+    id: "maisonette-lekki",
+    title: "Lekki Maisonette",
+    description: "Newly opened 2bedroom Maisonette apartment Located at off freedom way babalola garden street",
+    category: "Serviced Apartment",
+    location: "Lekki Phase 1",
+    bedrooms: 2,
+    bathrooms: 2,
+    maxGuests: 4,
+    nightlyRate: 210000,
+    weekendPremium: 10,
+    cleaningFee: 25000,
+    securityDeposit: 120000,
+    image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&q=80&w=1000",
+    images: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&q=80&w=1000"],
+    amenities: ["Gated and Secured Estate", "24-hour Electricity", "24-hour Safety & Security", "Guest Parking Space", "Smart TV & Netflix", "Superfast Internet", "standard gym house", "Standard Swimming Pool", "standard outdoor table tennis", "Chef on request", "Spacious Living Areas & Private Balcony", "High-Quality Bedding and Linens", "Washing Machine", "Bespoke Interior Decoration", "Netflix", "Prime video", "Elevator", "Ps5", "Cleaning services"],
+    ownerId: "emeka-anene",
+    isActive: true,
+    reviewsCount: 5,
+    rating: 4.9,
+    aiMatchPercent: 97,
+    createdAt: "2024-01-01T00:00:00Z",
+    updatedAt: "2024-01-01T00:00:00Z"
+  },
+  {
+    id: "victoria-penthouse",
+    title: "Victoria Penthouse",
+    description: "Luxury 3 bedroom penthouse with cinema",
+    category: "Penthouse",
+    location: "Victoria Island",
+    bedrooms: 3,
+    bathrooms: 3.5,
+    maxGuests: 6,
+    nightlyRate: 380000,
+    weekendPremium: 20,
+    cleaningFee: 30000,
+    securityDeposit: 200000,
+    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1000",
+    images: ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1000"],
+    amenities: ["Gated and Secured Estate", "24/7 Power Supply", "Serene environment", "Smart Lock", "Very fast internet", "Netflix / YouTube / Dstv", "Snooker Board", "Swimming pool", "Gym", "En-suite room with Balcony", "Cinema", "Ocean/ Cite view", "Daily housekeeping", "Dedicated car park space", "Equipped kitchen", "Washing Machine", "Tastefully furnished"],
+    ownerId: "emeka-anene",
+    isActive: true,
+    reviewsCount: 22,
+    rating: 5.0,
+    aiMatchPercent: 99,
+    createdAt: "2024-01-01T00:00:00Z",
+    updatedAt: "2024-01-01T00:00:00Z"
+  },
+  {
+    id: "oniru-serviced-1br",
+    title: "Oniru Serviced Apartment",
+    description: "A fully furnished 1 bedroom serviced apartment",
+    category: "Serviced Apartment",
+    location: "Victoria Island",
+    bedrooms: 1,
+    bathrooms: 1,
+    maxGuests: 2,
+    nightlyRate: 180000,
+    weekendPremium: 10,
+    cleaningFee: 10000,
+    securityDeposit: 40000,
+    image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=1000",
+    images: ["https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=1000"],
+    amenities: ["24/7 Power supply", "24/7 Treated water supply", "24/7 High profile security", "Highspeed broadband internet", "Netflix", "Smart TV's", "DSIV", "Housekeeping"],
+    ownerId: "emeka-anene",
+    isActive: true,
+    reviewsCount: 15,
+    rating: 4.6,
+    aiMatchPercent: 92,
+    createdAt: "2024-01-01T00:00:00Z",
+    updatedAt: "2024-01-01T00:00:00Z"
+  },
+  {
+    id: "cozy-2br-admiralty",
+    title: "Cozy Admiralty 2BR",
+    description: "Cozy 2bedroom apartment Available Today admiralty lekki phase1",
+    category: "Serviced Apartment",
+    location: "Lekki Phase 1",
+    bedrooms: 2,
+    bathrooms: 2,
+    maxGuests: 4,
+    nightlyRate: 190000,
+    weekendPremium: 15,
+    cleaningFee: 15000,
+    securityDeposit: 70000,
+    image: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80&w=1000",
+    images: ["https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80&w=1000"],
+    amenities: ["24/7 Electricity", "Smart TVs", "24/7 security", "Estate pool and gym", "Board games", "Fully equipped and fitted kitchen", "Dedicated fiber internet", "Washing machine", "Cooking spices", "Smart lock", "Fully Air-conditioned home", "Clean running water", "Elevators", "Yoga mat", "Work table and chair", "Pool toys"],
+    ownerId: "emeka-anene",
+    isActive: true,
+    reviewsCount: 28,
+    rating: 4.8,
+    aiMatchPercent: 94,
+    createdAt: "2024-01-01T00:00:00Z",
+    updatedAt: "2024-01-01T00:00:00Z"
+  },
+  {
+    id: "luxury-2br-admiralty",
+    title: "Admiralty Luxury 2BR",
+    description: "Luxury 2bedroom apartment admiralty lekki 1 available",
+    category: "Luxury Villa",
+    location: "Lekki Phase 1",
+    bedrooms: 2,
+    bathrooms: 2,
+    maxGuests: 4,
+    nightlyRate: 240000,
+    weekendPremium: 15,
+    cleaningFee: 20000,
+    securityDeposit: 100000,
+    image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=1000",
+    images: ["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=1000"],
+    amenities: ["Gated and Secured Estate", "Superfast WiFi", "24/7 Power Supply", "24/7 Security", "Swimming pool", "Smart TVs", "En-suite rooms", "Housekeeping", "Chef on demand", "Dedicated car park", "Fully equipped kitchen", "Washing machine", "Balcony sit out", "Tastefully furnished"],
+    ownerId: "emeka-anene",
+    isActive: true,
+    reviewsCount: 19,
+    rating: 4.9,
+    aiMatchPercent: 96,
+    createdAt: "2024-01-01T00:00:00Z",
+    updatedAt: "2024-01-01T00:00:00Z"
   }
 ];
 
@@ -93,7 +267,10 @@ export const INITIAL_BOOKINGS: Booking[] = [
     totalAmount: 3150000,
     chefAdded: true,
     photographerAdded: false,
-    jetskiAdded: true
+    jetskiAdded: true,
+    services: [],
+    createdAt: "2024-01-01T00:00:00Z",
+    updatedAt: "2024-01-01T00:00:00Z"
   },
   {
     id: "booking-02",
@@ -108,7 +285,11 @@ export const INITIAL_BOOKINGS: Booking[] = [
     status: "Pending",
     totalAmount: 3900000,
     chefAdded: true,
-    photographerAdded: true
+    photographerAdded: true,
+    jetskiAdded: false,
+    services: [],
+    createdAt: "2024-01-01T00:00:00Z",
+    updatedAt: "2024-01-01T00:00:00Z"
   },
   {
     id: "booking-03",
@@ -122,7 +303,12 @@ export const INITIAL_BOOKINGS: Booking[] = [
     guestsCount: 2,
     status: "Confirmed",
     totalAmount: 750000,
-    chefAdded: false
+    chefAdded: false,
+    photographerAdded: false,
+    jetskiAdded: false,
+    services: [],
+    createdAt: "2024-01-01T00:00:00Z",
+    updatedAt: "2024-01-01T00:00:00Z"
   }
 ];
 
@@ -134,7 +320,9 @@ export const INITIAL_TRANSACTIONS: Transaction[] = [
     type: "Booking Revenue",
     amount: 1200000,
     status: "Processed",
-    description: "Lagoon View Villa booking - Sarah Jenkins"
+    description: "Lagoon View Villa booking - Sarah Jenkins",
+    userId: "emeka-anene",
+    createdAt: "2024-01-01T00:00:00Z"
   },
   {
     id: "tx-02",
@@ -143,7 +331,9 @@ export const INITIAL_TRANSACTIONS: Transaction[] = [
     type: "Payout",
     amount: -2500000,
     status: "Processed",
-    description: "GTBank withdrawal to account ending in **3492"
+    description: "GTBank withdrawal to account ending in **3492",
+    userId: "emeka-anene",
+    createdAt: "2024-01-01T00:00:00Z"
   },
   {
     id: "tx-03",
@@ -152,7 +342,9 @@ export const INITIAL_TRANSACTIONS: Transaction[] = [
     type: "Booking Revenue",
     amount: 3150000,
     status: "Processed",
-    description: "The Bourdillon Penthouse booking - Alexander Sterling"
+    description: "The Bourdillon Penthouse booking - Alexander Sterling",
+    userId: "emeka-anene",
+    createdAt: "2024-01-01T00:00:00Z"
   },
   {
     id: "tx-04",
@@ -161,7 +353,9 @@ export const INITIAL_TRANSACTIONS: Transaction[] = [
     type: "Booking Revenue",
     amount: 450000,
     status: "Processed",
-    description: "The Eko Loft booking - Amina Alabi"
+    description: "The Eko Loft booking - Amina Alabi",
+    userId: "emeka-anene",
+    createdAt: "2024-01-01T00:00:00Z"
   }
 ];
 

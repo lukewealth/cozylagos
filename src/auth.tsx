@@ -18,6 +18,42 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const DEMO_USERS: UserRecord[] = [
   {
+    id: 'user-001',
+    email: 'lukeokagha@gmail.com',
+    name: 'Luke Okagha',
+    role: 'user',
+    avatar: 'https://ui-avatars.com/api/?name=Luke+Okagha&background=random',
+    phone: '+234 801 234 5678',
+    verified: true,
+    createdAt: '2024-01-15T10:00:00Z',
+    lastLogin: new Date().toISOString(),
+    loyaltyPoints: 12450
+  },
+  {
+    id: 'admin-001',
+    email: 'contact@tricode.pro',
+    name: 'Tricode Admin',
+    role: 'admin',
+    avatar: 'https://ui-avatars.com/api/?name=Tricode+Admin&background=random',
+    phone: '+234 803 456 7890',
+    verified: true,
+    createdAt: '2023-12-01T09:00:00Z',
+    lastLogin: new Date().toISOString(),
+    loyaltyPoints: 25000
+  },
+  {
+    id: 'superadmin-001',
+    email: 'luke.o@tricode.pro',
+    name: 'Luke O.',
+    role: 'super_admin',
+    avatar: 'https://ui-avatars.com/api/?name=Luke+O&background=random',
+    phone: '+234 800 000 0000',
+    verified: true,
+    createdAt: '2023-01-01T00:00:00Z',
+    lastLogin: new Date().toISOString(),
+    loyaltyPoints: 99999
+  },
+  {
     id: 'guest-001',
     email: 'guest@cozylagos.ng',
     name: 'Alexander Sterling',
@@ -30,30 +66,6 @@ const DEMO_USERS: UserRecord[] = [
     loyaltyPoints: 12450
   },
   {
-    id: 'user-001',
-    email: 'user@cozylagos.ng',
-    name: 'Chuka Obi',
-    role: 'user',
-    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB9Lh8rkEuZ0WtuwD5WIDKt8X-Rcw_hkbPJc4me77k4fCkgvj7bw8uS_oG_i5TwGhETMSGEO8280C-iff0nUzjqzM2S4kHFg5mbfWBJzan8ih4yEEtAdcVG3RBSr9E2D2cIGqu5JReEW10IA7NXk6IzHsmjKVrqjjVOlp8L8uCHSQF6kvoikGM4EOodrcn2VvxVlXT3MdMLy4uqFdnqsmxEB_PvwDpzjr1euEh0V68xjDrRvmA70yqiRTMfrAJUIC9aGARCX0VHZCK',
-    phone: '+234 802 345 6789',
-    verified: true,
-    createdAt: '2024-02-20T14:30:00Z',
-    lastLogin: new Date().toISOString(),
-    loyaltyPoints: 8200
-  },
-  {
-    id: 'admin-001',
-    email: 'admin@cozylagos.ng',
-    name: 'Emeka Anene',
-    role: 'admin',
-    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuChO__jpr70PBuRfnq-BQBd5gWupLLFUTveVncrizosRGPnEKwyHQoENzgCg9lwfnKYOEM7t7cKhrxteYnQmMCPCT6fQiQhw0t5x_oyWaDcgpF6YVWQbFEqVsbRYkLo5jeNWRChx-mVO8ogBC_FOKOHv6-xLWrZeGqBTzy9SST378Rfx0ud7ubpuCc9pG_6KQSvtogIK9kbjtONB7EkpsMQcX3gIGzOMqtwgdxiG_aXaJN_AYuzaZ_bhvFIN5-cXDVzxd9AW4Sl1pM2',
-    phone: '+234 803 456 7890',
-    verified: true,
-    createdAt: '2023-12-01T09:00:00Z',
-    lastLogin: new Date().toISOString(),
-    loyaltyPoints: 25000
-  },
-  {
     id: 'provider-001',
     email: 'chef@cozylagos.ng',
     name: 'Chef Adaeze',
@@ -64,18 +76,6 @@ const DEMO_USERS: UserRecord[] = [
     createdAt: '2024-03-10T11:15:00Z',
     lastLogin: new Date().toISOString(),
     loyaltyPoints: 5600
-  },
-  {
-    id: 'superadmin-001',
-    email: 'superadmin@cozylagos.ng',
-    name: 'System Administrator',
-    role: 'super_admin',
-    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDx15JuvuMcDijKEA4B_8Byjpib6fMI0fFxbYNjGPlhYAmDWvMdQMnX_byTMGQod-bhOYO4sugMfBPzJcWxb18Bmql8ORNoXufqWmoeBxtHTbACjeGG_PLhXiHkFL2osEeAHCx3O-SMpXLi_x1k6m7U63tChmAPXFuSi8NBKZZRkEVk2H9wgx0RHOtyObOSAqG24z8-V2mImw29UWFWmSYElo66Yb3acIv983sY8rqYphNg18jA9VNHTqWG9_nxNvLH1FbtnxRmPijH',
-    phone: '+234 800 000 0000',
-    verified: true,
-    createdAt: '2023-01-01T00:00:00Z',
-    lastLogin: new Date().toISOString(),
-    loyaltyPoints: 99999
   }
 ];
 

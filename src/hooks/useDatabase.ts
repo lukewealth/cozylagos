@@ -31,10 +31,19 @@ export function useDatabase<T extends keyof DBSchema>(storeName: T) {
     notifyListeners(storeName);
   };
 
+  const updateRecord = async (id: string, record: Partial<DBSchema[T]>) => {
+    const current = await dbGetAll(storeName);
+    const existing = current.find(item => (item as any).id === id);
+    if (existing) {
+      await dbPut(storeName, { ...existing, ...record } as DBSchema[T]);
+      notifyListeners(storeName);
+    }
+  };
+
   const removeRecord = async (id: string) => {
     await dbDelete(storeName, id);
     notifyListeners(storeName);
   };
 
-  return { data, loading, addRecord, removeRecord, refresh: fetchData };
+  return { data, loading, addRecord, updateRecord, removeRecord, refresh: fetchData };
 }
