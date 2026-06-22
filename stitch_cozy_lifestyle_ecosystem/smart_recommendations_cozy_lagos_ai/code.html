@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Élite Lagos - Smart Recommendations</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed-variant": "#574500",
+                      "tertiary": "#625e56",
+                      "surface-dim": "#dadad9",
+                      "on-surface": "#1a1c1c",
+                      "surface-container-low": "#f4f3f2",
+                      "surface-container": "#eeeeed",
+                      "surface-variant": "#e3e2e1",
+                      "secondary-fixed": "#e5e2e1",
+                      "outline": "#7f7663",
+                      "inverse-surface": "#2f3130",
+                      "primary-fixed-dim": "#e9c349",
+                      "on-secondary-fixed": "#1c1b1b",
+                      "on-error": "#ffffff",
+                      "on-secondary-fixed-variant": "#474746",
+                      "secondary": "#5f5e5e",
+                      "tertiary-container": "#b8b2a9",
+                      "surface-container-highest": "#e3e2e1",
+                      "surface-bright": "#faf9f8",
+                      "tertiary-fixed-dim": "#ccc6bc",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed": "#e8e2d8",
+                      "on-tertiary-container": "#48453e",
+                      "on-error-container": "#93000a",
+                      "primary-container": "#d4af37",
+                      "on-tertiary-fixed": "#1e1b15",
+                      "on-primary-container": "#554300",
+                      "on-primary-fixed": "#241a00",
+                      "surface": "#faf9f8",
+                      "secondary-fixed-dim": "#c8c6c5",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-container": "#636262",
+                      "on-surface-variant": "#4d4635",
+                      "inverse-primary": "#e9c349",
+                      "error-container": "#ffdad6",
+                      "primary": "#735c00",
+                      "primary-fixed": "#ffe088",
+                      "on-background": "#1a1c1c",
+                      "on-tertiary-fixed-variant": "#4a463f",
+                      "error": "#ba1a1a",
+                      "surface-container-high": "#e9e8e7",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#e2dfde",
+                      "inverse-on-surface": "#f1f0f0",
+                      "on-primary": "#ffffff",
+                      "background": "#faf9f8",
+                      "surface-tint": "#735c00",
+                      "outline-variant": "#d0c5af"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-md": "32px",
+                      "gutter": "32px",
+                      "container-padding": "80px",
+                      "unit": "8px",
+                      "section-gap": "120px",
+                      "stack-lg": "64px",
+                      "stack-sm": "16px"
+              },
+              "fontFamily": {
+                      "headline-sm": ["Playfair Display"],
+                      "headline-lg": ["Playfair Display"],
+                      "body-md": ["Manrope"],
+                      "headline-lg-mobile": ["Playfair Display"],
+                      "label-caps": ["Manrope"],
+                      "display-lg": ["Playfair Display"],
+                      "body-lg": ["Manrope"],
+                      "headline-md": ["Playfair Display"]
+              },
+              "fontSize": {
+                      "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                      "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "500"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        /* Custom scrollbar for horizontal scrollers */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0px 20px 50px rgba(26, 26, 26, 0.05);
+        }
+        
+        .masonry-grid {
+            column-count: 1;
+            column-gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .masonry-grid {
+                column-count: 2;
+            }
+        }
+        @media (min-width: 1280px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex">
+<!-- Side Navigation (Web) -->
+<nav class="hidden md:flex h-screen w-80 fixed left-0 top-0 flex-col bg-surface dark:bg-inverse-surface text-primary dark:text-primary-fixed-dim font-body-md text-body-md bg-surface-container-low dark:bg-inverse-surface shadow-[20px_0px_50px_rgba(26,26,26,0.05)] border-r border-outline-variant/10 p-stack-sm z-50">
+<div class="mb-stack-lg mt-stack-sm px-4">
+<h1 class="font-display-lg text-headline-sm text-primary tracking-tighter">Élite Lagos</h1>
+</div>
+<div class="mb-stack-md px-4 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary-container shrink-0">
+<img alt="User profile portrait" class="w-full h-full object-cover" data-alt="A sophisticated portrait of a high-net-worth individual, dressed casually but elegantly in neutral tones, looking thoughtfully into the distance. Bright, high-key lighting emphasizing a modern, luxurious aesthetic. Professional photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqEv6-Deo-HpVyLhIe4tjXykPOzh92CSSlvRdKbgkGcGYhvUL1kKOWsMXyawCa9N2Gbh7ZPMDpfypYvs0OFK9nKNNHw6X7Ij2PwmS8EWwbQYhpbaxv50_HekjV26Q0CNY_mcSyc937U8Q0msd4_eRsrpVa2HAUl8AQJ5dFFDcmk_1d-H5UZmh00_oYwLTKfTpKIICI72tvaQGdsWFKmu2eUx5dxJACZbohMSAwcvejRMmU5zz3Juqb9satcaPLcV3qIECl88AWKgnP"/>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm text-on-surface">Welcome, Kunle</div>
+<div class="text-primary text-sm font-semibold">Gold Member Status</div>
+</div>
+</div>
+<button class="mb-stack-md mx-4 bg-primary-container text-on-primary-container rounded-xl py-3 px-4 font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+            Book New Experience
+        </button>
+<ul class="flex-1 space-y-2">
+<li>
+<a class="flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container rounded-xl font-bold active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">auto_awesome</span>
+                    Concierge
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-xl transition-all hover:pl-6 duration-300 ease-in-out active:scale-95" href="#">
+<span class="material-symbols-outlined">domain</span>
+                    Properties
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-xl transition-all hover:pl-6 duration-300 ease-in-out active:scale-95" href="#">
+<span class="material-symbols-outlined">diamond</span>
+                    Experiences
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-xl transition-all hover:pl-6 duration-300 ease-in-out active:scale-95" href="#">
+<span class="material-symbols-outlined">event_note</span>
+                    Itinerary
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-xl transition-all hover:pl-6 duration-300 ease-in-out active:scale-95" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+</li>
+</ul>
+<div class="mt-auto pt-4 border-t border-outline-variant/20">
+<ul class="space-y-2">
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-xl transition-all hover:pl-6 duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+                        Support
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-xl transition-all hover:pl-6 duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">logout</span>
+                        Logout
+                    </a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Top Navigation (Mobile) -->
+<header class="md:hidden w-full bg-surface/80 dark:bg-inverse-surface/80 text-primary dark:text-primary-fixed-dim font-headline-sm text-headline-sm docked full-width top-0 sticky backdrop-blur-xl border-b border-outline-variant/20 shadow-sm flex justify-between items-center px-4 py-4 z-50">
+<div class="font-display-lg text-headline-md tracking-tighter text-primary dark:text-primary-fixed-dim">Élite Lagos</div>
+<div class="flex gap-4">
+<button class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300 cursor-pointer active:opacity-70">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300 cursor-pointer active:opacity-70">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-80 w-full min-h-screen bg-surface-bright pb-24 md:pb-0">
+<!-- Header Section -->
+<section class="px-4 md:px-container-padding py-stack-lg md:py-section-gap relative overflow-hidden">
+<div class="max-w-4xl mx-auto relative z-10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant tracking-widest uppercase">Concierge Recommendations</span>
+</div>
+<h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-on-surface mb-6">Hidden Gems of Lagos</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Curated exclusively for you, Kunle. Based on your recent preference for contemporary art and intimate dining, I've selected a few off-market experiences you might enjoy this weekend.</p>
+</div>
+<!-- Decorative blur element -->
+<div class="absolute top-0 right-0 w-96 h-96 bg-primary-container/10 rounded-full blur-[100px] -z-0"></div>
+</section>
+<!-- Horizontal Scroller: Editor's Picks -->
+<section class="pl-4 md:pl-container-padding mb-section-gap">
+<div class="flex justify-between items-end pr-4 md:pr-container-padding mb-stack-md">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Curated for You</h2>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:border-primary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<button class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:border-primary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="flex overflow-x-auto gap-6 pb-8 pr-4 md:pr-container-padding hide-scrollbar snap-x snap-mandatory">
+<!-- Card 1 -->
+<div class="min-w-[300px] md:min-w-[400px] w-[80vw] md:w-[400px] snap-center shrink-0 group cursor-pointer">
+<div class="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-4">
+<img alt="Private Gallery" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" data-alt="A highly detailed, editorial-style photograph of a modern, minimalist art gallery in Lagos. The space is illuminated by soft, natural light filtering through sheer curtains. White walls, sleek wooden floors, and a few striking contemporary abstract paintings. Warm, welcoming, high-end lifestyle aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCE5jIrouRIMBui-sQU2tueAD1A-FtQNUC9-OZpPX3zC9Ng31LRJ78G3KQezvuDSMTmaZTpklJbPap18D1N54PnIMqBDCkc7BAJy8IP3uF3Ub1t3HmPNVggtrYqglnfeB46IAE6qDPP_7vq-vIruinrMHsrYlC0crqVnzrs3Y_RgaGTmj9Ms2wL9litFmR8CKtrvulm6T_-paIKvSd0SAE4WqQMjdiPZEf2l3H_2Hptf-ZdPJ1ZiJkracA34kFUqzJq2pW0Dx9wxhg6"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute top-4 left-4 bg-surface/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span class="font-label-caps text-label-caps text-on-surface uppercase">Private Gallery Access</span>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl -mt-20 relative z-10 mx-4">
+<h3 class="font-headline-md text-[24px] text-on-surface mb-2">Nike Art Gallery: After Hours</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 line-clamp-2">A private, guided tour of the new contemporary wing, accompanied by champagne and a meet-and-greet with the curator.</p>
+<div class="flex items-start gap-3 bg-surface-container-low p-3 rounded-lg">
+<div class="w-8 h-8 rounded-full bg-primary-container/20 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<p class="font-body-md text-sm text-on-surface-variant italic">"Since you enjoy contemporary art, this exclusive access avoids the crowds and offers a deeper dive into the local scene."</p>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="min-w-[300px] md:min-w-[400px] w-[80vw] md:w-[400px] snap-center shrink-0 group cursor-pointer">
+<div class="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-4">
+<img alt="Secret Dining" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" data-alt="A sophisticated, dimly lit speakeasy or private dining room in Lagos. Rich mahogany wood, subtle gold accents, and warm ambient lighting from low-hanging designer pendants. A beautifully plated modern African dish sits on a dark marble table. High contrast, cinematic lighting, luxury lifestyle aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvmTJEhvPGualLN7PkVlki9Wo6BTkfI2UTDH7xehk8eK05g254LWv42PKAgWU3om_gW7R2kJkCi6ropLontyelZSUacP0LhFEZCPtL8KzcpJkrEttq8i2clOMMUJxr13WhALPQP1buI6lblCgaWqq3ybllp_X5D_4qrrFdNULAq5ejg5z592Vj3VcE1Nf9VdbiXgZn11jnfEOtDs0TAXeuKXO6DSqnp0kMRhLnLlsDYJsoxpGlWeehwlE3T2OyH4mB_CQuYvN-z27w"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute top-4 left-4 bg-surface/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span class="font-label-caps text-label-caps text-on-surface uppercase">Secret Dining</span>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl -mt-20 relative z-10 mx-4">
+<h3 class="font-headline-md text-[24px] text-on-surface mb-2">Chef Tolu's Test Kitchen</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 line-clamp-2">An unlisted 8-course tasting menu hosted in a restored colonial-era townhouse in Ikoyi.</p>
+<div class="flex items-start gap-3 bg-surface-container-low p-3 rounded-lg">
+<div class="w-8 h-8 rounded-full bg-primary-container/20 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<p class="font-body-md text-sm text-on-surface-variant italic">"I noticed you prefer intimate dining settings. This invitation-only pop-up aligns perfectly with your taste for experimental cuisine."</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Masonry Grid: Discovery -->
+<section class="px-4 md:px-container-padding mb-section-gap">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-stack-md">Explore Categories</h2>
+<div class="flex flex-wrap gap-3 mb-stack-lg">
+<button class="px-6 py-2 rounded-full bg-primary-container text-on-primary-container font-label-caps text-label-caps uppercase tracking-widest border border-primary-container">All</button>
+<button class="px-6 py-2 rounded-full bg-transparent text-on-surface-variant font-label-caps text-label-caps uppercase tracking-widest border border-outline-variant hover:border-primary transition-colors">Exclusive Events</button>
+<button class="px-6 py-2 rounded-full bg-transparent text-on-surface-variant font-label-caps text-label-caps uppercase tracking-widest border border-outline-variant hover:border-primary transition-colors">Wellness Retreats</button>
+<button class="px-6 py-2 rounded-full bg-transparent text-on-surface-variant font-label-caps text-label-caps uppercase tracking-widest border border-outline-variant hover:border-primary transition-colors">Yacht Access</button>
+</div>
+<div class="masonry-grid">
+<!-- Masonry Item 1 (Tall) -->
+<div class="masonry-item group cursor-pointer relative rounded-2xl overflow-hidden bg-surface-container-low border border-outline-variant/20 shadow-sm hover:shadow-md transition-shadow">
+<div class="aspect-[3/4] w-full">
+<img alt="Yacht Party" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A breathtaking view from a luxury superyacht navigating the coastal waters of Lagos at sunset. The sky is painted in rich hues of orange and pink. The deck features sleek, modern white furniture and subtle glowing ambient lights. High-end, aspirational lifestyle imagery." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUMXRTnwoK534sjOG3iUHZTpL5bihMmsZENsEN44Nuo6_EyZMI0GJRTZdItsyEiGB0yDRY31IAB5qcl1GE_9nm-fpPwUAYgBUM-L6xY1NRNTGyPlPSPuOUn4rnbii3Axc24f38ZPkp31VkxQvt0AtEM5K3c1UM0MTW3XHdHgjnvKgqMPc7u-uWqXFZOgeRlPnA3YSMrB7XzPNp3p88OXCMO8f-7saVOzWQn9RhJKdaMyNZpqBXQqqYro-ABJFmoCF5lxUS78qTIKij"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
+<div class="mb-2">
+<span class="font-label-caps text-label-caps text-white/80 uppercase tracking-widest">Exclusive Events</span>
+</div>
+<h3 class="font-headline-md text-[24px] text-white mb-2">Tarkwa Bay Sunset Sail</h3>
+<p class="font-body-md text-white/80 mb-4 line-clamp-2">Join a select group for an evening of champagne and live jazz aboard a 60ft catamaran.</p>
+<button class="self-start text-primary-fixed-dim flex items-center gap-2 font-semibold hover:gap-3 transition-all">
+                            View Details <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Masonry Item 2 (Square) -->
+<div class="masonry-item group cursor-pointer relative rounded-2xl overflow-hidden bg-surface-container-low border border-outline-variant/20 shadow-sm hover:shadow-md transition-shadow">
+<div class="aspect-square w-full">
+<img alt="Wellness Retreat" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A serene, minimalist wellness spa interior in Lagos. Natural textures, bamboo details, and gentle cascading water features. Soft, diffused lighting creating a calming, restorative atmosphere. A luxury retreat aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgwpGXwxxrhrbXDITkRHVQ-H6DC3B-0vwdQ8yJRRZjS9hVu7uUeU6zgzS5E0dmTg-pekfRo8wzGi5016W5ORdzQwULZDhjl5Tx7X1uqk1o6p_kCZKnD28ulli2Nq2FronhBLNEQJVshGeRKfaghP5Y1utnSs2EwiC1bZzbDHfkZ4Qsp4ZCnB0KLfDxha5XzHSuMAcNZQpBpKK6FgY7h62sf_7zHQBzXgGNcMwa7komT41S_uTRM6s-JVgOakG1MF3zdZnZUVmSoI4P"/>
+</div>
+<div class="glass-panel absolute bottom-4 left-4 right-4 p-4 rounded-xl">
+<div class="mb-1">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Wellness Retreats</span>
+</div>
+<h3 class="font-headline-sm text-[18px] text-on-surface mb-1">Eko Sound Bath Therapy</h3>
+<p class="font-body-md text-sm text-on-surface-variant line-clamp-1">A private restorative session overlooking the lagoon.</p>
+</div>
+</div>
+<!-- Masonry Item 3 (Square) -->
+<div class="masonry-item group cursor-pointer relative rounded-2xl overflow-hidden bg-surface-container-low border border-outline-variant/20 shadow-sm hover:shadow-md transition-shadow">
+<div class="aspect-[4/3] w-full">
+<img alt="Private Shopping" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A high-end, modern boutique showcasing bespoke African fashion in Lagos. Clean lines, warm lighting, and elegant displays of meticulously crafted garments. A sophisticated retail environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDm6NvLa1EA9b9_jwD1ikzOXaP9b9KbsSz0jkqDtymzQQb6MA62o-hW_IRuWP01sLrQyHmqqa3oCrE0M1JBGPSQ0Rgz4P0DhO56tHMauwxfPmGTmRYFK21ZKA_iZQNo8aq3eRjwOFy69m13LkJcLh_mP-Trrn3RzUL0ZqPLhROPaSuAGth-MCWdcguOSQ_cS_HnlqbnteJJwWAJwK3UFd8dCis2qK2IW54Rol9SJHA8LQ0NB9Pa44BTld6N4-EpIaN2UlESly-pg_FW"/>
+</div>
+<div class="glass-panel absolute bottom-4 left-4 right-4 p-4 rounded-xl">
+<div class="mb-1">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Private Gallery Access</span>
+</div>
+<h3 class="font-headline-sm text-[18px] text-on-surface mb-1">Alára VIP Shopping</h3>
+<p class="font-body-md text-sm text-on-surface-variant line-clamp-1">After-hours access with a personal stylist.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full bg-surface border-t border-outline-variant/20 flex justify-around items-center py-3 px-4 z-50 pb-safe shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center gap-1 text-primary font-bold" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-[10px]">Concierge</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="text-[10px]">Properties</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">diamond</span>
+<span class="text-[10px]">Experiences</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="text-[10px]">Itinerary</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px]">Settings</span>
+</a>
+</nav>
+</body></html>

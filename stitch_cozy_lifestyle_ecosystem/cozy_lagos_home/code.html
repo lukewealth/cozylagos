@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cozy Lagos - Luxury Lifestyle</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&amp;family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-primary-fixed-variant": "#574500",
+                        "secondary": "#5f5e5e",
+                        "on-primary-fixed": "#241a00",
+                        "on-tertiary-fixed-variant": "#4a463f",
+                        "on-surface-variant": "#4d4635",
+                        "inverse-primary": "#e9c349",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#625e56",
+                        "tertiary-container": "#b8b2a9",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-tertiary-container": "#48453e",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#faf9f8",
+                        "surface-variant": "#e3e2e1",
+                        "on-secondary-container": "#636262",
+                        "secondary-container": "#e2dfde",
+                        "surface-container-low": "#f4f3f2",
+                        "tertiary-fixed-dim": "#ccc6bc",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#dadad9",
+                        "primary-fixed": "#ffe088",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "outline": "#7f7663",
+                        "on-primary-container": "#554300",
+                        "outline-variant": "#d0c5af",
+                        "tertiary-fixed": "#e8e2d8",
+                        "on-background": "#1a1c1c",
+                        "on-error": "#ffffff",
+                        "surface-container": "#eeeeed",
+                        "surface": "#faf9f8",
+                        "background": "#faf9f8",
+                        "on-tertiary-fixed": "#1e1b15",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#735c00",
+                        "primary": "#735c00",
+                        "surface-container-high": "#e9e8e7",
+                        "inverse-surface": "#2f3130",
+                        "on-secondary-fixed-variant": "#474746",
+                        "primary-container": "#d4af37",
+                        "surface-container-highest": "#e3e2e1",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f1f0f0",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#e9c349"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "stack-md": "32px",
+                        "unit": "8px",
+                        "stack-lg": "64px",
+                        "container-padding": "80px",
+                        "stack-sm": "16px",
+                        "section-gap": "120px",
+                        "gutter": "32px"
+                    },
+                    fontFamily: {
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-sm": ["Playfair Display"],
+                        "body-lg": ["Manrope"],
+                        "headline-lg": ["Playfair Display"],
+                        "label-caps": ["Manrope"],
+                        "body-md": ["Manrope"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    fontSize: {
+                        "headline-lg-mobile": ["36px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "headline-sm": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["48px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .lux-shadow {
+            box-shadow: 0px 20px 50px rgba(26, 26, 26, 0.08);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="antialiased font-body-md text-body-md">
+<!-- TopNavBar -->
+<nav class="bg-surface/80 backdrop-blur-xl dark:bg-inverse-surface/80 docked full-width top-0 sticky border-b border-outline-variant/20 dark:border-outline/20 shadow-sm z-50">
+<div class="flex justify-between items-center w-full px-5 md:px-container-padding max-w-[1440px] mx-auto h-20">
+<a class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight" href="#">
+                Cozy Lagos
+            </a>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors font-label-caps text-label-caps uppercase" href="#">Apartments</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors font-label-caps text-label-caps uppercase" href="#">Experiences</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors font-label-caps text-label-caps uppercase" href="#">Services</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors font-label-caps text-label-caps uppercase" href="#">Concierge</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden md:flex items-center justify-center w-10 h-10 rounded-full hover:bg-primary/5 dark:hover:bg-inverse-primary/5 transition-all duration-300">
+<span class="material-symbols-outlined text-primary dark:text-inverse-primary">search</span>
+</button>
+<a class="bg-primary-container text-on-primary-container px-6 py-2.5 rounded-full font-label-caps text-label-caps uppercase tracking-widest hover:bg-primary-container/90 transition-all shadow-sm" href="#">
+                    Sign In
+                </a>
+</div>
+</div>
+</nav>
+<main>
+<!-- Hero Section -->
+<section class="relative w-full h-[921px] min-h-[600px] flex items-center justify-center overflow-hidden">
+<!-- Hero Image/Video Background -->
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover" data-alt="A breathtaking, cinematic wide shot of a luxury penthouse interior in Lagos, Nigeria. The room features floor-to-ceiling windows offering a panoramic view of the Victoria Island skyline and the shimmering ocean at sunset. Warm, golden-hour light floods the minimalist, high-end living space, highlighting plush cream-colored furniture, polished marble floors, and subtle gold accents. The overall aesthetic is elegant, sophisticated, and aspirational, embodying the pinnacle of West African luxury living." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT7v6HK_tnUa6WTpgNU3w-xC6nanOkzoluDDqkzpMjo9rehqL_IXadp15Q0bXfHQ2iAoGF-5mDdMB10A9SyPbQ6xOhG7V0TgFpv_wMDWxM1HsjoKqPjRpLeIlICyffTnyTxNGIoewAzlQZAQJl4WclLX2ylbXealVdhlt1NE1kZNkv4D9v6lXZbnzv4XIZ510cBzoXde9R8z4b23a8FInUrxENaLvgc11c4oz_qCOhlH9xVLD9tazhnBZzxDdTk5BvHXsX5N-tQpH0"/>
+<div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60"></div>
+</div>
+<div class="relative z-10 w-full max-w-[1440px] px-5 md:px-container-padding mx-auto flex flex-col items-center text-center pt-20">
+<h1 class="font-display-lg text-display-lg text-white mb-6 max-w-4xl drop-shadow-lg">
+                    Discover Your Perfect Lagos Lifestyle
+                </h1>
+<p class="font-body-lg text-body-lg text-white/90 mb-12 max-w-2xl drop-shadow-md">
+                    Exclusive properties, curated experiences, and bespoke concierge services for the discerning traveler.
+                </p>
+<!-- Search Bar -->
+<div class="w-full max-w-3xl glass-card rounded-2xl p-2 lux-shadow">
+<form class="flex flex-col md:flex-row items-center divide-y md:divide-y-0 md:divide-x divide-outline/20">
+<div class="flex-1 w-full px-6 py-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<div class="flex flex-col w-full">
+<label class="font-label-caps text-label-caps text-secondary uppercase mb-1">Destination</label>
+<input class="bg-transparent border-none p-0 text-on-surface focus:ring-0 placeholder:text-surface-variant font-body-md w-full" placeholder="Ikoyi, Victoria Island..." type="text"/>
+</div>
+</div>
+<div class="flex-1 w-full px-6 py-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">calendar_month</span>
+<div class="flex flex-col w-full">
+<label class="font-label-caps text-label-caps text-secondary uppercase mb-1">Dates</label>
+<input class="bg-transparent border-none p-0 text-on-surface focus:ring-0 placeholder:text-surface-variant font-body-md w-full" placeholder="Add dates" type="text"/>
+</div>
+</div>
+<div class="w-full md:w-auto p-2">
+<button class="w-full md:w-16 h-16 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center hover:scale-95 transition-transform duration-200" type="button">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">search</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+</section>
+<!-- Curated Collections -->
+<section class="py-section-gap px-5 md:px-container-padding max-w-[1440px] mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-stack-lg gap-6">
+<div class="max-w-2xl">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-4">Curated Collections</h2>
+<p class="font-body-lg text-body-lg text-secondary">Discover our handpicked selection of elite properties, from sky-high penthouses to secluded waterfront villas.</p>
+</div>
+<button class="flex items-center gap-2 text-primary font-label-caps text-label-caps uppercase hover:text-on-primary-fixed-variant transition-colors border-b border-primary pb-1">
+                    View All Properties <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Property Card 1 -->
+<div class="group cursor-pointer">
+<div class="relative w-full aspect-[3/4] rounded-2xl overflow-hidden mb-6">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A stunning exterior shot of a modern, ultra-luxury penthouse in Victoria Island, Lagos. The architecture features extensive glass walls, sleek concrete lines, and a spacious private terrace with an infinity pool overlooking the city. Soft, warm evening lighting highlights the sophisticated design and creates an inviting, elite atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCli9xKwNM01h_LS2ci3K6e5WmRJ3sSNtgZWv2hP5EfXIM9-bt6ANNqiAcYwrC1om0CPU2BGiTol4cr9QyK70ZVe4T2GKl183txsrANwtrlFD8MLA7ZCOvxvBDe6gefIZqDD54QAStibNCPBlosY6D_tdt-qxJguTfDTBxeJXuTnDqcJoH-3wMY-lXD6qTM_Z4Lr2z3ECb-KDNAecokieCqymRG2vEfXdAUpFph62NxOCj3p5DcWe9BgbkIlMcpw7mKwAAUHBddKh1O"/>
+<div class="absolute top-4 left-4 bg-surface/90 backdrop-blur-sm px-4 py-2 rounded-full font-label-caps text-label-caps uppercase text-on-surface">
+                            Ikoyi
+                        </div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">The Bourdillon Penthouse</h3>
+<div class="flex items-center gap-4 text-secondary font-body-md">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-lg">bed</span> 4 Beds</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-lg">shower</span> 4.5 Baths</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-lg">aspect_ratio</span> 450 sqm</span>
+</div>
+</div>
+<!-- Property Card 2 -->
+<div class="group cursor-pointer">
+<div class="relative w-full aspect-[3/4] rounded-2xl overflow-hidden mb-6">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="An elegant, softly lit interior of a luxury waterfront villa in Banana Island, Lagos. The shot focuses on a spacious living area with floor-to-ceiling windows showing the calm lagoon waters. The decor is minimalist and high-end, featuring neutral tones, natural wood textures, and plush, contemporary furnishings that exude a serene, premium lifestyle." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6zhFqIAth02rl8RLgo1AL8t4tKcs3xKf_jgxfbPcHNKqxRbZlhqPp0-bf8uwC-srgxFqYyFQTo9DkruyQZCd6KwohNkAUKKFl6N9RaF4mldR7c-UibrxiUylmPLGrk5TKq4iPgb3b_vPCBhn92R_v44qWXCv92xY3BoQ66qQsRDAQCt66Nef4IfzChQBG-OTg_caLRx30vAym1R96pkaI0fysoFDiejNCCADFc9yF4aK9pMsqvh0N5n5vtssAKzhpeR2xQq2Zch9N"/>
+<div class="absolute top-4 left-4 bg-surface/90 backdrop-blur-sm px-4 py-2 rounded-full font-label-caps text-label-caps uppercase text-on-surface">
+                            Banana Island
+                        </div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Lagoon View Villa</h3>
+<div class="flex items-center gap-4 text-secondary font-body-md">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-lg">bed</span> 5 Beds</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-lg">shower</span> 6 Baths</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-lg">pool</span> Private Pool</span>
+</div>
+</div>
+<!-- Property Card 3 -->
+<div class="group cursor-pointer">
+<div class="relative w-full aspect-[3/4] rounded-2xl overflow-hidden mb-6">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A highly stylized architectural photograph of a modern loft apartment in Victoria Island, Lagos. The image showcases double-height ceilings, exposed concrete accents, and massive industrial-chic windows letting in bright natural light. The interior styling is sophisticated, blending contemporary art with custom, high-end furniture in a bright, airy space." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi_cQDOnAzgGcO6_cbASiqCtiJmVs6EL4CDMSQ-3ixfZgB9SGSEAr0ei_YaH9e9AEYhtY7qFlDJn9oRuNkVyMhi6_G4y7v5Zat7F4TrJtlLG9aLvPeKmA-fI962i4cTCw5cVQEfahfe7AyrTQerw1ir4hne3OWPURHNTk2XDCG1XE--IvYMDUiRVC6Tg0NMgGCmiwNNjdfTNqLXpCdq4zjwNcZDPPq5u2IRrgwI55aafFKzPeefuI0PWumocNHp4LFCDcScC2Z8RFf"/>
+<div class="absolute top-4 left-4 bg-surface/90 backdrop-blur-sm px-4 py-2 rounded-full font-label-caps text-label-caps uppercase text-on-surface">
+                            Victoria Island
+                        </div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">The Eko Loft</h3>
+<div class="flex items-center gap-4 text-secondary font-body-md">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-lg">bed</span> 2 Beds</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-lg">shower</span> 2 Baths</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-lg">local_bar</span> Private Bar</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-on-background dark:bg-surface-container-lowest w-full py-stack-lg px-5 md:px-container-padding flex flex-col md:flex-row justify-between items-center border-t border-outline/10 text-center md:text-left gap-6">
+<div class="font-headline-sm text-headline-sm text-primary dark:text-inverse-primary">
+            Cozy Lagos
+        </div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="font-label-caps text-label-caps text-surface-variant dark:text-secondary hover:text-primary-container transition-colors uppercase" href="#">Privacy Policy</a>
+<a class="font-label-caps text-label-caps text-surface-variant dark:text-secondary hover:text-primary-container transition-colors uppercase" href="#">Terms of Service</a>
+<a class="font-label-caps text-label-caps text-surface-variant dark:text-secondary hover:text-primary-container transition-colors uppercase" href="#">Contact Support</a>
+<a class="font-label-caps text-label-caps text-surface-variant dark:text-secondary hover:text-primary-container transition-colors uppercase" href="#">About Us</a>
+</div>
+<div class="font-body-md text-body-md text-surface-variant dark:text-secondary">
+            © 2024 Cozy Lagos. All rights reserved.
+        </div>
+</footer>
+</body></html>

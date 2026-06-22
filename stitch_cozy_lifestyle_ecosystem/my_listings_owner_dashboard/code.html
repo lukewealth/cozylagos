@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Property Listings - Cozy Lagos</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Manrope:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#e5e2e1",
+                        "on-secondary-fixed-variant": "#474746",
+                        "tertiary-fixed": "#e8e2d8",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#574500",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#b8b2a9",
+                        "surface": "#faf9f8",
+                        "surface-container-highest": "#e3e2e1",
+                        "inverse-on-surface": "#f1f0f0",
+                        "on-tertiary-fixed-variant": "#4a463f",
+                        "on-error-container": "#93000a",
+                        "on-secondary-container": "#636262",
+                        "tertiary-fixed-dim": "#ccc6bc",
+                        "primary-fixed-dim": "#e9c349",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "inverse-surface": "#2f3130",
+                        "on-primary": "#ffffff",
+                        "background": "#faf9f8",
+                        "surface-bright": "#faf9f8",
+                        "surface-variant": "#e3e2e1",
+                        "on-primary-container": "#554300",
+                        "surface-container-low": "#f4f3f2",
+                        "outline-variant": "#d0c5af",
+                        "primary": "#735c00",
+                        "on-tertiary-fixed": "#1e1b15",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#eeeeed",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "tertiary": "#625e56",
+                        "on-primary-fixed": "#241a00",
+                        "surface-container-high": "#e9e8e7",
+                        "on-tertiary-container": "#48453e",
+                        "on-error": "#ffffff",
+                        "outline": "#7f7663",
+                        "surface-dim": "#dadad9",
+                        "secondary": "#5f5e5e",
+                        "inverse-primary": "#e9c349",
+                        "primary-container": "#d4af37",
+                        "secondary-container": "#e2dfde",
+                        "on-surface": "#1a1c1c",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#ffe088",
+                        "on-surface-variant": "#4d4635",
+                        "on-background": "#1a1c1c",
+                        "surface-tint": "#735c00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-md": "32px",
+                        "stack-sm": "16px",
+                        "section-gap": "120px",
+                        "stack-lg": "64px",
+                        "gutter": "32px",
+                        "container-padding": "80px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Playfair Display"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "label-caps": ["Manrope"],
+                        "body-md": ["Manrope"],
+                        "display-lg": ["Playfair Display"],
+                        "body-lg": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["36px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "headline-lg": ["48px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(250, 249, 248, 0.7);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(127, 118, 99, 0.2);
+        }
+        .glass-badge {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .btn-gold {
+            background-color: #D4AF37;
+            color: #1a1c1c;
+            transition: all 0.3s ease;
+        }
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+        }
+        .btn-ghost {
+            border: 1px solid #1a1c1c;
+            color: #1a1c1c;
+            transition: all 0.3s ease;
+        }
+        .btn-ghost:hover {
+            background-color: rgba(26, 28, 28, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-surface/80 backdrop-blur-xl dark:bg-inverse-surface/80 docked full-width top-0 sticky border-b border-outline-variant/20 dark:border-outline/20 shadow-sm z-50">
+<div class="flex justify-between items-center w-full px-container-padding max-w-[1440px] mx-auto h-20">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight">
+                Cozy Lagos
+            </div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:bg-primary/5 dark:hover:bg-inverse-primary/5 duration-300 px-3 py-2 rounded-md" href="#">Apartments</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:bg-primary/5 dark:hover:bg-inverse-primary/5 duration-300 px-3 py-2 rounded-md" href="#">Experiences</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:bg-primary/5 dark:hover:bg-inverse-primary/5 duration-300 px-3 py-2 rounded-md" href="#">Services</a>
+<a class="font-label-caps text-label-caps text-primary dark:text-inverse-primary border-b-2 border-primary pb-1 px-3 py-2" href="#">Concierge</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="font-label-caps text-label-caps text-primary dark:text-inverse-primary hover:bg-primary/5 transition-all duration-300 px-4 py-2 rounded-full">
+                    Sign In
+                </button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-[1440px] mx-auto px-5 md:px-container-padding py-section-gap">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-stack-lg gap-6">
+<div>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-unit">Owner Dashboard</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage your luxury listings and availability in Lagos.</p>
+</div>
+<button class="btn-gold font-label-caps text-label-caps px-8 py-4 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+                Add New Property
+            </button>
+</div>
+<!-- Dashboard Stats -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-stack-lg">
+<div class="glass-panel p-6 rounded-xl flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">apartment</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Total Properties</p>
+<p class="font-headline-md text-headline-md text-on-background">4</p>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-xl flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">hotel</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Current Occupancy</p>
+<p class="font-headline-md text-headline-md text-on-background">75%</p>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-xl flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Est. Monthly Revenue</p>
+<p class="font-headline-md text-headline-md text-on-background">₦12.5M</p>
+</div>
+</div>
+</div>
+<!-- Property Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<article class="glass-panel rounded-2xl overflow-hidden flex flex-col group">
+<div class="relative h-64 w-full overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A sweeping, high-angle interior shot of a luxurious modern penthouse in Lagos, featuring expansive floor-to-ceiling windows overlooking a shimmering cityscape and coastline. The living area is styled with minimalist, high-end Italian furniture in warm neutral tones. Soft, diffused daylight floods the room, creating an airy, light-mode aesthetic. Accents of brushed gold and lush indoor tropical plants add vitality. The mood is elite, serene, and sophisticated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkaT6hc5dsKZsFsvSNSuB1VrDNeVniZJTgvT0Trwl8jzvpZPrZlqS3ziy4ghdKtqfSHmT8Qjt_31C_OUbnK_Y8YsL0349ykfVfJK29eowenGRU47TqskX3f8CJ8foG7tKkHrTmNb8JPuodkY_31W_VsmGnLqNOy5_8EfNlU5WXsE806ojWHBBI1L8eBkjpRuFL5hejupbp-MJtfr7Bfs33jfl7srYEb4-3oEERjqpV_vJrwmAVP9o1QLcIKTlC4Cz0eIu_l9oCJu9J"/>
+<div class="absolute top-4 left-4 glass-badge px-3 py-1 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#10b981]"></span>
+<span class="font-label-caps text-label-caps text-on-background">Active</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h2 class="font-headline-sm text-headline-sm text-on-background line-clamp-1">The Bourdillon Penthouse</h2>
+<p class="font-body-lg text-body-lg text-on-background font-semibold">₦850k<span class="font-body-md text-body-md text-on-surface-variant font-normal">/nt</span></p>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Ikoyi, Lagos</p>
+<div class="flex items-center gap-4 mb-6 text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="font-body-md text-body-md">6 Guests</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">event_available</span>
+<span class="font-body-md text-body-md">Occupied until Oct 12</span>
+</div>
+</div>
+<div class="mt-auto grid grid-cols-2 gap-3">
+<button class="btn-ghost rounded-full py-3 px-4 font-label-caps text-label-caps flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span> Edit
+                        </button>
+<button class="btn-ghost rounded-full py-3 px-4 font-label-caps text-label-caps flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span> Calendar
+                        </button>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="glass-panel rounded-2xl overflow-hidden flex flex-col group">
+<div class="relative h-64 w-full overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="An elegant exterior shot of a modern villa situated directly on a calm lagoon in Lagos at twilight. The architecture features clean lines, white stucco walls, and expansive glass doors opening onto a wooden deck with an infinity pool. Warm golden lighting from the interior spills out onto the deck, contrasting with the soft blue tones of the dusk sky. The aesthetic is luxurious, peaceful, and highly curated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt1U0uIdAmb_wPY7RIzbyfXfWG7W5Gv8xaYdMlzZ4km78FIBxLse2tRTWf5Pf606P4Lz1PFEVoVEkaBV2GkE8l5-P-0lKDSxOFxvVZ-UWmcyszD_6X_SC4JkeW184aENNUoyEIx4Gti5de0xha6F7G_O_ji7GuoL1Y9_oZn1Dvk-YnIVhJc0BhFhNXQwJMDyeew-ShfDd3ic-eAcQb8NquV02xbkzDVLJJVYz5-Y6KEz9k3sqbAd8HCbbEcnijgsQ1Cn5JbtJd44Ur"/>
+<div class="absolute top-4 left-4 glass-badge px-3 py-1 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#10b981]"></span>
+<span class="font-label-caps text-label-caps text-on-background">Active</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h2 class="font-headline-sm text-headline-sm text-on-background line-clamp-1">Lagoon View Villa</h2>
+<p class="font-body-lg text-body-lg text-on-background font-semibold">₦1.2M<span class="font-body-md text-body-md text-on-surface-variant font-normal">/nt</span></p>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Banana Island, Lagos</p>
+<div class="flex items-center gap-4 mb-6 text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="font-body-md text-body-md">10 Guests</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">event_busy</span>
+<span class="font-body-md text-body-md">Available Next: Oct 5</span>
+</div>
+</div>
+<div class="mt-auto grid grid-cols-2 gap-3">
+<button class="btn-ghost rounded-full py-3 px-4 font-label-caps text-label-caps flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span> Edit
+                        </button>
+<button class="btn-ghost rounded-full py-3 px-4 font-label-caps text-label-caps flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span> Calendar
+                        </button>
+</div>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="glass-panel rounded-2xl overflow-hidden flex flex-col group opacity-80">
+<div class="relative h-64 w-full overflow-hidden bg-surface-container grayscale-[30%]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A close-up interior perspective of a sophisticated, minimalist urban loft apartment bedroom in Victoria Island, Lagos. The room features a plush, low-profile bed dressed in crisp white linens, set against a dark textured accent wall. High-end pendant lights cast a warm, focused glow. The overall lighting is subdued, maintaining a light-mode base but with stronger contrasts. The mood is intimate, exclusive, and resting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAeMFOGa4JpdRK7_5LVZqpuKg-VIcEg6j-VvO7nv3XHUh-zq8M_mvYIsH1PCyUsEAJ5jF_cyGl0rFDYNUEuGiMZPyAuCEmEY09WpITALZ4eUxf-Xl7XTaN0kmgacm92FzHK2AYI5UiyNVHr7wGQhAiOrOSFyHKkG-PzlAJoHN7QMjMiQisnWqbtyPmCdBUSZrhsiWoWjbnlz4LUzIreLn7tnXcPhqwZBbvXh6vJxhyJ4BmOic-g8Q8nCWnJkP5_WRPKqkaflu599Dq"/>
+<div class="absolute top-4 left-4 glass-badge px-3 py-1 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span class="font-label-caps text-label-caps text-on-background">Hidden (Maintenance)</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h2 class="font-headline-sm text-headline-sm text-on-background line-clamp-1">The V.I. Sanctuary</h2>
+<p class="font-body-lg text-body-lg text-on-background font-semibold">₦450k<span class="font-body-md text-body-md text-on-surface-variant font-normal">/nt</span></p>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Victoria Island, Lagos</p>
+<div class="flex items-center gap-4 mb-6 text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="font-body-md text-body-md">2 Guests</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">build</span>
+<span class="font-body-md text-body-md">Under Renovation</span>
+</div>
+</div>
+<div class="mt-auto grid grid-cols-2 gap-3">
+<button class="btn-ghost rounded-full py-3 px-4 font-label-caps text-label-caps flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span> Edit
+                        </button>
+<button class="btn-ghost rounded-full py-3 px-4 font-label-caps text-label-caps flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span> Calendar
+                        </button>
+</div>
+</div>
+</article>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-on-background dark:bg-surface-container-lowest full-width border-t border-outline/10 mt-auto">
+<div class="w-full py-stack-lg px-container-padding flex flex-col md:flex-row justify-between items-center max-w-[1440px] mx-auto gap-6">
+<div class="font-headline-sm text-headline-sm text-primary dark:text-inverse-primary">
+                Cozy Lagos
+            </div>
+<nav class="flex flex-wrap justify-center gap-6">
+<a class="font-body-md text-body-md text-surface-variant dark:text-secondary hover:text-primary-container transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-surface-variant dark:text-secondary hover:text-primary-container transition-colors" href="#">Terms of Service</a>
+<a class="font-body-md text-body-md text-surface-variant dark:text-secondary hover:text-primary-container transition-colors" href="#">Contact Support</a>
+<a class="font-body-md text-body-md text-surface-variant dark:text-secondary hover:text-primary-container transition-colors" href="#">About Us</a>
+</nav>
+<div class="font-body-md text-body-md text-surface-variant dark:text-secondary">
+                © 2024 Cozy Lagos. All rights reserved.
+            </div>
+</div>
+</footer>
+</body></html>

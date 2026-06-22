@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profile - Vendor Portal - Cozy Lagos</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#d0c5af",
+                        "tertiary": "#625e56",
+                        "surface-container-highest": "#e3e2e1",
+                        "on-secondary-fixed-variant": "#474746",
+                        "inverse-primary": "#e9c349",
+                        "error-container": "#ffdad6",
+                        "surface": "#faf9f8",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f4f3f2",
+                        "primary-fixed": "#ffe088",
+                        "inverse-on-surface": "#f1f0f0",
+                        "primary": "#735c00",
+                        "on-tertiary-fixed-variant": "#4a463f",
+                        "tertiary-fixed": "#e8e2d8",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#d4af37",
+                        "on-tertiary-fixed": "#1e1b15",
+                        "background": "#faf9f8",
+                        "surface-container-high": "#e9e8e7",
+                        "on-surface": "#1a1c1c",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "on-surface-variant": "#4d4635",
+                        "outline": "#7f7663",
+                        "surface-dim": "#dadad9",
+                        "primary-fixed-dim": "#e9c349",
+                        "on-tertiary-container": "#48453e",
+                        "on-primary-container": "#554300",
+                        "error": "#ba1a1a",
+                        "secondary-container": "#e2dfde",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#faf9f8",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "surface-variant": "#e3e2e1",
+                        "surface-container": "#eeeeed",
+                        "on-primary-fixed-variant": "#574500",
+                        "on-secondary-container": "#636262",
+                        "secondary-fixed": "#e5e2e1",
+                        "surface-tint": "#735c00",
+                        "secondary": "#5f5e5e",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#241a00",
+                        "tertiary-fixed-dim": "#ccc6bc",
+                        "tertiary-container": "#b8b2a9",
+                        "on-background": "#1a1c1c",
+                        "inverse-surface": "#2f3130"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "64px",
+                        "section-gap": "120px",
+                        "gutter": "32px",
+                        "stack-sm": "16px",
+                        "container-padding": "80px",
+                        "unit": "8px",
+                        "stack-md": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Manrope"],
+                        "headline-lg": ["Playfair Display"],
+                        "headline-sm": ["Playfair Display"],
+                        "body-md": ["Manrope"],
+                        "label-caps": ["Manrope"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["48px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-sm": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["36px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.6) 100%);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(208, 197, 175, 0.3);
+            box-shadow: 0px 20px 50px rgba(26, 26, 26, 0.04);
+        }
+        
+        .luxury-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(26, 28, 28, 0.2);
+            border-radius: 0;
+            padding-left: 0;
+            padding-right: 0;
+            transition: border-color 0.3s ease;
+        }
+        
+        .luxury-input:focus {
+            box-shadow: none;
+            border-bottom-color: #D4AF37;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #faf9f8;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d0c5af;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7f7663;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex selection:bg-primary-container/30">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-screen w-80 fixed left-0 top-0 bg-surface shadow-sm border-r border-outline-variant/20 z-50">
+<!-- Brand Header -->
+<div class="px-gutter py-stack-md border-b border-outline-variant/10">
+<h1 class="text-headline-md font-headline-md text-primary tracking-tight">Cozy Lagos</h1>
+<p class="text-label-caps font-label-caps text-secondary mt-1">Vendor Portal</p>
+</div>
+<!-- Navigation Links -->
+<ul class="flex flex-col flex-1 py-stack-md gap-2">
+<!-- Active: Profile -->
+<li>
+<a class="flex items-center gap-4 text-primary font-bold border-l-4 border-primary px-6 py-4 bg-primary-container/5 opacity-100 hover:opacity-80 transition-opacity duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person_outline</span>
+<span class="text-body-md font-body-md">Profile</span>
+</a>
+</li>
+<!-- Inactive Links -->
+<li>
+<a class="flex items-center gap-4 text-secondary px-6 py-4 hover:text-primary transition-colors opacity-80 duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-105 transition-transform">event_note</span>
+<span class="text-body-md font-body-md">Experience Details</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-secondary px-6 py-4 hover:text-primary transition-colors opacity-80 duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-105 transition-transform">image</span>
+<span class="text-body-md font-body-md">Media</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-secondary px-6 py-4 hover:text-primary transition-colors opacity-80 duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-105 transition-transform">verified_user</span>
+<span class="text-body-md font-body-md">Verification</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-secondary px-6 py-4 hover:text-primary transition-colors opacity-80 duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-105 transition-transform">rate_review</span>
+<span class="text-body-md font-body-md">Review</span>
+</a>
+</li>
+</ul>
+<!-- Bottom Action -->
+<div class="p-gutter mt-auto border-t border-outline-variant/10">
+<button class="w-full py-4 px-6 border border-on-background/20 text-on-background text-label-caps font-label-caps hover:bg-on-background hover:text-surface transition-all duration-300 rounded-DEFAULT">
+                Save Draft
+            </button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-80 min-h-screen relative">
+<!-- Background Decor (Minimalist geometric glow) -->
+<div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+<div class="absolute top-[-10%] right-[-5%] w-[40vw] h-[40vw] rounded-full bg-primary-container/5 blur-[100px]"></div>
+</div>
+<!-- TopAppBar (Mobile & Desktop specific context) -->
+<header class="flex justify-between items-center w-full px-gutter py-4 bg-surface/80 backdrop-blur-xl sticky top-0 z-40 md:hidden border-b border-outline-variant/20">
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm text-primary">Onboarding Wizard</span>
+<span class="text-label-caps font-label-caps text-secondary mt-1">Profile Setup</span>
+</div>
+<div class="flex gap-2">
+<button class="p-2 text-on-surface-variant hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+</div>
+</header>
+<!-- Content Area -->
+<div class="max-w-[1440px] mx-auto px-4 md:px-container-padding py-stack-lg md:py-section-gap">
+<!-- Page Header -->
+<div class="mb-stack-lg animate-fade-in-up">
+<h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-on-background mb-4">Establish Your Presence</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl">Craft a compelling narrative for your luxury service. This information represents your brand to high-net-worth clients seeking exclusive experiences.</p>
+</div>
+<!-- Bento Grid Layout -->
+<form class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Visual Identity -->
+<div class="lg:col-span-4 flex flex-col gap-gutter">
+<!-- Profile Photo Card -->
+<div class="glass-card rounded-xl p-8 flex flex-col items-center justify-center text-center group cursor-pointer relative overflow-hidden transition-all duration-300 hover:shadow-[0_30px_60px_rgba(26,26,26,0.08)]">
+<!-- Decorative bg map -->
+<div class="absolute inset-0 opacity-[0.03] z-0" data-alt="A highly detailed, subtle topographic map pattern of the Lagos coastline, rendered in extreme minimalist style with ultra-fine lines. The color palette is strictly white and pale champagne. The lighting is flat and graphic, creating a sophisticated background texture that suggests luxury travel without distracting from foreground elements." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBydHkt6ZaRxoeT7UbASaB3KV6NdbdWqzGXCO2B6YZeD6pDWRZD06_Lvr-HFeqOAAlYzLBSllDVuhCZSTPL0PSUbAd4r8klp2KW7z6OQM4rOS5jX9ecTKxe4XOJhW8yN2Wb8kuxJzRfX9i_dSTm-GQ9fng61h0z-lVwvNkRt4YwC0-wTKEPcxbabb27WzLWnIyBv0asVz9SQefq-FW4tXvebDOYVS1OA0o8vwgJpxPZgu4OJnB0aMLe2DJPEIYkw4GB6LZAzPU7Jo8b')"></div>
+<div class="relative z-10 w-48 h-48 rounded-full border-2 border-dashed border-outline-variant flex flex-col items-center justify-center mb-6 group-hover:border-primary-container group-hover:bg-primary-container/5 transition-all duration-300">
+<span class="material-symbols-outlined text-4xl text-outline mb-2 group-hover:text-primary-container transition-colors">add_photo_alternate</span>
+<span class="text-label-caps font-label-caps text-secondary group-hover:text-primary transition-colors">Upload Avatar</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-background mb-2">Brand Emblem</h3>
+<p class="text-body-md font-body-md text-on-surface-variant text-sm">High-resolution logo or professional portrait. 1:1 ratio recommended.</p>
+<!-- Invisible file input -->
+<input accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" type="file"/>
+</div>
+<!-- Experience Chips Preview -->
+<div class="glass-card rounded-xl p-6">
+<h4 class="text-label-caps font-label-caps text-on-background mb-4">Experience Categories</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-2 rounded-full bg-surface-container-low border border-outline-variant/30 text-label-caps font-label-caps text-on-surface-variant hover:border-primary-container hover:text-primary transition-colors cursor-pointer">PRIVATE YACHT</span>
+<span class="px-4 py-2 rounded-full bg-surface-container-low border border-outline-variant/30 text-label-caps font-label-caps text-on-surface-variant hover:border-primary-container hover:text-primary transition-colors cursor-pointer">FINE DINING</span>
+<span class="px-4 py-2 rounded-full bg-surface-container-low border border-outline-variant/30 text-label-caps font-label-caps text-on-surface-variant hover:border-primary-container hover:text-primary transition-colors cursor-pointer">HELICOPTER TOUR</span>
+<button class="px-4 py-2 rounded-full border border-dashed border-outline text-label-caps font-label-caps text-secondary hover:text-primary hover:border-primary transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span> ADD
+                            </button>
+</div>
+</div>
+</div>
+<!-- Right Column: Details -->
+<div class="lg:col-span-8 flex flex-col gap-gutter">
+<!-- Basic Info Card -->
+<div class="glass-card rounded-xl p-8 md:p-10">
+<h3 class="text-headline-sm font-headline-sm text-on-background mb-8 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container">storefront</span>
+                            Business Identity
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
+<!-- Input Group -->
+<div class="relative group">
+<input class="luxury-input w-full text-body-lg font-body-lg text-on-background pt-4 pb-2 peer placeholder-transparent" id="business_name" placeholder="Business Name" type="text"/>
+<label class="absolute left-0 top-0 text-label-caps font-label-caps text-secondary transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-body-md peer-focus:top-0 peer-focus:text-label-caps peer-focus:text-primary" for="business_name">Official Business Name</label>
+</div>
+<!-- Input Group -->
+<div class="relative group">
+<input class="luxury-input w-full text-body-lg font-body-lg text-on-background pt-4 pb-2 peer placeholder-transparent" id="legal_entity" placeholder="Legal Entity" type="text"/>
+<label class="absolute left-0 top-0 text-label-caps font-label-caps text-secondary transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-body-md peer-focus:top-0 peer-focus:text-label-caps peer-focus:text-primary" for="legal_entity">Legal Entity (RC Number)</label>
+</div>
+<!-- Input Group Full Width -->
+<div class="relative group md:col-span-2">
+<input class="luxury-input w-full text-body-lg font-body-lg text-on-background pt-4 pb-2 peer placeholder-transparent" id="tagline" placeholder="Short Tagline" type="text"/>
+<label class="absolute left-0 top-0 text-label-caps font-label-caps text-secondary transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-body-md peer-focus:top-0 peer-focus:text-label-caps peer-focus:text-primary" for="tagline">Elevator Pitch / Tagline</label>
+</div>
+</div>
+</div>
+<!-- Narrative Card -->
+<div class="glass-card rounded-xl p-8 md:p-10">
+<div class="flex justify-between items-center mb-8">
+<h3 class="text-headline-sm font-headline-sm text-on-background flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container">edit_document</span>
+                                Brand Narrative
+                            </h3>
+<span class="text-label-caps font-label-caps text-secondary">0/500 WORDS</span>
+</div>
+<div class="relative group">
+<textarea class="luxury-input w-full text-body-lg font-body-lg text-on-background pt-4 pb-2 peer placeholder-transparent resize-none leading-relaxed" id="bio" placeholder="Tell your story..." rows="6"></textarea>
+<label class="absolute left-0 top-0 text-label-caps font-label-caps text-secondary transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-body-md peer-focus:top-0 peer-focus:text-label-caps peer-focus:text-primary" for="bio">Professional Biography</label>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant mt-4 opacity-80">Highlight your expertise, exclusive offerings, and what makes your experience distinctively premium.</p>
+</div>
+<!-- Actions -->
+<div class="flex flex-col-reverse md:flex-row justify-end items-center gap-4 mt-4">
+<button class="w-full md:w-auto px-8 py-4 border border-on-background/20 text-on-background text-label-caps font-label-caps hover:bg-surface-container transition-colors rounded-DEFAULT" type="button">
+                            Previous Step
+                        </button>
+<button class="w-full md:w-auto px-8 py-4 bg-[#D4AF37] text-on-primary-fixed text-label-caps font-label-caps hover:bg-primary transition-colors shadow-[0_10px_20px_rgba(212,175,55,0.2)] rounded-DEFAULT relative overflow-hidden group" type="submit">
+<span class="relative z-10 flex items-center justify-center gap-2">
+                                Next Step
+                                <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</span>
+<!-- Button Shine Effect -->
+<div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:animate-[shimmer_1.5s_infinite]"></div>
+</button>
+</div>
+</div>
+</form>
+</div>
+</main>
+<style>
+        @keyframes shimmer {
+            100% {
+                transform: translateX(100%);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</body></html>

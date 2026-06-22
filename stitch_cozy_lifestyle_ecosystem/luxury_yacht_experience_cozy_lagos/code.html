@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Private Lagos Island Yacht Party - Cozy Lagos</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-primary-fixed-variant": "#574500",
+                        "secondary": "#5f5e5e",
+                        "on-primary-fixed": "#241a00",
+                        "on-tertiary-fixed-variant": "#4a463f",
+                        "on-surface-variant": "#4d4635",
+                        "inverse-primary": "#e9c349",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#625e56",
+                        "tertiary-container": "#b8b2a9",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-tertiary-container": "#48453e",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#faf9f8",
+                        "surface-variant": "#e3e2e1",
+                        "on-secondary-container": "#636262",
+                        "secondary-container": "#e2dfde",
+                        "surface-container-low": "#f4f3f2",
+                        "tertiary-fixed-dim": "#ccc6bc",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#dadad9",
+                        "primary-fixed": "#ffe088",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "outline": "#7f7663",
+                        "on-primary-container": "#554300",
+                        "outline-variant": "#d0c5af",
+                        "tertiary-fixed": "#e8e2d8",
+                        "on-background": "#1a1c1c",
+                        "on-error": "#ffffff",
+                        "surface-container": "#eeeeed",
+                        "surface": "#faf9f8",
+                        "background": "#faf9f8",
+                        "on-tertiary-fixed": "#1e1b15",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#735c00",
+                        "primary": "#735c00",
+                        "surface-container-high": "#e9e8e7",
+                        "inverse-surface": "#2f3130",
+                        "on-secondary-fixed-variant": "#474746",
+                        "primary-container": "#d4af37",
+                        "surface-container-highest": "#e3e2e1",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f1f0f0",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#e9c349"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "stack-md": "32px",
+                        "unit": "8px",
+                        "stack-lg": "64px",
+                        "container-padding": "80px",
+                        "stack-sm": "16px",
+                        "section-gap": "120px",
+                        "gutter": "32px"
+                    },
+                    fontFamily: {
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-sm": ["Playfair Display"],
+                        "body-lg": ["Manrope"],
+                        "headline-lg": ["Playfair Display"],
+                        "label-caps": ["Manrope"],
+                        "body-md": ["Manrope"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    fontSize: {
+                        "headline-lg-mobile": ["36px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "headline-sm": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["48px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(127, 118, 99, 0.1);
+        }
+        .luxury-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(26, 28, 28, 0.2);
+            border-radius: 0;
+        }
+        .luxury-input:focus {
+            outline: none;
+            box-shadow: none;
+            border-bottom-color: #D4AF37;
+        }
+        .ambient-shadow {
+            box-shadow: 0px 20px 50px rgba(26, 26, 26, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased">
+<!-- Top Navigation -->
+<nav class="bg-surface/80 backdrop-blur-xl dark:bg-inverse-surface/80 docked full-width top-0 sticky border-b border-outline-variant/20 dark:border-outline/20 shadow-sm z-50">
+<div class="flex justify-between items-center w-full px-4 md:px-container-padding max-w-[1440px] mx-auto h-20">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight">
+                Cozy Lagos
+            </div>
+<div class="hidden md:flex space-x-8 items-center">
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors font-label-caps text-label-caps uppercase" href="#">Apartments</a>
+<a class="text-primary dark:text-inverse-primary border-b-2 border-primary pb-1 font-label-caps text-label-caps uppercase" href="#">Experiences</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors font-label-caps text-label-caps uppercase" href="#">Services</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors font-label-caps text-label-caps uppercase" href="#">Concierge</a>
+</div>
+<div class="flex items-center space-x-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
+</button>
+<button class="hidden md:block px-6 py-2 bg-transparent border border-on-background text-on-background hover:bg-on-background hover:text-surface transition-colors font-label-caps text-label-caps uppercase">
+                    Sign In
+                </button>
+<button class="md:hidden text-on-surface-variant">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</nav>
+<main>
+<!-- Hero Section -->
+<section class="relative w-full h-[614px] md:h-[819px] flex items-end pb-12 md:pb-24">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A luxurious private yacht sailing on the shimmering waters of Lagos coastline at golden hour. The yacht is sleek and modern, with guests enjoying champagne on the deck. The sky is a warm gradient of orange and pink, reflecting on the calm ocean. High-end, sophisticated lifestyle photography." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuClJZQ9-BoVmmRqAZ5YttBYYzW1-2Lv4rnCNdcvL3D-OSYZII-nbBJJWpqV5Na5JgYUZd4pJL8_9fXZ2A4NYjXGMSeR7CgU8F64xmGQy-zaSgoekrg_ZTNaC5S2jIdDF2XFOvJ4h75LAwAp7Z3bHnznlOXt1sLe5r4r9oFl5rb_ENIFsVi_Cpj70vrZmgbrXHDN_VDySzVzpK_Oxjy0c8CalbGZMGou6urKXprf58_DQXWaWDa7qj87Xm87K2xxLViifBhZEqGo-iIo')">
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"></div>
+</div>
+<div class="relative w-full max-w-[1440px] mx-auto px-4 md:px-container-padding flex flex-col md:flex-row justify-between items-end gap-8">
+<div class="max-w-2xl">
+<div class="flex items-center gap-2 mb-4">
+<span class="px-3 py-1 bg-primary-container/20 text-on-primary-container font-label-caps text-label-caps rounded-full backdrop-blur-md uppercase">Premium Experience</span>
+<span class="flex items-center text-primary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1 font-label-caps text-label-caps">4.9 (128 REVIEWS)</span>
+</span>
+</div>
+<h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-on-background mb-4">Private Lagos Island Yacht Party</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Experience the ultimate luxury on the waters of Lagos. A curated journey combining breathtaking coastal views, bespoke entertainment, and unparalleled service.</p>
+</div>
+<div class="flex gap-4">
+<button class="w-12 h-12 rounded-full bg-surface/50 backdrop-blur-md flex items-center justify-center border border-outline/20 hover:bg-surface transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+<button class="w-12 h-12 rounded-full bg-surface/50 backdrop-blur-md flex items-center justify-center border border-outline/20 hover:bg-surface transition-colors">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Main Content Grid -->
+<section class="max-w-[1440px] mx-auto px-4 md:px-container-padding py-section-gap grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Details & Itinerary -->
+<div class="lg:col-span-8 space-y-section-gap">
+<!-- Highlights Bento -->
+<div>
+<h2 class="font-headline-md text-headline-md mb-8">Experience Highlights</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="glass-card p-6 rounded-xl flex flex-col items-center text-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">schedule</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Duration</span>
+<span class="font-body-md text-body-md font-semibold">6 Hours</span>
+</div>
+<div class="glass-card p-6 rounded-xl flex flex-col items-center text-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">groups</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Capacity</span>
+<span class="font-body-md text-body-md font-semibold">Up to 15 Guests</span>
+</div>
+<div class="glass-card p-6 rounded-xl flex flex-col items-center text-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">restaurant</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Dining</span>
+<span class="font-body-md text-body-md font-semibold">Gourmet Catering</span>
+</div>
+<div class="glass-card p-6 rounded-xl flex flex-col items-center text-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">directions_boat</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Vessel</span>
+<span class="font-body-md text-body-md font-semibold">65ft Luxury Motor Yacht</span>
+</div>
+</div>
+</div>
+<!-- Gallery -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<img class="w-full h-64 object-cover rounded-xl md:col-span-2" data-alt="Interior of a luxury yacht showing a spacious lounge area with white leather seating, polished wood finishes, and large windows looking out to the ocean. Bright, natural lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD--3KQdqUAW-vx4ZtvgQqz1KxRJtsBPnMS9vOHKrK8IefHg_iDZy3QwRWdOhomUnLtVU4GIt5NAW1GtKfDjblCfwU_IGsFBiNdRG0NdpYm5DfY4s38bV2MPedSISw9Z4SEkq8X3TiGSzkgtnm1qLpOkCvSziYHXQ673Bx8MiqiESIPXQcNRWOXTdyBtCME2azfi4GK6dvGzinqRh7GUNpfCDJeDUFCiUUFo9c30Lkw3MiANi3Y0Gz8PdcRelav2xgH2z6jLr8pBgTV"/>
+<img class="w-full h-64 object-cover rounded-xl" data-alt="A gourmet seafood platter and a bottle of chilled champagne served on the deck of a yacht. High-end culinary presentation, sunny outdoor setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkgPlULSEIIgM1P9_--QfBZ7VhsN8RhVZHo1O10oSbOEMr-i4mliwJ36i0ov_LZyj2ho2HIT59tN2FD748YpDvahh1jWXo4TGTbzl30SSk2dDIygM-x2UmPrKPuKA-_BaFqlsrV_zWEvpgO2gGGB2oZu7Qx7HT8ZoLrR0W4jbOlh9PKBy_t2W8Z0L4hfWrTjONuyfyI_lYEN-zVRr9_bPDk9NABQwSVW4ixhFqpFRCGUBE4X2q-KpScU6gcTwGRgVm5whifA4QwBli"/>
+</div>
+<!-- Itinerary -->
+<div>
+<h2 class="font-headline-md text-headline-md mb-8">Your Itinerary</h2>
+<div class="relative border-l border-outline-variant/30 ml-4 space-y-12">
+<div class="relative pl-8">
+<div class="absolute left-[-9px] top-1 w-4 h-4 rounded-full bg-primary-container border-2 border-background"></div>
+<h3 class="font-headline-sm text-headline-sm mb-2">14:00 - Welcome Aboard</h3>
+<p class="text-on-surface-variant">Embark at the Victoria Island Marina. Greeted with a champagne reception and a brief tour of the vessel by the captain.</p>
+</div>
+<div class="relative pl-8">
+<div class="absolute left-[-9px] top-1 w-4 h-4 rounded-full bg-surface border-2 border-outline-variant"></div>
+<h3 class="font-headline-sm text-headline-sm mb-2">15:00 - Coastal Cruise &amp; Canapés</h3>
+<p class="text-on-surface-variant">Set sail along the picturesque Lagos coastline. Enjoy a selection of gourmet canapés prepared fresh by your private chef.</p>
+</div>
+<div class="relative pl-8">
+<div class="absolute left-[-9px] top-1 w-4 h-4 rounded-full bg-surface border-2 border-outline-variant"></div>
+<h3 class="font-headline-sm text-headline-sm mb-2">17:00 - Golden Hour Anchoring</h3>
+<p class="text-on-surface-variant">Anchor at a secluded bay. Perfect time for swimming, jet-skiing (optional add-on), or relaxing on the sun deck as the sun begins to set.</p>
+</div>
+<div class="relative pl-8">
+<div class="absolute left-[-9px] top-1 w-4 h-4 rounded-full bg-surface border-2 border-outline-variant"></div>
+<h3 class="font-headline-sm text-headline-sm mb-2">18:30 - Sunset Dining</h3>
+<p class="text-on-surface-variant">A curated 3-course dinner served al fresco on the aft deck, paired with premium wines, under the fading light of the Lagos sunset.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Booking Widget -->
+<div class="lg:col-span-4">
+<div class="glass-card rounded-xl p-8 sticky top-28 ambient-shadow">
+<div class="flex justify-between items-baseline mb-6 border-b border-outline/10 pb-6">
+<div>
+<span class="font-headline-md text-headline-md">$2,500</span>
+<span class="text-on-surface-variant font-body-md text-body-md"> / base package</span>
+</div>
+</div>
+<form class="space-y-6">
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase block mb-2">Date</label>
+<div class="relative">
+<input class="w-full luxury-input py-2 text-body-md focus:ring-0" type="date"/>
+</div>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase block mb-2">Time</label>
+<select class="w-full luxury-input py-2 text-body-md focus:ring-0 bg-transparent">
+<option>10:00 AM</option>
+<option selected="">2:00 PM</option>
+</select>
+</div>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase block mb-2">Guests</label>
+<select class="w-full luxury-input py-2 text-body-md focus:ring-0 bg-transparent">
+<option>Up to 5 Guests</option>
+<option>6 - 10 Guests (+$500)</option>
+<option>11 - 15 Guests (+$1000)</option>
+</select>
+</div>
+<div class="pt-4">
+<h4 class="font-label-caps text-label-caps text-on-background uppercase mb-4">Add-on Services</h4>
+<div class="space-y-3">
+<label class="flex items-center justify-between p-3 border border-outline/20 rounded-lg cursor-pointer hover:bg-surface transition-colors">
+<div class="flex items-center gap-3">
+<input class="text-primary focus:ring-primary rounded-sm border-outline" type="checkbox"/>
+<span class="font-body-md text-body-md">Private Chef</span>
+</div>
+<span class="text-on-surface-variant">+$300</span>
+</label>
+<label class="flex items-center justify-between p-3 border border-outline/20 rounded-lg cursor-pointer hover:bg-surface transition-colors">
+<div class="flex items-center gap-3">
+<input class="text-primary focus:ring-primary rounded-sm border-outline" type="checkbox"/>
+<span class="font-body-md text-body-md">Professional Photographer</span>
+</div>
+<span class="text-on-surface-variant">+$250</span>
+</label>
+<label class="flex items-center justify-between p-3 border border-outline/20 rounded-lg cursor-pointer hover:bg-surface transition-colors">
+<div class="flex items-center gap-3">
+<input class="text-primary focus:ring-primary rounded-sm border-outline" type="checkbox"/>
+<span class="font-body-md text-body-md">Jet Ski Rental (2 hrs)</span>
+</div>
+<span class="text-on-surface-variant">+$400</span>
+</label>
+</div>
+</div>
+<div class="border-t border-outline/10 pt-6 mt-6">
+<div class="flex justify-between mb-4 font-body-lg text-body-lg font-semibold">
+<span>Total Estimate</span>
+<span>$2,500</span>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container font-label-caps text-label-caps py-4 rounded-lg uppercase tracking-wider hover:bg-primary-container/90 transition-colors" type="button">
+                                Request Booking
+                            </button>
+<p class="text-center text-on-surface-variant text-sm mt-4">You won't be charged yet.</p>
+</div>
+</form>
+</div>
+</div>
+</section>
+<!-- Cross-sell Section -->
+<section class="bg-surface-container-low py-section-gap">
+<div class="max-w-[1440px] mx-auto px-4 md:px-container-padding">
+<div class="flex justify-between items-end mb-8">
+<div>
+<span class="text-primary font-label-caps text-label-caps uppercase mb-2 block">AI Concierge Suggests</span>
+<h2 class="font-headline-md text-headline-md">Complete Your Trip</h2>
+</div>
+<button class="hidden md:flex items-center text-on-surface-variant hover:text-primary transition-colors font-label-caps text-label-caps uppercase">
+                        View All <span class="material-symbols-outlined ml-1">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="glass-card rounded-xl overflow-hidden group flex flex-col md:flex-row">
+<img class="w-full md:w-48 h-48 object-cover" data-alt="A luxurious modern apartment interior in Lagos, featuring floor-to-ceiling windows with a view of the city skyline, plush contemporary furniture, and elegant warm lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDOTWuPmvjJVETN1L_MJGgacgBOQU40ekhIF9iF2ZessHDMguFkJ0i0Q8yeLWk1O8wDF9Pka5O9P-P5XiFvr-R_f-nYF4h-4JtvTW_zSjVLsxt5_ToqlOxq-zgn5IJihJU1pI3X4cOKmUskvunnOxgjzWbpzpSIdFAyjMQi1wXztJhp8Ia2U7JgCmXnXz0rEnuX20Aufb4kDfOPZFeH2fDBNxh8h9VBvolAJBQuBqBp6C2A7PS8BaWmV0mESdGccfAbI8rrOPrYCc4"/>
+<div class="p-6 flex flex-col justify-center flex-1">
+<span class="px-2 py-1 bg-surface inline-block w-max text-xs font-label-caps rounded-sm mb-3">APARTMENT</span>
+<h3 class="font-headline-sm text-headline-sm mb-2 group-hover:text-primary transition-colors">The Eko Penthouse</h3>
+<p class="text-on-surface-variant text-sm mb-4">Just 10 minutes from the marina. Perfect for your post-party rest.</p>
+<a class="font-label-caps text-label-caps text-primary uppercase inline-flex items-center" href="#">
+                                View Details <span class="material-symbols-outlined ml-1 text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="glass-card rounded-xl overflow-hidden group flex flex-col md:flex-row">
+<img class="w-full md:w-48 h-48 object-cover" data-alt="A sleek black luxury SUV parked outside a high-end terminal, ready for a VIP airport transfer. Professional chauffeur standing by. Evening lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1P3QoBUYfXOx9AIPrASBZw9EWuBPoa3Fp2o-0j87cfdPF_fvERtN2uFM2x4TGWE1ccLudCB6ehLgYqOBCxxssW_wT_2hZjMEieWWCscCenj4rzXeZV_FZnTzmZCJ4v5uDiuZQtDFQThVUbKsVgL5gDjD2D0sjCF9dygvyfZuzphoLc7n1dVqt1w8HB25ErZ-mrazVAZSMalYCyTtlJRsAOyQHLfnz1idit7HTkEMAs0zWhrHp4nfDEwhfjO4OOUGQX2F2WKU4ZPfl"/>
+<div class="p-6 flex flex-col justify-center flex-1">
+<span class="px-2 py-1 bg-surface inline-block w-max text-xs font-label-caps rounded-sm mb-3">SERVICE</span>
+<h3 class="font-headline-sm text-headline-sm mb-2 group-hover:text-primary transition-colors">VIP Chauffeur Transfer</h3>
+<p class="text-on-surface-variant text-sm mb-4">Seamless travel from your accommodation to the marina dock.</p>
+<a class="font-label-caps text-label-caps text-primary uppercase inline-flex items-center" href="#">
+                                Add to Itinerary <span class="material-symbols-outlined ml-1 text-sm">add</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-on-background dark:bg-surface-container-lowest full-width border-t border-outline/10 w-full py-stack-lg px-4 md:px-container-padding flex flex-col md:flex-row justify-between items-center mt-section-gap">
+<div class="font-headline-sm text-headline-sm text-primary dark:text-inverse-primary mb-6 md:mb-0">
+            Cozy Lagos
+        </div>
+<div class="flex flex-wrap justify-center gap-6 mb-6 md:mb-0">
+<a class="font-body-md text-body-md text-surface-variant dark:text-secondary hover:text-primary-container transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-surface-variant dark:text-secondary hover:text-primary-container transition-colors" href="#">Terms of Service</a>
+<a class="font-body-md text-body-md text-surface-variant dark:text-secondary hover:text-primary-container transition-colors" href="#">Contact Support</a>
+<a class="font-body-md text-body-md text-surface-variant dark:text-secondary hover:text-primary-container transition-colors" href="#">About Us</a>
+</div>
+<div class="font-body-md text-body-md text-surface-variant dark:text-secondary">
+            © 2024 Cozy Lagos. All rights reserved.
+        </div>
+</footer>
+</body></html>

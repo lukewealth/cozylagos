@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Identity Verification - Lagos Elite Partner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Manrope:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#faf9f8",
+                    "surface-variant": "#e3e2e1",
+                    "surface-container": "#eeeeed",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#e8e2d8",
+                    "on-tertiary-fixed": "#1e1b15",
+                    "on-surface": "#1a1c1c",
+                    "outline-variant": "#d0c5af",
+                    "outline": "#7f7663",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed": "#e5e2e1",
+                    "on-secondary-container": "#636262",
+                    "tertiary": "#625e56",
+                    "on-secondary": "#ffffff",
+                    "on-surface-variant": "#4d4635",
+                    "on-error": "#ffffff",
+                    "background": "#faf9f8",
+                    "on-primary-fixed-variant": "#574500",
+                    "inverse-on-surface": "#f1f0f0",
+                    "surface-container-highest": "#e3e2e1",
+                    "surface-container-low": "#f4f3f2",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "primary-fixed": "#ffe088",
+                    "secondary-container": "#e2dfde",
+                    "on-primary-fixed": "#241a00",
+                    "inverse-surface": "#2f3130",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "surface-dim": "#dadad9",
+                    "secondary": "#5f5e5e",
+                    "primary-fixed-dim": "#e9c349",
+                    "on-background": "#1a1c1c",
+                    "tertiary-container": "#b8b2a9",
+                    "on-tertiary-fixed-variant": "#4a463f",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#faf9f8",
+                    "on-primary-container": "#554300",
+                    "surface-container-high": "#e9e8e7",
+                    "tertiary-fixed-dim": "#ccc6bc",
+                    "primary-container": "#d4af37",
+                    "on-tertiary": "#ffffff",
+                    "inverse-primary": "#e9c349",
+                    "primary": "#735c00",
+                    "on-tertiary-container": "#48453e",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#735c00",
+                    "on-secondary-fixed-variant": "#474746",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "stack-sm": "16px",
+                    "stack-md": "32px",
+                    "container-padding": "80px",
+                    "gutter": "32px",
+                    "section-gap": "120px",
+                    "stack-lg": "64px"
+            },
+            "fontFamily": {
+                    "display-lg": [
+                            "Playfair Display"
+                    ],
+                    "headline-md": [
+                            "Playfair Display"
+                    ],
+                    "body-md": [
+                            "Manrope"
+                    ],
+                    "headline-sm": [
+                            "Playfair Display"
+                    ],
+                    "body-lg": [
+                            "Manrope"
+                    ],
+                    "headline-lg": [
+                            "Playfair Display"
+                    ],
+                    "label-caps": [
+                            "Manrope"
+                    ],
+                    "headline-lg-mobile": [
+                            "Playfair Display"
+                    ]
+            },
+            "fontSize": {
+                    "display-lg": [
+                            "64px",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-md": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-sm": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "1",
+                                    "letterSpacing": "0.1em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "36px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+        },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(208, 197, 175, 0.3); /* outline-variant */
+            box-shadow: 0px 20px 50px rgba(26, 26, 26, 0.04);
+        }
+
+        .luxury-input-wrapper {
+            position: relative;
+            margin-bottom: theme('spacing.stack-md');
+        }
+
+        .luxury-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(26, 28, 28, 0.2); /* on-surface variant */
+            padding: theme('spacing.stack-sm') 0;
+            color: theme('colors.on-surface');
+            font-family: theme('fontFamily.body-md');
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .luxury-input:focus {
+            outline: none;
+            border-bottom-color: theme('colors.primary-container');
+            box-shadow: 0 1px 0 0 theme('colors.primary-container');
+        }
+
+        .luxury-label {
+            position: absolute;
+            top: theme('spacing.stack-sm');
+            left: 0;
+            color: theme('colors.on-surface-variant');
+            font-family: theme('fontFamily.body-md');
+            font-size: 16px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .luxury-input:focus ~ .luxury-label,
+        .luxury-input:not(:placeholder-shown) ~ .luxury-label {
+            top: -12px;
+            font-size: 12px;
+            color: theme('colors.primary');
+        }
+        
+        .file-drop-zone {
+            border: 1px dashed theme('colors.outline');
+            background: rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .file-drop-zone:hover, .file-drop-zone.drag-active {
+            border-color: theme('colors.primary-container');
+            background: rgba(212, 175, 55, 0.05); /* primary-container subtle */
+        }
+        
+        /* Custom Toggle */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: theme('colors.primary-container');
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: theme('colors.primary-container');
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex selection:bg-primary-container/30">
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex bg-surface h-screen w-80 border-r border-outline-variant/20 shadow-sm fixed left-0 top-0 flex-col z-40">
+<!-- Brand Header -->
+<div class="p-8 border-b border-outline-variant/10">
+<h1 class="font-display-lg text-display-lg text-primary" style="font-size: 32px;">Lagos Elite</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Service Partner</p>
+</div>
+<!-- Navigation Tabs -->
+<div class="flex-1 overflow-y-auto py-6">
+<ul class="space-y-2">
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant px-6 py-4 hover:bg-surface-container-high transition-colors duration-300 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="person_pin">person_pin</span>
+                        Profile Details
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant px-6 py-4 hover:bg-surface-container-high transition-colors duration-300 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+                        Service Catalog
+                    </a>
+</li>
+<li>
+<!-- ACTIVE STATE -->
+<a class="flex items-center gap-4 text-primary font-bold border-r-4 border-primary px-6 py-4 bg-primary-container/10 duration-300 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="verified_user" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+                        Identity Verification
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant px-6 py-4 hover:bg-surface-container-high transition-colors duration-300 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+                        Review &amp; Submit
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant px-6 py-4 hover:bg-surface-container-high transition-colors duration-300 ease-in-out font-body-md text-body-md mt-8" href="#">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+                        Support
+                    </a>
+</li>
+</ul>
+</div>
+<!-- Footer CTA -->
+<div class="p-6 border-t border-outline-variant/10">
+<button class="w-full py-3 px-4 border border-outline text-on-surface font-label-caps text-label-caps rounded hover:bg-surface-container-high transition-colors duration-300">
+                Save Draft
+            </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-80 min-h-screen relative overflow-hidden flex flex-col">
+<!-- TopAppBar (Shared Component) -->
+<header class="flex justify-between items-center w-full px-container-padding h-20 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/20 sticky top-0 z-30 transition-all duration-200">
+<div class="flex items-center gap-4">
+<!-- Mobile Menu Button (Hidden on Desktop) -->
+<button class="md:hidden text-on-surface-variant p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="font-headline-sm text-headline-sm text-primary">Onboarding Wizard</h2>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-2">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+<button class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">
+                    Exit Flow
+                </button>
+</div>
+</header>
+<!-- Form Canvas -->
+<div class="flex-1 overflow-y-auto px-6 py-12 md:px-container-padding lg:px-[120px] pb-32">
+<div class="max-w-4xl mx-auto">
+<!-- Header Section -->
+<div class="mb-16">
+<div class="inline-flex items-center gap-2 mb-4">
+<span class="font-label-caps text-label-caps text-primary bg-primary-container/10 px-3 py-1 rounded-full border border-primary-container/20 uppercase tracking-widest">Step 3 of 4</span>
+<span class="text-on-surface-variant text-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-[#2e7d32]">lock</span> Secure 256-bit Encryption
+                        </span>
+</div>
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-4">Identity &amp; Trust Verification</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                        To maintain the exceptional standards of the Lagos Elite community, we require government-issued identification and background verification for all service partners.
+                    </p>
+</div>
+<!-- Bento Grid Layout for Verification Steps -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Primary Verification (ID) -->
+<div class="lg:col-span-7 space-y-8">
+<!-- ID Upload Card -->
+<section class="glass-panel rounded-xl p-8 relative overflow-hidden">
+<!-- Subtle decorative gradient -->
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-primary-container/5 rounded-full blur-3xl pointer-events-none"></div>
+<div class="flex items-start justify-between mb-6">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Government ID</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">Upload a clear photo of your valid Passport, Driver's License, or National ID.</p>
+</div>
+<span class="material-symbols-outlined text-primary-container text-3xl font-light">badge</span>
+</div>
+<div class="space-y-6">
+<!-- Front of ID -->
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface mb-3 uppercase tracking-widest">Front of Document</label>
+<div class="file-drop-zone rounded-lg p-8 flex flex-col items-center justify-center text-center cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center mb-4 group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">add_photo_alternate</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-1 group-hover:text-primary transition-colors">Click to upload or drag and drop</p>
+<p class="font-body-md text-xs text-on-surface-variant">PNG, JPG up to 10MB</p>
+</div>
+</div>
+<!-- Back of ID -->
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface mb-3 uppercase tracking-widest">Back of Document</label>
+<div class="file-drop-zone rounded-lg p-8 flex flex-col items-center justify-center text-center cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center mb-4 group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">add_photo_alternate</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-1 group-hover:text-primary transition-colors">Click to upload or drag and drop</p>
+<p class="font-body-md text-xs text-on-surface-variant">PNG, JPG up to 10MB</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Secondary Verifications -->
+<div class="lg:col-span-5 space-y-8">
+<!-- Background Check Consent Card -->
+<section class="glass-panel rounded-xl p-8 border-l-4 border-l-primary-container">
+<div class="flex items-start gap-4 mb-6">
+<div class="mt-1">
+<span class="material-symbols-outlined text-on-surface-variant">policy</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2" style="font-size: 20px;">Background Verification</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">Consent to a standard criminal and professional background check via our secure third-party partner.</p>
+</div>
+</div>
+<div class="luxury-input-wrapper mb-6 mt-4">
+<input class="luxury-input" id="ssn" placeholder=" " type="text"/>
+<label class="luxury-label" for="ssn">National Identification Number (NIN)</label>
+</div>
+<!-- Toggle -->
+<div class="flex items-center justify-between mt-8 p-4 bg-surface-container-low rounded-lg border border-outline-variant/30">
+<span class="font-body-md text-body-md text-on-surface text-sm pr-4">I authorize Lagos Elite to conduct a background check.</span>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-surface-variant appearance-none cursor-pointer z-10 transition-all duration-300" id="consent-toggle" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-variant cursor-pointer transition-colors duration-300" for="consent-toggle"></label>
+</div>
+</div>
+</section>
+<!-- Professional Certifications (Optional) -->
+<section class="glass-panel rounded-xl p-8">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline-sm text-headline-sm text-on-surface" style="font-size: 20px;">Professional Certifications</h3>
+<span class="font-label-caps text-label-caps text-on-surface-variant bg-surface-container px-2 py-1 rounded text-[10px]">OPTIONAL</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mb-6">Elevate your profile. Highly recommended for culinary, wellness, and specialized service partners.</p>
+<button class="w-full py-4 px-6 border border-dashed border-outline-variant rounded-lg flex items-center justify-center gap-3 text-on-surface hover:bg-surface-container hover:border-outline transition-all duration-300 group">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">upload_file</span>
+<span class="font-body-md text-body-md">Upload Certificate (.pdf)</span>
+</button>
+</section>
+</div>
+</div>
+<!-- Action Footer (Floating) -->
+<div class="mt-16 flex items-center justify-between pt-8 border-t border-outline-variant/20">
+<button class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface flex items-center gap-2 uppercase tracking-widest transition-colors duration-300">
+<span class="material-symbols-outlined text-lg">arrow_back</span>
+                        Back
+                    </button>
+<button class="bg-[#D4AF37] text-[#1a1c1c] font-label-caps text-label-caps px-8 py-4 rounded hover:bg-[#e9c349] hover:shadow-lg transition-all duration-300 uppercase tracking-widest flex items-center gap-3">
+                        Continue to Review
+                        <span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Simple script for drag and drop visual feedback
+        const dropZones = document.querySelectorAll('.file-drop-zone');
+        
+        dropZones.forEach(zone => {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.classList.add('drag-active');
+            });
+            
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('drag-active');
+            });
+            
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('drag-active');
+                // Handle file visual update here if needed
+                const textEl = zone.querySelector('p.text-on-surface');
+                if(e.dataTransfer.files.length > 0) {
+                    textEl.textContent = e.dataTransfer.files[0].name;
+                    textEl.classList.add('text-primary');
+                }
+            });
+        });
+    </script>
+</body></html>
