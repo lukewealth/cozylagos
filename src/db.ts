@@ -388,7 +388,7 @@ export async function seedDatabase(initialData: {
   chatMessages?: any[]
 }): Promise<void> {
   const { listings, bookings, transactions, users, services, experiences, chatMessages } = initialData;
-  
+
   const currentListings = await dbGetAll('listings');
   if (currentListings.length === 0) {
     for (const listing of listings) {
@@ -397,6 +397,18 @@ export async function seedDatabase(initialData: {
         createdAt: listing.createdAt || new Date().toISOString(),
         updatedAt: listing.updatedAt || new Date().toISOString()
       });
+    }
+  } else {
+    // Ensure all initial listings exist (add missing ones)
+    const currentIds = new Set(currentListings.map((l: any) => l.id));
+    for (const listing of listings) {
+      if (!currentIds.has(listing.id)) {
+        await dbPut('listings', {
+          ...listing,
+          createdAt: listing.createdAt || new Date().toISOString(),
+          updatedAt: listing.updatedAt || new Date().toISOString()
+        });
+      }
     }
   }
 

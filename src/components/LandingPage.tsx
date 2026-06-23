@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { Listing } from '../types';
+import { INITIAL_LISTINGS } from '../data';
 import ApartmentCard from './ui/ApartmentCard';
 import Hero from './Hero';
 import SearchFilters from './SearchFilters';
@@ -13,6 +14,9 @@ interface LandingPageProps {
 }
 
 export default function LandingPage({ listings, onSelectListing, setActiveTab }: LandingPageProps) {
+  // Use INITIAL_LISTINGS as fallback to ensure all 15 properties are displayed
+  const allListings = listings.length > 0 ? listings : INITIAL_LISTINGS;
+
   const [filters, setFilters] = useState({
     location: '',
     category: '',
@@ -24,15 +28,15 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
   const [showMap, setShowMap] = useState(false);
 
   const locations = useMemo(() =>
-    Array.from(new Set(listings.map(l => l.location))),
-  []);
+    Array.from(new Set(allListings.map(l => l.location))),
+  [allListings]);
 
   const categories = useMemo(() =>
-    Array.from(new Set(listings.map(l => l.category))),
-  []);
+    Array.from(new Set(allListings.map(l => l.category))),
+  [allListings]);
 
   const filteredListings = useMemo(() => {
-    return listings.filter(listing => {
+    return allListings.filter(listing => {
       const matchLocation = !filters.location || listing.location === filters.location;
       const matchCategory = !filters.category || listing.category === filters.category;
       const matchPrice = listing.nightlyRate >= filters.priceRange[0] && listing.nightlyRate <= filters.priceRange[1];
@@ -41,7 +45,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
 
       return matchLocation && matchCategory && matchPrice && matchBeds && matchBaths;
     });
-  }, [listings, filters]);
+  }, [allListings, filters]);
 
   return (
     <div className="flex-grow flex flex-col animate-fade-in">

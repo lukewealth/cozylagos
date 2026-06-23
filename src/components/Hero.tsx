@@ -10,13 +10,14 @@ export default function Hero({ children }: HeroProps) {
   return (
     <section className="relative w-full h-[85vh] min-h-[650px] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <motion.img 
+        <motion.img
           initial={{ scale: 1.1 }}
           animate={{ scale: 1 }}
           transition={{ duration: 10, ease: "easeOut" }}
-          className="w-full h-full object-cover" 
-          src="assets/images/horizontal/IMG-20260621-WA0002.jpg" 
-          alt="Luxury Resort"
+          className="w-full h-full object-cover"
+          src="assets/images/horizontal/Horizotal view.jpg"
+          alt="Luxury Lagos"
+          onError={(e) => { (e.target as HTMLImageElement).src = 'assets/images/horizontal/CozyLagos.jpeg'; }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 via-transparent to-charcoal/60"></div>
       </div>
