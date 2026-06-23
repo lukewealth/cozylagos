@@ -212,7 +212,9 @@ function AppContent() {
               {activeTab === 'explorer' && (
                 <ExplorerView listings={listings.filter(l => l.isActive)} onSelectListing={(stay) => setSelectedListing(stay)} searchDestination={searchDestination} setSearchDestination={setSearchDestination} />
               )}
-              {activeTab === 'explore-lagos' && <ExploreLagosView />}
+              {activeTab === 'explore-lagos' && (
+                <ExploreLagosView onNavigateBundles={() => setActiveTab('bundles')} />
+              )}
               {activeTab === 'bundles' && <ServiceBundlesView />}
               {activeTab === 'concierge-hub' && <ConciergeHubView />}
               {activeTab === 'smart-recommendations' && <SmartRecommendationsView />}
