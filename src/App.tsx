@@ -7,6 +7,7 @@ import {
 } from './data';
 import { Listing, Booking, Transaction } from './types';
 import { CartProvider, useCart } from './context/CartContext';
+import { AuthProvider, useAuth } from './auth';
 import TopNavBar from './components/TopNavBar';
 import LandingPage from './components/LandingPage';
 import CartDrawer from './components/CartDrawer';
@@ -28,9 +29,8 @@ import AdminDashboard from './portals/AdminDashboard';
 import SuperAdminDashboard from './portals/SuperAdminDashboard';
 
 function AppContent() {
-  // Master Portals: expanded to include all requested roles
-  const [portal, setPortal] = useState<'guest' | 'user' | 'service_provider' | 'admin' | 'super_admin'>('guest');
-  
+  const { currentUser, isAuthenticated } = useAuth();
+
   // Tabs management
   const [activeTab, setActiveTab] = useState<
     'home' | 'lagos-cruise' | 'explorer' | 'experience' | 'bundles' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations'
@@ -147,9 +147,7 @@ function AppContent() {
     <div className="min-h-screen bg-parchment text-charcoal flex flex-col selection:bg-charcoal selection:text-parchment">
       
       {/* Dynamic Unified Header Navigation */}
-      <TopNavBar 
-        portal={portal as any}
-        setPortal={setPortal as any}
+      <TopNavBar
         activeTab={activeTab}
         setActiveTab={(tab) => {
           setSelectedListing(null); // clear single listing details
@@ -319,8 +317,10 @@ function AppContent() {
   
 export default function App() {
   return (
-    <CartProvider>
-      <AppContent />
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <AppContent />
+      </CartProvider>
+    </AuthProvider>
   );
 }
