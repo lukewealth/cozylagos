@@ -1,6 +1,9 @@
-import React, { useState, useMemo } from 'react';
-import { ArrowLeft, Star, Bed, Bath, Users, ShieldCheck, Heart, Share2, ClipboardCheck, AlertCircle, Sparkles } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { ArrowLeft, Star, Bed, Bath, Users, ShieldCheck, Heart, Share2, ClipboardCheck, AlertCircle, Sparkles, Maximize, Info, Clock, MapPin } from 'lucide-react';
 import { Listing } from '../types';
+import ImageGallery from './ui/ImageGallery';
+import BookingFlow from './BookingFlow';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface ListingDetailViewProps {
   listing: Listing;
@@ -17,6 +20,9 @@ interface ListingDetailViewProps {
 }
 
 export default function ListingDetailView({ listing, onBack, onConfirmBooking }: ListingDetailViewProps) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [showBookingFlow, setShowBookingFlow] = useState(false);
+  const [bookingFlowData, setBookingFlowData] = useState<any>(null);
   const [checkIn, setCheckIn] = useState<string>('2026-10-12');
   const [checkOut, setCheckOut] = useState<string>('2026-10-18');
   const [guestCount, setGuestCount] = useState<number>(2);
@@ -45,11 +51,11 @@ export default function ListingDetailView({ listing, onBack, onConfirmBooking }:
   }, [listing.nightlyRate, totalNights]);
 
   const vipDriverTotal = useMemo(() => {
-    return includeVipDriver ? 180000 * totalNights : 0; // ₦180k daily driver retainment
+    return includeVipDriver ? 180000 * totalNights : 0;
   }, [includeVipDriver, totalNights]);
 
   const chefTotal = useMemo(() => {
-    return includeChef ? 50000 * totalNights : 0; // ₦50k chef daily fee
+    return includeChef ? 50000 * totalNights : 0;
   }, [includeChef, totalNights]);
 
   const grossTotal = useMemo(() => {
@@ -57,338 +63,416 @@ export default function ListingDetailView({ listing, onBack, onConfirmBooking }:
   }, [nightlyTotal, vipDriverTotal, chefTotal, listing.cleaningFee]);
 
   const calculatedTax = useMemo(() => {
-    return Math.round(grossTotal * 0.075); // 7.5% Nigerian VAT
+    return Math.round(grossTotal * 0.075);
   }, [grossTotal]);
 
   const totalBilling = useMemo(() => {
     return grossTotal + calculatedTax;
   }, [grossTotal, calculatedTax]);
 
-  const handleCreateBooking = (e: React.FormEvent) => {
+  const handleStartBooking = (e: React.FormEvent) => {
     e.preventDefault();
+    setBookingFlowData({
+      name: '',
+      email: '',
+      checkIn,
+      checkOut,
+      guestsCount: guestCount,
+    });
+    setShowBookingFlow(true);
+  };
+
+  const handleCompleteBooking = (finalData: any) => {
     onConfirmBooking({
       listingId: listing.id,
       listingTitle: listing.title,
-      checkIn,
-      checkOut,
+      checkIn: finalData.checkIn,
+      checkOut: finalData.checkOut,
       totalAmount: totalBilling,
-      guestName: 'Alexander',
-      guestEmail: 'alex.traveler@elite.com'
+      guestName: finalData.name,
+      guestEmail: finalData.email
     });
     setBookingSuccess(true);
+    setShowBookingFlow(false);
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex-grow bg-parchment flex items-center justify-center overflow-hidden">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="flex flex-col items-center gap-6"
+        >
+          <div className="relative">
+            <motion.div 
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+              className="w-16 h-16 border-4 border-gold/20 border-t-gold rounded-full"
+            />
+            <motion.div 
+              animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              className="absolute inset-0 flex items-center justify-center"
+            >
+              <Sparkles className="w-6 h-6 text-gold" />
+            </motion.div>
+          </div>
+          <div className="text-center space-y-2">
+            <h3 className="font-serif text-xl text-charcoal">Preparing your view</h3>
+            <p className="text-xs font-mono text-charcoal/40 uppercase tracking-widest">Fetching luxury details...</p>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (showBookingFlow) {
+    return (
+      <BookingFlow 
+        listing={listing} 
+        onCancel={() => setShowBookingFlow(false)}
+        onComplete={handleCompleteBooking}
+        initialData={bookingFlowData}
+      />
+    );
+  }
 
   return (
     <div className="flex-grow bg-parchment animate-fade-in-up text-left">
       
-      {/* 1. PHOTO COVER LAYOUT */}
-      <section className="relative w-full h-[45vh] md:h-[55vh] flex items-end bg-charcoal select-none">
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-85"
-          style={{ backgroundImage: `url(${listing.image})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent"></div>
-        </div>
+      {/* 1. HERO SECTION - IMAGE GALLERY & HEADER */}
+      <section className="relative w-full bg-charcoal select-none">
+        <ImageGallery images={listing.images} />
 
-        {/* Back control */}
         <div className="absolute top-6 left-6 md:left-12 z-20">
-          <button
+          <motion.button
+            whileHover={{ x: -5 }}
             onClick={onBack}
-            className="flex items-center gap-2.5 px-5 py-3 bg-parchment/95 backdrop-blur-md rounded-full border border-charcoal/10 hover:bg-charcoal hover:text-parchment font-bold text-[10px] tracking-widest uppercase transition-colors shadow-lg"
+            className="flex items-center gap-2.5 px-5 py-3 bg-white/90 backdrop-blur-md rounded-full border border-charcoal/10 hover:bg-charcoal hover:text-parchment font-bold text-[10px] tracking-widest uppercase transition-all shadow-lg"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Residences List</span>
-          </button>
+            <span>Back to search</span>
+          </motion.button>
         </div>
 
-        {/* Top actions */}
         <div className="absolute top-6 right-6 md:right-12 z-20 flex gap-3">
-          <button
+          <motion.button
+            whileTap={{ scale: 0.9 }}
             onClick={() => setIsFavorited(!isFavorited)}
-            className="w-11 h-11 bg-parchment/95 backdrop-blur-md rounded-full shadow-lg flex items-center justify-center text-charcoal hover:text-red-600 transition-colors"
+            className="w-11 h-11 bg-white/90 backdrop-blur-md rounded-full shadow-lg flex items-center justify-center text-charcoal hover:text-red-600 transition-colors"
           >
             <Heart className={`w-4 h-4 ${isFavorited ? 'fill-current text-red-600' : ''}`} />
-          </button>
+          </motion.button>
           
-          <button
-            className="w-11 h-11 bg-parchment/95 backdrop-blur-md rounded-full shadow-lg flex items-center justify-center text-charcoal hover:text-gold-dark transition-colors"
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            className="w-11 h-11 bg-white/90 backdrop-blur-md rounded-full shadow-lg flex items-center justify-center text-charcoal hover:text-gold-dark transition-colors"
           >
             <Share2 className="w-4 h-4" />
-          </button>
+          </motion.button>
         </div>
 
-        {/* Floating title layout */}
         <div className="relative z-10 w-full max-w-[1440px] px-6 md:px-12 xl:px-20 mx-auto pb-10">
-          <div className="max-w-3xl text-white space-y-3">
-            <div className="flex items-center gap-2">
-              <span className="bg-gold/25 border border-gold/40 text-gold-light font-bold text-[9px] tracking-widest uppercase px-3 py-1 rounded-full backdrop-blur-sm">
-                {listing.location} Peninsula
+          <div className="max-w-4xl text-white space-y-4">
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-3"
+            >
+              <span className="bg-gold text-charcoal font-bold text-[10px] tracking-[0.2em] uppercase px-3 py-1 rounded-sm">
+                {listing.category}
               </span>
-              <span className="flex items-center gap-1 font-bold text-xs text-gold-light">
-                <Star className="w-3.5 h-3.5 fill-current" />
-                <span>{listing.rating} ({listing.reviewsCount} reviews)</span>
+              <span className="text-white/60 text-xs uppercase tracking-widest flex items-center gap-1">
+                <MapPin className="w-3 h-3" />
+                {listing.location}
               </span>
-            </div>
+            </motion.div>
 
-            <h1 className="font-serif text-3.5xl md:text-5xl font-extrabold uppercase tracking-tight">
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="font-serif text-4xl md:text-6xl font-bold leading-tight"
+            >
               {listing.title}
-            </h1>
+            </motion.h1>
           </div>
         </div>
       </section>
 
-      {/* 2. BODY SPECS & PRICE COLUMN GRID */}
-      <section className="max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 py-16 md:py-24 grid grid-cols-1 lg:grid-cols-12 gap-12">
+      {/* 2. DETAILS GRID */}
+      <section className="max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 py-12 md:py-20 grid grid-cols-1 lg:grid-cols-12 gap-16">
         
-        {/* LEFT COLUMN: RESIDENCE DETAILS (8/12th) */}
-        <div className="lg:col-span-8 space-y-12">
+        {/* LEFT CONTENT (8/12th) */}
+        <div className="lg:col-span-8 space-y-16">
           
-          {/* Quick Specs Bento */}
-          <div className="grid grid-cols-3 gap-4 border-b border-charcoal/5 pb-8 text-charcoal font-semibold text-center uppercase">
-            <div className="p-4 bg-white border border-charcoal/5 rounded-2xl flex flex-col justify-center items-center gap-1">
-              <Bed className="w-5 h-5 text-gold-dark" />
-              <span className="text-[9px] text-charcoal/40 font-bold tracking-widest block">SUITE ROOMS</span>
-              <span className="text-sm font-bold text-charcoal">{listing.bedrooms} Beds</span>
-            </div>
-
-            <div className="p-4 bg-white border border-charcoal/5 rounded-2xl flex flex-col justify-center items-center gap-1">
-              <Bath className="w-5 h-5 text-gold-dark" />
-              <span className="text-[9px] text-charcoal/40 font-bold tracking-widest block">BATHROOM UNITS</span>
-              <span className="text-sm font-bold text-charcoal">{listing.bathrooms} Baths</span>
-            </div>
-
-            <div className="p-4 bg-white border border-charcoal/5 rounded-2xl flex flex-col justify-center items-center gap-1">
+          {/* Quick Spec Bar (Image 3 style) */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="flex flex-wrap items-center gap-8 py-6 border-y border-charcoal/5 text-charcoal"
+          >
+            <div className="flex items-center gap-3">
               <Users className="w-5 h-5 text-gold-dark" />
-              <span className="text-[9px] text-charcoal/40 font-bold tracking-widest block">MAX OCCUPANCY</span>
-              <span className="text-sm font-bold text-charcoal">Up to {listing.maxGuests} Guests</span>
-            </div>
-          </div>
-
-          {/* Description */}
-          <div className="space-y-4">
-            <h3 className="font-serif text-2xl font-bold text-charcoal">About this sky residence</h3>
-            <p className="text-sm md:text-base text-charcoal-light leading-relaxed font-light">
-              {listing.description}
-            </p>
-          </div>
-
-          {/* Insulation guarantees */}
-          <div className="bg-white border border-charcoal/5 p-6 rounded-2.5xl space-y-4">
-            <div className="flex items-center gap-2 text-gold-dark">
-              <ShieldCheck className="w-5 h-5" />
-              <h4 className="font-serif text-sm font-bold uppercase tracking-wider">Lagos Power &amp; Security Shield</h4>
+              <div className="flex flex-col">
+                <span className="text-[10px] font-bold text-charcoal/40 uppercase tracking-wider">Capacity</span>
+                <span className="text-sm font-bold">Up to {listing.maxGuests} Guests</span>
+              </div>
             </div>
 
-            <p className="text-xs text-charcoal-light leading-relaxed font-medium">
-              Your tranquility is insulated by redundant infrastructure. Equipped with 24/7 automated Cummins silent backup power generation, smart high-capacity solar inverter stacks, Starlink fiber internet, and highly vetted on-site estate gated guards.
-            </p>
-          </div>
+            <div className="flex items-center gap-3">
+              <Bed className="w-5 h-5 text-gold-dark" />
+              <div className="flex flex-col">
+                <span className="text-[10px] font-bold text-charcoal/40 uppercase tracking-wider">Rooms</span>
+                <span className="text-sm font-bold">{listing.bedrooms} Bedroom(s)</span>
+              </div>
+            </div>
 
-          {/* Amenities Grid */}
-          <div className="space-y-6">
-            <h3 className="font-serif text-xl font-bold text-charcoal">Residence Amenities</h3>
+            <div className="flex items-center gap-3">
+              <Bath className="w-5 h-5 text-gold-dark" />
+              <div className="flex flex-col">
+                <span className="text-[10px] font-bold text-charcoal/40 uppercase tracking-wider">Bathrooms</span>
+                <span className="text-sm font-bold">{listing.bathrooms} Bath(s)</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Maximize className="w-5 h-5 text-gold-dark" />
+              <div className="flex flex-col">
+                <span className="text-[10px] font-bold text-charcoal/40 uppercase tracking-wider">Size</span>
+                <span className="text-sm font-bold">{listing.squareFootage?.toLocaleString()} sqft</span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Description Section */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="space-y-6"
+          >
+            <h2 className="font-serif text-3xl font-bold text-charcoal">About this property</h2>
+            <div className="prose prose-charcoal max-w-none">
+              <p className="text-lg text-charcoal-light leading-relaxed font-light">
+                {listing.description}
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Amenities Section */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="space-y-8"
+          >
+            <div className="flex items-center justify-between border-b border-charcoal/5 pb-4">
+              <h2 className="font-serif text-3xl font-bold text-charcoal">Amenities</h2>
+              <span className="text-xs font-bold text-gold-dark uppercase tracking-widest">{listing.amenities.length} total</span>
+            </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-6">
               {listing.amenities.map((am, idx) => (
-                <div 
-                  key={idx}
-                  className="p-4 bg-white/60 border border-charcoal/5 rounded-2xl flex items-center gap-3 text-xs font-semibold text-charcoal-light"
-                >
-                  <span className="w-2 h-2 rounded-full bg-gold" />
-                  <span>{am}</span>
+                <div key={idx} className="flex items-center gap-3 text-sm text-charcoal-light font-medium">
+                  <div className="w-1.5 h-1.5 rounded-full bg-gold" />
+                  {am}
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          {/* Review spotlight */}
-          <div className="space-y-6 pt-4 border-t border-charcoal/5">
-            <h3 className="font-serif text-xl font-bold text-charcoal">Travelers Feedback</h3>
-            
-            <div className="p-6 bg-white/70 border border-charcoal/5 rounded-3xl relative text-left">
-              <span className="absolute top-6 right-6 text-gold-dark text-lg font-bold">★★★★★</span>
-              <p className="font-serif italic text-charcoal/80 text-sm leading-relaxed">
-                "An incredible sanctuary. Perfect solar inverter back-up system meant we never noticed grid transitions. The in-house chef prepared standard-setting grilled ocean snappers."
-              </p>
-              <div className="mt-4 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-charcoal/5 flex items-center justify-center text-xs font-bold text-charcoal">
-                  M
+          {/* Review Highlight (Image 3 style) */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="p-8 bg-white border border-charcoal/5 rounded-3xl space-y-4"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className={`w-4 h-4 ${i < Math.floor(listing.rating) ? 'text-gold fill-current' : 'text-charcoal/10'}`} />
+                  ))}
                 </div>
-                <div>
-                  <span className="block text-xs font-bold text-charcoal">Marcus Thompson</span>
-                  <span className="text-[10px] text-charcoal-light/60 block">London, UK</span>
-                </div>
+                <span className="font-bold text-charcoal">{listing.rating}</span>
+              </div>
+              <span className="text-xs text-charcoal-light uppercase tracking-widest font-bold">{listing.reviewsCount} reviews</span>
+            </div>
+            <p className="font-serif italic text-charcoal/70 text-lg leading-relaxed">
+              "An absolutely spectacular sanctuary. The view from the penthouse at sunset is unmatched in Lagos. The housekeeping is impeccable and the atmosphere is pure tranquility."
+            </p>
+            <div className="flex items-center gap-3 pt-2">
+              <div className="w-10 h-10 rounded-full bg-charcoal/5 flex items-center justify-center font-bold text-charcoal">A</div>
+              <div>
+                <span className="block text-sm font-bold text-charcoal">Alexander Sterling</span>
+                <span className="text-[10px] text-charcoal-light uppercase font-bold">Verified Guest</span>
               </div>
             </div>
-          </div>
-
+          </motion.div>
         </div>
 
-        {/* RIGHT COLUMN: BOOKING ESTIMATOR (4/12th) */}
-        <div className="lg:col-span-4">
-          <div className="bg-white border border-charcoal/5 p-8 rounded-3xl sticky top-28 shadow-xl text-left">
-            
-            <div className="border-b border-charcoal/5 pb-4 mb-6">
-              <span className="text-[10px] uppercase font-bold text-charcoal/40 block">Guaranteed Rate</span>
-              <div className="flex items-baseline">
-                <span className="font-serif font-bold text-3xl text-gold-dark">
-                  ₦{listing.nightlyRate.toLocaleString()}
-                </span>
-                <span className="text-xs text-charcoal-light ml-1">/ Night</span>
-              </div>
-            </div>
-
-            {bookingSuccess ? (
-              <div className="space-y-6 py-6 text-center animate-fade-in-up">
-                <div className="w-14 h-14 bg-gold/15 rounded-full flex items-center justify-center mx-auto text-gold-dark">
-                  <ClipboardCheck className="w-7 h-7" />
+        {/* RIGHT COLUMN: BOOKING WIDGET (4/12th) */}
+        <aside className="lg:col-span-4">
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5 }}
+            className="bg-white border border-charcoal/5 p-8 rounded-[2.5rem] shadow-2xl sticky top-24 text-left"
+          >
+            <div className="space-y-6">
+              
+              {/* Price Display */}
+              <div className="pb-6 border-b border-charcoal/5">
+                <div className="flex justify-between items-baseline">
+                  <span className="text-charcoal/40 text-xs font-bold uppercase tracking-widest">Nightly Rate</span>
+                  <span className="text-2xl font-serif font-bold text-gold-dark">₦{listing.nightlyRate.toLocaleString()}</span>
                 </div>
-                
-                <div className="space-y-1.5">
-                  <h4 className="font-serif text-xl font-bold text-charcoal">Booking Completed!</h4>
-                  <p className="text-xs text-charcoal-light leading-relaxed">
-                    Success! Your dates from <strong className="text-charcoal">{checkIn}</strong> to <strong className="text-charcoal">{checkOut}</strong> have been locked securely. Your host, Sarah, has been pinged.
+              </div>
+
+              {bookingSuccess ? (
+                <div className="py-10 text-center space-y-4">
+                  <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto text-gold-dark">
+                    <ClipboardCheck className="w-8 h-8" />
+                  </div>
+                  <h4 className="font-serif text-2xl font-bold text-charcoal">Stay Confirmed!</h4>
+                  <p className="text-sm text-charcoal-light px-4">
+                    Your luxury residence is locked. Check your email for arrival instructions.
                   </p>
+                  <button 
+                    onClick={() => setBookingSuccess(false)}
+                    className="w-full py-4 bg-charcoal text-parchment font-bold text-xs tracking-widest uppercase rounded-2xl hover:bg-gold-dark transition-all"
+                  >
+                    Book Another
+                  </button>
                 </div>
-
-                <div className="p-3 bg-gold/10 border border-gold/15 text-[10px] uppercase tracking-wider font-bold text-gold-dark rounded-xl">
-                  Points Earned: +{Math.round(totalBilling / 1000)} pts
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setBookingSuccess(false)}
-                  className="w-full py-3.5 bg-charcoal hover:bg-gold-dark text-parchment font-bold text-xs tracking-wider uppercase rounded-xl transition-all"
-                >
-                  Book New Slot
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleCreateBooking} className="space-y-5">
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="block text-[9px] font-bold text-charcoal-light/60 uppercase tracking-widest">Check-in</label>
-                    <input 
-                      type="date"
-                      value={checkIn}
-                      onChange={(e) => setCheckIn(e.target.value)}
-                      className="w-full bg-transparent border-0 border-b border-charcoal/15 pb-1 text-xs font-semibold focus:ring-0 focus:border-gold outline-none"
-                    />
-                  </div>
-                  <div className="space-y-1.5 flex flex-col justify-end">
-                    <label className="block text-[9px] font-bold text-charcoal-light/60 uppercase tracking-widest">Check-out</label>
-                    <input 
-                      type="date"
-                      value={checkOut}
-                      onChange={(e) => setCheckOut(e.target.value)}
-                      className="w-full bg-transparent border-0 border-b border-charcoal/15 pb-1 text-xs font-semibold focus:ring-0 focus:border-gold outline-none animate"
-                    />
-                  </div>
-                </div>
-
-                {/* Guest size slider */}
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center text-xs text-charcoal-light font-bold">
-                    <span className="block text-[9px] font-bold uppercase tracking-widest text-charcoal-light/60">GUESTS SIZE</span>
-                    <span>{guestCount} Travelers</span>
-                  </div>
-                  <input 
-                    type="range"
-                    min={1}
-                    max={listing.maxGuests}
-                    value={guestCount}
-                    onChange={(e) => setGuestCount(Number(e.target.value))}
-                    className="w-full accent-gold-dark"
-                  />
-                </div>
-
-                {/* VIP ADD ONS */}
-                <div className="pt-4 border-t border-charcoal/5 space-y-3">
-                  <span className="block text-[9px] font-bold text-charcoal-light/60 uppercase tracking-widest">VIP ARRIVAL PERKS</span>
+              ) : (
+                <form onSubmit={handleStartBooking} className="space-y-6">
                   
-                  <label className="flex items-center justify-between p-2.5 border border-charcoal/5 rounded-xl cursor-pointer hover:bg-parchment/60 transition-colors select-none text-xs">
-                    <div className="flex items-center gap-2.5">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold text-charcoal-light/60 uppercase tracking-widest">Check-in</label>
                       <input 
-                        type="checkbox"
-                        checked={includeVipDriver}
-                        onChange={() => setIncludeVipDriver(!includeVipDriver)}
-                        className="rounded text-gold focus:ring-0 focus:ring-offset-0 border-charcoal/10 w-4 h-4 cursor-pointer"
+                        type="date"
+                        value={checkIn}
+                        onChange={(e) => setCheckIn(e.target.value)}
+                        className="w-full bg-parchment/50 border-none text-sm font-semibold rounded-xl py-2 px-3 focus:ring-2 focus:ring-gold/20"
                       />
-                      <span>Armed SUV + Driver Roster</span>
                     </div>
-                    <span className="font-bold text-gold-dark">+₦180k/day</span>
-                  </label>
-
-                  <label className="flex items-center justify-between p-2.5 border border-charcoal/5 rounded-xl cursor-pointer hover:bg-parchment/60 transition-colors select-none text-xs">
-                    <div className="flex items-center gap-2.5">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold text-charcoal-light/60 uppercase tracking-widest">Check-out</label>
                       <input 
-                        type="checkbox"
-                        checked={includeChef}
-                        onChange={() => setIncludeChef(!includeChef)}
-                        className="rounded text-gold focus:ring-0 focus:ring-offset-0 border-charcoal/10 w-4 h-4 cursor-pointer"
+                        type="date"
+                        value={checkOut}
+                        onChange={(e) => setCheckOut(e.target.value)}
+                        className="w-full bg-parchment/50 border-none text-sm font-semibold rounded-xl py-2 px-3 focus:ring-2 focus:ring-gold/20"
                       />
-                      <span>In-House Personal Gourmet Chef</span>
                     </div>
-                    <span className="font-bold text-gold-dark">+₦50k/day</span>
-                  </label>
-                </div>
-
-                {/* Real-time estimate bills breakdown */}
-                <div className="border-t border-charcoal/5 pt-4 space-y-2 text-xs font-medium text-charcoal-light">
-                  <div className="flex justify-between items-baseline">
-                    <span>₦{listing.nightlyRate.toLocaleString()} x {totalNights} Nights</span>
-                    <span className="font-mono text-charcoal font-bold">₦{nightlyTotal.toLocaleString()}</span>
                   </div>
 
-                  {includeVipDriver && (
-                    <div className="flex justify-between items-baseline">
-                      <span>Armed Chauffeur Retention ({totalNights} days)</span>
-                      <span className="font-mono text-charcoal font-bold">₦{vipDriverTotal.toLocaleString()}</span>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-charcoal-light/60 uppercase tracking-widest">Guests</label>
+                    <div className="flex items-center gap-4 bg-parchment/50 rounded-xl px-4 py-2">
+                      <Users className="w-4 h-4 text-charcoal/40" />
+                      <input 
+                        type="range"
+                        min={1}
+                        max={listing.maxGuests}
+                        value={guestCount}
+                        onChange={(e) => setGuestCount(Number(e.target.value))}
+                        className="flex-1 accent-gold"
+                      />
+                      <span className="text-sm font-bold text-charcoal min-w-[2ch]">{guestCount}</span>
                     </div>
-                  )}
+                  </div>
 
-                  {includeChef && (
-                    <div className="flex justify-between items-baseline">
-                      <span>Private gourmet catering ({totalNights} days)</span>
-                      <span className="font-mono text-charcoal font-bold">₦{chefTotal.toLocaleString()}</span>
+                  {/* Add-ons */}
+                  <div className="space-y-3 pt-2">
+                    <label className="text-[10px] font-bold text-charcoal-light/60 uppercase tracking-widest">Luxury Enhancements</label>
+                    
+                    <label className="flex items-center justify-between p-3 border border-charcoal/5 rounded-2xl cursor-pointer hover:bg-parchment/50 transition-all">
+                      <div className="flex items-center gap-3">
+                        <input 
+                          type="checkbox"
+                          checked={includeVipDriver}
+                          onChange={() => setIncludeVipDriver(!includeVipDriver)}
+                          className="rounded text-gold focus:ring-0 border-charcoal/10"
+                        />
+                        <span className="text-xs font-medium">Private Chauffeur</span>
+                      </div>
+                      <span className="text-[10px] font-bold text-gold-dark">₦180k/d</span>
+                    </label>
+
+                    <label className="flex items-center justify-between p-3 border border-charcoal/5 rounded-2xl cursor-pointer hover:bg-parchment/50 transition-all">
+                      <div className="flex items-center gap-3">
+                        <input 
+                          type="checkbox"
+                          checked={includeChef}
+                          onChange={() => setIncludeChef(!includeChef)}
+                          className="rounded text-gold focus:ring-0 border-charcoal/10"
+                        />
+                        <span className="text-xs font-medium">Personal Chef</span>
+                      </div>
+                      <span className="text-[10px] font-bold text-gold-dark">₦50k/d</span>
+                    </label>
+                  </div>
+
+                  {/* Price Breakdown */}
+                  <div className="space-y-2 pt-4 border-t border-charcoal/5 text-xs">
+                    <div className="flex justify-between text-charcoal-light">
+                      <span>{totalNights} Nights x ₦{listing.nightlyRate.toLocaleString()}</span>
+                      <span>₦{nightlyTotal.toLocaleString()}</span>
                     </div>
-                  )}
-
-                  <div className="flex justify-between items-baseline">
-                    <span>Deep-cleaning and key sanitation</span>
-                    <span className="font-mono text-charcoal font-bold">₦{listing.cleaningFee.toLocaleString()}</span>
+                    {includeVipDriver && (
+                      <div className="flex justify-between text-charcoal-light">
+                        <span>Chauffeur ({totalNights} days)</span>
+                        <span>₦{vipDriverTotal.toLocaleString()}</span>
+                      </div>
+                    )}
+                    {includeChef && (
+                      <div className="flex justify-between text-charcoal-light">
+                        <span>Chef ({totalNights} days)</span>
+                        <span>₦{chefTotal.toLocaleString()}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between text-charcoal-light">
+                      <span>Sanitation Fee</span>
+                      <span>₦{listing.cleaningFee.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between text-charcoal-light">
+                      <span>VAT (7.5%)</span>
+                      <span>₦{calculatedTax.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between pt-4 text-base font-serif font-bold text-charcoal">
+                      <span>Total</span>
+                      <span className="text-gold-dark">₦{totalBilling.toLocaleString()}</span>
+                    </div>
                   </div>
 
-                  <div className="flex justify-between items-baseline">
-                    <span>Nigeria VAT Luxury Levy (7.5%)</span>
-                    <span className="font-mono text-charcoal font-bold">₦{calculatedTax.toLocaleString()}</span>
-                  </div>
-
-                  {/* Absolute total */}
-                  <div className="border-t border-charcoal/10 pt-4 flex justify-between items-baseline font-bold font-serif text-base text-charcoal">
-                    <span>Estimated Total</span>
-                    <span className="text-xl text-gold-dark">₦{totalBilling.toLocaleString()}</span>
-                  </div>
-                </div>
-
-                {/* Primary action trigger */}
-                <button
-                  type="submit"
-                  className="w-full py-4 bg-charcoal hover:bg-gold-dark hover:scale-102 text-parchment hover:text-parchment text-xs font-bold tracking-widest uppercase rounded-xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  <span>Request Luxury Stay</span>
-                </button>
-
-              </form>
-            )}
-
-          </div>
-        </div>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    type="submit"
+                    className="w-full py-4 bg-charcoal text-parchment font-bold text-xs tracking-widest uppercase rounded-2xl shadow-xl hover:bg-gold-dark transition-all flex items-center justify-center gap-2"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    <span>Reserve Now</span>
+                  </motion.button>
+                </form>
+              )}
+            </div>
+          </motion.div>
+        </aside>
 
       </section>
-
     </div>
   );
 }

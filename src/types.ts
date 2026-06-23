@@ -5,6 +5,17 @@
 
 export type UserRole = 'guest' | 'service_provider' | 'admin' | 'super_admin';
 
+export interface Service {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  category: string;
+  providerId: string;
+  image: string;
+  rating: number;
+}
+
 export interface User {
   id: string;
   name: string;
@@ -19,11 +30,12 @@ export interface Listing {
   id: string;
   title: string;
   description: string;
-  category: "Penthouse" | "Luxury Villa" | "Executive Studio" | "Serviced Apartment";
+  category: "Penthouse" | "Luxury Villa" | "Executive Studio" | "Serviced Apartment" | "Premium Package";
   location: "Ikoyi" | "Victoria Island" | "Banana Island" | "Lekki Phase 1";
   bedrooms: number;
   bathrooms: number;
   maxGuests: number;
+  squareFootage?: number;
   nightlyRate: number;
   weekendPremium: number; // percentage, e.g. 15
   cleaningFee: number;
@@ -31,6 +43,7 @@ export interface Listing {
   image: string;
   images: string[];
   amenities: string[];
+  packageDetails?: string[];
   ownerId: string;
   isActive: boolean;
   reviewsCount: number;
@@ -38,6 +51,7 @@ export interface Listing {
   aiMatchPercent: number;
   createdAt: string;
   updatedAt: string;
+
 }
 
 export interface Booking {

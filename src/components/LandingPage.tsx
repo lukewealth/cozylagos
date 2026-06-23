@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
-import { Search, Home } from 'lucide-react';
 import { INITIAL_LISTINGS } from '../data';
 import { Listing } from '../types';
 import ApartmentCard from './ui/ApartmentCard';
+import Hero from './Hero';
+import SearchFilters from './SearchFilters';
 
 interface LandingPageProps {
   onSelectListing: (listing: Listing) => void;
@@ -11,71 +12,46 @@ interface LandingPageProps {
 }
 
 export default function LandingPage({ onSelectListing, setActiveTab }: LandingPageProps) {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState({
+    location: '',
+    category: '',
+    priceRange: [0, 1000000] as [number, number],
+    beds: 0,
+    baths: 0,
+  });
 
-  const filteredListings = INITIAL_LISTINGS.filter(listing =>
-    listing.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    listing.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    listing.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    listing.amenities.some(amenity => amenity.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const locations = useMemo(() => 
+    Array.from(new Set(INITIAL_LISTINGS.map(l => l.location))),
+  []);
+  
+  const categories = useMemo(() => 
+    Array.from(new Set(INITIAL_LISTINGS.map(l => l.category))),
+  []);
+
+  const filteredListings = useMemo(() => {
+    return INITIAL_LISTINGS.filter(listing => {
+      const matchLocation = !filters.location || listing.location === filters.location;
+      const matchCategory = !filters.category || listing.category === filters.category;
+      const matchPrice = listing.nightlyRate >= filters.priceRange[0] && listing.nightlyRate <= filters.priceRange[1];
+      const matchBeds = filters.beds === 0 || listing.bedrooms >= filters.beds;
+      const matchBaths = filters.baths === 0 || listing.bathrooms >= filters.baths;
+
+      return matchLocation && matchCategory && matchPrice && matchBeds && matchBaths;
+    });
+  }, [filters]);
 
   return (
     <div className="flex-grow flex flex-col animate-fade-in">
       {/* 1. HERO SECTION */}
-      <section className="relative w-full h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img 
-            className="w-full h-full object-cover scale-105" 
-            src="home HQ 1.jpg" 
-            alt="Luxury Resort"
-          />
-          <div className="absolute inset-0 bg-black/40"></div>
-        </div>
-
-        <div className="relative z-10 text-center px-6 max-w-4xl w-full">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="font-serif text-5xl md:text-7xl text-parchment mb-6"
-          >
-            Find Your Perfect <br /> Sanctuary
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-parchment/80 text-lg md:text-xl font-light mb-10"
-          >
-            Discover curated luxury stays in the heart of Lagos
-          </motion.p>
-
-          {/* Glass-morphic Search Bar */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="relative max-w-2xl mx-auto"
-          >
-            <div className="absolute inset-0 bg-white/20 backdrop-blur-xl rounded-full shadow-2xl border border-white/30 -z-10" />
-            <div className="relative flex items-center px-6 py-4">
-              <Search className="text-parchment/70 w-5 h-5 mr-3" />
-              <input
-                type="text"
-                placeholder="Search destination, apartment type or amenities..."
-                className="bg-transparent w-full outline-none text-parchment placeholder:text-parchment/50 text-lg font-light"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <div className="flex items-center gap-2 ml-2 border-l border-parchment/20 pl-4">
-                <Home className="text-parchment/70 w-5 h-5" />
-                <span className="text-parchment/70 text-sm hidden sm:inline">Home</span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      <Hero>
+        <SearchFilters 
+          filters={filters}
+          setFilters={setFilters}
+          locations={locations}
+          categories={categories}
+          maxPrice={1000000}
+        />
+      </Hero>
 
       {/* 2. APARTMENT LISTINGS SECTION */}
       <section className="py-24 px-6 md:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">

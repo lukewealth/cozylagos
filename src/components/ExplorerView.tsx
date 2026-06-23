@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Bed, Bath, Star, ShieldCheck, Heart, MapPin, ZoomIn, ZoomOut, Search, Sliders, CheckCircle } from 'lucide-react';
 import { Listing } from '../types';
+import LoadingView from './LoadingView';
 
 interface ExplorerViewProps {
   listings: Listing[];
@@ -10,11 +11,21 @@ interface ExplorerViewProps {
 }
 
 export default function ExplorerView({ listings, onSelectListing, searchDestination, setSearchDestination }: ExplorerViewProps) {
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedRegion, setSelectedRegion] = useState<string>('All');
   const [onlyPremiumChef, setOnlyPremiumChef] = useState<boolean>(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [mapZoom, setMapZoom] = useState<number>(1);
   const [selectedPin, setSelectedPin] = useState<string | null>(null);
+
+  // Simulate real-time fetching
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [searchDestination, selectedRegion, onlyPremiumChef]);
 
   // Filter listings based on region selector and search input
   const filteredListings = useMemo(() => {
@@ -47,6 +58,10 @@ export default function ExplorerView({ listings, onSelectListing, searchDestinat
     { id: "lagoon-view-villa", x: 420, y: 310, label: "₦650k", title: "Lagoon View Villa", top: "42%" },
     { id: "eko-loft", x: 190, y: 390, label: "₦250k", title: "Eko Loft Sanctuary", top: "65%" }
   ];
+
+  if (isLoading) {
+    return <LoadingView />;
+  }
 
   return (
     <div className="flex-grow flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-charcoal/10 h-[calc(100vh-80px)] overflow-hidden animate-fade-in-up text-left">
@@ -107,7 +122,7 @@ export default function ExplorerView({ listings, onSelectListing, searchDestinat
                 type="checkbox"
                 checked={onlyPremiumChef}
                 onChange={() => setOnlyPremiumChef(!onlyPremiumChef)}
-                className="w-4 h-4 rounded text-gold-dark border-charcoal/20 focus:ring-gold focus:ring-0 focus:ring-offset-0 cursor-pointer"
+                className="w-4 h-4 rounded text-gold-dark border-charcoal/20 focus:ring-gold focus:ring-offset-0 focus:ring-0 cursor-pointer"
               />
               <span className="text-[11px] font-bold uppercase tracking-wider text-charcoal-light">
                 Private Chef Included
@@ -159,7 +174,7 @@ export default function ExplorerView({ listings, onSelectListing, searchDestinat
                         {item.title}
                       </h3>
                       <p className="text-[10px] uppercase font-bold tracking-widest text-charcoal/40 mt-0.5">
-                        {item.location} &bull; Penthouse Collection
+                        {item.location} &bull; {item.category}
                       </p>
 
                       <div className="flex flex-wrap gap-1.5 mt-3">
@@ -184,7 +199,7 @@ export default function ExplorerView({ listings, onSelectListing, searchDestinat
 
                       <button
                         onClick={() => onSelectListing(item)}
-                        className="px-4 py-2 bg-charcoal hover:bg-gold-dark text-parchment hover:text-parchment font-bold text-[9px] tracking-widest uppercase rounded-lg transition-colors select-none"
+                        className="px-4 py-2 bg-charcoal hover:bg-gold-dark text-parchment font-bold text-[9px] tracking-widest uppercase rounded-lg transition-colors select-none"
                       >
                         Reserve
                       </button>

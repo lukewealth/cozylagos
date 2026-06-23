@@ -9,7 +9,7 @@ interface CartDrawerProps {
 }
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
-  const { cart, removeFromCart, clearCart, cartTotal } = useCart();
+  const { cart, removeFromCart, clearCart, getTotalAmount } = useCart();
 
   return (
     <AnimatePresence>
@@ -57,7 +57,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               ) : (
                 <div className="space-y-6">
                   {cart.map((item) => (
-                    <div key={item.listing.id} className="flex gap-4 group">
+                    <div key={`${item.listing.id}-${item.checkIn}`} className="flex gap-4 group">
                       <div className="w-24 h-24 rounded-xl overflow-hidden shrink-0 border border-charcoal/5">
                         <img src={item.listing.image} alt={item.listing.title} className="w-full h-full object-cover" />
                       </div>
@@ -66,10 +66,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <p className="text-xs text-charcoal/50 mb-1">{item.listing.location}</p>
                         <div className="flex items-center justify-between mt-2">
                           <span className="text-gold-dark font-bold text-sm">
-                            ₦{(item.listing.nightlyRate * item.quantity).toLocaleString()}
+                            ₦{item.listing.nightlyRate.toLocaleString()} / night
                           </span>
                           <button 
-                            onClick={() => removeFromCart(item.listing.id)}
+                            onClick={() => removeFromCart(item.listing.id, item.checkIn, item.checkOut)}
                             className="text-charcoal/30 hover:text-red-500 transition-colors"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -87,7 +87,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 <div className="flex justify-between items-center mb-6">
                   <span className="text-charcoal/60 uppercase tracking-widest text-xs font-bold">Total Amount</span>
                   <span className="text-2xl font-serif font-bold text-charcoal">
-                    ₦{cartTotal.toLocaleString()}
+                    ₦{getTotalAmount().toLocaleString()}
                   </span>
                 </div>
                 <div className="flex gap-3">

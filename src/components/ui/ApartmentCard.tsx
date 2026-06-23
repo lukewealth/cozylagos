@@ -61,26 +61,19 @@ export default function ApartmentCard({ listing, onClick }: ApartmentCardProps) 
           {listing.description}
         </p>
 
-        <div className="flex flex-wrap gap-2 mb-6">
-          <div className="flex items-center gap-1 bg-gold/5 px-2 py-1 rounded text-[10px] font-bold text-gold-dark">
-            <Bed className="w-3 h-3" />
-            {listing.bedrooms}
-          </div>
-          <div className="flex items-center gap-1 bg-gold/5 px-2 py-1 rounded text-[10px] font-bold text-gold-dark">
-            <Bath className="w-3 h-3" />
-            {listing.bathrooms}
-          </div>
-          {listing.amenities.slice(0, 3).map((amenity, idx) => {
-            const Icon = getAmenityIcon(amenity);
-            return (
-              <div key={idx} className="flex items-center gap-1 bg-gold/5 px-2 py-1 rounded text-[10px] font-bold text-gold-dark">
-                {Icon ? Icon : <div className="w-3 h-3" />}
-                {amenity.split(' ')[0]}
-              </div>
-            );
-          })}
+          {/* Show package details if they exist */}
+          {listing.packageDetails && (
+            <div className="mt-3 pt-3 border-t border-gold/10 space-y-1">
+              {listing.packageDetails.map((detail, idx) => (
+                <div key={idx} className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-gold-dark">
+                  <CheckCircle className="w-2.5 h-2.5" />
+                  <span>{detail}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-
+        
         <div className="flex items-center justify-between pt-4 border-t border-charcoal/5">
           <div>
             <span className="text-xs text-charcoal/40 block uppercase font-bold tracking-tighter">Nightly Rate</span>
