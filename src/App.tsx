@@ -46,7 +46,7 @@ function AppContent() {
   const { cartCount } = useCart();
   
   // Use database hook for reactivity and persistence
-  const { data: listings, addRecord: addListing } = useDatabase('listings');
+  const { data: listings, addRecord: addListing, removeRecord: removeListing } = useDatabase('listings');
   const { data: bookings, addRecord: addBooking } = useDatabase('bookings');
   const { data: transactions, addRecord: addTransaction } = useDatabase('transactions');
   
@@ -78,6 +78,22 @@ function AppContent() {
     if (listing) {
       addListing({ ...listing, isActive: active } as any);
     }
+  };
+
+  const handleToggleStatus = (id: string) => {
+    const listing = listings.find(l => l.id === id);
+    if (listing) {
+      handleUpdateListingStatus(id, !listing.isActive);
+    }
+  };
+
+  const handleDeleteListing = (id: string) => {
+    removeListing(id);
+  };
+
+  // Callback to update a listing (Fullstack edit)
+  const handleUpdateListing = (updatedListing: Listing) => {
+    addListing(updatedListing as any);
   };
   
   // Callback to insert a brand new locked booking from guest client area
@@ -140,10 +156,10 @@ function AppContent() {
         cartCount={cartCount}
         onOpenCart={() => setIsCartOpen(true)}
       />
- 
+  
       {/* Cart Drawer */}
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
- 
+  
       {/* Main Layout Views Selector */}
       <main className="flex-grow flex flex-col relative">
         <AnimatePresence mode="wait">
@@ -166,12 +182,13 @@ function AppContent() {
                {activeTab === 'home' && (
                  <React.Fragment key="home">
                    <LandingPage 
+                     listings={listings}
                      onSelectListing={(stay) => setSelectedListing(stay)}
                      setActiveTab={setActiveTab}
                    />
                  </React.Fragment>
                )}
- 
+  
                {activeTab === 'lagos-cruise' && (
                  <React.Fragment key="lagos-cruise">
                    <LagosCruiseView 
@@ -182,7 +199,7 @@ function AppContent() {
                    />
                  </React.Fragment>
                )}
- 
+  
                {activeTab === 'explorer' && (
                  <React.Fragment key="explorer">
                    <ExplorerView 
@@ -193,7 +210,7 @@ function AppContent() {
                    />
                  </React.Fragment>
                )}
- 
+  
                {activeTab === 'experience' && (
                  <React.Fragment key="experience">
                    <ExperienceDetailView 
@@ -201,49 +218,53 @@ function AppContent() {
                    />
                  </React.Fragment>
                )}
-
+  
                {activeTab === 'concierge-hub' && (
                  <React.Fragment key="concierge-hub">
                    <ConciergeHubView />
                  </React.Fragment>
                )}
-
+  
                {activeTab === 'smart-recommendations' && (
                  <React.Fragment key="smart-recommendations">
                    <SmartRecommendationsView />
                  </React.Fragment>
                )}
- 
+  
                {activeTab === 'guest-dashboard' && (
                  <React.Fragment key="guest-dashboard">
                    <GuestDashboard />
                  </React.Fragment>
                )}
- 
+  
                {activeTab === 'user-dashboard' && (
                  <React.Fragment key="user-dashboard">
                    <UserDashboard />
                  </React.Fragment>
                )}
- 
+  
                {activeTab === 'service-dashboard' && (
                  <React.Fragment key="service-dashboard">
                    <ServiceProviderDashboard />
                  </React.Fragment>
                )}
- 
+  
                {activeTab === 'admin-dashboard' && (
                  <React.Fragment key="admin-dashboard">
-                   <AdminDashboard />
+                   <AdminDashboard 
+                     listings={listings}
+                     onToggleStatus={handleToggleStatus}
+                     onDeleteListing={handleDeleteListing}
+                   />
                  </React.Fragment>
                )}
- 
+  
                {activeTab === 'super-admin-dashboard' && (
                  <React.Fragment key="super-admin-dashboard">
                    <SuperAdminDashboard />
                  </React.Fragment>
                )}
- 
+  
                {/* PORTAL HOST/SERVICE PROVIDER ACCENTS */}
                {(activeTab === 'overview' || activeTab === 'listings' || activeTab === 'calendar' || activeTab === 'payouts') && (
                  <React.Fragment key="host-dashboard">
@@ -253,10 +274,11 @@ function AppContent() {
                      transactions={transactions}
                      onAddListingClick={() => setActiveTab('wizard')}
                      onUpdateListingsStatus={handleUpdateListingStatus}
+                     onUpdateListing={handleUpdateListing}
                    />
                  </React.Fragment>
                )}
- 
+  
                {activeTab === 'wizard' && (
                  <React.Fragment key="wizard">
                    <ListingWizardView 
@@ -265,13 +287,11 @@ function AppContent() {
                    />
                  </React.Fragment>
                )}
- 
-            </div>
-          )}
- 
+              </div>
+           )}
         </AnimatePresence>
       </main>
- 
+  
       {/* Footer copyright segment */}
       <footer className="h-16 border-t border-charcoal/5 flex items-center justify-between px-6 md:px-12 xl:px-20 text-[9px] text-charcoal/40 uppercase tracking-[0.2em] relative z-20 bg-parchment shrink-0">
         <div>
@@ -288,7 +308,7 @@ function AppContent() {
     </div>
   );
 }
- 
+  
 export default function App() {
   return (
     <CartProvider>

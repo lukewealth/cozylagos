@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { TrendingUp, Bed, DollarSign, Plus, Calendar, ListFilter, ClipboardCheck, EyeOff, Wrench, ShieldAlert, BadgeCheck } from 'lucide-react';
+import { TrendingUp, Bed, DollarSign, Plus, Calendar, ListFilter, ClipboardCheck, EyeOff, Wrench, ShieldAlert, BadgeCheck, Edit } from 'lucide-react';
 import { Listing, Booking, Transaction } from '../types';
+import ListingEditorView from './ListingEditorView';
 
 interface OwnerDashboardProps {
   listings: Listing[];
@@ -9,6 +10,7 @@ interface OwnerDashboardProps {
   transactions: Transaction[];
   onAddListingClick: () => void;
   onUpdateListingsStatus: (id: string, active: boolean) => void;
+  onUpdateListing: (updatedListing: Listing) => void;
 }
 
 export default function OwnerDashboardView({
@@ -16,11 +18,13 @@ export default function OwnerDashboardView({
   bookings,
   transactions,
   onAddListingClick,
-  onUpdateListingsStatus
+  onUpdateListingsStatus,
+  onUpdateListing
 }: OwnerDashboardProps) {
   const [activeSubTab, setActiveSubTab] = useState<'overview' | 'listings' | 'calendar' | 'payouts'>('overview');
   const [blockedDates, setBlockedDates] = useState<string[]>(["2024-10-08", "2024-10-09"]);
   const [payoutSuccess, setPayoutSuccess] = useState<boolean>(false);
+  const [editingListing, setEditingListing] = useState<Listing | null>(null);
 
   // Month mock days for October 2024 (exact date from mockups)
   const calendarDays = useMemo(() => {
@@ -84,6 +88,19 @@ export default function OwnerDashboardView({
     setPayoutSuccess(true);
     setTimeout(() => setPayoutSuccess(false), 6000);
   };
+
+  if (editingListing) {
+    return (
+      <ListingEditorView 
+        listing={editingListing}
+        onCancel={() => setEditingListing(null)}
+        onSave={(updated) => {
+          onUpdateListing(updated);
+          setEditingListing(null);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="flex-grow flex flex-col md:flex-row h-[calc(100vh-80px)] overflow-hidden text-left bg-parchment animate-fade-in-up">
@@ -353,63 +370,67 @@ export default function OwnerDashboardView({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {listings.map((stay) => (
-                  <article key={stay.id} className="bg-white border border-charcoal/5 rounded-2.5xl overflow-hidden shadow-sm flex flex-col justify-between">
-                    <div className="relative aspect-[16/10] bg-charcoal w-full">
-                      <img src={stay.image} alt={stay.title} className="w-full h-full object-cover" />
-                      
-                      <div className="absolute top-4 left-4">
-                        <span className={`px-3 py-1 rounded-full font-bold text-[9px] tracking-widest uppercase backdrop-blur-md ${
-                          stay.isActive 
-                            ? 'bg-emerald-500/90 text-white' 
-                            : 'bg-charcoal/80 text-parchment/60'
-                        }`}>
-                          {stay.isActive ? "ACTIVE PORTAL" : "HIDDEN PORTAL"}
-                        </span>
+                {listings.map((stay) => {
+                  const cardKey = stay.id;
+                  return (
+                    <article key={cardKey} className="bg-white border border-charcoal/5 rounded-2.5xl overflow-hidden shadow-sm flex flex-col justify-between">
+                      <div className="relative aspect-[16/10] bg-charcoal w-full">
+                        <img src={stay.image} alt={stay.title} className="w-full h-full object-cover" />
+                        
+                        <div className="absolute top-4 left-4">
+                          <span className={`px-3 py-1 rounded-full font-bold text-[9px] tracking-widest uppercase backdrop-blur-md ${
+                            stay.isActive 
+                              ? 'bg-emerald-500/90 text-white' 
+                              : 'bg-charcoal/80 text-parchment/60'
+                          }`}>
+                            {stay.isActive ? "ACTIVE PORTAL" : "HIDDEN PORTAL"}
+                          </span>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="p-6 space-y-4">
-                      <div className="flex justify-between items-start gap-2">
-                        <h4 className="font-serif text-lg font-bold text-charcoal line-clamp-1">{stay.title}</h4>
-                        <span className="font-serif text-sm font-bold text-gold-dark inline-block shrink-0">
-                          ₦{(stay.nightlyRate / 1000).toFixed(0)}k/nt
-                        </span>
+                      <div className="p-6 space-y-4">
+                        <div className="flex justify-between items-start gap-2">
+                          <h4 className="font-serif text-lg font-bold text-charcoal line-clamp-1">{stay.title}</h4>
+                          <span className="font-serif text-sm font-bold text-gold-dark inline-block shrink-0">
+                            ₦{(stay.nightlyRate / 1000).toFixed(0)}k/nt
+                          </span>
+                        </div>
+                        
+                        <p className="text-xs text-charcoal-light line-clamp-2">{stay.description}</p>
+
+                        <div className="flex items-center gap-4 text-xs font-semibold text-charcoal-light pt-2">
+                          <span>{stay.bedrooms} Suite units</span>
+                          <span>&larr;</span>
+                          <span>Match {stay.aiMatchPercent}%</span>
+                        </div>
                       </div>
-                      
-                      <p className="text-xs text-charcoal-light line-clamp-2">{stay.description}</p>
 
-                      <div className="flex items-center gap-4 text-xs font-semibold text-charcoal-light pt-2">
-                        <span>{stay.bedrooms} Suite units</span>
-                        <span>&larr;</span>
-                        <span>Match {stay.aiMatchPercent}%</span>
+                      {/* Action buttons */}
+                      <div className="p-6 border-t border-charcoal/5 grid grid-cols-2 gap-3">
+                        <button
+                          onClick={() => onUpdateListingsStatus(stay.id, !stay.isActive)}
+                          className={`py-2 px-3 text-[9px] font-bold uppercase tracking-widest rounded-lg flex items-center justify-center gap-1.5 border transition-all ${
+                            stay.isActive 
+                              ? 'border-charcoal/20 text-charcoal hover:bg-red-50 hover:text-red-700' 
+                              : 'bg-gold/10 border-gold/20 text-gold-dark hover:scale-105'
+                          }`}
+                        >
+                          {stay.isActive ? <EyeOff className="w-3.5 h-3.5" /> : <TrendingUp className="w-3.5 h-3.5" />}
+                          <span>{stay.isActive ? "HIDE STAY" : "SHOW STAY"}</span>
+                        </button>
+
+                        <button
+                          onClick={() => setEditingListing(stay)}
+                          className="py-2 px-3 border border-charcoal/10 hover:border-charcoal text-charcoal hover:bg-parchment/30 text-[9px] font-bold uppercase tracking-widest rounded-lg transition-colors flex items-center justify-center gap-1.5"
+                        >
+                          <Edit className="w-3.5 h-3.5" />
+                          <span>Edit</span>
+                        </button>
                       </div>
-                    </div>
 
-                    {/* Toggle action button */}
-                    <div className="p-6 border-t border-charcoal/5 grid grid-cols-2 gap-3">
-                      <button
-                        onClick={() => onUpdateListingsStatus(stay.id, !stay.isActive)}
-                        className={`py-2 px-3 text-[9px] font-bold uppercase tracking-widest rounded-lg flex items-center justify-center gap-1.5 border transition-all ${
-                          stay.isActive 
-                            ? 'border-charcoal/20 text-charcoal hover:bg-red-50 hover:text-red-700' 
-                            : 'bg-gold/10 border-gold/20 text-gold-dark hover:scale-105'
-                        }`}
-                      >
-                        {stay.isActive ? <EyeOff className="w-3.5 h-3.5" /> : <TrendingUp className="w-3.5 h-3.5" />}
-                        <span>{stay.isActive ? "HIDE STAY" : "SHOW STAY"}</span>
-                      </button>
-
-                      <button
-                        onClick={() => setActiveSubTab('calendar')}
-                        className="py-2 px-3 border border-charcoal/10 hover:border-charcoal text-charcoal hover:bg-parchment/30 text-[9px] font-bold uppercase tracking-widest rounded-lg transition-colors"
-                      >
-                        Avails Calendar
-                      </button>
-                    </div>
-
-                  </article>
-                ))}
+                    </article>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -441,7 +462,7 @@ export default function OwnerDashboardView({
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-3 h-3 bg-red-100 border border-red-200 rounded-md inline-block" />
-                  <span>System Blocks (E.g. Oct 8-9 maintenance)</span>
+                  <span>System Blocks (E.G. Oct 8-9 maintenance)</span>
                 </div>
               </div>
 
@@ -530,7 +551,7 @@ export default function OwnerDashboardView({
               {/* Financial balances */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 
-                <div className="bg-charcoal text-parchment p-6 rounded-2.5xl flex flex-col justify-between h-44 shadow-lg gold-inner-glow relative overflow-hidden group">
+                <div className="bg-charcoal text-parchment p-6 rounded-2.5xl flex flex-col justify-between h-44 shadow-lg relative overflow-hidden group">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-gold-dark/10 rounded-full blur-3xl pointer-events-none" />
                   <div className="flex justify-between items-start">
                     <span className="text-[10px] font-bold text-parchment/40 uppercase tracking-widest">Available Wallet balance</span>
@@ -538,7 +559,7 @@ export default function OwnerDashboardView({
                   </div>
                   <div>
                     <h3 className="font-serif text-3xl font-bold text-white">₦12,450,000</h3>
-                    <span className="text-[10px] text-gold-light mt-1 font-semibold block">Cleared &bull; Instant GTBank Withdrawal</span>
+                    <span className="text-xs text-gold-light mt-1 font-semibold block">Cleared &bull; Instant GTBank Withdrawal</span>
                   </div>
                 </div>
 

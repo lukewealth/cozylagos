@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bed, Bath, Star, MapPin, ArrowRight, Wifi, Shield, Waves, Coffee, Dumbbell, Tv, ShoppingCart } from 'lucide-react';
+import { Bed, Bath, Star, MapPin, ArrowRight, Wifi, Shield, Waves, Coffee, Dumbbell, Tv, ShoppingCart, CheckCircle } from 'lucide-react';
 import { Listing } from '../../types';
 import GlassCard from './GlassCard';
 import { useCart } from '../../context/CartContext';
@@ -61,48 +61,46 @@ export default function ApartmentCard({ listing, onClick }: ApartmentCardProps) 
           {listing.description}
         </p>
 
-          {/* Show package details if they exist */}
-          {listing.packageDetails && (
-            <div className="mt-3 pt-3 border-t border-gold/10 space-y-1">
-              {listing.packageDetails.map((detail, idx) => (
-                <div key={idx} className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-gold-dark">
-                  <CheckCircle className="w-2.5 h-2.5" />
-                  <span>{detail}</span>
-                </div>
-              ))}
-            </div>
-          )}
+        {listing.packageDetails && (
+          <div className="mt-3 pt-3 border-t border-gold/10 space-y-1">
+            {listing.packageDetails.map((detail, idx) => (
+              <div key={idx} className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-gold-dark">
+                <CheckCircle className="w-2.5 h-2.5" />
+                <span>{detail}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      
+      <div className="flex items-center justify-between p-6 pt-4 border-t border-charcoal/5">
+        <div>
+          <span className="text-xs text-charcoal/40 block uppercase font-bold tracking-tighter">Nightly Rate</span>
+          <span className="font-serif text-lg font-bold text-gold-dark">
+            ₦{listing.nightlyRate.toLocaleString()}
+          </span>
         </div>
-        
-        <div className="flex items-center justify-between pt-4 border-t border-charcoal/5">
-          <div>
-            <span className="text-xs text-charcoal/40 block uppercase font-bold tracking-tighter">Nightly Rate</span>
-            <span className="font-serif text-lg font-bold text-gold-dark">
-              ₦{listing.nightlyRate.toLocaleString()}
-            </span>
-          </div>
-          <div className="flex gap-2">
-            <button 
-              className="p-2 bg-charcoal text-parchment rounded-full hover:bg-gold hover:text-charcoal transition-all shadow-lg"
-              onClick={(e) => {
-                e.stopPropagation();
-                onClick();
-              }}
-              title="View Details"
-            >
-              <ArrowRight className="w-5 h-5" />
-            </button>
-            <button 
-              className="p-2 bg-gold text-charcoal rounded-full hover:bg-parchment transition-all shadow-lg"
-              onClick={(e) => {
-                e.stopPropagation();
-                addToCart(listing);
-              }}
-              title="Add to Cart"
-            >
-              <ShoppingCart className="w-5 h-5" />
-            </button>
-          </div>
+        <div className="flex gap-2">
+          <button 
+            className="p-2 bg-charcoal text-parchment rounded-full hover:bg-gold hover:text-charcoal transition-all shadow-lg"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClick();
+            }}
+            title="View Details"
+          >
+            <ArrowRight className="w-5 h-5" />
+          </button>
+          <button 
+            className="p-2 bg-gold text-charcoal rounded-full hover:bg-parchment transition-all shadow-lg"
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart(listing);
+            }}
+            title="Add to Cart"
+          >
+            <ShoppingCart className="w-5 h-5" />
+          </button>
         </div>
       </div>
     </GlassCard>
