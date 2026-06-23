@@ -42,6 +42,26 @@ function AppContent() {
   // Selected single listing for detailed pricing & booking checkout
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   
+  // Booking state for WhatsApp integration
+  const [bookingContext, setBookingContext] = useState<{
+    listing?: Listing;
+    checkIn?: string;
+    checkOut?: string;
+    guests?: number;
+    totalAmount?: number;
+    bookingId?: string;
+    nightlyTotal?: number;
+    serviceFee?: number;
+    tax?: number;
+    grandTotal?: number;
+    includeVipDriver?: boolean;
+    includeChef?: boolean;
+    vipDriverTotal?: number;
+    chefTotal?: number;
+    cleaningFee?: number;
+    totalNights?: number;
+  }>({});
+  
   // Cart state management
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cartCount } = useCart();
@@ -107,9 +127,21 @@ function AppContent() {
     totalAmount: number;
     guestName: string;
     guestEmail: string;
+    guestsCount?: number;
+    nightlyTotal?: number;
+    serviceFee?: number;
+    tax?: number;
+    grandTotal?: number;
+    includeVipDriver?: boolean;
+    includeChef?: boolean;
+    vipDriverTotal?: number;
+    chefTotal?: number;
+    cleaningFee?: number;
+    totalNights?: number;
   }) => {
+    const bookingId = `booking-${Date.now()}`;
     const newBooking: Booking = {
-      id: `booking-${Date.now()}`,
+      id: bookingId,
       listingId: bookingData.listingId,
       listingTitle: bookingData.listingTitle,
       guestId: 'guest-id',
@@ -117,7 +149,7 @@ function AppContent() {
       guestEmail: bookingData.guestEmail,
       checkIn: bookingData.checkIn,
       checkOut: bookingData.checkOut,
-      guestsCount: 2,
+      guestsCount: bookingData.guestsCount || 2,
       status: 'Confirmed' as any,
       totalAmount: bookingData.totalAmount,
       services: [],
@@ -126,6 +158,25 @@ function AppContent() {
     };
     
     addBooking(newBooking as any);
+
+    setBookingContext({
+      listing: selectedListing || undefined,
+      checkIn: bookingData.checkIn,
+      checkOut: bookingData.checkOut,
+      guests: bookingData.guestsCount || 2,
+      totalAmount: bookingData.totalAmount,
+      bookingId,
+      nightlyTotal: bookingData.nightlyTotal,
+      serviceFee: bookingData.serviceFee,
+      tax: bookingData.tax,
+      grandTotal: bookingData.grandTotal,
+      includeVipDriver: bookingData.includeVipDriver,
+      includeChef: bookingData.includeChef,
+      vipDriverTotal: bookingData.vipDriverTotal,
+      chefTotal: bookingData.chefTotal,
+      cleaningFee: bookingData.cleaningFee,
+      totalNights: bookingData.totalNights,
+    });
   
     // Insert positive referral transaction in owners payments ledger
     const newTx: Transaction = {
@@ -161,7 +212,7 @@ function AppContent() {
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
       {/* WhatsApp Concierge - Global Floating Button */}
-      <WhatsAppConcierge />
+      <WhatsAppConcierge {...bookingContext} />
   
       {/* Main Layout Views Selector */}
       <main className="flex-grow flex flex-col relative">
@@ -172,8 +223,9 @@ function AppContent() {
             <React.Fragment key={`detail-${selectedListing.id}`}>
               <ListingDetailView
                 listing={selectedListing}
-                onBack={() => setSelectedListing(null)}
+                onBack={() => { setSelectedListing(null); setBookingContext({}); }}
                 onConfirmBooking={handleConfirmBooking}
+                onUpdateBookingContext={setBookingContext}
               />
             </React.Fragment>
           ) : (

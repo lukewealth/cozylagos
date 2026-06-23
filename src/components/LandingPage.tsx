@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Anchor, ArrowRight, Shield, Waves, Wifi } from 'lucide-react';
+import { Anchor, ArrowRight, Shield, Waves, Wifi, Flame } from 'lucide-react';
 import { Listing } from '../types';
 import { INITIAL_LISTINGS } from '../data';
 import ApartmentCard from './ui/ApartmentCard';
+import GemCard from './ui/GemCard';
 import Hero from './Hero';
 import SearchFilters from './SearchFilters';
 import PropertyMap from './PropertyMap';
@@ -60,18 +61,18 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
         />
       </Hero>
 
-      {/* 2. FEATURED RESIDENCES */}
+      {/* 2. LAGOS GEMS - HOT DEALS */}
       <section className="py-10 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 md:mb-16 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10 md:mb-12 gap-4">
           <div className="text-left">
-            <span className="text-gold-dark font-bold text-[10px] tracking-[0.25em] uppercase block mb-2">
-              Curated Collections
-            </span>
-            <h2 className="font-serif text-3xl md:text-5xl text-charcoal mb-3">Featured Residences</h2>
-            <div className="w-24 h-1 bg-gold"></div>
-            <p className="text-charcoal/60 mt-4 text-sm md:text-base">
-              {filteredListings.length} luxury properties available
-            </p>
+            <div className="flex items-center gap-2 mb-2">
+              <Flame className="w-4 h-4 text-red-500 fill-current" />
+              <span className="text-red-500 font-bold text-[10px] tracking-[0.25em] uppercase">
+                Don't Miss Out
+              </span>
+            </div>
+            <h2 className="font-serif text-3xl md:text-5xl text-charcoal mb-2">Lagos Gems</h2>
+            <div className="w-20 h-1 bg-red-500 rounded-full"></div>
           </div>
           <button
             onClick={() => setActiveTab('explorer')}
@@ -83,18 +84,19 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
         </div>
 
         {filteredListings.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
-            {filteredListings.map((listing) => (
-              <ApartmentCard
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+            {filteredListings.slice(0, 8).map((listing, index) => (
+              <GemCard
                 key={listing.id}
                 listing={listing}
+                index={index}
                 onClick={() => onSelectListing(listing)}
               />
             ))}
           </div>
         ) : (
           <div className="text-center py-20">
-            <p className="text-charcoal/40 font-serif text-2xl">No residences found matching your search.</p>
+            <p className="text-charcoal/40 font-serif text-2xl">No gems found matching your search.</p>
             <button
               onClick={() => setFilters({ location: '', category: '', priceRange: [0, 1000000], beds: 0, baths: 0 })}
               className="mt-4 text-gold-dark hover:text-charcoal text-sm font-bold underline"
@@ -104,6 +106,27 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
           </div>
         )}
       </section>
+
+      {/* 2B. ALL LISTINGS */}
+      {filteredListings.length > 8 && (
+        <section className="py-8 sm:py-12 px-4 sm:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
+          <div className="text-left mb-8">
+            <span className="text-gold-dark font-bold text-[10px] tracking-[0.25em] uppercase block mb-2">
+              Full Collection
+            </span>
+            <h2 className="font-serif text-2xl md:text-3xl text-charcoal">All Residences</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {filteredListings.slice(8).map((listing) => (
+              <ApartmentCard
+                key={listing.id}
+                listing={listing}
+                onClick={() => onSelectListing(listing)}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* 3. MAP SECTION */}
       <section className="py-8 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">

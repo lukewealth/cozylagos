@@ -16,10 +16,38 @@ interface ListingDetailViewProps {
     totalAmount: number;
     guestName: string;
     guestEmail: string;
+    guestsCount?: number;
+    nightlyTotal?: number;
+    serviceFee?: number;
+    tax?: number;
+    grandTotal?: number;
+    includeVipDriver?: boolean;
+    includeChef?: boolean;
+    vipDriverTotal?: number;
+    chefTotal?: number;
+    cleaningFee?: number;
+    totalNights?: number;
+  }) => void;
+  onUpdateBookingContext?: (ctx: {
+    listing: Listing;
+    checkIn: string;
+    checkOut: string;
+    guests: number;
+    totalAmount: number;
+    nightlyTotal: number;
+    serviceFee: number;
+    tax: number;
+    grandTotal: number;
+    includeVipDriver: boolean;
+    includeChef: boolean;
+    vipDriverTotal: number;
+    chefTotal: number;
+    cleaningFee: number;
+    totalNights: number;
   }) => void;
 }
 
-export default function ListingDetailView({ listing, onBack, onConfirmBooking }: ListingDetailViewProps) {
+export default function ListingDetailView({ listing, onBack, onConfirmBooking, onUpdateBookingContext }: ListingDetailViewProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [showBookingFlow, setShowBookingFlow] = useState(false);
   const [bookingFlowData, setBookingFlowData] = useState<any>(null);
@@ -90,7 +118,18 @@ export default function ListingDetailView({ listing, onBack, onConfirmBooking }:
       checkOut: finalData.checkOut,
       totalAmount: totalBilling,
       guestName: finalData.name,
-      guestEmail: finalData.email
+      guestEmail: finalData.email,
+      guestsCount: guestCount,
+      nightlyTotal,
+      serviceFee: Math.round(totalBilling * 0.05),
+      tax: calculatedTax,
+      grandTotal: totalBilling + Math.round(totalBilling * 0.05),
+      includeVipDriver,
+      includeChef,
+      vipDriverTotal,
+      chefTotal,
+      cleaningFee: listing.cleaningFee,
+      totalNights,
     });
     setBookingSuccess(true);
     setShowBookingFlow(false);
@@ -100,6 +139,28 @@ export default function ListingDetailView({ listing, onBack, onConfirmBooking }:
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (onUpdateBookingContext && !showBookingFlow && !bookingSuccess) {
+      onUpdateBookingContext({
+        listing,
+        checkIn,
+        checkOut,
+        guests: guestCount,
+        totalAmount: totalBilling,
+        nightlyTotal,
+        serviceFee: Math.round(totalBilling * 0.05),
+        tax: calculatedTax,
+        grandTotal: totalBilling + Math.round(totalBilling * 0.05),
+        includeVipDriver,
+        includeChef,
+        vipDriverTotal,
+        chefTotal,
+        cleaningFee: listing.cleaningFee,
+        totalNights,
+      });
+    }
+  }, [checkIn, checkOut, guestCount, includeVipDriver, includeChef, totalBilling, nightlyTotal, calculatedTax, vipDriverTotal, chefTotal, totalNights, showBookingFlow, bookingSuccess]);
 
   if (isLoading) {
     return (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, ShieldCheck, CreditCard, Building2, Bitcoin, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, CreditCard, Building2, Bitcoin, CheckCircle2, MessageCircle } from 'lucide-react';
 import { Listing } from '../types';
 import PillButton from './ui/PillButton';
 
@@ -28,6 +28,31 @@ export default function CheckoutView({
   const serviceFee = Math.round(totalAmount * 0.05);
   const tax = Math.round(totalAmount * 0.075);
   const grandTotal = totalAmount + serviceFee + tax;
+
+  const generateWhatsAppMessage = () => {
+    const lines: string[] = [];
+    lines.push(`*RESERVATION REQUEST — Cozy Lagos*`);
+    lines.push(``);
+    lines.push(`*Property:* ${listing.title}`);
+    lines.push(`*Location:* ${listing.location}`);
+    lines.push(`*Category:* ${listing.category}`);
+    lines.push(``);
+    lines.push(`*Check-in:* ${checkIn}`);
+    lines.push(`*Check-out:* ${checkOut}`);
+    lines.push(`*Guests:* ${guestsCount}`);
+    lines.push(``);
+    lines.push(`*— Cost Breakdown —*`);
+    lines.push(`Accommodation: ₦${totalAmount.toLocaleString()}`);
+    lines.push(`Service Fee (5%): ₦${serviceFee.toLocaleString()}`);
+    lines.push(`VAT (7.5%): ₦${tax.toLocaleString()}`);
+    lines.push(``);
+    lines.push(`*TOTAL: ₦${grandTotal.toLocaleString()}*`);
+    lines.push(``);
+    lines.push(`I would like to confirm availability for the above dates and proceed with booking. Payment method: ${paymentMethod === 'card' ? 'Credit/Debit Card' : paymentMethod === 'bank' ? 'Bank Transfer' : 'Cryptocurrency'}. Please assist.`);
+    return encodeURIComponent(lines.join('\n'));
+  };
+
+  const whatsappUrl = `https://wa.me/2348064305782?text=${generateWhatsAppMessage()}`;
 
   return (
     <div className="flex-grow bg-parchment animate-fade-in-up">
@@ -161,6 +186,16 @@ export default function CheckoutView({
               >
                 Proceed to Payment
               </PillButton>
+
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white py-3.5 rounded-xl font-bold text-xs tracking-wider uppercase transition-all shadow-md hover:shadow-lg"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Confirm with Admin via WhatsApp
+              </a>
             </div>
           </div>
         </div>
