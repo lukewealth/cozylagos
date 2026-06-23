@@ -24,7 +24,9 @@ export const INITIAL_LISTINGS: Listing[] = [
     rating: 4.9,
     aiMatchPercent: 98,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    updatedAt: "2024-01-01T00:00:00Z",
+    lat: 6.4541,
+    lng: 3.4390
   },
   {
     id: "lagoon-view-villa",
@@ -49,7 +51,9 @@ export const INITIAL_LISTINGS: Listing[] = [
     rating: 4.8,
     aiMatchPercent: 94,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    updatedAt: "2024-01-01T00:00:00Z",
+    lat: 6.4467,
+    lng: 3.4125
   },
   {
     id: "eko-loft",
@@ -74,12 +78,14 @@ export const INITIAL_LISTINGS: Listing[] = [
     rating: 4.7,
     aiMatchPercent: 91,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    updatedAt: "2024-01-01T00:00:00Z",
+    lat: 6.4281,
+    lng: 3.4241
   },
   {
     id: "ekpo-apartment",
     title: "Ekpo - Luxury 1-Bedroom",
-    description: "Our Unique Studio Bedroom Apartment with Swimming Pool, Smartlock Door, complimentary breakfast, and Gym 😍✨",
+    description: "Our Unique Studio Bedroom Apartment with Swimming Pool, Smartlock Door, complimentary breakfast, and Gym",
     category: "Serviced Apartment",
     location: "Lekki Phase 1",
     bedrooms: 1,
@@ -99,7 +105,9 @@ export const INITIAL_LISTINGS: Listing[] = [
     rating: 4.8,
     aiMatchPercent: 95,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    updatedAt: "2024-01-01T00:00:00Z",
+    lat: 6.4333,
+    lng: 3.4667
   },
   {
     id: "studio-lekki-130k",
@@ -124,7 +132,9 @@ export const INITIAL_LISTINGS: Listing[] = [
     rating: 4.7,
     aiMatchPercent: 89,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    updatedAt: "2024-01-01T00:00:00Z",
+    lat: 6.4350,
+    lng: 3.4680
   },
   {
     id: "whitestone-2br",
@@ -149,7 +159,9 @@ export const INITIAL_LISTINGS: Listing[] = [
     rating: 4.7,
     aiMatchPercent: 90,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    updatedAt: "2024-01-01T00:00:00Z",
+    lat: 6.4340,
+    lng: 3.4690
   },
   {
     id: "maisonette-lekki",
@@ -174,7 +186,9 @@ export const INITIAL_LISTINGS: Listing[] = [
     rating: 4.9,
     aiMatchPercent: 97,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    updatedAt: "2024-01-01T00:00:00Z",
+    lat: 6.4360,
+    lng: 3.4650
   },
   {
     id: "victoria-penthouse",
@@ -199,7 +213,9 @@ export const INITIAL_LISTINGS: Listing[] = [
     rating: 5.0,
     aiMatchPercent: 99,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    updatedAt: "2024-01-01T00:00:00Z",
+    lat: 6.4290,
+    lng: 3.4250
   },
   {
     id: "oniru-serviced-1br",
@@ -224,7 +240,9 @@ export const INITIAL_LISTINGS: Listing[] = [
     rating: 4.6,
     aiMatchPercent: 92,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    updatedAt: "2024-01-01T00:00:00Z",
+    lat: 6.4310,
+    lng: 3.4320
   },
   {
     id: "cozy-2br-admiralty",
@@ -249,7 +267,9 @@ export const INITIAL_LISTINGS: Listing[] = [
     rating: 4.8,
     aiMatchPercent: 94,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    updatedAt: "2024-01-01T00:00:00Z",
+    lat: 6.4370,
+    lng: 3.4640
   },
   {
     id: "luxury-2br-admiralty",
@@ -274,7 +294,9 @@ export const INITIAL_LISTINGS: Listing[] = [
     rating: 4.9,
     aiMatchPercent: 96,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    updatedAt: "2024-01-01T00:00:00Z",
+    lat: 6.4380,
+    lng: 3.4630
   },
   {
     id: "ikoyi-executive-3br",
@@ -299,7 +321,9 @@ export const INITIAL_LISTINGS: Listing[] = [
     rating: 4.8,
     aiMatchPercent: 93,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    updatedAt: "2024-01-01T00:00:00Z",
+    lat: 6.4550,
+    lng: 3.4380
   },
   {
     id: "vi-oceanview-2br",
@@ -324,7 +348,9 @@ export const INITIAL_LISTINGS: Listing[] = [
     rating: 4.7,
     aiMatchPercent: 90,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    updatedAt: "2024-01-01T00:00:00Z",
+    lat: 6.4270,
+    lng: 3.4230
   },
   {
     id: "lekki-garden-1br",
@@ -349,7 +375,9 @@ export const INITIAL_LISTINGS: Listing[] = [
     rating: 4.6,
     aiMatchPercent: 88,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    updatedAt: "2024-01-01T00:00:00Z",
+    lat: 6.4320,
+    lng: 3.4700
   },
   {
     id: "oniru-premium-3br",
@@ -374,7 +402,9 @@ export const INITIAL_LISTINGS: Listing[] = [
     rating: 4.9,
     aiMatchPercent: 95,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    updatedAt: "2024-01-01T00:00:00Z",
+    lat: 6.4300,
+    lng: 3.4310
   }
 ];
 

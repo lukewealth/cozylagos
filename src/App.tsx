@@ -21,6 +21,7 @@ import ListingWizardView from './components/ListingWizardView';
 import ConciergeHubView from './components/ConciergeHubView';
 import SmartRecommendationsView from './components/SmartRecommendationsView';
 import ServiceBundlesView from './components/ServiceBundlesView';
+import WhatsAppConcierge from './components/WhatsAppConcierge';
 import { useDatabase } from './hooks/useDatabase';
 import { seedDatabase, getListingsWithFallback, syncToLocalStorage } from './db';
 import UserDashboard from './portals/UserDashboard';
@@ -159,6 +160,9 @@ function AppContent() {
   
       {/* Cart Drawer */}
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+
+      {/* WhatsApp Concierge - Global Floating Button */}
+      <WhatsAppConcierge />
   
       {/* Main Layout Views Selector */}
       <main className="flex-grow flex flex-col relative">

@@ -37,7 +37,7 @@ export interface Listing {
   maxGuests: number;
   squareFootage?: number;
   nightlyRate: number;
-  weekendPremium: number; // percentage, e.g. 15
+  weekendPremium: number;
   cleaningFee: number;
   securityDeposit: number;
   image: string;
@@ -51,7 +51,8 @@ export interface Listing {
   aiMatchPercent: number;
   createdAt: string;
   updatedAt: string;
-
+  lat?: number;
+  lng?: number;
 }
 
 export interface Booking {
