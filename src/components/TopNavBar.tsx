@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Compass, User, Bell, ChevronRight, ShoppingCart, LogIn, LogOut } from 'lucide-react';
+import { Compass, User, Bell, ChevronRight, ShoppingCart, LogIn, LogOut, Menu, X } from 'lucide-react';
 import { useAuth } from '../auth';
 
 interface TopNavBarProps {
@@ -12,6 +12,7 @@ interface TopNavBarProps {
 export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCart }: TopNavBarProps) {
   const { currentUser, login, logout, isAuthenticated } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState('');
@@ -68,7 +69,7 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
         </div>
 
         {/* Center Links (Based on user role) */}
-        <nav className="hidden md:flex items-center gap-8 text-[11px] font-bold tracking-[0.15em] uppercase">
+        <nav className="hidden lg:flex items-center gap-8 text-[11px] font-bold tracking-[0.15em] uppercase">
           {!isAuthenticated ? (
             <>
               <button
@@ -77,13 +78,6 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
               >
                 Home
                 {activeTab === 'home' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-              </button>
-              <button
-                onClick={() => setActiveTab('lagos-cruise')}
-                className={`py-2 px-1 relative transition-colors ${activeTab === 'lagos-cruise' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
-              >
-                Lagos Cruise
-                {activeTab === 'lagos-cruise' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
               </button>
               <button
                 onClick={() => setActiveTab('explorer')}
@@ -245,6 +239,14 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
             </button>
           )}
 
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            className="lg:hidden p-2 bg-charcoal/5 hover:bg-gold/10 rounded-full transition-colors"
+          >
+            {showMobileMenu ? <X className="w-5 h-5 text-charcoal/70" /> : <Menu className="w-5 h-5 text-charcoal/70" />}
+          </button>
+
           {/* Login/Logout Button */}
           {!isAuthenticated ? (
             <button
@@ -357,6 +359,57 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                   <div className="text-charcoal/60">chef@cozylagos.ng</div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Menu Drawer */}
+      {showMobileMenu && (
+        <div className="lg:hidden fixed inset-0 z-[90]">
+          <div className="fixed inset-0 bg-charcoal/40 backdrop-blur-sm" onClick={() => setShowMobileMenu(false)} />
+          <div className="fixed top-20 right-0 left-0 bg-parchment border-b border-charcoal/5 shadow-xl max-h-[80vh] overflow-y-auto">
+            <div className="p-4 space-y-1">
+              {(!isAuthenticated ? [
+                { tab: 'home', label: 'Home' },
+                { tab: 'explorer', label: 'Stays' },
+                { tab: 'experience', label: 'Experiences' },
+                { tab: 'bundles', label: 'Bundles' },
+              ] : currentUser?.role === 'user' ? [
+                { tab: 'home', label: 'Browse' },
+                { tab: 'explorer', label: 'Stays' },
+                { tab: 'experience', label: 'Experiences' },
+                { tab: 'bundles', label: 'Bundles' },
+                { tab: 'guest-dashboard', label: 'My Dashboard' },
+              ] : currentUser?.role === 'service_provider' ? [
+                { tab: 'overview', label: 'Dashboard' },
+                { tab: 'listings', label: 'My Services' },
+                { tab: 'calendar', label: 'Schedule' },
+                { tab: 'payouts', label: 'Earnings' },
+              ] : currentUser?.role === 'admin' ? [
+                { tab: 'admin-dashboard', label: 'Admin Panel' },
+                { tab: 'listings', label: 'All Properties' },
+                { tab: 'overview', label: 'Analytics' },
+              ] : currentUser?.role === 'super_admin' ? [
+                { tab: 'super-admin-dashboard', label: 'Super Admin' },
+                { tab: 'admin-dashboard', label: 'Management' },
+                { tab: 'overview', label: 'System Stats' },
+              ] : []).map(({ tab, label }) => (
+                <button
+                  key={tab}
+                  onClick={() => {
+                    setActiveTab(tab);
+                    setShowMobileMenu(false);
+                  }}
+                  className={`w-full text-left px-4 py-3 rounded-lg text-sm font-bold tracking-wider uppercase transition-colors ${
+                    activeTab === tab
+                      ? 'bg-gold/10 text-gold-dark'
+                      : 'text-charcoal hover:bg-charcoal/5'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
           </div>
         </div>

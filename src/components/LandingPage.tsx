@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Anchor, ArrowRight, Shield, Waves, Wifi } from 'lucide-react';
 import { Listing } from '../types';
 import { INITIAL_LISTINGS } from '../data';
 import ApartmentCard from './ui/ApartmentCard';
@@ -14,7 +15,6 @@ interface LandingPageProps {
 }
 
 export default function LandingPage({ listings, onSelectListing, setActiveTab }: LandingPageProps) {
-  // Use INITIAL_LISTINGS as fallback to ensure all 15 properties are displayed
   const allListings = listings.length > 0 ? listings : INITIAL_LISTINGS;
 
   const [filters, setFilters] = useState({
@@ -49,7 +49,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
 
   return (
     <div className="flex-grow flex flex-col animate-fade-in">
-      {/* 1. HERO SECTION */}
+      {/* 1. HERO SECTION WITH SEARCH */}
       <Hero>
         <SearchFilters
           filters={filters}
@@ -60,11 +60,56 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
         />
       </Hero>
 
-      {/* 2. MAP SECTION */}
-      <section className="py-12 px-6 md:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
-        <div className="flex justify-between items-center mb-6">
+      {/* 2. FEATURED RESIDENCES */}
+      <section className="py-16 md:py-24 px-4 md:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 md:mb-16 gap-6">
+          <div className="text-left">
+            <span className="text-gold-dark font-bold text-[10px] tracking-[0.25em] uppercase block mb-2">
+              Curated Collections
+            </span>
+            <h2 className="font-serif text-3xl md:text-5xl text-charcoal mb-3">Featured Residences</h2>
+            <div className="w-24 h-1 bg-gold"></div>
+            <p className="text-charcoal/60 mt-4 text-sm md:text-base">
+              {filteredListings.length} luxury properties available
+            </p>
+          </div>
+          <button
+            onClick={() => setActiveTab('explorer')}
+            className="group/btn flex items-center gap-2 text-gold-dark hover:text-charcoal font-bold text-xs tracking-wider uppercase border-b-2 border-gold/40 hover:border-charcoal pb-1 transition-all self-start md:self-auto"
+          >
+            <span>Explore All Stays</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+          </button>
+        </div>
+
+        {filteredListings.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
+            {filteredListings.map((listing) => (
+              <ApartmentCard
+                key={listing.id}
+                listing={listing}
+                onClick={() => onSelectListing(listing)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-20">
+            <p className="text-charcoal/40 font-serif text-2xl">No residences found matching your search.</p>
+            <button
+              onClick={() => setFilters({ location: '', category: '', priceRange: [0, 1000000], beds: 0, baths: 0 })}
+              className="mt-4 text-gold-dark hover:text-charcoal text-sm font-bold underline"
+            >
+              Clear filters
+            </button>
+          </div>
+        )}
+      </section>
+
+      {/* 3. MAP SECTION */}
+      <section className="py-12 md:py-16 px-4 md:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <div>
-            <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-2">
+            <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-1">
               Explore Properties on Map
             </h2>
             <p className="text-sm text-charcoal/60">
@@ -73,59 +118,137 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
           </div>
           <button
             onClick={() => setShowMap(!showMap)}
-            className="px-4 py-2 bg-charcoal text-parchment hover:bg-gold-dark rounded-lg text-xs font-bold uppercase tracking-wider transition-colors"
+            className="px-5 py-2.5 bg-charcoal text-parchment hover:bg-gold-dark rounded-lg text-xs font-bold uppercase tracking-wider transition-colors"
           >
             {showMap ? 'Hide Map' : 'Show Map'}
           </button>
         </div>
-        {showMap && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <PropertyMap
-              listings={filteredListings}
-              onSelectListing={onSelectListing}
-            />
-          </motion.div>
-        )}
+        <AnimatePresence>
+          {showMap && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <PropertyMap
+                listings={filteredListings}
+                onSelectListing={onSelectListing}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </section>
 
-      {/* 3. APARTMENT LISTINGS SECTION */}
-      <section className="py-16 px-6 md:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-          <div className="text-left">
-            <h2 className="font-serif text-4xl md:text-5xl text-charcoal mb-4">Featured Residences</h2>
-            <div className="w-24 h-1 bg-gold"></div>
-            <p className="text-charcoal/60 mt-4">
-              {filteredListings.length} luxury properties available
+      {/* 4. EXPERIENCE & BUNDLES MERGED SECTION */}
+      <section className="py-16 md:py-20 px-4 md:px-6 lg:px-12 xl:px-20 bg-charcoal text-parchment relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gold-dark/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-10 -left-10 w-96 h-96 bg-gold-dark/5 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-[1440px] mx-auto">
+          <div className="text-center mb-12">
+            <span className="text-gold uppercase tracking-[0.3em] font-bold text-[10px] block mb-3">
+              Premium Experiences
+            </span>
+            <h2 className="font-serif text-3xl md:text-5xl text-parchment leading-tight mb-4">
+              Curate Your <span className="italic font-light">Lagos Experience</span>
+            </h2>
+            <p className="text-sm md:text-base text-parchment/70 font-light max-w-2xl mx-auto leading-relaxed">
+              From private yacht charters to bespoke service bundles, every experience is tailored to your desires.
             </p>
           </div>
-          <p className="text-charcoal/60 max-w-md">
-            Hand-picked, premium apartments designed for the ultimate Lagos experience.
-          </p>
-        </div>
 
-        {filteredListings.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {filteredListings.map((listing) => {
-              const cardKey = listing.id;
-              return (
-                <ApartmentCard
-                  key={cardKey}
-                  listing={listing}
-                  onClick={() => onSelectListing(listing)}
-                />
-              );
-            })}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
+            {/* Yacht Charter */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="bg-parchment/5 backdrop-blur-md border border-parchment/10 rounded-2xl p-6 hover:bg-parchment/10 transition-all group cursor-pointer"
+              onClick={() => setActiveTab('experience')}
+            >
+              <div className="w-12 h-12 bg-gold/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Anchor className="w-6 h-6 text-gold-light" />
+              </div>
+              <h3 className="font-serif text-xl font-bold text-parchment mb-2">Private Yacht Charter</h3>
+              <p className="text-sm text-parchment/60 leading-relaxed mb-4">
+                65ft luxury executive boat for custom lagoon cruising with multi-course dining and premium champagnes.
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-gold-light font-serif font-bold text-lg">₦2,500,000</span>
+                <span className="text-[10px] text-parchment/40 uppercase tracking-widest">From / 6hrs</span>
+              </div>
+            </motion.div>
+
+            {/* Weekend Special */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="bg-parchment/5 backdrop-blur-md border border-gold/20 rounded-2xl p-6 hover:bg-parchment/10 transition-all group cursor-pointer"
+              onClick={() => setActiveTab('bundles')}
+            >
+              <div className="w-12 h-12 bg-gold/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Waves className="w-6 h-6 text-gold-light" />
+              </div>
+              <h3 className="font-serif text-xl font-bold text-parchment mb-2">Service Bundles</h3>
+              <p className="text-sm text-parchment/60 leading-relaxed mb-4">
+                7 premium bundles from ₦750K to ₦88M. Business, Diaspora, Tourist, Executive Elite, and more.
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-gold-light font-serif font-bold text-lg">₦750,000</span>
+                <span className="text-[10px] text-parchment/40 uppercase tracking-widest">From / 3 days</span>
+              </div>
+            </motion.div>
+
+            {/* Concierge */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-parchment/5 backdrop-blur-md border border-parchment/10 rounded-2xl p-6 hover:bg-parchment/10 transition-all group cursor-pointer"
+              onClick={() => setActiveTab('concierge-hub')}
+            >
+              <div className="w-12 h-12 bg-gold/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Shield className="w-6 h-6 text-gold-light" />
+              </div>
+              <h3 className="font-serif text-xl font-bold text-parchment mb-2">AI Concierge Hub</h3>
+              <p className="text-sm text-parchment/60 leading-relaxed mb-4">
+                24/7 proactive concierge with smart recommendations, itinerary planning, and instant booking.
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-gold-light font-serif font-bold text-lg">Complimentary</span>
+                <span className="text-[10px] text-parchment/40 uppercase tracking-widest">For all guests</span>
+              </div>
+            </motion.div>
           </div>
-        ) : (
-          <div className="text-center py-20">
-            <p className="text-charcoal/40 font-serif text-2xl">No residences found matching your search.</p>
+
+          <div className="text-center">
+            <button
+              onClick={() => setActiveTab('bundles')}
+              className="px-8 py-4 bg-gold hover:bg-parchment text-charcoal font-bold text-xs tracking-widest uppercase rounded-xl transition-all inline-flex items-center gap-3 active:scale-95"
+            >
+              <span>View All Packages</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
-        )}
+        </div>
+      </section>
+
+      {/* 5. TRUST BADGES */}
+      <section className="py-12 px-4 md:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
+        <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12 text-charcoal/50 text-xs font-bold uppercase tracking-widest">
+          <span className="flex items-center gap-2"><Shield className="w-4 h-4 text-gold-dark" /> 24/7 Security</span>
+          <span className="hidden md:block w-1 h-1 rounded-full bg-charcoal/20" />
+          <span className="flex items-center gap-2"><Waves className="w-4 h-4 text-gold-dark" /> Ocean Views</span>
+          <span className="hidden md:block w-1 h-1 rounded-full bg-charcoal/20" />
+          <span className="flex items-center gap-2"><Wifi className="w-4 h-4 text-gold-dark" /> Fiber Internet</span>
+          <span className="hidden md:block w-1 h-1 rounded-full bg-charcoal/20" />
+          <span className="flex items-center gap-2"><Anchor className="w-4 h-4 text-gold-dark" /> Yacht Access</span>
+        </div>
       </section>
     </div>
   );

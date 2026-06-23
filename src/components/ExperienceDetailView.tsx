@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { Calendar, Users, Utensils, Anchor, Ship, CircleCheck, Star, Share2, Heart, Award } from 'lucide-react';
+import { Calendar, Users, Utensils, Anchor, Ship, CircleCheck, Star, Share2, Heart, Award, ArrowRight, Briefcase, Globe, Map, Crown, GraduationCap, Sparkles } from 'lucide-react';
+import { SERVICE_BUNDLES } from '../data';
 
 interface ExperienceDetailViewProps {
   onBackToHome: () => void;
@@ -348,6 +349,58 @@ export default function ExperienceDetailView({ onBackToHome }: ExperienceDetailV
           </div>
         </div>
 
+      </section>
+
+      {/* BUNDLES SECTION */}
+      <section className="max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 py-16 md:py-24">
+        <div className="text-center mb-12">
+          <span className="text-gold-dark font-bold text-[10px] tracking-[0.25em] uppercase block mb-2">
+            Premium Packages
+          </span>
+          <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-3">
+            Curated Experience Bundles
+          </h2>
+          <p className="text-sm text-charcoal/60 max-w-xl mx-auto">
+            All-inclusive packages from 3-day escapes to 21-day luxury immersions.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {SERVICE_BUNDLES.map((bundle) => {
+            const iconMap: Record<string, React.ReactNode> = {
+              briefcase: <Briefcase className="w-5 h-5" />,
+              globe: <Globe className="w-5 h-5" />,
+              map: <Map className="w-5 h-5" />,
+              crown: <Crown className="w-5 h-5" />,
+              graduation: <GraduationCap className="w-5 h-5" />,
+              heart: <Heart className="w-5 h-5" />,
+              sparkles: <Sparkles className="w-5 h-5" />
+            };
+            const lowestPrice = Math.min(...bundle.tiers.map(t => t.price));
+            return (
+              <div
+                key={bundle.id}
+                className="group bg-parchment border border-charcoal/5 rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-500 cursor-pointer"
+              >
+                <div className="p-5">
+                  <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center mb-3 text-gold-dark group-hover:scale-110 transition-transform">
+                    {iconMap[bundle.icon]}
+                  </div>
+                  <h3 className="font-serif text-lg font-bold text-charcoal mb-1">{bundle.title}</h3>
+                  <p className="text-[11px] text-charcoal/50 mb-3">{bundle.tagline}</p>
+                  <p className="text-xs text-charcoal/60 line-clamp-2 mb-4 leading-relaxed">{bundle.description}</p>
+                  <div className="flex items-center justify-between pt-3 border-t border-charcoal/5">
+                    <div>
+                      <span className="text-[9px] text-charcoal/40 uppercase tracking-widest block">From</span>
+                      <span className="font-serif font-bold text-gold-dark">{lowestPrice.toLocaleString()}</span>
+                    </div>
+                    <span className="text-[10px] text-charcoal/40">{bundle.tiers.length} tiers</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </section>
     </div>
   );

@@ -29,7 +29,7 @@ export default function ApartmentCard({ listing, onClick }: ApartmentCardProps) 
       className="group flex flex-col h-full transition-all duration-500 hover:-translate-y-2"
       onClick={onClick}
     >
-      <div className="relative aspect-[16/10] overflow-hidden">
+      <div className="relative aspect-[3/4] overflow-hidden">
         <img 
           src={listing.image} 
           alt={listing.title}

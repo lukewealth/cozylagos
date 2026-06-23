@@ -11,7 +11,6 @@ import { AuthProvider, useAuth } from './auth';
 import TopNavBar from './components/TopNavBar';
 import LandingPage from './components/LandingPage';
 import CartDrawer from './components/CartDrawer';
-import LagosCruiseView from './components/LagosCruiseView';
 import ExplorerView from './components/ExplorerView';
 import ExperienceDetailView from './components/ExperienceDetailView';
 import ListingDetailView from './components/ListingDetailView';
@@ -34,7 +33,7 @@ function AppContent() {
 
   // Tabs management
   const [activeTab, setActiveTab] = useState<
-    'home' | 'lagos-cruise' | 'explorer' | 'experience' | 'bundles' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations'
+    'home' | 'explorer' | 'experience' | 'bundles' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations'
   >('home');
   
   // Search parameters for staying enclaves
@@ -188,17 +187,6 @@ function AppContent() {
                    <LandingPage 
                      listings={listings}
                      onSelectListing={(stay) => setSelectedListing(stay)}
-                     setActiveTab={setActiveTab}
-                   />
-                 </React.Fragment>
-               )}
-  
-               {activeTab === 'lagos-cruise' && (
-                 <React.Fragment key="lagos-cruise">
-                   <LagosCruiseView 
-                     listings={listings.filter(l => l.isActive)}
-                     onSelectListing={(stay) => setSelectedListing(stay)}
-                     setSearchDestination={setSearchDestination}
                      setActiveTab={setActiveTab}
                    />
                  </React.Fragment>
