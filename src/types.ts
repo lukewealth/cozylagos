@@ -44,6 +44,7 @@ export interface Listing {
   images: string[];
   amenities: string[];
   packageDetails?: string[];
+  keywords?: string[];
   ownerId: string;
   isActive: boolean;
   reviewsCount: number;

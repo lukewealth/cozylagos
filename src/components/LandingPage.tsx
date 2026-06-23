@@ -6,7 +6,7 @@ import { INITIAL_LISTINGS } from '../data';
 import ApartmentCard from './ui/ApartmentCard';
 import GemCard from './ui/GemCard';
 import Hero from './Hero';
-import SearchFilters from './SearchFilters';
+import SmartSearchBar from './SmartSearchBar';
 import PropertyMap from './PropertyMap';
 
 interface LandingPageProps {
@@ -18,46 +18,22 @@ interface LandingPageProps {
 export default function LandingPage({ listings, onSelectListing, setActiveTab }: LandingPageProps) {
   const allListings = listings.length > 0 ? listings : INITIAL_LISTINGS;
 
-  const [filters, setFilters] = useState({
-    location: '',
-    category: '',
-    priceRange: [0, 1000000] as [number, number],
-    beds: 0,
-    baths: 0,
-  });
-
+  const [filteredListings, setFilteredListings] = useState<Listing[]>(allListings);
+  const [searchQuery, setSearchQuery] = useState('');
   const [showMap, setShowMap] = useState(false);
 
-  const locations = useMemo(() =>
-    Array.from(new Set(allListings.map(l => l.location))),
-  [allListings]);
-
-  const categories = useMemo(() =>
-    Array.from(new Set(allListings.map(l => l.category))),
-  [allListings]);
-
-  const filteredListings = useMemo(() => {
-    return allListings.filter(listing => {
-      const matchLocation = !filters.location || listing.location === filters.location;
-      const matchCategory = !filters.category || listing.category === filters.category;
-      const matchPrice = listing.nightlyRate >= filters.priceRange[0] && listing.nightlyRate <= filters.priceRange[1];
-      const matchBeds = filters.beds === 0 || listing.bedrooms >= filters.beds;
-      const matchBaths = filters.baths === 0 || listing.bathrooms >= filters.baths;
-
-      return matchLocation && matchCategory && matchPrice && matchBeds && matchBaths;
-    });
-  }, [allListings, filters]);
+  const handleSearchResults = (results: Listing[], query: string) => {
+    setFilteredListings(results.length > 0 ? results : allListings);
+    setSearchQuery(query);
+  };
 
   return (
     <div className="flex-grow flex flex-col animate-fade-in">
       {/* 1. HERO SECTION WITH SEARCH */}
       <Hero>
-        <SearchFilters
-          filters={filters}
-          setFilters={setFilters}
-          locations={locations}
-          categories={categories}
-          maxPrice={1000000}
+        <SmartSearchBar
+          listings={allListings}
+          onResultsChange={handleSearchResults}
         />
       </Hero>
 
@@ -98,10 +74,10 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
           <div className="text-center py-20">
             <p className="text-charcoal/40 font-serif text-2xl">No gems found matching your search.</p>
             <button
-              onClick={() => setFilters({ location: '', category: '', priceRange: [0, 1000000], beds: 0, baths: 0 })}
+              onClick={() => { setFilteredListings(allListings); setSearchQuery(''); }}
               className="mt-4 text-gold-dark hover:text-charcoal text-sm font-bold underline"
             >
-              Clear filters
+              Show all properties
             </button>
           </div>
         )}
@@ -112,9 +88,11 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
         <section className="py-8 sm:py-12 px-4 sm:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
           <div className="text-left mb-8">
             <span className="text-gold-dark font-bold text-[10px] tracking-[0.25em] uppercase block mb-2">
-              Full Collection
+              {searchQuery ? 'Search Results' : 'Full Collection'}
             </span>
-            <h2 className="font-serif text-2xl md:text-3xl text-charcoal">All Residences</h2>
+            <h2 className="font-serif text-2xl md:text-3xl text-charcoal">
+              {searchQuery ? `${filteredListings.length} Properties Found` : 'All Residences'}
+            </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {filteredListings.slice(8).map((listing) => (
@@ -155,7 +133,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
               transition={{ duration: 0.4 }}
             >
               <PropertyMap
-                listings={filteredListings}
+                listings={filteredListings.length > 0 ? filteredListings : allListings}
                 onSelectListing={onSelectListing}
               />
             </motion.div>
