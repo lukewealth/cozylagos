@@ -25,9 +25,12 @@ export default function TopNavBar({ portal, setPortal, activeTab, setActiveTab, 
                 setActiveTab('overview');
               }
             }}
-            className="font-serif italic text-2xl font-bold tracking-tight text-gold-dark cursor-pointer select-none hover:opacity-85 transition-opacity"
+            className="flex items-center gap-3 cursor-pointer select-none hover:opacity-85 transition-opacity"
           >
-            Cozy Lagos
+            <img src="/logo.png" alt="Cozy Lagos Logo" className="h-10 w-auto" />
+            <div className="font-serif italic text-2xl font-bold tracking-tight text-gold-dark">
+              Cozy Lagos
+            </div>
           </div>
           
           {/* Elite Host badge */}

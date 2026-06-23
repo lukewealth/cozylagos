@@ -172,3 +172,98 @@ Facilities Include:
 • Washing machine
 • Balcony sit out
 • Tastefully furnished
+
+
+
+[21/06/2026, 01:05:09] Willy F Beat: A fully furnished 1 bedroom serviced apartment
+
+Location: VHA, Oniru vi
+Amenities:
+•⁠  ⁠24/7 Power supply
+•⁠  ⁠24/7 Treated water supply
+•⁠  ⁠24/7 High profile security
+•⁠  ⁠Highspeed broadband internet
+•⁠  ⁠Netflix
+•⁠  ⁠Smart TV's
+•⁠  ⁠DSIV
+•⁠  ⁠Housekeeping
+•⁠  ⁠⁠
+180k
+[21/06/2026, 01:05:30] Willy F Beat: All the photos are for this apartments
+[21/06/2026, 01:05:41] Willy F Beat: This is like a sample
+
+
+Cozy 2bedroom apartment 
+Available Today admiralty lekki phase1
+
+24/7 Electricity
+Smart TVs (Living room and Bedroom)
+24/7 security 
+Estate pool and gym 
+Board games
+Fully equipped and fitted kitchen 
+Dedicated fiber internet 
+Washing machine 
+Cooking spices 
+Smart lock 
+Fully Air-conditioned home 
+Clean running water 
+Elevators 
+Yoga mat
+Work table and chair 
+Pool toys
+
+190k
+
+Luxury 2bedroom apartment admiralty lekki 1 available 
+Rate-240k
+
+Facilities Include:
+•⁠  ⁠Gated and Secured Estate
+•⁠  ⁠Superfast WiFi
+•⁠  ⁠24/7 Power Supply
+•⁠  ⁠24/7 Security
+•⁠  ⁠Swimming pool
+•⁠  ⁠Smart TVs
+•⁠  ⁠En-suite rooms
+•⁠  ⁠Housekeeping
+•⁠  ⁠Chef on demand
+•⁠  ⁠Dedicated car park
+•⁠  ⁠Fully equipped kitchen
+•⁠  ⁠Washing machine
+•⁠  ⁠Balcony sit out
+•⁠  ⁠Tastefully furnished
+
+
+
+VICTORIA
+
+Luxury 3 bedroom penthouse with cinema 
+📍Oniru Victoria Island
+
+Rate: 380,000
+
+
+Features: 
+Gated and Secured Estate, 
+24/7 Power Supply 
+Serene environment 
+Smart Lock
+Very fast internet 
+Netflix / YouTube / Dstv
+Snooker Board
+Swimming pool
+Gym
+En-suite room with Balcony 
+Cinema 
+Ocean/ Cite view 
+Daily housekeeping 
+Dedicated car park space
+Equipped kitchen 
+Washing Machine 
+Tastefully furnished
+
+Note: smoke in the balcony only🚭 
+No loud music 
+No pets
+

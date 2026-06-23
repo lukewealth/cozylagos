@@ -117,7 +117,7 @@ export default function HomeView({ listings, onSelectListing, setSearchDestinati
 
   const heroImgSrc = heroImgError
     ? FALLBACK_IMG
-    : 'assets/images/horizontal/Horizotal%20view.jpg';
+    : 'assets/images/horizontal/CozyLagos.jpeg';
 
   return (
     <div className="flex-grow flex flex-col animate-fade-in-up">
