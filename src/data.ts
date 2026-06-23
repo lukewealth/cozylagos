@@ -1109,6 +1109,48 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
   }
 ];
 
+export interface VIPService {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  price: number;
+  duration: string;
+  rating: number;
+  location: string;
+  image: string;
+  highlights: string[];
+  provider: string;
+}
+
+export const VIP_SERVICES: VIPService[] = [
+  // Spa & Wellness
+  { id: 'spa-01', title: 'Serenity Spa Ikoyi', description: 'Award-winning day spa offering deep tissue massage, aromatherapy, and holistic body treatments in a tranquil setting.', category: 'Spa & Wellness', price: 45000, duration: '2 hours', rating: 4.9, location: 'Ikoyi', image: '/assets/images/vertical/IMG-20260621-WA0043.jpg', highlights: ['Deep tissue massage', 'Aromatherapy', 'Sauna access'], provider: 'Serenity Spa Ltd' },
+  { id: 'spa-02', title: 'The Wellness Hub VI', description: 'State-of-the-art fitness center with personal trainers, yoga classes, and rooftop infinity pool.', category: 'Spa & Wellness', price: 35000, duration: '3 hours', rating: 4.7, location: 'Victoria Island', image: '/assets/images/vertical/IMG-20260621-WA0044.jpg', highlights: ['Personal trainer', 'Yoga classes', 'Infinity pool'], provider: 'Wellness Hub NG' },
+  { id: 'spa-03', title: 'Zen Yoga Studio', description: 'Tranquil yoga and meditation studio offering daily classes from Vinyasa to sound healing sessions.', category: 'Spa & Wellness', price: 25000, duration: '1.5 hours', rating: 4.8, location: 'Lekki Phase 1', image: '/assets/images/vertical/IMG-20260621-WA0045.jpg', highlights: ['Daily classes', 'Meditation', 'Sound healing'], provider: 'Zen Studios' },
+
+  // Barber & Beauty
+  { id: 'barber-01', title: 'Executive Cuts Barbershop', description: 'Premium barbershop offering classic cuts, hot towel shaves, and grooming services for the modern gentleman.', category: 'Barber & Beauty', price: 15000, duration: '1 hour', rating: 4.8, location: 'Victoria Island', image: '/assets/images/vertical/IMG-20260621-WA0038.jpg', highlights: ['Classic cuts', 'Hot towel shave', 'Beard grooming'], provider: 'Executive Cuts Ltd' },
+  { id: 'barber-02', title: 'Glow Beauty Lounge', description: 'Premium beauty services — facials, manicures, hair styling, and bridal packages by top stylists.', category: 'Barber & Beauty', price: 40000, duration: '2 hours', rating: 4.6, location: 'Ikoyi', image: '/assets/images/vertical/IMG-20260621-WA0039.jpg', highlights: ['Facials', 'Bridal packages', 'Hair styling'], provider: 'Glow Beauty Ltd' },
+  { id: 'barber-03', title: 'The Style Studio', description: 'Full-service salon offering hair treatments, coloring, braiding, and styling for all hair types.', category: 'Barber & Beauty', price: 30000, duration: '2 hours', rating: 4.7, location: 'Lekki Phase 1', image: '/assets/images/vertical/IMG-20260621-WA0041.jpg', highlights: ['Hair treatments', 'Coloring', 'Braiding'], provider: 'Style Studio NG' },
+
+  // Shopping Malls
+  { id: 'shop-01', title: 'Palm Shopping Mall', description: 'Lekki\'s premier shopping destination with 150+ stores, cinema, bowling alley, and international brands.', category: 'Shopping Malls', price: 0, duration: '3-5 hours', rating: 4.5, location: 'Lekki Phase 1', image: '/assets/images/vertical/IMG-20260621-WA0002.jpg', highlights: ['150+ stores', 'Cinema', 'Bowling alley'], provider: 'Palm Mall Ltd' },
+  { id: 'shop-02', title: 'Alara Lagos', description: 'Curated luxury concept store featuring African and international designer fashion, art, and lifestyle.', category: 'Shopping Malls', price: 0, duration: '2-3 hours', rating: 4.8, location: 'Victoria Island', image: '/assets/images/vertical/IMG-20260621-WA0003.jpg', highlights: ['Luxury fashion', 'African designers', 'Art gallery'], provider: 'Alara Lagos' },
+  { id: 'shop-03', title: 'The Palms Shopping Mall', description: 'One of Lagos\'s largest malls with over 100 retail stores, restaurants, and entertainment options.', category: 'Shopping Malls', price: 0, duration: '3-4 hours', rating: 4.4, location: 'Lekki', image: '/assets/images/vertical/IMG-20260621-WA0004.jpg', highlights: ['100+ stores', 'Restaurants', 'Entertainment'], provider: 'The Palms Ltd' },
+
+  // Sport Centers & Gyms
+  { id: 'gym-01', title: 'Muscle Republic Gym', description: 'Premium fitness center with state-of-the-art equipment, personal trainers, and group classes.', category: 'Sport Centers & Gyms', price: 25000, duration: '2 hours', rating: 4.7, location: 'Victoria Island', image: '/assets/images/vertical/IMG-20260621-WA0005.jpg', highlights: ['Modern equipment', 'Personal trainers', 'Group classes'], provider: 'Muscle Republic' },
+  { id: 'gym-02', title: 'FitZone Sports Center', description: 'Multi-sport facility offering basketball, tennis, swimming, and fitness training.', category: 'Sport Centers & Gyms', price: 30000, duration: '3 hours', rating: 4.6, location: 'Ikoyi', image: '/assets/images/vertical/IMG-20260621-WA0006.jpg', highlights: ['Basketball court', 'Tennis courts', 'Swimming pool'], provider: 'FitZone Ltd' },
+  { id: 'gym-03', title: 'CrossFit Lagos', description: 'High-intensity functional fitness gym with certified coaches and community-driven workouts.', category: 'Sport Centers & Gyms', price: 35000, duration: '1.5 hours', rating: 4.8, location: 'Lekki Phase 1', image: '/assets/images/vertical/IMG-20260621-WA0007.jpg', highlights: ['CrossFit classes', 'Certified coaches', 'Community'], provider: 'CrossFit Lagos' },
+
+  // Service Providers
+  { id: 'service-01', title: 'Laundry Mate Express', description: 'Professional laundry and dry cleaning service with pickup and delivery within 24 hours.', category: 'Service Providers', price: 12000, duration: '24 hours', rating: 4.7, location: 'All Lagos', image: '/assets/images/vertical/IMG-20260621-WA0017.jpg', highlights: ['Pickup & delivery', '24-hour service', 'Dry cleaning'], provider: 'Laundry Mate Ltd' },
+  { id: 'service-02', title: 'QuickFix Home Services', description: 'On-demand home repair and maintenance services — plumbing, electrical, AC repair, and more.', category: 'Service Providers', price: 20000, duration: '2-4 hours', rating: 4.5, location: 'All Lagos', image: '/assets/images/vertical/IMG-20260621-WA0019.jpg', highlights: ['Plumbing', 'Electrical', 'AC repair'], provider: 'QuickFix Services' },
+  { id: 'service-03', title: 'Chef at Home', description: 'Private chef service bringing restaurant-quality meals to your doorstep with custom menus.', category: 'Service Providers', price: 50000, duration: '3 hours', rating: 4.9, location: 'All Lagos', image: '/assets/images/vertical/IMG-20260621-WA0020.jpg', highlights: ['Custom menus', 'Restaurant quality', 'Professional chefs'], provider: 'Chef at Home NG' },
+  { id: 'service-04', title: 'Mobile Car Wash Premium', description: 'Luxury mobile car wash and detailing service at your location with eco-friendly products.', category: 'Service Providers', price: 18000, duration: '2 hours', rating: 4.6, location: 'All Lagos', image: '/assets/images/vertical/IMG-20260621-WA0021.jpg', highlights: ['Mobile service', 'Eco-friendly', 'Full detailing'], provider: 'Mobile Wash Ltd' },
+];
+
 export const CONCIERGE_FAQ_TRIGGERS = [
   {
     keywords: ["chef", "dinner", "food", "cook", "dining"],

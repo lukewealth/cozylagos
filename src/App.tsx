@@ -14,7 +14,9 @@ import LandingPage from './components/LandingPage';
 import CartDrawer from './components/CartDrawer';
 import ExplorerView from './components/ExplorerView';
 import ExploreLagosView from './components/ExploreLagosView';
+import VIPServicesView from './components/VIPServicesView';
 import ListingDetailView from './components/ListingDetailView';
+import CheckoutView from './components/CheckoutView';
 import GuestDashboard from './components/GuestDashboard';
 import OwnerDashboardView from './components/OwnerDashboardView';
 import ListingWizardView from './components/ListingWizardView';
@@ -42,7 +44,8 @@ function AppContent() {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [bookingContext, setBookingContext] = useState<{}>({});
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const { cartCount } = useCart();
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const { cartCount, cart, serviceCart, experienceCart, getGrandTotal, getTotalAmount, getServiceTotal, getExperienceTotal } = useCart();
   const [showCookies, setShowCookies] = useState(() => {
     return !localStorage.getItem('cozy_lagos_cookies_accepted');
   });
@@ -173,16 +176,39 @@ function AppContent() {
       <TopNavBar
         activeTab={activeTab}
         setActiveTab={handleTabChange}
-        cartCount={cartCount}
+        cartCount={cartCount + serviceCart.length + experienceCart.length}
         onOpenCart={() => setIsCartOpen(true)}
       />
   
-      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} onCheckout={() => setIsCheckoutOpen(true)} />
       <WhatsAppConcierge {...bookingContext} />
   
       <main className="flex-grow flex flex-col relative">
         <AnimatePresence mode="wait">
-          {selectedListing ? (
+          {isCheckoutOpen ? (
+            <motion.div
+              key="checkout"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <CheckoutView
+                cart={cart}
+                serviceCart={serviceCart}
+                experienceCart={experienceCart}
+                listingTotal={getTotalAmount()}
+                serviceTotal={getServiceTotal()}
+                experienceTotal={getExperienceTotal()}
+                grandTotal={getGrandTotal()}
+                onBack={() => setIsCheckoutOpen(false)}
+                onConfirm={(bookingData) => {
+                  handleConfirmBooking(bookingData);
+                  setIsCheckoutOpen(false);
+                }}
+              />
+            </motion.div>
+          ) : selectedListing ? (
             <motion.div
               key={`detail-${selectedListing.id}`}
               initial={{ opacity: 0, x: 20 }}

@@ -9,9 +9,13 @@ import {
   Plane, KeyRound, Bike, Bus, Flower2, HandHeart, Scissors, Tent,
   Wifi, Presentation, FolderOpen, Calendar, Trophy, Drum, ArrowUp, Gift,
   Grid3X3, List, X, ChevronRight, Check, Package, ArrowRight, LayoutGrid,
-  SlidersHorizontal, Filter, Search, TrendingUp, Flame, Zap, Crown, Globe
+  SlidersHorizontal, Filter, Search, TrendingUp, Flame, Zap, Crown, Globe,
+  Anchor, Sparkle
 } from 'lucide-react';
 import { SERVICE_BUNDLES } from '../data';
+import VIPServicesView from './VIPServicesView';
+import ExperienceDetailView from './ExperienceDetailView';
+import VIPServicesView from './VIPServicesView';
 
 interface CategoryItem {
   id: string;
@@ -449,6 +453,7 @@ function SidePanel({ item, onClose, onBookBundle }: { item: CategoryItem; onClos
 }
 
 export default function ExploreLagosView({ onNavigateBundles }: { onNavigateBundles?: () => void }) {
+  const [activeTab, setActiveTab] = useState<'discover' | 'experiences' | 'vip'>('discover');
   const [activeCategory, setActiveCategory] = useState<string>('attractions');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedItem, setSelectedItem] = useState<CategoryItem | null>(null);
@@ -528,7 +533,121 @@ export default function ExploreLagosView({ onNavigateBundles }: { onNavigateBund
         </div>
       </section>
 
-      {/* CATEGORY NAV PILLS */}
+      {/* TAB NAVIGATION */}
+      <div className="bg-parchment border-b border-charcoal/5">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20">
+          <div className="flex gap-1 py-3">
+            {[
+              { id: 'discover' as const, label: 'Discover Lagos', icon: <Compass className="w-4 h-4" /> },
+              { id: 'experiences' as const, label: 'Experiences', icon: <Sparkles className="w-4 h-4" /> },
+              { id: 'vip' as const, label: 'VIP Services', icon: <Crown className="w-4 h-4" /> },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-4 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 ${
+                  activeTab === tab.id
+                    ? 'bg-charcoal text-white shadow-lg shadow-charcoal/20'
+                    : 'bg-white/70 text-charcoal/60 hover:bg-white hover:text-charcoal border border-charcoal/5'
+                }`}
+              >
+                {tab.icon}
+                <span className="hidden sm:inline">{tab.label}</span>
+                <span className="sm:hidden">{tab.label.split(' ')[0]}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* VIP SERVICES TAB */}
+      {activeTab === 'vip' && <VIPServicesView />}
+
+      {/* EXPERIENCES TAB */}
+      {activeTab === 'experiences' && (
+        <div className="max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 py-10 sm:py-14 md:py-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <Anchor className="w-4 h-4 text-gold-dark" />
+              <span className="font-bold text-[10px] tracking-[0.2em] uppercase text-gold-dark">
+                Premier Ocean Experience
+              </span>
+            </div>
+            <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-charcoal mb-4">
+              Private Yacht Charter
+            </h2>
+            <p className="text-sm sm:text-base text-charcoal/60 max-w-2xl mb-8 leading-relaxed">
+              Ascend to the waters of Lagos in absolute style. A deeply curated custom voyage across the Lekki peninsula, merging pure skyline backdrops with elite in-house service.
+            </p>
+          </motion.div>
+
+          <ExperienceDetailView onBackToHome={() => setActiveTab('discover')} />
+
+          <div className="mt-16">
+            <div className="text-center mb-12">
+              <span className="text-gold-dark font-bold text-[10px] tracking-[0.25em] uppercase block mb-2">
+                More Experiences
+              </span>
+              <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-3">
+                Curated Lagos Adventures
+              </h2>
+              <p className="text-sm text-charcoal/60 max-w-xl mx-auto">
+                From sunset cruises to cultural tours, discover unforgettable experiences.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {categories[4].items.slice(0, 6).map((item) => (
+                <motion.div
+                  key={item.id}
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  onClick={() => setSelectedItem(item)}
+                  className="group cursor-pointer"
+                >
+                  <div className="bg-white rounded-2xl overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-xl transition-shadow duration-500">
+                    <div className={`relative h-48 bg-gradient-to-br ${item.gradient} flex items-center justify-center`}>
+                      <div className="text-white/90 group-hover:scale-110 transition-transform duration-500">
+                        {item.icon}
+                      </div>
+                      <div className="absolute top-3 right-3">
+                        <span className="px-2.5 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold text-white tracking-wide">
+                          {item.price}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-5">
+                      <h3 className="font-serif text-lg font-semibold text-charcoal group-hover:text-gold-dark transition-colors mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-charcoal/60 line-clamp-2 mb-3">{item.description}</p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1 text-charcoal/40">
+                          <MapPin className="w-3 h-3" />
+                          <span className="text-[10px]">{item.location}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-3 h-3 fill-gold text-gold" />
+                          <span className="text-xs font-bold">{item.rating}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MAIN CONTENT (Discover & Experiences) */}
+      {activeTab !== 'vip' && (
+        <>
+          {/* CATEGORY NAV PILLS */}
       <div className="sticky top-0 z-40 bg-parchment/90 backdrop-blur-xl border-b border-charcoal/5">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20">
           <div className="flex items-center justify-between py-3 sm:py-4">
@@ -740,6 +859,8 @@ export default function ExploreLagosView({ onNavigateBundles }: { onNavigateBund
           </motion.div>
         </div>
       </section>
+        </>
+      )}
 
       {/* SIDE PANEL */}
       <AnimatePresence>
