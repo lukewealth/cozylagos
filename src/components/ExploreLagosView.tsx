@@ -9,7 +9,7 @@ import {
   Plane, KeyRound, Bike, Bus, Flower2, HandHeart, Scissors, Tent,
   Wifi, Presentation, FolderOpen, Calendar, Trophy, Drum, ArrowUp, Gift,
   Grid3X3, List, X, ChevronRight, Check, Package, ArrowRight, LayoutGrid,
-  SlidersHorizontal, Filter, Search, TrendingUp, Flame, Zap, Crown
+  SlidersHorizontal, Filter, Search, TrendingUp, Flame, Zap, Crown, Globe
 } from 'lucide-react';
 import { SERVICE_BUNDLES } from '../data';
 
