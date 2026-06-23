@@ -65,13 +65,20 @@ export default function TopNavBar({ portal, setPortal, activeTab, setActiveTab, 
                 Stays
                 {activeTab === 'explorer' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
               </button>
-               <button 
-                 onClick={() => setActiveTab('experience')}
-                 className={`py-2 px-1 relative transition-colors ${activeTab === 'experience' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
-               >
-                 Experiences
-                 {activeTab === 'experience' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-               </button>
+                <button
+                  onClick={() => setActiveTab('experience')}
+                  className={`py-2 px-1 relative transition-colors ${activeTab === 'experience' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+                >
+                  Experiences
+                  {activeTab === 'experience' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                </button>
+                <button
+                  onClick={() => setActiveTab('bundles')}
+                  className={`py-2 px-1 relative transition-colors ${activeTab === 'bundles' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+                >
+                  Bundles
+                  {activeTab === 'bundles' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                </button>
                <button 
                  onClick={() => setActiveTab('concierge-hub')}
                  className={`py-2 px-1 relative transition-colors ${activeTab === 'concierge-hub' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}

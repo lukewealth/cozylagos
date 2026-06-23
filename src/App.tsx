@@ -19,6 +19,7 @@ import OwnerDashboardView from './components/OwnerDashboardView';
 import ListingWizardView from './components/ListingWizardView';
 import ConciergeHubView from './components/ConciergeHubView';
 import SmartRecommendationsView from './components/SmartRecommendationsView';
+import ServiceBundlesView from './components/ServiceBundlesView';
 import { useDatabase } from './hooks/useDatabase';
 import { seedDatabase, getListingsWithFallback, syncToLocalStorage } from './db';
 import UserDashboard from './portals/UserDashboard';
@@ -32,7 +33,7 @@ function AppContent() {
   
   // Tabs management
   const [activeTab, setActiveTab] = useState<
-    'home' | 'lagos-cruise' | 'explorer' | 'experience' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations'
+    'home' | 'lagos-cruise' | 'explorer' | 'experience' | 'bundles' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations'
   >('home');
   
   // Search parameters for staying enclaves
@@ -214,9 +215,15 @@ function AppContent() {
   
                {activeTab === 'experience' && (
                  <React.Fragment key="experience">
-                   <ExperienceDetailView 
+                   <ExperienceDetailView
                      onBackToHome={() => setActiveTab('home')}
                    />
+                 </React.Fragment>
+               )}
+
+               {activeTab === 'bundles' && (
+                 <React.Fragment key="bundles">
+                   <ServiceBundlesView />
                  </React.Fragment>
                )}
   

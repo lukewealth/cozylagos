@@ -530,6 +530,410 @@ export const INITIAL_CHAT_MESSAGES: ChatMessage[] = [
   }
 ];
 
+export interface BundleTier {
+  duration: string;
+  nights: number;
+  price: number;
+  components: { name: string; cost: number; notes: string }[];
+}
+
+export interface ServiceBundle {
+  id: string;
+  title: string;
+  tagline: string;
+  description: string;
+  icon: string;
+  image: string;
+  tiers: BundleTier[];
+}
+
+export const SERVICE_BUNDLES: ServiceBundle[] = [
+  {
+    id: "business-bundle",
+    title: "Business Bundle",
+    tagline: "Corporate Executive",
+    description: "Designed for the corporate leader who requires zero distractions and maximum efficiency.",
+    icon: "briefcase",
+    image: "/assets/images/horizontal/IMG-20260621-WA0164.jpg",
+    tiers: [
+      {
+        duration: "3 Days",
+        nights: 3,
+        price: 1650000,
+        components: [
+          { name: "Apartment (3 nights)", cost: 360000, notes: "Standard 1-BR @ ₦120,000/night in Lekki Phase 1" },
+          { name: "Airport transfer (round)", cost: 60000, notes: "LOS → Lekki @ ₦25,000–₦45,000 each way" },
+          { name: "IT support (24/7, 3 days)", cost: 180000, notes: "Basic remote support package" },
+          { name: "Workspace setup", cost: 150000, notes: "Desk, chair, monitor rental" },
+          { name: "Land Cruiser Prado + driver", cost: 300000, notes: "SUV with driver @ ₦50,000–₦120,000/day" },
+          { name: "Concierge services", cost: 150000, notes: "Daily errands & assistance" },
+          { name: "Meals & incidentals", cost: 450000, notes: "₦150,000/day for executive dining" }
+        ]
+      },
+      {
+        duration: "7 Days",
+        nights: 7,
+        price: 6000000,
+        components: [
+          { name: "Apartment (7 nights)", cost: 980000, notes: "Premium 2-BR @ ₦140,000/night in Lekki" },
+          { name: "Airport transfer (round)", cost: 70000, notes: "VIP vehicle + meet & greet" },
+          { name: "IT support (24/7, 7 days)", cost: 490000, notes: "On-call technician + hardware backup" },
+          { name: "Workspace setup", cost: 300000, notes: "Full office equipment + high-speed internet" },
+          { name: "Land Cruiser Prado + driver", cost: 700000, notes: "Full-day SUV @ ₦100,000/day" },
+          { name: "Concierge services", cost: 350000, notes: "24/7 personal assistant" },
+          { name: "Meals & incidentals", cost: 1050000, notes: "₦150,000/day" },
+          { name: "Misc buffer", cost: 2060000, notes: "Unforeseen expenses & premium services" }
+        ]
+      },
+      {
+        duration: "21 Days",
+        nights: 21,
+        price: 27000000,
+        components: [
+          { name: "Apartment (21 nights)", cost: 4200000, notes: "Luxury 3-BR in Victoria Island @ ₦200,000/night" },
+          { name: "Airport transfer (round)", cost: 120000, notes: "VIP concierge + fast-track" },
+          { name: "IT support (24/7, 21 days)", cost: 1500000, notes: "Dedicated IT specialist" },
+          { name: "Workspace setup", cost: 800000, notes: "Premium executive office" },
+          { name: "Land Cruiser Prado + driver", cost: 2100000, notes: "₦100,000/day" },
+          { name: "Concierge services", cost: 1500000, notes: "Full-time personal assistant" },
+          { name: "Meals & incidentals", cost: 3150000, notes: "₦150,000/day" },
+          { name: "Misc & premium buffer", cost: 13630000, notes: "Executive perks & contingencies" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "diaspora-bundle",
+    title: "Diaspora Bundle",
+    tagline: "Reconnect with Lagos",
+    description: "Reconnect with Lagos, beautifully.",
+    icon: "globe",
+    image: "/assets/images/horizontal/IMG-20260621-WA0173.jpg",
+    tiers: [
+      {
+        duration: "3 Days",
+        nights: 3,
+        price: 1200000,
+        components: [
+          { name: "Apartment (3 nights)", cost: 420000, notes: "Cozy 2-BR in Lekki @ ₦140,000/night" },
+          { name: "Airport transfer + SIM", cost: 80000, notes: "Transfer + SIM card ready on arrival" },
+          { name: "Private tour guide (3 days)", cost: 150000, notes: "Local guide @ ₦50,000/day" },
+          { name: "Attraction entry fees", cost: 20000, notes: "Nike Art Gallery, Lekki Conservation, etc." },
+          { name: "Street food tour", cost: 50000, notes: "Curated food experiences" },
+          { name: "Photographer (half-day)", cost: 200000, notes: "Professional documentation" },
+          { name: "Transport (tour days)", cost: 180000, notes: "SUV with driver @ ₦60,000/day" },
+          { name: "Meals", cost: 100000, notes: "₦15,000–₦40,000 for two" }
+        ]
+      },
+      {
+        duration: "7 Days",
+        nights: 7,
+        price: 4200000,
+        components: [
+          { name: "Apartment (7 nights)", cost: 1260000, notes: "2-BR in Lekki @ ₦180,000/night" },
+          { name: "Airport transfer + SIM", cost: 90000, notes: "VIP pickup" },
+          { name: "Private tour guide (7 days)", cost: 350000, notes: "Full-time guide" },
+          { name: "Attraction & activity fees", cost: 100000, notes: "All cultural sites + workshops" },
+          { name: "Street food & dining", cost: 200000, notes: "Multiple curated food tours" },
+          { name: "Photographer (full 3 days)", cost: 500000, notes: "Full documentation package" },
+          { name: "Transport (SUV, 7 days)", cost: 700000, notes: "₦100,000/day" },
+          { name: "Meals", cost: 400000, notes: "" },
+          { name: "Deep exploration logistics", cost: 300000, notes: "Historic Lagos Island + transport" },
+          { name: "Beach day setup", cost: 300000, notes: "Equipment, refreshments, logistics" }
+        ]
+      },
+      {
+        duration: "21 Days",
+        nights: 21,
+        price: 17000000,
+        components: [
+          { name: "Apartment (21 nights)", cost: 4200000, notes: "Luxury 3-BR in Victoria Island" },
+          { name: "Airport transfer + VIP SIM", cost: 150000, notes: "Concierge airport service" },
+          { name: "Private tour guide (21 days)", cost: 1050000, notes: "Dedicated cultural expert" },
+          { name: "All attraction fees", cost: 300000, notes: "Full access to all experiences" },
+          { name: "Premium food tours", cost: 600000, notes: "High-end culinary experiences" },
+          { name: "Photographer (full coverage)", cost: 1500000, notes: "Professional documentary photo + video" },
+          { name: "Transport (SUV, 21 days)", cost: 2100000, notes: "₦100,000/day" },
+          { name: "Meals (fine dining)", cost: 2100000, notes: "₦100,000/day" },
+          { name: "Logistics & misc", cost: 4000000, notes: "Intercity travel, special access, contingencies" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "tourist-bundle",
+    title: "Tourist Bundle",
+    tagline: "Hassle-Free Discovery",
+    description: "Discover the best of Lagos, hassle-free.",
+    icon: "map",
+    image: "/assets/images/horizontal/IMG-20260621-WA0038.jpg",
+    tiers: [
+      {
+        duration: "3 Days",
+        nights: 3,
+        price: 750000,
+        components: [
+          { name: "Apartment (3 nights)", cost: 360000, notes: "Standard 1-BR @ ₦120,000/night" },
+          { name: "Airport transfer (round)", cost: 60000, notes: "Standard car" },
+          { name: "Curated local experiences", cost: 100000, notes: "1 guided tour day" },
+          { name: "Transport (tour days)", cost: 120000, notes: "Camry with driver @ ₦40,000/day" },
+          { name: "Attraction entry fees", cost: 15000, notes: "Key sites" },
+          { name: "Meals", cost: 60000, notes: "₦20,000/day" },
+          { name: "Visitor support", cost: 35000, notes: "24/7 assistance" }
+        ]
+      },
+      {
+        duration: "7 Days",
+        nights: 7,
+        price: 2400000,
+        components: [
+          { name: "Apartment (7 nights)", cost: 980000, notes: "2-BR @ ₦140,000/night" },
+          { name: "Airport transfer (round)", cost: 70000, notes: "VIP vehicle" },
+          { name: "Curated experiences", cost: 400000, notes: "Culture, food, sights (4 tours)" },
+          { name: "Transport (SUV, 7 days)", cost: 420000, notes: "₦60,000/day" },
+          { name: "Attraction fees", cost: 50000, notes: "All major sites" },
+          { name: "Meals", cost: 280000, notes: "₦40,000/day for two" },
+          { name: "Visitor support", cost: 200000, notes: "Full coverage" }
+        ]
+      },
+      {
+        duration: "21 Days",
+        nights: 21,
+        price: 9500000,
+        components: [
+          { name: "Apartment (21 nights)", cost: 2940000, notes: "2-BR @ ₦140,000/night" },
+          { name: "Airport transfer (round)", cost: 120000, notes: "VIP concierge" },
+          { name: "Curated experiences", cost: 1200000, notes: "Full itinerary (12+ tours)" },
+          { name: "Transport (SUV, 21 days)", cost: 1260000, notes: "₦60,000/day" },
+          { name: "Attraction & activity fees", cost: 150000, notes: "All sites + workshops" },
+          { name: "Meals", cost: 1680000, notes: "₦80,000/day" },
+          { name: "Visitor support", cost: 500000, notes: "Premium 24/7" },
+          { name: "Misc", cost: 1650000, notes: "Special access, contingencies" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "executive-elite",
+    title: "Executive Elite",
+    tagline: "Total Mobility",
+    description: "Zero downtime. Total mobility.",
+    icon: "crown",
+    image: "/assets/images/horizontal/IMG-20260621-WA0188.jpg",
+    tiers: [
+      {
+        duration: "3 Days",
+        nights: 3,
+        price: 4500000,
+        components: [
+          { name: "Apartment (3 nights)", cost: 840000, notes: "Premium VI 3-BR @ ₦280,000/night" },
+          { name: "Mobile office setup", cost: 1200000, notes: "Full equipment + installation" },
+          { name: "24/7 IT & admin support", cost: 600000, notes: "3 days dedicated" },
+          { name: "Airport VIP fast-track", cost: 150000, notes: "Concierge service" },
+          { name: "Executive SUV + chauffeur", cost: 360000, notes: "₦120,000/day" },
+          { name: "Private jet charter (1 leg)", cost: 1350000, notes: "Lagos–Abuja" }
+        ]
+      },
+      {
+        duration: "7 Days",
+        nights: 7,
+        price: 18500000,
+        components: [
+          { name: "Apartment (7 nights)", cost: 1960000, notes: "VI luxury @ ₦280,000/night" },
+          { name: "Mobile office setup", cost: 2000000, notes: "Premium executive office" },
+          { name: "24/7 IT & admin support", cost: 1400000, notes: "Full-time team" },
+          { name: "Airport VIP fast-track", cost: 200000, notes: "Full concierge" },
+          { name: "Executive SUV + chauffeur", cost: 840000, notes: "₦120,000/day" },
+          { name: "Private jet charter (2-3 legs)", cost: 4000000, notes: "Multi-city mobility" },
+          { name: "Meals & incidentals", cost: 2100000, notes: "₦300,000/day" },
+          { name: "Logistics & misc", cost: 6000000, notes: "Ground transport, security, contingencies" }
+        ]
+      },
+      {
+        duration: "21 Days",
+        nights: 21,
+        price: 88000000,
+        components: [
+          { name: "Apartment (21 nights)", cost: 5880000, notes: "VI presidential suite" },
+          { name: "Mobile office setup", cost: 5000000, notes: "Full C-suite command center" },
+          { name: "24/7 IT & admin support", cost: 4200000, notes: "Dedicated team" },
+          { name: "Airport VIP fast-track", cost: 500000, notes: "Multiple fast-track services" },
+          { name: "Executive SUV fleet", cost: 2520000, notes: "Multiple vehicles" },
+          { name: "Private jet charter flights", cost: 15000000, notes: "Extensive travel" },
+          { name: "Meals & incidentals", cost: 6300000, notes: "₦300,000/day" },
+          { name: "Security & logistics", cost: 15000000, notes: "Close protection, ground support" },
+          { name: "Misc premium buffer", cost: 33600000, notes: "Unforeseen executive needs" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "edu-care",
+    title: "Edu-Care Package",
+    tagline: "Families & Sabbaticals",
+    description: "Relocation and educational support for the whole family.",
+    icon: "graduation",
+    image: "/assets/images/horizontal/IMG-20260621-WA0043.jpg",
+    tiers: [
+      {
+        duration: "3 Days",
+        nights: 3,
+        price: 1200000,
+        components: [
+          { name: "Apartment (3 nights)", cost: 600000, notes: "Family 3-BR @ ₦200,000/night" },
+          { name: "Airport transfer (round)", cost: 80000, notes: "Large vehicle" },
+          { name: "School placement consult", cost: 200000, notes: "Initial assessment" },
+          { name: "Emergency health insurance", cost: 200000, notes: "Short-term coverage" },
+          { name: "Cargo handling consult", cost: 120000, notes: "Planning session" }
+        ]
+      },
+      {
+        duration: "7 Days",
+        nights: 7,
+        price: 4200000,
+        components: [
+          { name: "Apartment (7 nights)", cost: 1400000, notes: "Family 3-BR @ ₦200,000/night" },
+          { name: "Airport transfer (round)", cost: 120000, notes: "Van + driver" },
+          { name: "School placement consults", cost: 600000, notes: "Multiple school visits" },
+          { name: "Emergency health insurance", cost: 500000, notes: "7-day family coverage" },
+          { name: "Cargo handling", cost: 800000, notes: "Shipment coordination" },
+          { name: "Transport (family SUV)", cost: 420000, notes: "₦60,000/day" },
+          { name: "Meals", cost: 360000, notes: "Family of 4 @ ₦15,000/meal" }
+        ]
+      },
+      {
+        duration: "21 Days",
+        nights: 21,
+        price: 18000000,
+        components: [
+          { name: "Apartment (21 nights)", cost: 5880000, notes: "Large family home" },
+          { name: "Airport transfer (round)", cost: 200000, notes: "Premium van service" },
+          { name: "School placement (full)", cost: 3000000, notes: "Comprehensive matching" },
+          { name: "Emergency health insurance", cost: 1500000, notes: "Full family coverage" },
+          { name: "Cargo & relocation support", cost: 2000000, notes: "Full relocation support" },
+          { name: "Transport (SUV, 21 days)", cost: 1260000, notes: "₦60,000/day" },
+          { name: "Meals", cost: 2100000, notes: "Family dining" },
+          { name: "Misc & contingencies", cost: 2060000, notes: "" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "lavish-love",
+    title: "Lavish Love",
+    tagline: "Romance & Milestones",
+    description: "Milestone moments, perfected.",
+    icon: "heart",
+    image: "/assets/images/horizontal/IMG-20260621-WA0044.jpg",
+    tiers: [
+      {
+        duration: "3 Days",
+        nights: 3,
+        price: 2800000,
+        components: [
+          { name: "Apartment (3 nights)", cost: 600000, notes: "Romantic 2-BR @ ₦200,000/night" },
+          { name: "Event planner consultation", cost: 300000, notes: "Initial planning" },
+          { name: "Private chef (3 days)", cost: 150000, notes: "" },
+          { name: "Photographer (1 session)", cost: 250000, notes: "" },
+          { name: "Transport (SUV, 3 days)", cost: 180000, notes: "₦60,000/day" },
+          { name: "Romantic dinners", cost: 300000, notes: "Fine dining" },
+          { name: "Decor & styling", cost: 300000, notes: "Apartment transformation" },
+          { name: "Misc", cost: 720000, notes: "" }
+        ]
+      },
+      {
+        duration: "7 Days",
+        nights: 7,
+        price: 9500000,
+        components: [
+          { name: "Apartment (7 nights)", cost: 1400000, notes: "Luxury 3-BR @ ₦200,000/night" },
+          { name: "Full event planner", cost: 1000000, notes: "End-to-end proposal/elopement" },
+          { name: "Private chef (7 days)", cost: 350000, notes: "" },
+          { name: "Private yacht cruise", cost: 1500000, notes: "Half-day luxury charter" },
+          { name: "Photographer (full)", cost: 500000, notes: "Full coverage" },
+          { name: "Mixologist (3 events)", cost: 300000, notes: "" },
+          { name: "Transport (SUV, 7 days)", cost: 420000, notes: "₦60,000/day" },
+          { name: "Fine dining & catering", cost: 1000000, notes: "" },
+          { name: "Decor & styling", cost: 800000, notes: "" },
+          { name: "Misc", cost: 2230000, notes: "" }
+        ]
+      },
+      {
+        duration: "21 Days",
+        nights: 21,
+        price: 42000000,
+        components: [
+          { name: "Apartment (21 nights)", cost: 5880000, notes: "Presidential suite" },
+          { name: "Full event planner + team", cost: 3000000, notes: "Complete wedding planning" },
+          { name: "Private chef (21 days)", cost: 1050000, notes: "" },
+          { name: "Private yacht (multiple)", cost: 5000000, notes: "Multiple cruises" },
+          { name: "Photo + videographer", cost: 2000000, notes: "Full documentation" },
+          { name: "Mixologist (full-time)", cost: 1000000, notes: "" },
+          { name: "Transport (SUV fleet)", cost: 1680000, notes: "Multiple vehicles" },
+          { name: "Catering & fine dining", cost: 5000000, notes: "" },
+          { name: "Decor, flowers, styling", cost: 3000000, notes: "" },
+          { name: "Misc & contingencies", cost: 13900000, notes: "" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "pulse-zen",
+    title: "Pulse & Zen",
+    tagline: "Wellness & Nightlife",
+    description: "Sophisticated escapism.",
+    icon: "sparkles",
+    image: "/assets/images/horizontal/IMG-20260621-WA0045.jpg",
+    tiers: [
+      {
+        duration: "3 Days",
+        nights: 3,
+        price: 1500000,
+        components: [
+          { name: "Apartment (3 nights)", cost: 420000, notes: "@ ₦140,000/night" },
+          { name: "In-room spa treatment", cost: 150000, notes: "1 premium session" },
+          { name: "Resort day pass", cost: 100000, notes: "" },
+          { name: "Club VIP table (1 night)", cost: 500000, notes: "Starting rate" },
+          { name: "Transport (3 days)", cost: 180000, notes: "₦60,000/day" },
+          { name: "Meals", cost: 150000, notes: "" }
+        ]
+      },
+      {
+        duration: "7 Days",
+        nights: 7,
+        price: 5200000,
+        components: [
+          { name: "Apartment (7 nights)", cost: 980000, notes: "@ ₦140,000/night" },
+          { name: "Spa treatments (3)", cost: 450000, notes: "" },
+          { name: "Resort day passes (2)", cost: 200000, notes: "" },
+          { name: "Club VIP table (2 nights)", cost: 1200000, notes: "Premium Afrobeats club" },
+          { name: "Private after-party lounge", cost: 500000, notes: "" },
+          { name: "Transport (SUV, 7 days)", cost: 420000, notes: "" },
+          { name: "Meals & wellness food", cost: 700000, notes: "" },
+          { name: "Wellness consultations", cost: 250000, notes: "" },
+          { name: "Misc", cost: 500000, notes: "" }
+        ]
+      },
+      {
+        duration: "21 Days",
+        nights: 21,
+        price: 24000000,
+        components: [
+          { name: "Apartment (21 nights)", cost: 4200000, notes: "Wellness sanctuary" },
+          { name: "Spa treatments (regular)", cost: 2000000, notes: "Full wellness program" },
+          { name: "Resort day passes (weekly)", cost: 600000, notes: "" },
+          { name: "Club VIP tables (6 nights)", cost: 4000000, notes: "Elite nightlife" },
+          { name: "Private after-party lounges", cost: 2000000, notes: "" },
+          { name: "Transport (SUV, 21 days)", cost: 1260000, notes: "" },
+          { name: "Wellness meals & nutrition", cost: 3000000, notes: "" },
+          { name: "Personal wellness coach", cost: 2000000, notes: "" },
+          { name: "Misc & contingencies", cost: 4940000, notes: "" }
+        ]
+      }
+    ]
+  }
+];
+
 export const CONCIERGE_FAQ_TRIGGERS = [
   {
     keywords: ["chef", "dinner", "food", "cook", "dining"],
