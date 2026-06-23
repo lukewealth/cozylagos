@@ -20,7 +20,7 @@ import ListingWizardView from './components/ListingWizardView';
 import ConciergeHubView from './components/ConciergeHubView';
 import SmartRecommendationsView from './components/SmartRecommendationsView';
 import { useDatabase } from './hooks/useDatabase';
-import { seedDatabase } from './db';
+import { seedDatabase, getListingsWithFallback, syncToLocalStorage } from './db';
 import UserDashboard from './portals/UserDashboard';
 import ServiceProviderDashboard from './portals/ServiceProviderDashboard';
 import AdminDashboard from './portals/AdminDashboard';
@@ -50,7 +50,6 @@ function AppContent() {
   const { data: bookings, addRecord: addBooking } = useDatabase('bookings');
   const { data: transactions, addRecord: addTransaction } = useDatabase('transactions');
   
-  // Initialize database with seed data if empty
   useEffect(() => {
     const initDb = async () => {
       await seedDatabase({
@@ -62,6 +61,8 @@ function AppContent() {
         experiences: [],
         chatMessages: []
       });
+      await getListingsWithFallback(INITIAL_LISTINGS);
+      await syncToLocalStorage();
     };
     initDb();
   }, []);

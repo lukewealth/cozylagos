@@ -339,6 +339,45 @@ export async function restoreFromLocalStorage(): Promise<void> {
   }
 }
 
+export async function cacheGetOrFallback<T>(key: string, fallback: () => Promise<T>, ttlMs: number = 3600000): Promise<T> {
+  const cached = await cacheGet<T>(key);
+  if (cached !== null) return cached;
+  const fresh = await fallback();
+  await cacheSet(key, fresh, ttlMs);
+  return fresh;
+}
+
+export async function getListingsWithFallback(fallbackListings: any[]): Promise<any[]> {
+  try {
+    const dbListings = await dbGetAll('listings');
+    if (dbListings.length > 0) {
+      await cacheSet('listings_snapshot', dbListings, 1800000);
+      return dbListings;
+    }
+  } catch (e) {
+    console.warn('IndexedDB listings read failed, using cache/fallback', e);
+  }
+
+  try {
+    const cached = await cacheGet<any[]>('listings_snapshot');
+    if (cached && cached.length > 0) return cached;
+  } catch (e) {
+    console.warn('Cache listings read failed, using static fallback', e);
+  }
+
+  try {
+    const raw = localStorage.getItem('cozy_lagos_listings');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed.length > 0) return parsed;
+    }
+  } catch (e) {
+    console.warn('LocalStorage fallback failed', e);
+  }
+
+  return fallbackListings;
+}
+
 export async function seedDatabase(initialData: {
   listings: any[],
   bookings: any[],
