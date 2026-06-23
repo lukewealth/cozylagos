@@ -12,10 +12,10 @@ export default function Hero({ children }: HeroProps) {
 
   const dayImg = imgError.day
     ? 'assets/images/horizontal/CozyLagos.jpeg'
-    : 'assets/images/horizontal/Horizotal view.jpg';
+    : 'assets/images/horizontal/day-hero.jpg';
   const nightImg = imgError.night
     ? 'assets/images/horizontal/CozyLagos.jpeg'
-    : 'assets/images/horizontal/Home.jpg';
+    : 'assets/images/horizontal/night-hero.jpg';
 
   useEffect(() => {
     const hour = new Date().getHours();
