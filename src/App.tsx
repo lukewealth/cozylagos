@@ -45,7 +45,8 @@ function AppContent() {
   const [bookingContext, setBookingContext] = useState<{}>({});
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  const { cartCount, cart, serviceCart, experienceCart, getGrandTotal, getTotalAmount, getServiceTotal, getExperienceTotal } = useCart();
+  const { cartCount, cart, serviceCart, experienceCart, getGrandTotal, getTotalAmount, getServiceTotal, getExperienceTotal, getTotalItemCount } = useCart();
+  const totalCartCount = getTotalItemCount();
   const [showCookies, setShowCookies] = useState(() => {
     return !localStorage.getItem('cozy_lagos_cookies_accepted');
   });
@@ -176,7 +177,7 @@ function AppContent() {
       <TopNavBar
         activeTab={activeTab}
         setActiveTab={handleTabChange}
-        cartCount={cartCount + serviceCart.length + experienceCart.length}
+        cartCount={totalCartCount}
         onOpenCart={() => setIsCartOpen(true)}
       />
   
