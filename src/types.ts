@@ -101,3 +101,23 @@ export interface CartItem {
   checkIn: string;
   checkOut: string;
 }
+
+export interface BundleActivity {
+  name: string;
+  description: string;
+  icon: string;
+  duration: string;
+  included: boolean;
+}
+
+export interface ServiceBundle {
+  id: string;
+  title: string;
+  tagline: string;
+  description: string;
+  icon: string;
+  image: string;
+  tiers: { duration: string; nights: number; price: number; components: { name: string; cost: number; notes: string }[] }[];
+  activities: BundleActivity[];
+  highlights: string[];
+}

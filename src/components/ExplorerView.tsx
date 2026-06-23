@@ -64,7 +64,7 @@ export default function ExplorerView({ listings, onSelectListing, searchDestinat
   }
 
   return (
-    <div className="flex-grow flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-charcoal/10 h-[calc(100vh-80px)] overflow-hidden animate-fade-in-up text-left">
+    <div className="flex-grow flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-charcoal/10 min-h-[calc(100vh-80px)] lg:h-[calc(100vh-80px)] overflow-hidden animate-fade-in-up text-left">
       
       {/* LEFT COLUMN: LIST FILTER & CARDS (5/12th width) */}
       <section className="w-full lg:w-[45%] xl:w-[40%] flex flex-col h-full bg-parchment overflow-y-auto">

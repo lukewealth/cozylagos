@@ -93,7 +93,7 @@ export default function BookingFlow({ listing, onCancel, onComplete, initialData
         />
       </div>
 
-      <main className="flex-grow flex items-center justify-center px-6 py-12">
+      <main className="flex-grow flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
         <AnimatePresence mode="wait">
           {step === 'request' && (
             <motion.div
@@ -101,7 +101,7 @@ export default function BookingFlow({ listing, onCancel, onComplete, initialData
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="w-full max-w-xl bg-white p-8 md:p-12 rounded-3xl shadow-2xl space-y-8"
+              className="w-full max-w-xl bg-white p-6 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl shadow-2xl space-y-6 sm:space-y-8"
             >
               <div className="text-center space-y-2">
                 <h2 className="font-serif text-3xl text-charcoal font-bold">Reservation Request</h2>

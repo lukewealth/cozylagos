@@ -17,7 +17,7 @@ interface SearchFiltersProps {
 
 export default function SearchFilters({ filters, setFilters, locations, categories, maxPrice }: SearchFiltersProps) {
   return (
-    <div className="w-full max-w-6xl mx-auto bg-white/10 backdrop-blur-xl rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] border border-white/20 p-2 md:p-4 relative group">
+    <div className="w-full max-w-6xl mx-auto bg-white/10 backdrop-blur-xl rounded-2xl sm:rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] border border-white/20 p-2 sm:p-3 md:p-4 relative group">
       {/* Decorative highlight */}
       <div className="absolute -top-1 -left-1 -right-1 -bottom-1 bg-gradient-to-r from-gold/20 via-transparent to-gold/20 rounded-[2.6rem] -z-10 opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
       

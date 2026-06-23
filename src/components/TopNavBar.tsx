@@ -285,8 +285,8 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
 
       {/* Login Modal */}
       {showLoginModal && (
-        <div className="fixed inset-0 bg-charcoal/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-          <div className="bg-parchment rounded-2xl p-8 max-w-md w-full shadow-2xl">
+        <div className="fixed inset-0 bg-charcoal/60 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-parchment rounded-t-3xl sm:rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl max-h-[90vh] overflow-y-auto">
             <h2 className="font-serif text-2xl font-bold text-charcoal mb-6">Login to Cozy Lagos</h2>
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
@@ -368,8 +368,8 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
       {showMobileMenu && (
         <div className="lg:hidden fixed inset-0 z-[90]">
           <div className="fixed inset-0 bg-charcoal/40 backdrop-blur-sm" onClick={() => setShowMobileMenu(false)} />
-          <div className="fixed top-20 right-0 left-0 bg-parchment border-b border-charcoal/5 shadow-xl max-h-[80vh] overflow-y-auto">
-            <div className="p-4 space-y-1">
+          <div className="fixed top-20 right-0 left-0 bg-parchment border-b border-charcoal/5 shadow-xl max-h-[75vh] overflow-y-auto rounded-b-2xl">
+            <div className="p-3 space-y-1">
               {(!isAuthenticated ? [
                 { tab: 'home', label: 'Home' },
                 { tab: 'explorer', label: 'Stays' },
@@ -401,7 +401,7 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                     setActiveTab(tab);
                     setShowMobileMenu(false);
                   }}
-                  className={`w-full text-left px-4 py-3 rounded-lg text-sm font-bold tracking-wider uppercase transition-colors ${
+                  className={`w-full text-left px-4 py-3.5 rounded-lg text-sm font-bold tracking-wider uppercase transition-colors ${
                     activeTab === tab
                       ? 'bg-gold/10 text-gold-dark'
                       : 'text-charcoal hover:bg-charcoal/5'

@@ -61,7 +61,7 @@ export default function WhatsAppConcierge({ listing, checkIn, checkOut, guests =
       {/* Floating WhatsApp Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 group"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 bg-[#25D366] hover:bg-[#128C7E] text-white p-3.5 sm:p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 group"
         aria-label="Contact WhatsApp Concierge"
       >
         <MessageCircle className="w-6 h-6" />
@@ -72,8 +72,8 @@ export default function WhatsAppConcierge({ listing, checkIn, checkOut, guests =
 
       {/* WhatsApp Modal */}
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-charcoal/60 backdrop-blur-sm">
-          <div className="bg-parchment rounded-2xl max-w-md w-full shadow-2xl overflow-hidden">
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-charcoal/60 backdrop-blur-sm">
+          <div className="bg-parchment rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
             {/* Header */}
             <div className="bg-[#25D366] text-white p-6 relative">
               <button

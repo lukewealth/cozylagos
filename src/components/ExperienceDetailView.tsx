@@ -50,7 +50,7 @@ export default function ExperienceDetailView({ onBackToHome }: ExperienceDetailV
     <div className="flex-grow bg-parchment animate-fade-in-up text-left">
       
       {/* HERO HERO SECTION */}
-      <section className="relative w-full h-[400px] md:h-[550px] flex items-end pb-12 md:pb-16 select-none bg-charcoal">
+      <section className="relative w-full h-[300px] sm:h-[400px] md:h-[550px] flex items-end pb-8 sm:pb-12 md:pb-16 select-none bg-charcoal">
         <div 
           className="absolute inset-0 bg-cover bg-center opacity-70"
           style={{ backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuClJZQ9-BoVmmRqAZ5YttBYYzW1-2Lv4rnCNdcvL3D-OSYZII-nbBJJWpqV5Na5JgYUZd4pJL8_9fXZ2A4NYjXGMSeR7CgU8F64xmGQy-zaSgoekrg_ZTNaC5S2jIdDF2XFOvJ4h75LAwAp7Z3bHnznlOXt1sLe5r4r9oFl5rb_ENIFsVi_Cpj70vrZmgbrXHDN_VDySzVzpK_Oxjy0c8CalbGZMGou6urKXprf58_DQXWaWDa7qj87Xm87K2xxLViifBhZEqGo-iIo')` }}
@@ -97,7 +97,7 @@ export default function ExperienceDetailView({ onBackToHome }: ExperienceDetailV
       </section>
 
       {/* CORE SPEC & BOOKING COLUMN GRID */}
-      <section className="max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 py-16 md:py-24 grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20 py-10 sm:py-16 md:py-24 grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12">
         
         {/* LEFT COLUMN: ITINERARY & BULLETS (8/12th width) */}
         <div className="lg:col-span-8 space-y-16">
@@ -195,7 +195,7 @@ export default function ExperienceDetailView({ onBackToHome }: ExperienceDetailV
 
         {/* RIGHT COLUMN: BOOKING WIDGET CALCULATOR (4/12th width) */}
         <div className="lg:col-span-4">
-          <div className="bg-white border border-charcoal/5 p-8 rounded-3xl sticky top-28 shadow-xl text-left">
+          <div className="bg-white border border-charcoal/5 p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl text-left">
             <div className="border-b border-charcoal/5 pb-4 mb-6">
               <span className="text-[10px] uppercase tracking-widest font-bold text-charcoal/40 block mb-1">Estimated Charge</span>
               <div className="flex items-baseline">
@@ -352,7 +352,7 @@ export default function ExperienceDetailView({ onBackToHome }: ExperienceDetailV
       </section>
 
       {/* BUNDLES SECTION */}
-      <section className="max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 py-16 md:py-24">
+      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20 py-10 sm:py-16 md:py-24">
         <div className="text-center mb-12">
           <span className="text-gold-dark font-bold text-[10px] tracking-[0.25em] uppercase block mb-2">
             Premium Packages
@@ -365,7 +365,7 @@ export default function ExperienceDetailView({ onBackToHome }: ExperienceDetailV
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {SERVICE_BUNDLES.map((bundle) => {
             const iconMap: Record<string, React.ReactNode> = {
               briefcase: <Briefcase className="w-5 h-5" />,

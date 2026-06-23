@@ -61,7 +61,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
       </Hero>
 
       {/* 2. FEATURED RESIDENCES */}
-      <section className="py-16 md:py-24 px-4 md:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
+      <section className="py-10 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 md:mb-16 gap-6">
           <div className="text-left">
             <span className="text-gold-dark font-bold text-[10px] tracking-[0.25em] uppercase block mb-2">
@@ -106,7 +106,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
       </section>
 
       {/* 3. MAP SECTION */}
-      <section className="py-12 md:py-16 px-4 md:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
+      <section className="py-8 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <div>
             <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-1">
@@ -141,7 +141,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
       </section>
 
       {/* 4. EXPERIENCE & BUNDLES MERGED SECTION */}
-      <section className="py-16 md:py-20 px-4 md:px-6 lg:px-12 xl:px-20 bg-charcoal text-parchment relative overflow-hidden">
+      <section className="py-10 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-12 xl:px-20 bg-charcoal text-parchment relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-gold-dark/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-10 -left-10 w-96 h-96 bg-gold-dark/5 rounded-full blur-3xl pointer-events-none" />
 

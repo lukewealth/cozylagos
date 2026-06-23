@@ -567,6 +567,14 @@ export interface BundleTier {
   components: { name: string; cost: number; notes: string }[];
 }
 
+export interface BundleActivity {
+  name: string;
+  description: string;
+  icon: string;
+  duration: string;
+  included: boolean;
+}
+
 export interface ServiceBundle {
   id: string;
   title: string;
@@ -575,6 +583,8 @@ export interface ServiceBundle {
   icon: string;
   image: string;
   tiers: BundleTier[];
+  activities: BundleActivity[];
+  highlights: string[];
 }
 
 export const SERVICE_BUNDLES: ServiceBundle[] = [
@@ -585,6 +595,22 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     description: "Designed for the corporate leader who requires zero distractions and maximum efficiency.",
     icon: "briefcase",
     image: "/assets/images/horizontal/IMG-20260621-WA0164.jpg",
+    highlights: [
+      "24/7 Dedicated IT Support",
+      "Executive SUV with Chauffeur",
+      "Premium Workspace Setup",
+      "Personal Concierge Assistant",
+      "VIP Airport Fast-Track",
+      "Executive Dining Included"
+    ],
+    activities: [
+      { name: "Executive Workspace Setup", description: "Full office equipment with high-speed internet, monitor, and ergonomic setup", icon: "monitor", duration: "Day 1", included: true },
+      { name: "Airport VIP Transfer", description: "Meet & greet service with fast-track immigration and luxury vehicle transfer", icon: "plane", duration: "Arrival", included: true },
+      { name: "Business District Tours", description: "Guided tours of Lekki, VI, and Ikoyi business districts with networking introductions", icon: "building", duration: "Day 2", included: true },
+      { name: "Executive Dining Experience", description: "Reservations at Lagos' top business dining venues with private rooms", icon: "utensils", duration: "Daily", included: true },
+      { name: "IT Infrastructure Setup", description: "Dedicated technician for network, hardware, and software configuration", icon: "wifi", duration: "Day 1", included: true },
+      { name: "Golf & Networking", description: "Access to Ikoyi Club and Eko Atlantic golf courses for business networking", icon: "golf", duration: "Flexible", included: true }
+    ],
     tiers: [
       {
         duration: "3 Days",
@@ -639,6 +665,24 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     description: "Reconnect with Lagos, beautifully.",
     icon: "globe",
     image: "/assets/images/horizontal/IMG-20260621-WA0173.jpg",
+    highlights: [
+      "Private Cultural Tour Guide",
+      "Professional Photography Sessions",
+      "Curated Food & Street Tours",
+      "Historic Lagos Island Exploration",
+      "Beach Day Setup & Activities",
+      "SIM Card & Connectivity Ready"
+    ],
+    activities: [
+      { name: "Lagos Heritage Walking Tour", description: "Explore historic Lagos Island, National Museum, and colonial architecture with expert guide", icon: "landmark", duration: "Day 1", included: true },
+      { name: "Nike Art Gallery Visit", description: "Private guided tour of West Africa's largest art gallery with artist meet & greet", icon: "palette", duration: "Day 2", included: true },
+      { name: "Lekki Conservation Centre", description: "Canopy walkway and nature reserve experience with wildlife spotting", icon: "tree", duration: "Day 2", included: true },
+      { name: "Street Food Culinary Tour", description: "Taste authentic suya, akara, puff-puff, and local delicacies at hidden gems", icon: "utensils", duration: "Day 3", included: true },
+      { name: "Professional Photo Session", description: "Document your Lagos journey with a professional photographer at iconic locations", icon: "camera", duration: "Day 3", included: true },
+      { name: "Elegushi Beach Day", description: "Private beach setup with refreshments, water sports, and sunset experience", icon: "waves", duration: "Flexible", included: true },
+      { name: "Kalakuta Museum & Shrine", description: "Visit Fela Kuti's former home and the New Afrika Shrine for live music", icon: "music", duration: "Day 4", included: true },
+      { name: "Badagry Slave Route", description: "Historical tour of the first storey building and slave route relics", icon: "landmark", duration: "Full Day", included: true }
+    ],
     tiers: [
       {
         duration: "3 Days",
@@ -697,6 +741,22 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     description: "Discover the best of Lagos, hassle-free.",
     icon: "map",
     image: "/assets/images/vertical/IMG-20260621-WA0041.jpg",
+    highlights: [
+      "Curated Local Experiences",
+      "Guided City Tours",
+      "Transport with Driver",
+      "24/7 Visitor Support",
+      "All Attraction Entry Fees",
+      "Daily Meal Allowance"
+    ],
+    activities: [
+      { name: "Lagos City Highlights Tour", description: "Visit key landmarks including Lekki Bridge, Eko Atlantic, and Victoria Island waterfront", icon: "map", duration: "Day 1", included: true },
+      { name: "National Museum Lagos", description: "Explore Nigerian history, art, and cultural artifacts with guided commentary", icon: "landmark", duration: "Day 2", included: true },
+      { name: "Lekki Market Shopping", description: "Navigate the vibrant craft market for authentic souvenirs and handmade goods", icon: "shopping", duration: "Day 2", included: true },
+      { name: "Freedom Park Concert", description: "Evening at the historic Freedom Park with live music and dining", icon: "music", duration: "Day 3", included: true },
+      { name: "Tarkwa Bay Beach Trip", description: "Boat ride to the secluded beach with swimming and relaxation", icon: "waves", duration: "Flexible", included: true },
+      { name: "Lagos Food Tour", description: "Sample jollof rice, egusi soup, and local delicacies at top restaurants", icon: "utensils", duration: "Day 3", included: true }
+    ],
     tiers: [
       {
         duration: "3 Days",
@@ -750,6 +810,24 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     description: "Zero downtime. Total mobility.",
     icon: "crown",
     image: "/assets/images/vertical/IMG-20260621-WA0038.jpg",
+    highlights: [
+      "Private Jet Charter Flights",
+      "Presidential Suite Accommodation",
+      "C-Suite Command Center Office",
+      "Close Protection Security Team",
+      "Executive SUV Fleet",
+      "Dedicated Admin & IT Team"
+    ],
+    activities: [
+      { name: "Private Jet Charter", description: "Lagos-Abuja-Port Harcourt private jet flights with flexible scheduling", icon: "plane", duration: "As needed", included: true },
+      { name: "Presidential Suite Check-in", description: "Victoria Island presidential suite with butler service and panoramic views", icon: "crown", duration: "Arrival", included: true },
+      { name: "Executive Office Setup", description: "Full C-suite command center with video conferencing and secure communications", icon: "monitor", duration: "Day 1", included: true },
+      { name: "Security Detail Assignment", description: "Close protection team with armored vehicles for all movements", icon: "shield", duration: "Full stay", included: true },
+      { name: "VIP Business Meetings", description: "Arranged meetings with key Lagos business leaders and government officials", icon: "users", duration: "Scheduled", included: true },
+      { name: "Fine Dining Experiences", description: "Exclusive reservations at Lagos' most prestigious restaurants with private rooms", icon: "utensils", duration: "Daily", included: true },
+      { name: "Helicopter City Tour", description: "Aerial tour of Lagos skyline, Eko Atlantic, and Lekki peninsula", icon: "helicopter", duration: "Day 2", included: true },
+      { name: "Yacht Charter Experience", description: "Private 80ft yacht with crew for entertainment and relaxation", icon: "anchor", duration: "Flexible", included: true }
+    ],
     tiers: [
       {
         duration: "3 Days",
@@ -804,6 +882,22 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     description: "Relocation and educational support for the whole family.",
     icon: "graduation",
     image: "/assets/images/vertical/IMG-20260621-WA0043.jpg",
+    highlights: [
+      "School Placement Consultations",
+      "Family Health Insurance Coverage",
+      "Full Relocation & Cargo Support",
+      "Family-Friendly Accommodation",
+      "Daily Family Transport",
+      "Educational Facility Tours"
+    ],
+    activities: [
+      { name: "International School Tours", description: "Visit top international schools including Chrisland, Greensprings, and Meadow Hall", icon: "school", duration: "Day 1-2", included: true },
+      { name: "Family Health Check-up", description: "Comprehensive health screening at Lagos' premier medical facilities", icon: "heart", duration: "Day 2", included: true },
+      { name: "Neighborhood Exploration", description: "Tour family-friendly neighborhoods in Lekki, Ikoyi, and Banana Island", icon: "home", duration: "Day 3", included: true },
+      { name: "Cultural Orientation", description: "Introduction to Lagos culture, safety, and daily life for new residents", icon: "book", duration: "Day 1", included: true },
+      { name: "Shopping & Setup Assistance", description: "Help with grocery shopping, household setup, and local service connections", icon: "shopping", duration: "Day 3", included: true },
+      { name: "Family Recreation Day", description: "Visit to Lekki Conservation Centre, beach, or family entertainment centers", icon: "smile", duration: "Flexible", included: true }
+    ],
     tiers: [
       {
         duration: "3 Days",
@@ -855,6 +949,24 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     description: "Milestone moments, perfected.",
     icon: "heart",
     image: "/assets/images/vertical/IMG-20260621-WA0044.jpg",
+    highlights: [
+      "Full Event Planning Service",
+      "Private Yacht Cruise",
+      "Professional Photo & Video",
+      "Private Chef & Mixologist",
+      "Luxury Decor & Styling",
+      "Fine Dining Experiences"
+    ],
+    activities: [
+      { name: "Romantic Apartment Styling", description: "Complete apartment transformation with roses, candles, and luxury decor", icon: "heart", duration: "Day 1", included: true },
+      { name: "Private Yacht Sunset Cruise", description: "Half-day luxury yacht charter with champagne, canapés, and sunset views", icon: "anchor", duration: "Day 2", included: true },
+      { name: "Professional Photography Session", description: "Couple's photoshoot at iconic Lagos locations with edited photos delivered", icon: "camera", duration: "Day 3", included: true },
+      { name: "Private Chef Dinner", description: "Multi-course gourmet dinner prepared in your apartment by a private chef", icon: "utensils", duration: "Day 3", included: true },
+      { name: "Spa & Wellness Day", description: "Couples spa treatment with massages, facials, and relaxation", icon: "sparkles", duration: "Day 4", included: true },
+      { name: "Rooftop Cocktail Experience", description: "Private mixologist crafting custom cocktails at a luxury rooftop venue", icon: "glass", duration: "Day 5", included: true },
+      { name: "Proposal/Elopement Planning", description: "Full event coordination for proposals, anniversaries, or milestone celebrations", icon: "ring", duration: "As needed", included: true },
+      { name: "Horse Carriage Ride", description: "Romantic horse carriage ride through Victoria Island waterfront", icon: "heart", duration: "Flexible", included: true }
+    ],
     tiers: [
       {
         duration: "3 Days",
@@ -914,6 +1026,24 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     description: "Sophisticated escapism.",
     icon: "sparkles",
     image: "/assets/images/vertical/IMG-20260621-WA0045.jpg",
+    highlights: [
+      "In-Room Spa Treatments",
+      "Resort Day Passes",
+      "VIP Club Tables",
+      "Private After-Party Lounges",
+      "Personal Wellness Coach",
+      "Wellness Meal Planning"
+    ],
+    activities: [
+      { name: "In-Room Spa Treatment", description: "Premium massage, facial, and body treatment in the comfort of your apartment", icon: "sparkles", duration: "Day 1", included: true },
+      { name: "Resort Day Pass", description: "Full-day access to Lagos' premier beach resorts with pool and amenities", icon: "waves", duration: "Day 2", included: true },
+      { name: "VIP Club Night", description: "Reserved VIP table at Lagos' top Afrobeats club with bottle service", icon: "music", duration: "Night 2", included: true },
+      { name: "Wellness Consultation", description: "Personal wellness assessment and customized health program design", icon: "heart", duration: "Day 3", included: true },
+      { name: "Yoga & Meditation Session", description: "Private sunrise yoga on the beach or in your apartment with certified instructor", icon: "smile", duration: "Day 4", included: true },
+      { name: "Private After-Party Lounge", description: "Exclusive access to private lounges with DJ and premium drinks", icon: "glass", duration: "Night 3", included: true },
+      { name: "Detox & Nutrition Plan", description: "Personalized meal planning with wellness-focused cuisine delivery", icon: "utensils", duration: "Full stay", included: true },
+      { name: "Sunset Beach Meditation", description: "Guided meditation session at Elegushi Beach during golden hour", icon: "sun", duration: "Flexible", included: true }
+    ],
     tiers: [
       {
         duration: "3 Days",

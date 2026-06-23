@@ -30,7 +30,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full w-full max-w-md bg-parchment z-[70] shadow-2xl flex flex-col"
+            className="fixed right-0 top-0 h-full sm:h-auto sm:bottom-0 w-full max-w-md bg-parchment z-[70] shadow-2xl flex flex-col sm:rounded-l-3xl"
           >
             <div className="p-6 border-b border-charcoal/5 flex items-center justify-between">
               <div className="flex items-center gap-3">

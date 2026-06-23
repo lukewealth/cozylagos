@@ -90,7 +90,7 @@ export default function ListingWizardView({ onPublishListing, onCancel }: Listin
 
 
   return (
-    <div className="flex-grow flex flex-col md:flex-row h-[calc(100vh-80px)] overflow-hidden text-left bg-parchment animate-fade-in-up">
+    <div className="flex-grow flex flex-col md:flex-row min-h-[calc(100vh-80px)] md:h-[calc(100vh-80px)] overflow-hidden text-left bg-parchment animate-fade-in-up">
       
       {/* 1. LEFT WIZARD STEP NAVIGATION */}
       <aside className="hidden md:flex flex-col w-64 bg-white border-r border-charcoal/5 p-6 h-full justifications-between shrink-0">

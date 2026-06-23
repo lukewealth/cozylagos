@@ -178,7 +178,7 @@ export default function ListingDetailView({ listing, onBack, onConfirmBooking }:
           </motion.button>
         </div>
 
-        <div className="relative z-10 w-full max-w-[1440px] px-6 md:px-12 xl:px-20 mx-auto pb-10">
+        <div className="relative z-10 w-full max-w-[1440px] px-4 sm:px-6 md:px-12 xl:px-20 mx-auto pb-8 sm:pb-10">
           <div className="max-w-4xl text-white space-y-4">
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
@@ -207,7 +207,7 @@ export default function ListingDetailView({ listing, onBack, onConfirmBooking }:
       </section>
 
       {/* 2. DETAILS GRID */}
-      <section className="max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 py-12 md:py-20 grid grid-cols-1 lg:grid-cols-12 gap-16">
+      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20 py-8 sm:py-12 md:py-20 grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-16">
         
         {/* LEFT CONTENT (8/12th) */}
         <div className="lg:col-span-8 space-y-16">
@@ -326,7 +326,7 @@ export default function ListingDetailView({ listing, onBack, onConfirmBooking }:
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-white border border-charcoal/5 p-8 rounded-[2.5rem] shadow-2xl sticky top-24 text-left"
+            className="bg-white border border-charcoal/5 p-5 sm:p-8 rounded-2xl sm:rounded-[2.5rem] shadow-2xl text-left"
           >
             <div className="space-y-6">
               

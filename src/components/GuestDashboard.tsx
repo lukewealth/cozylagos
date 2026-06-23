@@ -69,7 +69,7 @@ export default function GuestDashboard() {
   };
 
   return (
-    <div className="flex-grow w-full max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 py-12 animate-fade-in-up text-left space-y-12">
+    <div className="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20 py-8 sm:py-12 animate-fade-in-up text-left space-y-8 sm:space-y-12">
       
       {/* Welcome Banner */}
       <header className="border-b border-charcoal/5 pb-6">
