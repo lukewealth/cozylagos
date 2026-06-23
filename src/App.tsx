@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AnimatePresence } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { 
   INITIAL_LISTINGS, 
   INITIAL_BOOKINGS, 
@@ -8,11 +8,12 @@ import {
 import { Listing, Booking, Transaction } from './types';
 import { CartProvider, useCart } from './context/CartContext';
 import { AuthProvider, useAuth } from './auth';
+import { ToastProvider, useToast } from './components/Toast';
 import TopNavBar from './components/TopNavBar';
 import LandingPage from './components/LandingPage';
 import CartDrawer from './components/CartDrawer';
 import ExplorerView from './components/ExplorerView';
-import ExperienceDetailView from './components/ExperienceDetailView';
+import ExploreLagosView from './components/ExploreLagosView';
 import ListingDetailView from './components/ListingDetailView';
 import GuestDashboard from './components/GuestDashboard';
 import OwnerDashboardView from './components/OwnerDashboardView';
@@ -21,6 +22,7 @@ import ConciergeHubView from './components/ConciergeHubView';
 import SmartRecommendationsView from './components/SmartRecommendationsView';
 import ServiceBundlesView from './components/ServiceBundlesView';
 import WhatsAppConcierge from './components/WhatsAppConcierge';
+import CookiesAlert from './components/PrivacyPolicy';
 import { useDatabase } from './hooks/useDatabase';
 import { seedDatabase, getListingsWithFallback, syncToLocalStorage } from './db';
 import UserDashboard from './portals/UserDashboard';
@@ -30,43 +32,21 @@ import SuperAdminDashboard from './portals/SuperAdminDashboard';
 
 function AppContent() {
   const { currentUser, isAuthenticated } = useAuth();
+  const { addToast } = useToast();
 
-  // Tabs management
   const [activeTab, setActiveTab] = useState<
-    'home' | 'explorer' | 'experience' | 'bundles' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations'
+    'home' | 'explorer' | 'explore-lagos' | 'bundles' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations'
   >('home');
   
-  // Search parameters for staying enclaves
   const [searchDestination, setSearchDestination] = useState<string>('');
-  
-  // Selected single listing for detailed pricing & booking checkout
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
-  
-  // Booking state for WhatsApp integration
-  const [bookingContext, setBookingContext] = useState<{
-    listing?: Listing;
-    checkIn?: string;
-    checkOut?: string;
-    guests?: number;
-    totalAmount?: number;
-    bookingId?: string;
-    nightlyTotal?: number;
-    serviceFee?: number;
-    tax?: number;
-    grandTotal?: number;
-    includeVipDriver?: boolean;
-    includeChef?: boolean;
-    vipDriverTotal?: number;
-    chefTotal?: number;
-    cleaningFee?: number;
-    totalNights?: number;
-  }>({});
-  
-  // Cart state management
+  const [bookingContext, setBookingContext] = useState<{}>({});
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cartCount } = useCart();
+  const [showCookies, setShowCookies] = useState(() => {
+    return !localStorage.getItem('cozy_lagos_cookies_accepted');
+  });
   
-  // Use database hook for reactivity and persistence
   const { data: listings, addRecord: addListing, removeRecord: removeListing } = useDatabase('listings');
   const { data: bookings, addRecord: addBooking } = useDatabase('bookings');
   const { data: transactions, addRecord: addTransaction } = useDatabase('transactions');
@@ -87,18 +67,23 @@ function AppContent() {
     };
     initDb();
   }, []);
-  
-  // Callback to insert a newly created listing from onboarding wizard
-  const handlePublishListing = (newListing: Listing) => {
-    addListing(newListing as any);
-    setActiveTab('listings'); // return to owner's property list
+
+  const handleTabChange = (tab: any) => {
+    setSelectedListing(null);
+    setActiveTab(tab);
   };
   
-  // Callback to toggle listings status (Active live / Hidden)
+  const handlePublishListing = (newListing: Listing) => {
+    addListing(newListing as any);
+    setActiveTab('listings');
+    addToast({ type: 'success', title: 'Listing Published!', message: 'Your property is now live.' });
+  };
+  
   const handleUpdateListingStatus = (id: string, active: boolean) => {
     const listing = listings.find(l => l.id === id);
     if (listing) {
       addListing({ ...listing, isActive: active } as any);
+      addToast({ type: 'info', title: active ? 'Listing Active' : 'Listing Hidden' });
     }
   };
 
@@ -111,34 +96,15 @@ function AppContent() {
 
   const handleDeleteListing = (id: string) => {
     removeListing(id);
+    addToast({ type: 'warning', title: 'Listing Removed' });
   };
 
-  // Callback to update a listing (Fullstack edit)
   const handleUpdateListing = (updatedListing: Listing) => {
     addListing(updatedListing as any);
+    addToast({ type: 'success', title: 'Listing Updated' });
   };
   
-  // Callback to insert a brand new locked booking from guest client area
-  const handleConfirmBooking = (bookingData: {
-    listingId: string;
-    listingTitle: string;
-    checkIn: string;
-    checkOut: string;
-    totalAmount: number;
-    guestName: string;
-    guestEmail: string;
-    guestsCount?: number;
-    nightlyTotal?: number;
-    serviceFee?: number;
-    tax?: number;
-    grandTotal?: number;
-    includeVipDriver?: boolean;
-    includeChef?: boolean;
-    vipDriverTotal?: number;
-    chefTotal?: number;
-    cleaningFee?: number;
-    totalNights?: number;
-  }) => {
+  const handleConfirmBooking = (bookingData: any) => {
     const bookingId = `booking-${Date.now()}`;
     const newBooking: Booking = {
       id: bookingId,
@@ -158,7 +124,6 @@ function AppContent() {
     };
     
     addBooking(newBooking as any);
-
     setBookingContext({
       listing: selectedListing || undefined,
       checkIn: bookingData.checkIn,
@@ -177,177 +142,100 @@ function AppContent() {
       cleaningFee: bookingData.cleaningFee,
       totalNights: bookingData.totalNights,
     });
-  
-    // Insert positive referral transaction in owners payments ledger
+
     const newTx: Transaction = {
       id: `tx-${Date.now()}`,
       date: bookingData.checkIn.replace(/-/g, '.'),
       reference: `BOOKING_REVENUE_${Math.round(Math.random() * 90000 + 10000)}`,
       description: `Stay: ${bookingData.listingTitle}`,
       type: 'booking_revenue' as any,
-      amount: Math.round(bookingData.totalAmount * 0.85), // Owner gets 85% profit cut
+      amount: Math.round(bookingData.totalAmount * 0.85),
       status: 'processed' as any,
       userId: 'system',
       createdAt: new Date().toISOString()
     };
   
     addTransaction(newTx as any);
+    addToast({ type: 'success', title: 'Booking Confirmed!', message: 'Check WhatsApp for admin confirmation.' });
+  };
+
+  const handleAcceptCookies = () => {
+    localStorage.setItem('cozy_lagos_cookies_accepted', 'true');
+    setShowCookies(false);
+  };
+
+  const handleDeclineCookies = () => {
+    setShowCookies(false);
   };
   
   return (
     <div className="min-h-screen bg-parchment text-charcoal flex flex-col selection:bg-charcoal selection:text-parchment">
-      
-      {/* Dynamic Unified Header Navigation */}
       <TopNavBar
         activeTab={activeTab}
-        setActiveTab={(tab) => {
-          setSelectedListing(null); // clear single listing details
-          setActiveTab(tab);
-        }}
+        setActiveTab={handleTabChange}
         cartCount={cartCount}
         onOpenCart={() => setIsCartOpen(true)}
       />
   
-      {/* Cart Drawer */}
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
-
-      {/* WhatsApp Concierge - Global Floating Button */}
       <WhatsAppConcierge {...bookingContext} />
   
-      {/* Main Layout Views Selector */}
       <main className="flex-grow flex flex-col relative">
         <AnimatePresence mode="wait">
-          
-          {/* A. If traveler has clicked details on a custom residence */}
           {selectedListing ? (
-            <React.Fragment key={`detail-${selectedListing.id}`}>
+            <motion.div
+              key={`detail-${selectedListing.id}`}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            >
               <ListingDetailView
                 listing={selectedListing}
                 onBack={() => { setSelectedListing(null); setBookingContext({}); }}
                 onConfirmBooking={handleConfirmBooking}
                 onUpdateBookingContext={setBookingContext}
               />
-            </React.Fragment>
+            </motion.div>
           ) : (
-            
-            /* B. Standard Multi-Page workspace rendering */
-            <div className="flex-grow flex flex-col h-full">
-              
-               {/* PORTAL GUEST ACCENTS */}
-               {activeTab === 'home' && (
-                 <React.Fragment key="home">
-                   <LandingPage 
-                     listings={listings}
-                     onSelectListing={(stay) => setSelectedListing(stay)}
-                     setActiveTab={setActiveTab}
-                   />
-                 </React.Fragment>
-               )}
-  
-               {activeTab === 'explorer' && (
-                 <React.Fragment key="explorer">
-                   <ExplorerView 
-                     listings={listings.filter(l => l.isActive)}
-                     onSelectListing={(stay) => setSelectedListing(stay)}
-                     searchDestination={searchDestination}
-                     setSearchDestination={setSearchDestination}
-                   />
-                 </React.Fragment>
-               )}
-  
-               {activeTab === 'experience' && (
-                 <React.Fragment key="experience">
-                   <ExperienceDetailView
-                     onBackToHome={() => setActiveTab('home')}
-                   />
-                 </React.Fragment>
-               )}
-
-               {activeTab === 'bundles' && (
-                 <React.Fragment key="bundles">
-                   <ServiceBundlesView />
-                 </React.Fragment>
-               )}
-  
-               {activeTab === 'concierge-hub' && (
-                 <React.Fragment key="concierge-hub">
-                   <ConciergeHubView />
-                 </React.Fragment>
-               )}
-  
-               {activeTab === 'smart-recommendations' && (
-                 <React.Fragment key="smart-recommendations">
-                   <SmartRecommendationsView />
-                 </React.Fragment>
-               )}
-  
-               {activeTab === 'guest-dashboard' && (
-                 <React.Fragment key="guest-dashboard">
-                   <GuestDashboard />
-                 </React.Fragment>
-               )}
-  
-               {activeTab === 'user-dashboard' && (
-                 <React.Fragment key="user-dashboard">
-                   <UserDashboard />
-                 </React.Fragment>
-               )}
-  
-               {activeTab === 'service-dashboard' && (
-                 <React.Fragment key="service-dashboard">
-                   <ServiceProviderDashboard />
-                 </React.Fragment>
-               )}
-  
-               {activeTab === 'admin-dashboard' && (
-                 <React.Fragment key="admin-dashboard">
-                   <AdminDashboard 
-                     listings={listings}
-                     onToggleStatus={handleToggleStatus}
-                     onDeleteListing={handleDeleteListing}
-                   />
-                 </React.Fragment>
-               )}
-  
-               {activeTab === 'super-admin-dashboard' && (
-                 <React.Fragment key="super-admin-dashboard">
-                   <SuperAdminDashboard />
-                 </React.Fragment>
-               )}
-  
-               {/* PORTAL HOST/SERVICE PROVIDER ACCENTS */}
-               {(activeTab === 'overview' || activeTab === 'listings' || activeTab === 'calendar' || activeTab === 'payouts') && (
-                 <React.Fragment key="host-dashboard">
-                   <OwnerDashboardView 
-                     listings={listings}
-                     bookings={bookings}
-                     transactions={transactions}
-                     onAddListingClick={() => setActiveTab('wizard')}
-                     onUpdateListingsStatus={handleUpdateListingStatus}
-                     onUpdateListing={handleUpdateListing}
-                   />
-                 </React.Fragment>
-               )}
-  
-               {activeTab === 'wizard' && (
-                 <React.Fragment key="wizard">
-                   <ListingWizardView 
-                     onPublishListing={handlePublishListing}
-                     onCancel={() => setActiveTab('listings')}
-                   />
-                 </React.Fragment>
-               )}
-              </div>
-           )}
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="flex-grow flex flex-col h-full"
+            >
+              {activeTab === 'home' && (
+                <LandingPage listings={listings} onSelectListing={(stay) => setSelectedListing(stay)} setActiveTab={setActiveTab} />
+              )}
+              {activeTab === 'explorer' && (
+                <ExplorerView listings={listings.filter(l => l.isActive)} onSelectListing={(stay) => setSelectedListing(stay)} searchDestination={searchDestination} setSearchDestination={setSearchDestination} />
+              )}
+              {activeTab === 'explore-lagos' && <ExploreLagosView />}
+              {activeTab === 'bundles' && <ServiceBundlesView />}
+              {activeTab === 'concierge-hub' && <ConciergeHubView />}
+              {activeTab === 'smart-recommendations' && <SmartRecommendationsView />}
+              {activeTab === 'guest-dashboard' && <GuestDashboard />}
+              {activeTab === 'user-dashboard' && <UserDashboard />}
+              {activeTab === 'service-dashboard' && <ServiceProviderDashboard />}
+              {activeTab === 'admin-dashboard' && (
+                <AdminDashboard listings={listings} onToggleStatus={handleToggleStatus} onDeleteListing={handleDeleteListing} />
+              )}
+              {activeTab === 'super-admin-dashboard' && <SuperAdminDashboard />}
+              {(activeTab === 'overview' || activeTab === 'listings' || activeTab === 'calendar' || activeTab === 'payouts') && (
+                <OwnerDashboardView listings={listings} bookings={bookings} transactions={transactions} onAddListingClick={() => setActiveTab('wizard')} onUpdateListingsStatus={handleUpdateListingStatus} onUpdateListing={handleUpdateListing} />
+              )}
+              {activeTab === 'wizard' && (
+                <ListingWizardView onPublishListing={handlePublishListing} onCancel={() => setActiveTab('listings')} />
+              )}
+            </motion.div>
+          )}
         </AnimatePresence>
       </main>
   
-      {/* Footer copyright segment */}
       <footer className="h-16 border-t border-charcoal/5 flex items-center justify-between px-6 md:px-12 xl:px-20 text-[9px] text-charcoal/40 uppercase tracking-[0.2em] relative z-20 bg-parchment shrink-0">
-        <div>
-          &copy; {new Date().getFullYear()} Cozy Lagos Ltd &bull; Victoria Island Suite 416
-        </div>
-        
+        <div>&copy; {new Date().getFullYear()} Cozy Lagos Ltd &bull; Victoria Island Suite 416</div>
         <div className="hidden sm:flex items-center gap-6 font-semibold">
           <span className="text-gold-dark">★ Nigeria Luxury Insulated</span>
           <span className="w-1.5 h-1.5 rounded-full bg-charcoal/20" />
@@ -355,6 +243,12 @@ function AppContent() {
           <a href="#terms" className="hover:text-charcoal transition-colors">Guest Protocol</a>
         </div>
       </footer>
+
+      <AnimatePresence>
+        {showCookies && (
+          <CookiesAlert onAccept={handleAcceptCookies} onDecline={handleDeclineCookies} onPreferences={handleAcceptCookies} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -363,7 +257,9 @@ export default function App() {
   return (
     <AuthProvider>
       <CartProvider>
-        <AppContent />
+        <ToastProvider>
+          <AppContent />
+        </ToastProvider>
       </CartProvider>
     </AuthProvider>
   );
