@@ -3,6 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export type UserRole = 'guest' | 'service_provider' | 'admin' | 'super_admin';
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+  role: UserRole;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Listing {
   id: string;
   title: string;
@@ -66,4 +78,11 @@ export interface ChatMessage {
   sender: "user" | "concierge" | "host";
   text: string;
   timestamp: string;
+}
+
+export interface CartItem {
+  listing: Listing;
+  guestsCount: number;
+  checkIn: string;
+  checkOut: string;
 }

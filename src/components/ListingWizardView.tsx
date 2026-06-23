@@ -51,39 +51,43 @@ export default function ListingWizardView({ onPublishListing, onCancel }: Listin
     return nightlyRate - fee;
   }, [nightlyRate]);
 
-  const handleFinalPublish = () => {
-    if (!acceptTerms) {
-      alert("Please accept the Host Terms & Conditions to publish.");
-      return;
-    }
+      const handleFinalPublish = () => {
+        if (!acceptTerms) {
+          alert("Please accept the Host Terms & Conditions to publish.");
+          return;
+        }
 
-    const newHome: Listing = {
-      id: `custom-stay-${Date.now()}`,
-      title: propertyName,
-      description,
-      category,
-      location,
-      bedrooms,
-      bathrooms,
-      maxGuests,
-      nightlyRate: Number(nightlyRate),
-      weekendPremium: 15,
-      cleaningFee: 25000,
-      securityDeposit: Number(securityDeposit),
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBJ2GGWFNwuBO2JM2bYf-QFEBP5nlp9knwLAIEbuxzj4ld_7CfhmUboRV3Ih7CVn_cIyrr_4X1CctHurZYPJbDxPLcuNMAlgZ8E7GyLfuIZd0L6TiIH6JL4qxE0S6LH3dMbrqgFBA03tV_nv4ZYAyrn6SxvsPQIXQbaDeHNvc4U7p0dKE_MVLgA3pA2eXUVxVCT1kqKk61Iy5V8EtXhKI2oGFsLpYuJKl_0DR9wGJZd3pAuZVlzm1NLpNPC1R-jcDjf_0MBaI235ER6",
-      images: [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuBJ2GGWFNwuBO2JM2bYf-QFEBP5nlp9knwLAIEbuxzj4ld_7CfhmUboRV3Ih7CVn_cIyrr_4X1CctHurZYPJbDxPLcuNMAlgZ8E7GyLfuIZd0L6TiIH6JL4qxE0S6LH3dMbrqgFBA03tV_nv4ZYAyrn6SxvsPQIXQbaDeHNvc4U7p0dKE_MVLgA3pA2eXUVxVCT1kqKk61Iy5V8EtXhKI2oGFsLpYuJKl_0DR9wGJZd3pAuZVlzm1NLpNPC1R-jcDjf_0MBaI235ER6"
-      ],
-      amenities: selectedAmenities,
-      ownerId: "emeka-anene",
-      isActive: isPublic,
-      reviewsCount: 0,
-      rating: 5.0,
-      aiMatchPercent: 95
-    };
+        const now = new Date().toISOString();
+        const newHome: Listing = {
+          id: `custom-stay-${Date.now()}`,
+          title: propertyName,
+          description,
+          category,
+          location,
+          bedrooms,
+          bathrooms,
+          maxGuests,
+          nightlyRate: Number(nightlyRate),
+          weekendPremium: 15,
+          cleaningFee: 25000,
+          securityDeposit: Number(securityDeposit),
+          image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBJ2GGWFNwuBO2JM2bYf-QFEBP5nlp9knwLAIEbuxzj4ld_7CfhmUboRV3Ih7CVn_cIyrr_4X1CctHurZYPJbDxPLcuNMAlgZ8E7GyLfuIZd0L6TiIH6JL4qxE0S6LH3dMbrqgFBA03tV_nv4ZYAyrn6SxvsPQIXQbaDeHNvc4U7p0dKE_MVLgA3pA2eXUVxVCT1kqKk61Iy5V8EtXhKI2oGFsLpYuJKl_0DR9wGJZd3pAuZVlzm1NLpNPC1R-jcDjf_0MBaI235ER6",
+          images: [
+            "https://lh3.googleusercontent.com/aida-public/AB6AXuBJ2GGWFNwuBO2JM2bYf-QFEBP5nlp9knwLAIEbuxzj4ld_7CfhmUboRV3Ih7CVn_cIyrr_4X1CctHurZYPJbDxPLcuNMAlgZ8E7GyLfuIZd0L6TiIH6JL4qxE0S6LH3dMbrqgFBA03tV_nv4ZYAyrn6SxvsPQIXQbaDeHNvc4U7p0dKE_MVLgA3pA2eXUVxVCT1kqKk61Iy5V8EtXhKI2oGFsLpYuJKl_0DR9wGJZd3pAuZVlzm1NLpNPC1R-jcDjf_0MBaI235ER6"
+          ],
+          amenities: selectedAmenities,
+          ownerId: "emeka-anene",
+          isActive: isPublic,
+          reviewsCount: 0,
+          rating: 5.0,
+          aiMatchPercent: 95,
+          createdAt: now,
+          updatedAt: now
+        };
 
-    onPublishListing(newHome);
-  };
+        onPublishListing(newHome);
+      };
+
 
   return (
     <div className="flex-grow flex flex-col md:flex-row h-[calc(100vh-80px)] overflow-hidden text-left bg-parchment animate-fade-in-up">

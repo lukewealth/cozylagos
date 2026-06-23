@@ -384,4 +384,36 @@ export async function seedDatabase(initialData: {
       });
     }
   }
+
+  const currentUsers = await dbGetAll('users');
+  if (currentUsers.length === 0 && users) {
+    for (const user of users) {
+      await dbPut('users', {
+        ...user,
+        createdAt: user.createdAt || new Date().toISOString(),
+        lastLogin: user.lastLogin || new Date().toISOString()
+      });
+    }
+  }
+
+  const currentServices = await dbGetAll('services');
+  if (currentServices.length === 0 && services) {
+    for (const service of services) {
+      await dbPut('services', service);
+    }
+  }
+
+  const currentExperiences = await dbGetAll('experiences');
+  if (currentExperiences.length === 0 && experiences) {
+    for (const exp of experiences) {
+      await dbPut('experiences', exp);
+    }
+  }
+
+  const currentChatMessages = await dbGetAll('chatMessages');
+  if (currentChatMessages.length === 0 && chatMessages) {
+    for (const msg of chatMessages) {
+      await dbPut('chatMessages', msg);
+    }
+  }
 }

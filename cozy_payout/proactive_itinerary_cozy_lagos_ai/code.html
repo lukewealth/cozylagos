@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Concierge - Élite Lagos</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed-variant": "#574500",
+                      "tertiary": "#625e56",
+                      "surface-dim": "#dadad9",
+                      "on-surface": "#1a1c1c",
+                      "surface-container-low": "#f4f3f2",
+                      "surface-container": "#eeeeed",
+                      "surface-variant": "#e3e2e1",
+                      "secondary-fixed": "#e5e2e1",
+                      "outline": "#7f7663",
+                      "inverse-surface": "#2f3130",
+                      "primary-fixed-dim": "#e9c349",
+                      "on-secondary-fixed": "#1c1b1b",
+                      "on-error": "#ffffff",
+                      "on-secondary-fixed-variant": "#474746",
+                      "secondary": "#5f5e5e",
+                      "tertiary-container": "#b8b2a9",
+                      "surface-container-highest": "#e3e2e1",
+                      "surface-bright": "#faf9f8",
+                      "tertiary-fixed-dim": "#ccc6bc",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed": "#e8e2d8",
+                      "on-tertiary-container": "#48453e",
+                      "on-error-container": "#93000a",
+                      "primary-container": "#d4af37",
+                      "on-tertiary-fixed": "#1e1b15",
+                      "on-primary-container": "#554300",
+                      "on-primary-fixed": "#241a00",
+                      "surface": "#faf9f8",
+                      "secondary-fixed-dim": "#c8c6c5",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-container": "#636262",
+                      "on-surface-variant": "#4d4635",
+                      "inverse-primary": "#e9c349",
+                      "error-container": "#ffdad6",
+                      "primary": "#735c00",
+                      "primary-fixed": "#ffe088",
+                      "on-background": "#1a1c1c",
+                      "on-tertiary-fixed-variant": "#4a463f",
+                      "error": "#ba1a1a",
+                      "surface-container-high": "#e9e8e7",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#e2dfde",
+                      "inverse-on-surface": "#f1f0f0",
+                      "on-primary": "#ffffff",
+                      "background": "#faf9f8",
+                      "surface-tint": "#735c00",
+                      "outline-variant": "#d0c5af"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-md": "32px",
+                      "gutter": "32px",
+                      "container-padding": "80px",
+                      "unit": "8px",
+                      "section-gap": "120px",
+                      "stack-lg": "64px",
+                      "stack-sm": "16px"
+              },
+              "fontFamily": {
+                      "headline-sm": ["Playfair Display"],
+                      "headline-lg": ["Playfair Display"],
+                      "body-md": ["Manrope"],
+                      "headline-lg-mobile": ["Playfair Display"],
+                      "label-caps": ["Manrope"],
+                      "display-lg": ["Playfair Display"],
+                      "body-lg": ["Manrope"],
+                      "headline-md": ["Playfair Display"]
+              },
+              "fontSize": {
+                      "headline-sm": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                      "headline-lg": ["48px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                      "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                      "headline-lg-mobile": ["36px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                      "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                      "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                      "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "500" }]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.4) 100%);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0px 20px 50px rgba(26, 26, 26, 0.05);
+        }
+        .ai-bubble {
+            background: #F4EDE3; /* Soft champagne */
+        }
+        .timeline-line {
+            width: 2px;
+            background: linear-gradient(to bottom, #d4af37 0%, rgba(212, 175, 55, 0) 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex selection:bg-primary-container selection:text-on-primary-container">
+<!-- Side Navigation -->
+<nav class="hidden md:flex h-screen w-80 fixed left-0 top-0 flex-col bg-surface dark:bg-inverse-surface shadow-[20px_0px_50px_rgba(26,26,26,0.05)] border-r border-outline-variant/10 p-stack-sm z-50">
+<div class="mb-stack-lg px-4 mt-8">
+<h1 class="font-display-lg text-headline-sm text-primary tracking-tighter">Élite Lagos</h1>
+</div>
+<div class="mb-stack-md px-4">
+<div class="flex items-center gap-4 mb-2">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary-container">
+<img class="w-full h-full object-cover" data-alt="A professional, high-end portrait of a well-dressed individual against a blurred luxury hotel lobby background. Soft, warm lighting highlighting a sophisticated aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0iQHXewIln4_4u4vDuihxbDHPOCZ9cKGDO2ZMdOZRWLhHFVf_VLmX5gaISGNxA6VU0qnFF8s1irR3rWTIOPw6nA3OLJGv-zm58S-Le76SCf6G7WXY4l2_2GfsoIdOcoHCBuERjQU7udi3UueWWXReFRrASaGbOYs2u0aDDitcJDM3uMgMDjYooXKuwu75-ejfPFproAml8ivfLNDqlHbSV2i6Hobf_QF84n_vbEZZWvVM5Z24AUI30MyXMutd8ugSfHmHvMf_t-eO"/>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-primary dark:text-primary-fixed-dim">Welcome, Kunle</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Gold Member Status</p>
+</div>
+</div>
+</div>
+<ul class="flex flex-col gap-2 flex-grow">
+<!-- Active Tab: Concierge -->
+<li>
+<a class="flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container rounded-xl font-bold active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span>Concierge</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-xl transition-all hover:pl-4 transition-all duration-300 ease-in-out active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span>Properties</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-xl transition-all hover:pl-4 transition-all duration-300 ease-in-out active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">diamond</span>
+<span>Experiences</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-xl transition-all hover:pl-4 transition-all duration-300 ease-in-out active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span>Itinerary</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-xl transition-all hover:pl-4 transition-all duration-300 ease-in-out active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto px-4 pb-4">
+<button class="w-full bg-primary-container text-on-primary-fixed py-3 rounded-lg font-bold mb-4 shadow-md hover:opacity-90 transition-opacity">
+                Book New Experience
+            </button>
+<ul class="flex flex-col gap-2 border-t border-outline-variant/20 pt-4">
+<li>
+<a class="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span>Support</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>Logout</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow md:ml-80 min-h-screen relative overflow-hidden bg-surface-container-lowest">
+<!-- Top App Bar (Mobile only for this contextual view, but provided as requested, normally hidden on task focus) -->
+<header class="flex md:hidden justify-between items-center px-6 py-4 w-full z-50 bg-surface/80 dark:bg-inverse-surface/80 docked full-width top-0 sticky backdrop-blur-xl border-b border-outline-variant/20 shadow-sm">
+<h1 class="font-display-lg text-headline-sm tracking-tighter text-primary dark:text-primary-fixed-dim">Élite Lagos</h1>
+<div class="flex gap-4">
+<span class="material-symbols-outlined cursor-pointer active:opacity-70 text-primary hover:text-primary transition-colors duration-300">notifications</span>
+<span class="material-symbols-outlined cursor-pointer active:opacity-70 text-primary hover:text-primary transition-colors duration-300">account_circle</span>
+</div>
+</header>
+<!-- Canvas Content -->
+<div class="max-w-[1000px] mx-auto px-6 md:px-gutter py-stack-lg relative z-10">
+<!-- AI Header -->
+<div class="flex items-start gap-6 mb-section-gap">
+<div class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center flex-shrink-0 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+<span class="material-symbols-outlined text-3xl text-on-primary-fixed" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="ai-bubble p-6 rounded-2xl rounded-tl-none shadow-sm max-w-2xl border border-outline-variant/20">
+<p class="font-body-lg text-body-lg text-on-surface mb-2">I have curated a bespoke <strong>'Weekend in Victoria Island'</strong> itinerary based on your preferences for wellness, fine dining, and contemporary art.</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Review the proposed schedule below. You can refine specific days or accept the entire plan.</p>
+<div class="mt-6 flex flex-wrap gap-4">
+<button class="bg-[#D4AF37] text-[#1a1c1c] px-6 py-3 rounded-full font-bold shadow-md hover:bg-primary transition-colors">Accept Entire Itinerary</button>
+<button class="border border-[#1a1c1c] text-[#1a1c1c] bg-transparent px-6 py-3 rounded-full font-bold hover:bg-surface-variant transition-colors">Adjust Preferences</button>
+</div>
+</div>
+</div>
+<!-- Itinerary Timeline -->
+<div class="relative pl-8 md:pl-12">
+<!-- Timeline Line -->
+<div class="absolute left-[39px] md:left-[55px] top-8 bottom-0 timeline-line"></div>
+<!-- Day 1 -->
+<div class="mb-section-gap relative">
+<!-- Day Marker -->
+<div class="absolute -left-8 md:-left-12 top-0 w-8 h-8 rounded-full bg-surface border-2 border-primary-container flex items-center justify-center z-10">
+<div class="w-3 h-3 rounded-full bg-primary-container"></div>
+</div>
+<div class="flex justify-between items-baseline mb-6">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">Day 1: Serenity &amp; Culinary Arts</h2>
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2 font-label-caps text-label-caps">
+<span class="material-symbols-outlined text-sm">edit</span>
+                            REFINE DAY 1
+                        </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Activity 1 -->
+<div class="glass-card rounded-2xl p-4 flex flex-col group cursor-pointer hover:shadow-lg transition-shadow relative overflow-hidden">
+<div class="absolute top-4 right-4 z-20">
+<span class="bg-surface/80 backdrop-blur-md px-3 py-1 rounded-full font-label-caps text-label-caps text-on-surface">08:00 AM</span>
+</div>
+<div class="h-48 w-full rounded-xl overflow-hidden mb-4 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A serene luxury spa room with warm sunlight streaming through sheer curtains. Minimalist design with light oak wood, a plush yoga mat, and a calming, premium atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6xWD60vJChktJBgPkuP_geUmKqHJD6FeY5CN8-xzIvN8GOh9ol21bJs1dB9jUwO1ZkZsvW_GwW9Y-n-nsDilGjuzwP1w50hl_3Oc_IzZd9lq2QabBJmdS0QlKRTgA4MhmD_9sKd6RTC60IydmE70F3spgIADcEIji-oEsIW6bv0b_hGcGBDwhGDRKD7UkGZvahw-DYKGkgj0Q6WQIJoVwT4uCE-MQ13tIVuE0QI5TYaqx8YTKSeuivS2OQ7rLIr9sjccIPP5tVunf"/>
+<div class="absolute bottom-3 left-3 flex gap-2">
+<span class="bg-surface/90 px-2 py-1 rounded-full font-label-caps text-label-caps text-primary shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">spa</span> WELLNESS
+                                    </span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Private Morning Yoga &amp; Spa</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow">Begin your weekend with a guided session at the Wheatbaker Spa, followed by a bespoke hydrotherapy treatment.</p>
+</div>
+<!-- Activity 2 -->
+<div class="glass-card rounded-2xl p-4 flex flex-col group cursor-pointer hover:shadow-lg transition-shadow relative overflow-hidden">
+<div class="absolute top-4 right-4 z-20">
+<span class="bg-surface/80 backdrop-blur-md px-3 py-1 rounded-full font-label-caps text-label-caps text-on-surface">01:30 PM</span>
+</div>
+<div class="h-48 w-full rounded-xl overflow-hidden mb-4 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A high-end, elegantly plated lunch at a luxury restaurant in Lagos. The table setting is immaculate with fine dining silverware, crystal glasses, and a view of the city skyline in the background. Warm, inviting lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArUyfYFG1fSNq3biNgDrlG_KepfMLN9tRlnNmqwiHXFi74dSqI52qND2yy0Yr8plErjllL2NqwViQwFbyJE22eFbD2u20hAUSvfyUrzTOsoIqW7Mqf9378wOzjH62UZJ2OqD4MIiXnQ0A4jLDI_UrErhp8CRo2GBoJkQ5pBqnizWqjHmDSSReUFSX0GcN8bhiDRa78CrDPIF3k0uwvuuFNIXI4LDKPVHleVuaHAF5XqcLQnmm9xlTiTm5G5x1ubFZsykgx5M6qg1Xg"/>
+<div class="absolute bottom-3 left-3 flex gap-2">
+<span class="bg-surface/90 px-2 py-1 rounded-full font-label-caps text-label-caps text-primary shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">restaurant</span> FINE DINING
+                                    </span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Lunch at RSVP</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow">A reserved table by the pool. The chef has prepared a curated tasting menu focusing on modern West African fusion.</p>
+</div>
+<!-- Activity 3 -->
+<div class="glass-card rounded-2xl p-4 flex flex-col group cursor-pointer hover:shadow-lg transition-shadow relative overflow-hidden md:col-span-2">
+<div class="absolute top-4 right-4 z-20">
+<span class="bg-surface/80 backdrop-blur-md px-3 py-1 rounded-full font-label-caps text-label-caps text-on-surface">04:00 PM</span>
+</div>
+<div class="flex flex-col md:flex-row gap-6">
+<div class="h-48 md:h-auto md:w-1/2 rounded-xl overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A sophisticated modern art gallery interior in Lagos. Spacious white walls displaying contemporary African art, polished concrete floors, and elegant spotlighting. A premium, quiet cultural experience." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwSeZMckUOfrceGAr4sRWFFghWhQgXxMW8AJC-rTiZfMJC0pt_9r1q7tawr5aIjTPZ5ijXOoVrNu_85f4kw4vzcBBRivsS7PuXe5-WoQO2D_sPJ3OyZJ1B8wfv-5n0H7qRVPhNSMgP-zvgRMSlaWMQKRGdduEkgkwD01JfGi2Q0vAoyTQcDPP6DMx-A3toaBeV4Vc1-EU685i2KWK6hgVtbAZIncX5ivjwU6l7OSR6-Z1cvbvjzse4WMZ7t1r8XC-g7quckrPY0Ysy"/>
+<div class="absolute bottom-3 left-3 flex gap-2">
+<span class="bg-surface/90 px-2 py-1 rounded-full font-label-caps text-label-caps text-primary shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">palette</span> CULTURE
+                                        </span>
+</div>
+</div>
+<div class="md:w-1/2 flex flex-col justify-center">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Private Gallery Tour</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">An exclusive after-hours viewing at the Rele Gallery, guided by the curator, featuring emerging contemporary artists.</p>
+<div class="mt-auto flex items-center gap-2 text-primary font-bold">
+<span>View Details</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="text-center mt-section-gap pb-section-gap">
+<button class="bg-surface border border-outline-variant text-primary px-8 py-4 rounded-full font-bold shadow-sm hover:bg-surface-variant transition-colors inline-flex items-center gap-2">
+<span class="material-symbols-outlined">expand_more</span>
+                    Reveal Day 2
+                </button>
+</div>
+</div>
+</main>
+</body></html>

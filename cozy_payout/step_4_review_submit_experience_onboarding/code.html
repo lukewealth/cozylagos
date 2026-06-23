@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cozy Lagos - Vendor Portal - Verification &amp; Review</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Manrope:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-variant": "#d0c5af",
+                    "tertiary": "#625e56",
+                    "surface-container-highest": "#e3e2e1",
+                    "on-secondary-fixed-variant": "#474746",
+                    "inverse-primary": "#e9c349",
+                    "error-container": "#ffdad6",
+                    "surface": "#faf9f8",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f4f3f2",
+                    "primary-fixed": "#ffe088",
+                    "inverse-on-surface": "#f1f0f0",
+                    "primary": "#735c00",
+                    "on-tertiary-fixed-variant": "#4a463f",
+                    "tertiary-fixed": "#e8e2d8",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#d4af37",
+                    "on-tertiary-fixed": "#1e1b15",
+                    "background": "#faf9f8",
+                    "surface-container-high": "#e9e8e7",
+                    "on-surface": "#1a1c1c",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "on-surface-variant": "#4d4635",
+                    "outline": "#7f7663",
+                    "surface-dim": "#dadad9",
+                    "primary-fixed-dim": "#e9c349",
+                    "on-tertiary-container": "#48453e",
+                    "on-primary-container": "#554300",
+                    "error": "#ba1a1a",
+                    "secondary-container": "#e2dfde",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#faf9f8",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "surface-variant": "#e3e2e1",
+                    "surface-container": "#eeeeed",
+                    "on-primary-fixed-variant": "#574500",
+                    "on-secondary-container": "#636262",
+                    "secondary-fixed": "#e5e2e1",
+                    "surface-tint": "#735c00",
+                    "secondary": "#5f5e5e",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#241a00",
+                    "tertiary-fixed-dim": "#ccc6bc",
+                    "tertiary-container": "#b8b2a9",
+                    "on-background": "#1a1c1c",
+                    "inverse-surface": "#2f3130"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "64px",
+                    "section-gap": "120px",
+                    "gutter": "32px",
+                    "stack-sm": "16px",
+                    "container-padding": "80px",
+                    "unit": "8px",
+                    "stack-md": "32px"
+            },
+            "fontFamily": {
+                    "headline-md": [
+                            "Playfair Display"
+                    ],
+                    "body-lg": [
+                            "Manrope"
+                    ],
+                    "headline-lg": [
+                            "Playfair Display"
+                    ],
+                    "headline-sm": [
+                            "Playfair Display"
+                    ],
+                    "body-md": [
+                            "Manrope"
+                    ],
+                    "label-caps": [
+                            "Manrope"
+                    ],
+                    "headline-lg-mobile": [
+                            "Playfair Display"
+                    ],
+                    "display-lg": [
+                            "Playfair Display"
+                    ]
+            },
+            "fontSize": {
+                    "headline-md": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-sm": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "1",
+                                    "letterSpacing": "0.1em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "36px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "64px",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+        }
+
+        .luxury-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(26, 28, 28, 0.2);
+            border-radius: 0;
+            padding-left: 0;
+            padding-right: 0;
+            transition: border-color 0.3s ease;
+        }
+
+        .luxury-input:focus {
+            outline: none;
+            box-shadow: none;
+            border-bottom-color: theme('colors.primary-container');
+        }
+
+        .file-drop-zone {
+            border: 1px dashed theme('colors.outline-variant');
+            transition: all 0.3s ease;
+        }
+        
+        .file-drop-zone:hover {
+            border-color: theme('colors.primary-container');
+            background-color: theme('colors.surface-container-low');
+        }
+    </style>
+</head>
+<body class="flex min-h-screen bg-background antialiased selection:bg-primary-container/30 selection:text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full md:w-[calc(100%-20rem)] md:ml-80 z-40 bg-surface/80 dark:bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/20 flex justify-between items-center px-gutter py-4">
+<div>
+<h1 class="text-headline-sm font-headline-sm text-primary dark:text-inverse-primary tracking-tight">Onboarding Wizard</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-label-caps font-label-caps text-on-surface-variant hover:text-primary transition-colors duration-200">Previous Step</button>
+<button class="text-label-caps font-label-caps bg-primary-container text-on-primary-container px-6 py-3 rounded-full hover:opacity-90 transition-opacity duration-200 shadow-[0_4px_14px_0_rgba(212,175,55,0.39)]">Next Step</button>
+</div>
+</header>
+<!-- SideNavBar (Hidden on Mobile) -->
+<nav class="hidden md:flex flex-col h-screen w-80 fixed left-0 top-0 bg-surface dark:bg-inverse-surface border-r border-outline-variant/20 shadow-sm dark:shadow-none z-50">
+<div class="px-6 py-8 border-b border-outline-variant/10">
+<div class="flex items-center gap-4 mb-2">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">diamond</span>
+</div>
+<div>
+<h2 class="text-headline-sm font-headline-sm text-primary dark:text-inverse-primary leading-tight">Cozy Lagos</h2>
+<p class="text-label-caps font-label-caps text-secondary mt-1">Vendor Portal</p>
+</div>
+</div>
+</div>
+<div class="flex-1 py-6 flex flex-col gap-2">
+<a class="flex items-center gap-4 text-secondary dark:text-secondary-fixed px-6 py-4 hover:text-primary dark:hover:text-inverse-primary transition-colors opacity-80 duration-150" href="#">
+<span class="material-symbols-outlined">person_outline</span>
+<span class="text-label-caps font-label-caps">Profile</span>
+</a>
+<a class="flex items-center gap-4 text-secondary dark:text-secondary-fixed px-6 py-4 hover:text-primary dark:hover:text-inverse-primary transition-colors opacity-80 duration-150" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="text-label-caps font-label-caps">Experience Details</span>
+</a>
+<a class="flex items-center gap-4 text-secondary dark:text-secondary-fixed px-6 py-4 hover:text-primary dark:hover:text-inverse-primary transition-colors opacity-80 duration-150" href="#">
+<span class="material-symbols-outlined">image</span>
+<span class="text-label-caps font-label-caps">Media</span>
+</a>
+<a class="flex items-center gap-4 text-primary dark:text-inverse-primary font-bold border-l-4 border-primary px-6 py-4 opacity-100 duration-150 bg-primary/5" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="text-label-caps font-label-caps">Verification</span>
+</a>
+<a class="flex items-center gap-4 text-secondary dark:text-secondary-fixed px-6 py-4 hover:text-primary dark:hover:text-inverse-primary transition-colors opacity-80 duration-150" href="#">
+<span class="material-symbols-outlined">rate_review</span>
+<span class="text-label-caps font-label-caps">Review</span>
+</a>
+</div>
+<div class="px-6 py-6 border-t border-outline-variant/10">
+<button class="w-full text-label-caps font-label-caps border border-outline text-on-surface py-3 rounded-full hover:bg-surface-container transition-colors duration-200">Save Draft</button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full md:ml-80 pt-24 px-6 md:px-gutter pb-section-gap">
+<div class="max-w-[1000px] mx-auto">
+<div class="mb-stack-md">
+<h2 class="text-headline-lg font-headline-lg text-on-surface mb-2 tracking-tight">Verification &amp; Review</h2>
+<p class="text-body-lg font-body-lg text-secondary max-w-2xl">Ensure your documentation is in order and review your experience details before submitting for publication on the Cozy Lagos platform.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Uploads -->
+<div class="lg:col-span-7 space-y-stack-md">
+<!-- Document Upload Section -->
+<section class="glass-panel rounded-xl p-8">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">admin_panel_settings</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Required Documentation</h3>
+</div>
+<p class="text-body-md font-body-md text-secondary mb-6">Upload valid business licenses, liability insurance, or required certifications for this experience type.</p>
+<div class="file-drop-zone rounded-lg p-8 text-center cursor-pointer bg-surface-container-lowest/50 group">
+<div class="w-16 h-16 mx-auto bg-surface rounded-full flex items-center justify-center mb-4 shadow-sm group-hover:scale-105 transition-transform duration-300">
+<span class="material-symbols-outlined text-outline text-3xl group-hover:text-primary-container transition-colors">cloud_upload</span>
+</div>
+<h4 class="text-body-lg font-body-lg text-on-surface mb-1">Drag and drop files here</h4>
+<p class="text-body-md font-body-md text-secondary mb-4">or click to browse from your device</p>
+<p class="text-label-caps font-label-caps text-tertiary">Accepted formats: PDF, JPG, PNG (Max 10MB)</p>
+<input accept=".pdf,.jpg,.jpeg,.png" class="hidden" multiple="" type="file"/>
+</div>
+<!-- Uploaded Files List (Mock) -->
+<div class="mt-6 space-y-3">
+<div class="flex items-center justify-between p-4 bg-surface rounded-lg border border-outline-variant/30">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">description</span>
+<div>
+<p class="text-body-md font-body-md text-on-surface font-medium">Business_License_2024.pdf</p>
+<p class="text-label-caps font-label-caps text-secondary mt-1">2.4 MB • Uploaded</p>
+</div>
+</div>
+<button class="text-secondary hover:text-error transition-colors p-2">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Quality Standards Acknowledgment -->
+<section class="glass-panel rounded-xl p-8">
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-6">Quality Standards</h3>
+<div class="space-y-4">
+<label class="flex items-start gap-4 cursor-pointer group">
+<div class="relative flex items-center justify-center mt-1">
+<input class="w-5 h-5 rounded border-outline-variant text-primary-container focus:ring-primary-container/20 transition-all cursor-pointer" type="checkbox"/>
+</div>
+<span class="text-body-md font-body-md text-on-surface-variant group-hover:text-on-surface transition-colors">I confirm that this experience meets the <a class="text-primary hover:underline" href="#">Cozy Lagos Luxury Standards</a>.</span>
+</label>
+<label class="flex items-start gap-4 cursor-pointer group">
+<div class="relative flex items-center justify-center mt-1">
+<input class="w-5 h-5 rounded border-outline-variant text-primary-container focus:ring-primary-container/20 transition-all cursor-pointer" type="checkbox"/>
+</div>
+<span class="text-body-md font-body-md text-on-surface-variant group-hover:text-on-surface transition-colors">I agree to the <a class="text-primary hover:underline" href="#">Vendor Terms of Service</a> and cancellation policies.</span>
+</label>
+</div>
+</section>
+</div>
+<!-- Right Column: Summary Review -->
+<div class="lg:col-span-5">
+<div class="sticky top-32 glass-panel rounded-xl overflow-hidden flex flex-col h-[calc(100vh-12rem)] max-h-[800px]">
+<!-- Hero Image Summary -->
+<div class="h-48 relative w-full bg-surface-variant">
+<img class="w-full h-full object-cover" data-alt="A highly detailed, ultra-realistic photograph of a luxurious private yacht interior docked in Lagos, Nigeria. The scene is bathed in warm, golden-hour sunlight streaming through large panoramic windows. The aesthetic is high-end minimalism with polished wood, white leather seating, and subtle champagne gold accents. The mood is exclusive, serene, and inviting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJR2qjYcca1LD_Kji9fMkG0MmyQrxLdZbBhbcOgYiT7ZDM1rZg8tQuAvoO5Z2A7PcLVYuqiEdsaTzkFo4U8-u6P3VZ3J4PYwV646f-kqccyfGkvtPYssq24_q8UV-u10HAEs1jG539fDODC_TOiMbyK0RdK4ETPRUKiYXXO8MxJRDOS_D63kMQvcum_IqyCeSq5xlBfyqCTqRnoNaipmVHrL4iUu7wMOuNH2xVZATAqEASf2wBXFCEz8bjaecZJi98SB8HPGeygr4F"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<span class="inline-block px-3 py-1 bg-surface/20 backdrop-blur-md rounded-full text-label-caps font-label-caps text-on-primary mb-2 border border-white/20">PRIVATE YACHT</span>
+<h3 class="text-headline-sm font-headline-sm text-on-primary leading-tight">Sunset Cruise &amp; Dining</h3>
+</div>
+</div>
+<!-- Scrollable Summary Details -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<div>
+<h4 class="text-label-caps font-label-caps text-secondary mb-2">LOCATION</h4>
+<p class="text-body-md font-body-md text-on-surface">Victoria Island Marina, Lagos</p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<h4 class="text-label-caps font-label-caps text-secondary mb-2">DURATION</h4>
+<p class="text-body-md font-body-md text-on-surface">4 Hours</p>
+</div>
+<div>
+<h4 class="text-label-caps font-label-caps text-secondary mb-2">CAPACITY</h4>
+<p class="text-body-md font-body-md text-on-surface">Up to 8 Guests</p>
+</div>
+</div>
+<div>
+<h4 class="text-label-caps font-label-caps text-secondary mb-2">PRICING</h4>
+<p class="text-body-lg font-body-lg text-on-surface font-medium">₦450,000 <span class="text-body-md font-body-md text-secondary font-normal">/ session</span></p>
+</div>
+<div>
+<h4 class="text-label-caps font-label-caps text-secondary mb-3">INCLUDED PERKS</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1.5 bg-surface rounded-full text-label-caps font-label-caps text-on-surface border border-outline-variant/30 flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary-container">restaurant</span> PRIVATE CHEF</span>
+<span class="px-3 py-1.5 bg-surface rounded-full text-label-caps font-label-caps text-on-surface border border-outline-variant/30 flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary-container">wine_bar</span> CHAMPAGNE</span>
+<span class="px-3 py-1.5 bg-surface rounded-full text-label-caps font-label-caps text-on-surface border border-outline-variant/30 flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary-container">music_note</span> LIVE DJ</span>
+</div>
+</div>
+</div>
+<!-- Action Area -->
+<div class="p-6 border-t border-outline-variant/20 bg-surface/50 backdrop-blur-md">
+<button class="w-full bg-primary-container text-on-primary-container text-body-lg font-body-lg py-4 rounded-lg font-medium hover:opacity-90 transition-opacity duration-300 shadow-[0_8px_20px_-4px_rgba(212,175,55,0.4)] flex items-center justify-center gap-2">
+                                Publish Experience
+                                <span class="material-symbols-outlined">rocket_launch</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Simple drag and drop visual feedback
+        const dropZone = document.querySelector('.file-drop-zone');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            dropZone.classList.add('border-primary-container', 'bg-surface-container-low');
+        }
+
+        function unhighlight(e) {
+            dropZone.classList.remove('border-primary-container', 'bg-surface-container-low');
+        }
+    </script>
+</body></html>

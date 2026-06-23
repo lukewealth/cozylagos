@@ -257,13 +257,14 @@ export const INITIAL_BOOKINGS: Booking[] = [
     id: "booking-01",
     listingId: "bourdillon-penthouse",
     listingTitle: "The Bourdillon Penthouse",
+    guestId: "alex-sterling",
     guestName: "Alexander Sterling",
     guestEmail: "alex@sterlingholdings.com",
-    guestAvatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDx15JuvuMcDijKEA4B_8Byjpib6fMI0fFxbYNjGPlhYAmDWvMdQMnX_byTMGQod-bhOYO4sugMfBPzJcWxb18Bmql8ORNoXufqWmoeBxtHTbACjeGG_PLhXiHkFL2osEeAHCx3O-SMpXLi_x1k6m7U63tChmAPXFuSi8NBKZZRkEVk2H9wgx0RHOtyObOSAqG24z8-V2mImw29UWFWmSYElo66Yb3acIv983sY8rqYphNg18jA9VNHTqWG9_nxNvLH1FbtnxRmPijH",
+    guestAvatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuChO__jpr70PBuRfnq-BQBd5gWupLLFUTveVncrizosRGPnEKwyHQoENzgCg9lwfnKYOEM7t7cKhrxteYnQmMCPCT6fQiQhw0t5x_oyWaDcgpF6YVWQbFEqVsbRYkLo5jeNWRChx-mVO8ogBC_FOKOHv6-xLPrZeGqBTzy9SST378Rfx0ud7ubpuCc9pG_6KQSvtogIK9kbjtONB7EkpsMQcX3gIGzOMqtwgdxiG_aXaJN_AYuzaZ_bhvFIN5-cXDVzxd9AW4Sl1pM2",
     checkIn: "2026-06-25",
     checkOut: "2026-07-02",
     guestsCount: 4,
-    status: "Confirmed",
+    status: "Confirmed" as any,
     totalAmount: 3150000,
     chefAdded: true,
     photographerAdded: false,
@@ -276,13 +277,14 @@ export const INITIAL_BOOKINGS: Booking[] = [
     id: "booking-02",
     listingId: "lagoon-view-villa",
     listingTitle: "Lagoon View Villa",
+    guestId: "sarah-jenkins",
     guestName: "Sarah Jenkins",
     guestEmail: "sjenkins@media-arts.co",
     guestAvatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuC9lTotMd2RIFjd-3xeK4mO_pmn_YYNyDArzN4tfbFqP4RQklnVe0rYjO7FozZUN0q1OWa3DeOu-ssQ3pyzcns_p3HivAPKLD29383WGDgK7lr1wXrwFiOhXyQL0XWXIpa6C-M3iqJWUVSZG7u5maEXPdRpMTZz4hyhjRB2ciQ2NIYsmPTdywDAsBFkZ7-a_KkFgu73NjCA6ligR5O66nIl54t-AJSB4ttjEwiRBH9ARqWh0YB7Af1tO_9g0HQ3eJmKCryEixQ-8-PF",
     checkIn: "2026-07-10",
     checkOut: "2026-07-16",
     guestsCount: 6,
-    status: "Pending",
+    status: "Pending" as any,
     totalAmount: 3900000,
     chefAdded: true,
     photographerAdded: true,
@@ -295,13 +297,14 @@ export const INITIAL_BOOKINGS: Booking[] = [
     id: "booking-03",
     listingId: "eko-loft",
     listingTitle: "The Eko Loft Sanctuary",
+    guestId: "chuka-obi",
     guestName: "Chuka Obi",
     guestEmail: "chuka@obi-studios.ng",
-    guestAvatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuB9Lh8rkEuZ0WtuwD5WIDKt8X-Rcw_hkbPJc4me77k4fCkgvj7bw8uS_oG_i5TwGhETMSGEO8280C-iff0nUzjqzM2S4kHFg5mbfWBJzan8ih4yEEtAdcVG3RBSr9E2D2cIGqu5JReEW10IA7NXk63IzHsmjKVrqjjVOlp8L8uCHSQF6kvoikGM4EOodrcn2VvxVlXT3MdMLy4uqFdnqsmxEB_PvwDpzjr1euEh0V68xjDrRvmA70yqiRTMfrAJUIC9aGARCX0VHZCK",
+    guestAvatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuB9Lh8rkEuZ0WtuwD5WIDKt8X-Rcw_hkbPJc4me77k4fCkgvj7bw8uS_oG_i5TwGhETMSGEO8280C-iff0nUzjqzM2S4kHFg5mbfWBJzan8ih4yEEtAdcVG3RBSr9E2D2cIGqu5JReEW10IA7NXk6m7U63tChmAPXFuSi8NBKZZRkEVk2H9wgx0RHOtyObOSAqG24z8-V2mImw29UWFWmSYElo66Yb3acIv983sY8rqYphNg18jA9VNHTqWG9_nxNvLH1FbtnxRmPijH",
     checkIn: "2026-06-22",
     checkOut: "2026-06-25",
     guestsCount: 2,
-    status: "Confirmed",
+    status: "Confirmed" as any,
     totalAmount: 750000,
     chefAdded: false,
     photographerAdded: false,
@@ -311,6 +314,7 @@ export const INITIAL_BOOKINGS: Booking[] = [
     updatedAt: "2024-01-01T00:00:00Z"
   }
 ];
+
 
 export const INITIAL_TRANSACTIONS: Transaction[] = [
   {

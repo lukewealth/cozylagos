@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Property Listing Wizard - Review</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f4f3f2",
+                    "on-primary-fixed": "#241a00",
+                    "on-tertiary-fixed-variant": "#4a463f",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "on-tertiary-fixed": "#1e1b15",
+                    "on-secondary-fixed-variant": "#474746",
+                    "surface-container-high": "#e9e8e7",
+                    "on-tertiary-container": "#48453e",
+                    "outline": "#7f7663",
+                    "surface-tint": "#735c00",
+                    "surface-variant": "#e3e2e1",
+                    "on-tertiary": "#ffffff",
+                    "background": "#faf9f8",
+                    "secondary-container": "#e2dfde",
+                    "on-surface-variant": "#4d4635",
+                    "on-primary-fixed-variant": "#574500",
+                    "on-error-container": "#93000a",
+                    "on-secondary-container": "#636262",
+                    "primary": "#735c00",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#dadad9",
+                    "surface-container-highest": "#e3e2e1",
+                    "primary-fixed": "#ffe088",
+                    "surface": "#faf9f8",
+                    "tertiary-fixed": "#e8e2d8",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#1a1c1c",
+                    "primary-fixed-dim": "#e9c349",
+                    "on-primary-container": "#554300",
+                    "primary-container": "#d4af37",
+                    "outline-variant": "#d0c5af",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "inverse-primary": "#e9c349",
+                    "on-error": "#ffffff",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed-dim": "#ccc6bc",
+                    "inverse-surface": "#2f3130",
+                    "secondary-fixed": "#e5e2e1",
+                    "on-secondary": "#ffffff",
+                    "surface-bright": "#faf9f8",
+                    "secondary": "#5f5e5e",
+                    "inverse-on-surface": "#f1f0f0",
+                    "surface-container": "#eeeeed",
+                    "on-background": "#1a1c1c",
+                    "on-primary": "#ffffff",
+                    "tertiary-container": "#b8b2a9",
+                    "tertiary": "#625e56"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "section-gap": "120px",
+                    "stack-lg": "64px",
+                    "unit": "8px",
+                    "stack-md": "32px",
+                    "gutter": "32px",
+                    "container-padding": "80px",
+                    "stack-sm": "16px"
+            },
+            "fontFamily": {
+                    "body-md": [
+                            "Manrope"
+                    ],
+                    "label-caps": [
+                            "Manrope"
+                    ],
+                    "headline-sm": [
+                            "Playfair Display"
+                    ],
+                    "body-lg": [
+                            "Manrope"
+                    ],
+                    "headline-md": [
+                            "Playfair Display"
+                    ],
+                    "headline-lg": [
+                            "Playfair Display"
+                    ],
+                    "headline-lg-mobile": [
+                            "Playfair Display"
+                    ],
+                    "display-lg": [
+                            "Playfair Display"
+                    ]
+            },
+            "fontSize": {
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "1",
+                                    "letterSpacing": "0.1em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-sm": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-md": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "36px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "64px",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(208, 197, 175, 0.3); /* outline-variant */
+            box-shadow: 0px 20px 50px rgba(26, 26, 26, 0.04);
+        }
+        
+        /* Toggle Switch Styling */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #d4af37; /* primary-container */
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #d4af37;
+        }
+        .toggle-checkbox:checked + .toggle-label:after {
+            transform: translateX(100%);
+            border-color: white;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen flex">
+<!-- SideNavBar (JSON Component) -->
+<nav class="bg-surface-container-low dark:bg-inverse-surface h-screen w-64 fixed left-0 top-0 shadow-sm flex flex-col h-full py-8 z-50">
+<div class="px-8 mb-12">
+<h1 class="font-headline-sm text-headline-sm text-primary dark:text-primary-fixed">Lagos Elite Host</h1>
+<p class="font-body-md text-body-md text-secondary mt-1">Premium Tier</p>
+</div>
+<ul class="flex-1 space-y-2 px-4">
+<!-- Dashboard -->
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-secondary-container/20 transition-colors active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+</li>
+<!-- My Properties (Active context for Wizard) -->
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-primary font-bold border-r-4 border-primary bg-primary-container/10 hover:bg-secondary-container/20 transition-colors active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span>My Properties</span>
+</a>
+</li>
+<!-- Bookings -->
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-secondary-container/20 transition-colors active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span>Bookings</span>
+</a>
+</li>
+<!-- Earnings -->
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-secondary-container/20 transition-colors active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Earnings</span>
+</a>
+</li>
+<!-- Settings -->
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-secondary-container/20 transition-colors active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</li>
+</ul>
+<div class="px-8 mt-auto flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden">
+<img alt="Owner Profile Picture" class="w-full h-full object-cover" data-alt="A professional headshot of a sophisticated Nigerian host smiling warmly in a well-lit luxury apartment, exuding premium hospitality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCynM2jIPFKN995nhtNdv2oH1PI4daJ5L7thCH8fYqwKfdesWsN0EKfkqGbH93SXOFnFNjXx0QR5uuhkYPs5rOsDl4rGFWIJum7J55YdugVSlVLXLFYyK5ahxL6n_Bvmi1e6DotCnFhMSw3rNLCMxD_QhU-fqHI-bhQyz_UpNux9GJVEyDnmJN0Ga29LtGmnXDnOz4Rggl16IzIb09CbknDaDUTHtMKJZw4nH5I18K4XXRTqaHvCMSCIHv74ZA8JCJZjPjOh88OimsJ"/>
+</div>
+<button class="font-label-caps text-label-caps text-primary hover:text-primary-container transition-colors">List New Property</button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-64 flex flex-col min-h-screen">
+<!-- TopAppBar (JSON Component) -->
+<header class="bg-surface/80 backdrop-blur-xl dark:bg-surface-dim/80 docked full-width top-0 sticky border-b border-outline-variant/20 shadow-sm flex justify-between items-center w-full px-container-padding h-20 z-40">
+<div class="flex items-center gap-8">
+<h2 class="font-headline-sm text-headline-sm text-primary dark:text-primary-fixed">Property Listing Wizard</h2>
+<nav class="hidden md:flex gap-6 mt-2">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors active:opacity-80" href="#">Step 1: Details</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors active:opacity-80" href="#">Step 2: Media</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors active:opacity-80" href="#">Step 3: Pricing</a>
+<a class="font-label-caps text-label-caps text-primary border-b-2 border-primary pb-2 hover:text-primary transition-colors active:opacity-80" href="#">Step 4: Review</a>
+</nav>
+</div>
+<div class="flex items-center gap-4 hidden">
+<!-- Search bar hidden per JSON -->
+</div>
+<div class="flex items-center gap-4">
+<button class="font-label-caps text-label-caps text-on-surface hover:text-primary transition-colors px-4 py-2 border border-outline rounded-full">Save Draft</button>
+<button class="font-label-caps text-label-caps text-on-primary bg-primary hover:bg-primary-container transition-colors px-6 py-2 rounded-full shadow-md">Next Step</button>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 p-container-padding max-w-[1440px] mx-auto w-full pb-section-gap">
+<div class="mb-stack-lg">
+<h1 class="font-headline-lg text-headline-lg text-on-background">Review &amp; Publish</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2 max-w-2xl">Confirm your property details below. Once published, your listing will be live on the Lagos Elite network.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Summary Cards (Bento style) -->
+<div class="lg:col-span-8 flex flex-col gap-stack-md">
+<!-- Details Summary -->
+<section class="glass-card rounded-xl p-8 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-primary flex items-center gap-1 font-label-caps text-label-caps"><span class="material-symbols-outlined text-[18px]">edit</span> EDIT</button>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-background mb-6">Property Details</h3>
+<div class="grid grid-cols-2 gap-6">
+<div>
+<p class="font-label-caps text-label-caps text-outline mb-1">TITLE</p>
+<p class="font-body-lg text-body-lg text-on-surface font-medium">The Ikoyi Glasshouse Retreat</p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-outline mb-1">LOCATION</p>
+<p class="font-body-lg text-body-lg text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">location_on</span>
+                                    Banana Island, Lagos
+                                </p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-outline mb-1">TYPE &amp; CAPACITY</p>
+<p class="font-body-lg text-body-lg text-on-surface">Luxury Villa • 8 Guests • 4 Bedrooms</p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-outline mb-1">EXPERIENCE PERKS</p>
+<div class="flex flex-wrap gap-2 mt-1">
+<span class="bg-surface-container text-on-surface font-label-caps text-label-caps px-3 py-1 rounded-full border border-outline/20">PRIVATE CHEF</span>
+<span class="bg-surface-container text-on-surface font-label-caps text-label-caps px-3 py-1 rounded-full border border-outline/20">INFINITY POOL</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Media Summary -->
+<section class="glass-card rounded-xl p-8 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+<button class="text-primary flex items-center gap-1 font-label-caps text-label-caps bg-surface/80 px-3 py-1 rounded-full backdrop-blur-sm"><span class="material-symbols-outlined text-[18px]">edit</span> EDIT</button>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-background mb-6">Media Gallery</h3>
+<div class="grid grid-cols-3 gap-4">
+<div class="col-span-2 aspect-[4/3] rounded-lg overflow-hidden">
+<img class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" data-alt="A luxurious modern villa in Lagos, Nigeria, featuring extensive glass facades, a pristine infinity pool reflecting the golden hour sun, and lush tropical landscaping. The architectural style is minimalist yet opulent, capturing a premium, high-end lifestyle aesthetic suitable for a luxury property listing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCl531HUrzoxd5qsppge9MY1u4gFm4U5WzK8BUtWenT_MzMJgZK4Jdzh1JqPUmQ4MjSsW9NarG4tljrVBo3SZXa1Df3Qz4ibpQPwIKjKFkTdiLySFUdJV47Y1kplw11rAEJRmr9VcMQuJJevGWAmy0Eegs-wBaKc8bxh5jbk5qPK1E9BW6n1JinVG8K3v9yrl4Sv12ZFrWbXkcFUZrVW0yWIE_1bqY6lTWf-QF3ArfSp-fe2UdCUNCunF8wMvKna4i4sJUpfkztgYOf"/>
+</div>
+<div class="flex flex-col gap-4">
+<div class="aspect-square rounded-lg overflow-hidden">
+<img class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" data-alt="A sophisticated, high-end living room in a modern luxury apartment in Lagos. Floor-to-ceiling windows offer a breathtaking view of the city skyline. The interior features minimalist luxury furniture, rich textures, marble accents, and a warm, inviting lighting scheme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ2GGWFNwuBO2JM2bYf-QFEBP5nlp9knwLAIEbuxzj4ld_7CfhmUboRV3Ih7CVn_cIyrr_4X1CctHurZYPJbDxPLcuNMAlgZ8E7GyLfuIZd0L6TiIH6JL4qxE0S6LH3dMbrqgFBA03tV_nv4ZYAyrn6SxvsPQIXQbaDeHNvc4U7p0dKE_MVLgA3pA2eXUVxVCT1kqKk61Iy5V8EtXhKI2oGFsLpYuJKl_0DR9wGJZd3pAuZVlzm1NLpNPC1R-jcDjf_0MBaI235ER6"/>
+</div>
+<div class="aspect-square rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" data-alt="A beautifully designed modern bathroom in a luxury villa, featuring a freestanding marble tub, rainfall shower, soft ambient lighting, and high-end golden fixtures, exuding a spa-like tranquility and premium quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSYPP8Fr2Q5FatbqhOLiIHFJ3D9xvTrYq9PHA608IcJCptL8G9xlEwiWAmCni3zOXbe840MgzelOsy0xEquJtQEGb5wZzMLneLPRc-F5pzBgBjXESHtvvzR8KYX9LwJXG9wNj62hwDt2wvUf0gEQS54yEtpC3vYFSVR460mLF7ekYoXwOTpfdY9vSSSd9rWx50O_xYLeAPMFY5GEErf58BJk8rdGw9zeZ7DFDtRZxv_robNVfdyF5-rY9B6rcM91PbVw-rwczZ0kIa"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+<span class="font-headline-sm text-headline-sm text-white">+12</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Pricing & Publish Actions -->
+<div class="lg:col-span-4 flex flex-col gap-stack-md">
+<!-- Pricing Summary -->
+<section class="glass-card rounded-xl p-8 relative group">
+<div class="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-primary flex items-center gap-1 font-label-caps text-label-caps"><span class="material-symbols-outlined text-[18px]">edit</span> EDIT</button>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-background mb-6">Pricing Strategy</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center border-b border-outline/10 pb-4">
+<span class="font-body-md text-body-md text-on-surface-variant">Base Nightly Rate</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">₦450,000</span>
+</div>
+<div class="flex justify-between items-center border-b border-outline/10 pb-4">
+<span class="font-body-md text-body-md text-on-surface-variant">Weekend Premium</span>
+<span class="font-body-lg text-body-lg text-primary">+15%</span>
+</div>
+<div class="flex justify-between items-center pt-2">
+<span class="font-body-md text-body-md text-on-surface-variant">Cleaning Fee</span>
+<span class="font-body-md text-body-md text-on-surface">₦25,000</span>
+</div>
+</div>
+</section>
+<!-- Publish Action Card -->
+<section class="glass-card rounded-xl p-8 border-t-4 border-t-primary-container bg-surface-container-lowest/90">
+<h3 class="font-headline-md text-headline-md text-on-background mb-6">Ready to Go Live</h3>
+<!-- Visibility Toggle -->
+<div class="flex items-center justify-between mb-8">
+<div>
+<p class="font-body-lg text-body-lg text-on-surface font-medium">Public Visibility</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">Allow guests to find and book this property.</p>
+</div>
+<label class="flex items-center cursor-pointer" for="visibility-toggle">
+<div class="relative">
+<input checked="" class="sr-only toggle-checkbox" id="visibility-toggle" type="checkbox"/>
+<div class="block bg-surface-variant w-14 h-8 rounded-full border border-outline/30 transition-colors duration-300 toggle-label"></div>
+<div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-300 shadow-sm flex items-center justify-center">
+</div>
+</div>
+</label>
+</div>
+<!-- T&C Checkbox -->
+<div class="mb-8">
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="relative flex items-center justify-center mt-1">
+<input class="peer appearance-none w-5 h-5 border border-outline rounded bg-transparent checked:bg-primary checked:border-primary transition-colors cursor-pointer" type="checkbox"/>
+<span class="material-symbols-outlined absolute text-white text-[16px] opacity-0 peer-checked:opacity-100 pointer-events-none">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface-variant group-hover:text-on-surface transition-colors">
+                                    I agree to the <a class="text-primary underline underline-offset-2" href="#">Host Terms &amp; Conditions</a> and confirm that I have the right to list this property.
+                                </span>
+</label>
+</div>
+<!-- Final Action -->
+<button class="w-full bg-primary text-on-primary font-headline-sm text-[20px] py-4 rounded-lg shadow-lg hover:bg-primary-container hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex justify-center items-center gap-2">
+                            Publish Listing
+                            <span class="material-symbols-outlined">rocket_launch</span>
+</button>
+</section>
+</div>
+</div>
+</main>
+</div>
+</body></html>

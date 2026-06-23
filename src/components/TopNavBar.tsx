@@ -1,14 +1,16 @@
 import React from 'react';
-import { Compass, User, Bell, ChevronRight, RefreshCw, ShieldCheck } from 'lucide-react';
+import { Compass, User, Bell, ChevronRight, RefreshCw, ShieldCheck, ShoppingCart } from 'lucide-react';
 
 interface TopNavBarProps {
   portal: 'guest' | 'user' | 'service_provider' | 'admin' | 'super_admin';
   setPortal: (portal: 'guest' | 'user' | 'service_provider' | 'admin' | 'super_admin') => void;
   activeTab: string;
   setActiveTab: (tab: any) => void;
+  cartCount: number;
+  onOpenCart: () => void;
 }
 
-export default function TopNavBar({ portal, setPortal, activeTab, setActiveTab }: TopNavBarProps) {
+export default function TopNavBar({ portal, setPortal, activeTab, setActiveTab, cartCount, onOpenCart }: TopNavBarProps) {
   return (
     <header className="sticky top-0 z-50 w-full bg-parchment/85 backdrop-blur-xl border-b border-charcoal/5 shadow-sm">
       <div className="flex justify-between items-center w-full px-6 md:px-12 xl:px-20 max-w-[1440px] mx-auto h-20">
@@ -47,28 +49,42 @@ export default function TopNavBar({ portal, setPortal, activeTab, setActiveTab }
                 {activeTab === 'home' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
               </button>
               <button 
+                onClick={() => setActiveTab('lagos-cruise')}
+                className={`py-2 px-1 relative transition-colors ${activeTab === 'lagos-cruise' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+              >
+                Lagos Cruise
+                {activeTab === 'lagos-cruise' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+              </button>
+              <button 
                 onClick={() => setActiveTab('explorer')}
                 className={`py-2 px-1 relative transition-colors ${activeTab === 'explorer' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
               >
                 Stays
                 {activeTab === 'explorer' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
               </button>
-              <button 
-                onClick={() => setActiveTab('experience')}
-                className={`py-2 px-1 relative transition-colors ${activeTab === 'experience' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
-              >
-                Experiences
-                {activeTab === 'experience' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-              </button>
-              <button 
-                onClick={() => setActiveTab('guest-dashboard')}
-                className={`py-2 px-1 relative transition-colors ${activeTab === 'guest-dashboard' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
-              >
-                Concierge & Dashboard
-                {activeTab === 'guest-dashboard' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-              </button>
-            </>
-          ) : (
+               <button 
+                 onClick={() => setActiveTab('experience')}
+                 className={`py-2 px-1 relative transition-colors ${activeTab === 'experience' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+               >
+                 Experiences
+                 {activeTab === 'experience' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+               </button>
+               <button 
+                 onClick={() => setActiveTab('concierge-hub')}
+                 className={`py-2 px-1 relative transition-colors ${activeTab === 'concierge-hub' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+               >
+                 Concierge Hub
+                 {activeTab === 'concierge-hub' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+               </button>
+               <button 
+                 onClick={() => setActiveTab('guest-dashboard')}
+                 className={`py-2 px-1 relative transition-colors ${activeTab === 'guest-dashboard' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+               >
+                 Dashboard
+                 {activeTab === 'guest-dashboard' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+               </button>
+             </>
+           ) : (
             <>
               <button 
                 onClick={() => setActiveTab('overview')}
@@ -105,29 +121,43 @@ export default function TopNavBar({ portal, setPortal, activeTab, setActiveTab }
         {/* Right Side Portal Switcher and Actions */}
         <div className="flex items-center gap-4">
           
-         {/* Quick toggle mode portal button */}
-           <button
-             onClick={() => {
-               const roles: ('guest' | 'user' | 'service_provider' | 'admin' | 'super_admin')[] = ['guest', 'user', 'service_provider', 'admin', 'super_admin'];
-               const currentIndex = roles.indexOf(portal);
-               const nextIndex = (currentIndex + 1) % roles.length;
-               const nextPortal = roles[nextIndex];
-               setPortal(nextPortal);
-               
-               if (nextPortal === 'guest') {
-                 setActiveTab('home');
-               } else if (nextPortal === 'user' || nextPortal === 'service_provider' || nextPortal === 'admin' || nextPortal === 'super_admin') {
-                 setActiveTab('overview');
-               }
-             }}
-             className="flex items-center gap-2 px-3 py-1.5 bg-charcoal text-parchment hover:bg-gold-dark hover:text-parchment rounded-full text-[10px] font-bold tracking-wider uppercase transition-colors shrink-0"
-             title={`Current: ${portal}. Click to cycle roles.`}
-           >
-             <RefreshCw className="w-3 h-3" />
-             <span className="hidden sm:inline">Role: {portal.replace('_', ' ')}</span>
-             <span className="sm:hidden">{portal.substring(0, 4)}</span>
-           </button>
+          {/* Cart Icon */}
+          {portal === 'guest' && (
+            <button 
+              onClick={onOpenCart}
+              className="relative p-2 bg-charcoal/5 hover:bg-gold/10 rounded-full transition-colors"
+            >
+              <ShoppingCart className="w-5 h-5 text-charcoal/70" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-gold text-charcoal text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+          )}
 
+          {/* Quick toggle mode portal button */}
+          <button
+            onClick={() => {
+              const roles: ('guest' | 'user' | 'service_provider' | 'admin' | 'super_admin')[] = ['guest', 'user', 'service_provider', 'admin', 'super_admin'];
+              const currentIndex = roles.indexOf(portal);
+              const nextIndex = (currentIndex + 1) % roles.length;
+              const nextPortal = roles[nextIndex];
+              setPortal(nextPortal);
+              
+              if (nextPortal === 'guest') {
+                setActiveTab('home');
+              } else if (nextPortal === 'user' || nextPortal === 'service_provider' || nextPortal === 'admin' || nextPortal === 'super_admin') {
+                setActiveTab('overview');
+              }
+            }}
+            className="flex items-center gap-2 px-3 py-1.5 bg-charcoal text-parchment hover:bg-gold-dark hover:text-parchment rounded-full text-[10px] font-bold tracking-wider uppercase transition-colors shrink-0"
+            title={`Current: ${portal}. Click to cycle roles.`}
+          >
+            <RefreshCw className="w-3 h-3" />
+            <span className="hidden sm:inline">Role: {portal.replace('_', ' ')}</span>
+            <span className="sm:hidden">{portal.substring(0, 4)}</span>
+          </button>
 
           {/* User Icon */}
           <button 

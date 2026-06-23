@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Checkout | Confirm Your Stay - Luxe Lagos</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&amp;family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e3e2e1",
+                        "secondary-fixed": "#e5e2e1",
+                        "surface-container-low": "#f4f3f2",
+                        "surface-container": "#eeeeed",
+                        "surface-dim": "#dadad9",
+                        "on-surface": "#1a1c1c",
+                        "tertiary": "#625e56",
+                        "on-primary-fixed-variant": "#574500",
+                        "primary-fixed-dim": "#e9c349",
+                        "inverse-surface": "#2f3130",
+                        "outline": "#7f7663",
+                        "secondary": "#5f5e5e",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#e8e2d8",
+                        "tertiary-fixed-dim": "#ccc6bc",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#faf9f8",
+                        "surface-container-highest": "#e3e2e1",
+                        "tertiary-container": "#b8b2a9",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#faf9f8",
+                        "on-primary-fixed": "#241a00",
+                        "primary-container": "#d4af37",
+                        "on-tertiary-fixed": "#1e1b15",
+                        "on-primary-container": "#554300",
+                        "on-tertiary-container": "#48453e",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#ffe088",
+                        "on-background": "#1a1c1c",
+                        "primary": "#735c00",
+                        "error-container": "#ffdad6",
+                        "on-surface-variant": "#4d4635",
+                        "inverse-primary": "#e9c349",
+                        "on-secondary-container": "#636262",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#e2dfde",
+                        "inverse-on-surface": "#f1f0f0",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#e9e8e7",
+                        "on-tertiary-fixed-variant": "#4a463f",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#735c00",
+                        "outline-variant": "#d0c5af",
+                        "background": "#faf9f8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "section-gap": "120px",
+                        "stack-md": "32px",
+                        "gutter": "32px",
+                        "container-padding": "80px",
+                        "stack-lg": "64px",
+                        "stack-sm": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "headline-sm": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Manrope"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-lg": ["Manrope"],
+                        "label-caps": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["36px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-sm": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "headline-lg": ["48px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #faf9f8; /* background */
+            color: #1a1c1c; /* on-background */
+        }
+        
+        /* Luxury Inputs */
+        .luxury-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(26, 28, 28, 0.2); /* on-surface at 20% */
+            padding: 12px 0;
+            transition: border-color 0.3s ease;
+            width: 100%;
+        }
+        .luxury-input:focus {
+            outline: none;
+            border-bottom-color: #d4af37; /* primary-container (Gold) */
+        }
+        
+        /* Glass Card */
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Ambient Shadows for Modals/Elevated surfaces */
+        .ambient-shadow {
+            box-shadow: 0px 20px 50px rgba(26, 26, 26, 0.08);
+        }
+
+        /* Gold Button */
+        .btn-gold {
+            background-color: #d4af37;
+            color: #1a1c1c;
+            transition: all 0.3s ease;
+        }
+        .btn-gold:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased min-h-screen flex flex-col">
+<!-- TopAppBar (Suppressed for Checkout as per rules: linear/transactional intent implies suppression of global nav. We use a simplified header instead to allow "Close/Back") -->
+<header class="w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface/80 backdrop-blur-xl border-b border-outline/10">
+<button class="text-secondary hover:text-primary transition-colors flex items-center gap-2 group">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+<span class="font-label-caps text-label-caps tracking-widest uppercase">Back</span>
+</button>
+<div class="font-display-lg text-headline-sm tracking-widest text-primary text-center">LUXE LAGOS</div>
+<div class="w-20"></div> <!-- Spacer for centering -->
+</header>
+<main class="flex-grow container mx-auto max-w-[1440px] px-gutter md:px-container-padding py-section-gap">
+<div class="mb-stack-lg">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface mb-4">Confirm Your Stay</h1>
+<p class="font-body-lg text-body-lg text-secondary max-w-2xl">Complete your reservation details below to secure your luxury experience at The Ikoyi Penthouse.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter lg:gap-section-gap">
+<!-- Left Column: Guest Details & Payment -->
+<div class="lg:col-span-7 space-y-stack-lg">
+<!-- Guest Details Section -->
+<section>
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-stack-md flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">person</span>
+                        Guest Information
+                    </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+<div>
+<label class="font-label-caps text-label-caps text-secondary block mb-2">First Name</label>
+<input class="luxury-input font-body-lg text-body-lg text-on-surface" placeholder="E.g. Ade" type="text" value="Ade"/>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-secondary block mb-2">Last Name</label>
+<input class="luxury-input font-body-lg text-body-lg text-on-surface" placeholder="E.g. Balogun" type="text" value="Balogun"/>
+</div>
+<div class="md:col-span-2">
+<label class="font-label-caps text-label-caps text-secondary block mb-2">Email Address</label>
+<input class="luxury-input font-body-lg text-body-lg text-on-surface" placeholder="E.g. ade@example.com" type="email" value="ade.b@example.com"/>
+</div>
+<div class="md:col-span-2">
+<label class="font-label-caps text-label-caps text-secondary block mb-2">Phone Number</label>
+<input class="luxury-input font-body-lg text-body-lg text-on-surface" placeholder="+234 ..." type="tel" value="+234 800 123 4567"/>
+</div>
+</div>
+</section>
+<hr class="border-t border-outline/20"/>
+<!-- Payment Method Section -->
+<section>
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-stack-md flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">payment</span>
+                        Payment Method
+                    </h2>
+<!-- Payment Options -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-stack-md">
+<button class="border border-primary-container bg-surface-bright rounded-xl p-4 flex flex-col items-center justify-center gap-3 transition-all hover:bg-surface-variant relative overflow-hidden">
+<div class="absolute inset-0 bg-primary-container/5"></div>
+<span class="material-symbols-outlined text-primary-container text-3xl" style="font-variation-settings: 'FILL' 0;">credit_card</span>
+<span class="font-body-md text-body-md text-on-surface font-medium z-10">Credit Card</span>
+<!-- Active Indicator -->
+<div class="absolute top-2 right-2 w-3 h-3 rounded-full bg-primary-container"></div>
+</button>
+<button class="border border-outline/20 bg-surface-bright rounded-xl p-4 flex flex-col items-center justify-center gap-3 transition-all hover:bg-surface-variant group">
+<span class="material-symbols-outlined text-secondary group-hover:text-on-surface transition-colors text-3xl" style="font-variation-settings: 'FILL' 0;">account_balance_wallet</span>
+<span class="font-body-md text-body-md text-secondary group-hover:text-on-surface transition-colors font-medium">Apple Pay</span>
+</button>
+<button class="border border-outline/20 bg-surface-bright rounded-xl p-4 flex flex-col items-center justify-center gap-3 transition-all hover:bg-surface-variant group">
+<span class="material-symbols-outlined text-secondary group-hover:text-on-surface transition-colors text-3xl" style="font-variation-settings: 'FILL' 0;">account_balance</span>
+<span class="font-body-md text-body-md text-secondary group-hover:text-on-surface transition-colors font-medium">Bank Transfer</span>
+</button>
+</div>
+<!-- Credit Card Form -->
+<div class="space-y-6 bg-surface-container-low p-6 rounded-xl border border-outline/10">
+<div>
+<label class="font-label-caps text-label-caps text-secondary block mb-2">Card Number</label>
+<div class="relative">
+<input class="luxury-input font-body-lg text-body-lg text-on-surface pl-10" placeholder="0000 0000 0000 0000" type="text"/>
+<span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-secondary" style="font-variation-settings: 'FILL' 0;">credit_card</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-8">
+<div>
+<label class="font-label-caps text-label-caps text-secondary block mb-2">Expiration Date</label>
+<input class="luxury-input font-body-lg text-body-lg text-on-surface" placeholder="MM/YY" type="text"/>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-secondary block mb-2">CVV</label>
+<input class="luxury-input font-body-lg text-body-lg text-on-surface" placeholder="123" type="text"/>
+</div>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-secondary block mb-2">Cardholder Name</label>
+<input class="luxury-input font-body-lg text-body-lg text-on-surface" placeholder="Name on card" type="text"/>
+</div>
+</div>
+</section>
+<hr class="border-t border-outline/20"/>
+<!-- Special Requests -->
+<section>
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-stack-md flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">edit_note</span>
+                        Special Requests
+                    </h2>
+<textarea class="w-full bg-transparent border border-outline/20 rounded-lg p-4 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary-container transition-colors min-h-[120px]" placeholder="Any specific needs for your stay? (e.g., dietary restrictions, airport pickup)"></textarea>
+</section>
+</div>
+<!-- Right Column: Order Summary (Sticky) -->
+<div class="lg:col-span-5 relative">
+<div class="sticky top-stack-lg">
+<div class="glass-card rounded-2xl p-6 md:p-8 ambient-shadow relative overflow-hidden">
+<!-- Property Thumbnail & Title -->
+<div class="flex gap-4 mb-stack-md border-b border-outline/10 pb-6">
+<div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 relative">
+<img class="w-full h-full object-cover" data-alt="A luxurious modern apartment interior in Lagos, featuring sleek furniture, warm lighting, and a stunning view of the city skyline through floor-to-ceiling windows. The aesthetic is high-end, clean, and sophisticated, reflecting a premium lifestyle." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLv_f_U7EXFxK4SJ3KtRbCeXYBpEIOA_crhtp1TuO-pjZTCz-xrlsbYuQCopf3snO-N0BHmo6-qkpDYvsM4FlB7cSqr9i2yP2U9m7HMdttrAglyOMWI2JXIg3wkjrQVlS844nfVHzQVu8-Z94KIquRTJZEEDLOS_gKlAEneBvgaFzc21lJ6jFl4yzp-DW_ejB7g3M5qoIEwHHzE5laHLYF2BGbxv6zDFmXwJsjr38d5P2eiDeaAYnvjUtTRVWmVWUTctO2IlQQZ0bA"/>
+</div>
+<div class="flex flex-col justify-center">
+<span class="font-label-caps text-label-caps text-primary-container mb-1 block">IKOYI, LAGOS</span>
+<h3 class="font-headline-md text-headline-md text-on-surface leading-tight">The Ikoyi Penthouse</h3>
+<div class="flex items-center gap-1 mt-2 text-secondary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-body-md text-sm">4.95 (120 reviews)</span>
+</div>
+</div>
+</div>
+<!-- Stay Details -->
+<div class="space-y-4 mb-stack-md border-b border-outline/10 pb-6">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-label-caps text-label-caps text-secondary block mb-1">DATES</span>
+<div class="font-body-md text-body-md text-on-surface">Oct 15 - Oct 20, 2024</div>
+</div>
+<button class="text-primary hover:text-primary-container text-sm font-medium transition-colors">Edit</button>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<span class="font-label-caps text-label-caps text-secondary block mb-1">GUESTS</span>
+<div class="font-body-md text-body-md text-on-surface">2 Guests</div>
+</div>
+</div>
+</div>
+<!-- Price Breakdown -->
+<div class="space-y-4 mb-stack-md">
+<h4 class="font-headline-sm text-lg text-on-surface mb-2">Price Details</h4>
+<div class="flex justify-between text-body-md">
+<span class="text-secondary">₦250,000 x 5 nights</span>
+<span class="text-on-surface">₦1,250,000</span>
+</div>
+<div class="flex justify-between text-body-md">
+<span class="text-secondary flex items-center gap-1">Cleaning fee <span class="material-symbols-outlined text-[16px] cursor-help" style="font-variation-settings: 'FILL' 0;">info</span></span>
+<span class="text-on-surface">₦45,000</span>
+</div>
+<div class="flex justify-between text-body-md">
+<span class="text-secondary flex items-center gap-1">Service fee <span class="material-symbols-outlined text-[16px] cursor-help" style="font-variation-settings: 'FILL' 0;">info</span></span>
+<span class="text-on-surface">₦150,000</span>
+</div>
+<div class="flex justify-between text-body-md">
+<span class="text-secondary flex items-center gap-1">Taxes <span class="material-symbols-outlined text-[16px] cursor-help" style="font-variation-settings: 'FILL' 0;">info</span></span>
+<span class="text-on-surface">₦85,000</span>
+</div>
+</div>
+<!-- Total -->
+<div class="border-t border-outline/20 pt-6 mb-stack-md flex justify-between items-end">
+<span class="font-headline-sm text-headline-sm text-on-surface">Total (NGN)</span>
+<span class="font-headline-md text-headline-md text-primary-container">₦1,530,000</span>
+</div>
+<!-- Action Button -->
+<button class="w-full btn-gold rounded-full py-4 px-6 font-label-caps text-label-caps tracking-widest text-on-surface-variant flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">lock</span>
+                            CONFIRM AND PAY
+                        </button>
+<p class="text-center font-body-md text-sm text-secondary mt-4">
+                            You won't be charged until you confirm.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer intentionally omitted for focused checkout flow -->
+</body></html>
