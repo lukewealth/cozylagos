@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { MapIcon, HandRaisedIcon, BriefcaseIcon, CalendarIcon, ArrowRight, Compass, Anchor, Utensils, Music, ShoppingBag, Building2, Waves, Sparkles, Car, Flower2, Baby } from 'lucide-react';
+import { MapIcon, Hand, BriefcaseIcon, CalendarIcon, ArrowRight, Compass, Anchor, Utensils, Music, ShoppingBag, Building2, Waves, Sparkles, Car, Flower2, Baby } from 'lucide-react';
 
 interface ExploreHubViewProps {
   setActiveTab: (tab: string) => void;
@@ -19,7 +19,7 @@ const exploreCategories = [
     id: 'vip-services',
     title: 'Lagos Assist',
     description: 'Premium concierge services, transportation, wellness, and personalized assistance',
-    icon: HandRaisedIcon,
+    icon: Hand,
     color: 'from-blue-500 to-indigo-600',
     items: ['Airport Pickup', 'Personal Driver', 'Concierge', 'Spa & Wellness', 'Personal Shopper']
   },

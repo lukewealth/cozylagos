@@ -452,24 +452,24 @@ function AppContent() {
               )}
               {(activeTab === 'overview' || activeTab === 'listings' || activeTab === 'calendar' || activeTab === 'payouts') && (
                 <OwnerDashboardView listings={listings} bookings={bookings} transactions={transactions} onAddListingClick={() => {
-                  if (currentUser?.role === 'admin' || currentUser?.role === 'super_admin') {
+                  if (currentUser?.role === 'admin' || currentUser?.role === 'super_admin' || currentUser?.role === 'service_provider') {
                     setActiveTab('wizard');
                   } else {
-                    addToast({ type: 'error', title: 'Admin Only', message: 'Only admins can create property listings.' });
+                    addToast({ type: 'error', title: 'Access Denied', message: 'Only hosts can create property listings.' });
                   }
                 }} onUpdateListingsStatus={handleUpdateListingStatus} onUpdateListing={handleUpdateListing} />
               )}
-              {activeTab === 'wizard' && (currentUser?.role === 'admin' || currentUser?.role === 'super_admin') && (
+              {activeTab === 'wizard' && (currentUser?.role === 'admin' || currentUser?.role === 'super_admin' || currentUser?.role === 'service_provider') && (
                 <ListingWizardView onPublishListing={handlePublishListing} onCancel={() => setActiveTab('listings')} />
               )}
-              {activeTab === 'wizard' && currentUser?.role !== 'admin' && currentUser?.role !== 'super_admin' && (
+              {activeTab === 'wizard' && currentUser?.role !== 'admin' && currentUser?.role !== 'super_admin' && currentUser?.role !== 'service_provider' && (
                 <div className="flex-grow flex items-center justify-center py-20">
                   <div className="text-center space-y-4 max-w-md">
                     <div className="w-16 h-16 bg-charcoal/5 rounded-full flex items-center justify-center mx-auto">
                       <ShieldAlert className="w-8 h-8 text-charcoal/40" />
                     </div>
-                    <h2 className="font-serif text-2xl font-bold text-charcoal">Admin Access Required</h2>
-                    <p className="text-sm text-charcoal/60">Property listings can only be created by administrators. Contact admin to list a property.</p>
+                    <h2 className="font-serif text-2xl font-bold text-charcoal">Host Access Required</h2>
+                    <p className="text-sm text-charcoal/60">Property listings can only be created by hosts. Register as a service provider to list properties.</p>
                     <button onClick={() => setActiveTab('home')} className="px-6 py-3 bg-charcoal text-parchment rounded-xl font-bold text-xs uppercase tracking-widest">
                       Back to Home
                     </button>

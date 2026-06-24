@@ -35,7 +35,8 @@ const SUPER_ADMIN_NAV: NavItem[] = [
 
 const PROVIDER_NAV: NavItem[] = [
   { id: 'service-dashboard', label: 'Dashboard', icon: LayoutDashboard, description: 'Your services overview' },
-  { id: 'listings', label: 'My Services', icon: Globe, description: 'Manage offerings' },
+  { id: 'listings', label: 'My Properties', icon: Globe, description: 'Manage apartments' },
+  { id: 'my-services', label: 'My Services', icon: Users, description: 'Manage offerings' },
   { id: 'calendar', label: 'Schedule', icon: BarChart3, description: 'Calendar & bookings' },
   { id: 'payouts', label: 'Earnings', icon: Key, description: 'Financial reports' },
 ];

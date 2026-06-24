@@ -117,33 +117,9 @@ export default function ServiceProviderDashboard() {
                 <Menu className="w-5 h-5" />
               </button>
             </Tooltip>
-            <span className="font-serif text-headline-sm font-bold tracking-tight text-primary hidden md:block">Elite Orchestrator</span>
-            <nav className="hidden lg:flex gap-6 items-center h-full">
-              {['My Services', 'Schedule', 'Staffing', 'Arrivals', 'Analytics'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => {
-                    const map: Record<string, ProviderSection> = { 'My Services': 'my-services', 'Schedule': 'schedule', 'Staffing': 'staffing', 'Arrivals': 'arrivals', 'Analytics': 'analytics' };
-                    setActiveSection(map[item] || 'overview');
-                  }}
-                  className="text-secondary hover:text-primary transition-colors font-body-md text-body-md"
-                >
-                  {item}
-                </button>
-              ))}
-            </nav>
+            <span className="font-serif text-headline-sm font-bold tracking-tight text-primary hidden md:block">My Dashboard</span>
           </div>
           <div className="flex items-center gap-2 md:gap-6">
-            <div className="relative hidden md:block">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-outline w-4 h-4" />
-              <input
-                className="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full text-sm focus:ring-1 focus:ring-primary w-48 lg:w-64 focus:outline-none"
-                placeholder="Search staff or assets..."
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
             <Tooltip content="Notifications" description="View alerts and updates">
               <button className="p-2 text-secondary hover:text-primary cursor-pointer transition-colors relative">
                 <Bell className="w-5 h-5" />

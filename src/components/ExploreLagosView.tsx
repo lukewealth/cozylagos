@@ -349,7 +349,7 @@ export default function ExploreLagosView({ onNavigateBundles }: { onNavigateBund
   );
 }
 
-function ExperienceCard({ item, index, onClick }: { item: ExploreItem; index: number; onClick: () => void }) {
+function ExperienceCard({ item, index, onClick }: { item: ExploreItem; index: number; onClick: () => void; key?: string | number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
