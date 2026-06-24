@@ -638,6 +638,289 @@ npm run preview  # Preview production build
 4. Create pull request with description
 5. Request review from team
 
+## UI/UX Design System & User Flow
+
+### Design Principles
+
+1. **Luxury Minimalism** - Clean, spacious layouts with gold accents
+2. **Progressive Disclosure** - Show essential info first, details on demand
+3. **Micro-interactions** - Subtle animations for feedback and delight
+4. **Accessibility** - WCAG 2.1 AA compliance with proper contrast and focus states
+5. **Responsive First** - Mobile-optimized with progressive enhancement
+
+### Color System
+
+```css
+/* Primary Palette */
+--color-primary: #735C00;              /* Gold - Primary actions */
+--color-primary-container: #D4AF37;    /* Light Gold - Highlights */
+--color-on-primary: #FFFFFF;           /* White text on primary */
+
+/* Surface Colors */
+--color-parchment: #FAF9F8;            /* Background */
+--color-surface: #FAF9F8;              /* Card surfaces */
+--color-surface-container: #EEEEED;    /* Elevated surfaces */
+
+/* Text Colors */
+--color-charcoal: #1A1C1C;             /* Primary text */
+--color-charcoal-light: #474746;       /* Secondary text */
+--color-secondary: #5F5E5E;            /* Muted text */
+
+/* Status Colors */
+--color-success: #10B981;              /* Green - Active/Success */
+--color-warning: #F59E0B;              /* Amber - Pending/Warning */
+--color-error: #BA1A1A;                /* Red - Error/Critical */
+```
+
+### Typography Scale
+
+```css
+/* Display */
+--text-display-lg: 64px;               /* Hero headlines */
+--text-headline-lg: 48px;              /* Page titles */
+--text-headline-md: 32px;              /* Section titles */
+--text-headline-sm: 24px;              /* Card titles */
+
+/* Body */
+--text-body-lg: 18px;                  /* Emphasized body */
+--text-body-md: 16px;                  /* Standard body */
+
+/* Labels */
+--text-label-caps: 12px;               /* Uppercase labels */
+```
+
+### Spacing System
+
+```css
+--spacing-unit: 8px;                   /* Base unit */
+--spacing-stack-sm: 16px;              /* Small gaps */
+--spacing-stack-md: 32px;              /* Medium gaps */
+--spacing-stack-lg: 64px;              /* Large gaps */
+--spacing-gutter: 32px;                /* Grid gutters */
+--spacing-container-padding: 80px;     /* Page padding */
+```
+
+### Component Library
+
+#### Reusable UI Components (`src/components/ui/`)
+
+1. **CollapsibleSidebar**
+   - Expandable/collapsible navigation
+   - Icon indicators with animated transitions
+   - Tooltip popups when collapsed
+   - Active state indicator with spring animation
+   - Role-specific navigation items
+
+2. **Tooltip**
+   - Position-aware (top, bottom, left, right)
+   - Animated entrance/exit
+   - Optional description text
+   - Arrow indicator
+
+3. **LoadingSpinner**
+   - Three sizes (sm, md, lg)
+   - Color variants (primary, secondary, white)
+   - Optional text label
+   - Full-screen overlay mode
+   - Smooth rotation animation
+
+4. **Button**
+   - Primary, Secondary, Ghost variants
+   - Loading state with spinner
+   - Icon support (left/right)
+   - Ripple effect on click
+   - Disabled state styling
+
+### Micro-interactions
+
+#### Page Transitions
+```typescript
+// Fade + slide up on page change
+<motion.div
+  initial={{ opacity: 0, y: 8 }}
+  animate={{ opacity: 1, y: 0 }}
+  exit={{ opacity: 0, y: -8 }}
+  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+>
+```
+
+#### Card Hover Effects
+```typescript
+// Subtle lift on hover
+<motion.div
+  whileHover={{ y: -4, boxShadow: '0 20px 50px rgba(0,0,0,0.08)' }}
+  transition={{ duration: 0.2 }}
+>
+```
+
+#### Button Press
+```typescript
+// Scale down on press
+<button className="active:scale-95 transition-transform" />
+```
+
+#### Loading States
+- Skeleton screens for content loading
+- Spinner overlays for actions
+- Progress bars for long operations
+- Shimmer animations for placeholders
+
+### User Flow by Role
+
+#### Guest User (Unauthenticated)
+```
+Landing Page → Browse Properties → View Details → Add to Cart → 
+Login/Register → Checkout → Booking Confirmation
+```
+
+**Key Features:**
+- Property search with filters
+- Image galleries with zoom
+- AI-powered recommendations
+- WhatsApp concierge integration
+- Cart persistence across sessions
+
+#### User Dashboard (Authenticated)
+```
+Login → Dashboard → My Bookings → Upcoming Trips → 
+Experience Itinerary → Concierge Chat → Points Redemption
+```
+
+**Key Features:**
+- Active trip overview with timeline
+- AI concierge chat (Amara)
+- Loyalty points wallet
+- Quick action buttons
+- Coordinator inbox
+
+#### Service Provider Dashboard
+```
+Login → Dashboard → My Services → Add/Edit Service → 
+Schedule Management → Booking Requests → Earnings → Payouts
+```
+
+**Key Features:**
+- Service catalog management
+- Calendar with drag-and-drop
+- Booking request notifications
+- Earnings tracking
+- Staff orchestration
+- Inventory management
+
+#### Admin Dashboard
+```
+Login → Dashboard → Arrival Operations → Live Stream → 
+Booking Requests → Property Management → Analytics
+```
+
+**Key Features:**
+- Arrival Operations Center
+- Live arrival stream with status
+- Security logs timeline
+- Booking confirmation/rejection
+- Property moderation
+- Revenue analytics
+
+#### Super Admin Dashboard
+```
+Login → System Control → User Management → Credentials → 
+Infrastructure Health → Critical Controls → Audit Logs
+```
+
+**Key Features:**
+- User credential management (email/password display)
+- Role-based access control
+- System health monitoring
+- Critical controls (lockout, cache flush, maintenance)
+- Infrastructure metrics
+- Audit trail
+
+### Authentication Flow
+
+1. **Login Process**
+   - User enters email + password
+   - Validate against DEMO_USERS or IndexedDB
+   - Set currentUser in AuthContext
+   - Cache in IndexedDB (24h TTL)
+   - Redirect to role-specific dashboard
+
+2. **Role-Based Routing**
+   ```typescript
+   user → 'user-dashboard'
+   service_provider → 'service-dashboard'
+   admin → 'admin-dashboard'
+   super_admin → 'super-admin-dashboard'
+   guest → 'home'
+   ```
+
+3. **Demo Credentials**
+   ```
+   Guest User: lukeokagha@gmail.com / cozy_guest_2024
+   Provider: chef@cozylagos.ng / cozy_host_2024
+   Admin: contact@tricode.pro / cozy_admin_2024
+   Super Admin: luke.o@tricode.pro / cozy_super_2024
+   Visitor: guest@cozylagos.ng / cozy_visitor_2024
+   ```
+
+### Responsive Breakpoints
+
+```css
+/* Mobile First */
+sm: 640px;   /* Large phones */
+md: 768px;   /* Tablets */
+lg: 1024px;  /* Small laptops */
+xl: 1280px;  /* Desktops */
+2xl: 1536px; /* Large screens */
+```
+
+### Accessibility Features
+
+1. **Keyboard Navigation**
+   - All interactive elements focusable
+   - Visible focus indicators
+   - Tab order follows visual hierarchy
+   - Escape closes modals/drawers
+
+2. **Screen Reader Support**
+   - Semantic HTML structure
+   - ARIA labels on icon buttons
+   - Live regions for dynamic content
+   - Descriptive alt text for images
+
+3. **Color Contrast**
+   - WCAG AA compliance (4.5:1 ratio)
+   - Never rely on color alone
+   - High contrast mode support
+
+4. **Motion Preferences**
+   - Respect `prefers-reduced-motion`
+   - Provide non-animated alternatives
+   - No flashing content
+
+### Performance Optimizations
+
+1. **Code Splitting**
+   - Route-based lazy loading
+   - Dynamic imports for heavy components
+   - Tree shaking unused code
+
+2. **Image Optimization**
+   - Lazy loading with `loading="lazy"`
+   - Responsive images with `srcset`
+   - WebP format with fallbacks
+   - Blur-up placeholder technique
+
+3. **Bundle Analysis**
+   - Keep chunks under 500KB
+   - Analyze with `rollup-plugin-visualizer`
+   - Remove unused dependencies
+
+4. **Caching Strategy**
+   - IndexedDB for offline support
+   - LocalStorage for cart persistence
+   - TTL-based cache invalidation
+   - Service Worker for assets (future)
+
 ## Support & Contact
 
 - **Email**: contact@tricode.pro
