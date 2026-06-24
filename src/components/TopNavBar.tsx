@@ -134,80 +134,38 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
             </div>
           </div>
 
-          {/* Center Links */}
-          <nav className="hidden lg:flex items-center gap-8 text-[11px] font-bold tracking-[0.15em] uppercase">
-            {!isAuthenticated ? (
+          {/* Center Links - New Navigation Structure */}
+          <nav className="hidden lg:flex items-center gap-6 text-[11px] font-bold tracking-[0.15em] uppercase">
+            {!isAuthenticated || currentUser?.role === 'user' ? (
               <>
                 <button onClick={() => setActiveTab('home')} className={`py-2 px-1 relative transition-colors ${activeTab === 'home' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  Home{activeTab === 'home' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-                <button onClick={() => setActiveTab('explorer')} className={`py-2 px-1 relative transition-colors ${activeTab === 'explorer' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  Stays{activeTab === 'explorer' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                  🏡 Lagos Gems{activeTab === 'home' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
                 <button onClick={() => setActiveTab('explore-lagos')} className={`py-2 px-1 relative transition-colors ${activeTab === 'explore-lagos' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  Explore Lagos{activeTab === 'explore-lagos' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                  🌴 Explore{activeTab === 'explore-lagos' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                </button>
+                <button onClick={() => setActiveTab('vip-services')} className={`py-2 px-1 relative transition-colors ${activeTab === 'vip-services' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
+                  🤝 Assist{activeTab === 'vip-services' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
                 <button onClick={() => setActiveTab('bundles')} className={`py-2 px-1 relative transition-colors ${activeTab === 'bundles' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  Bundles{activeTab === 'bundles' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                  ✨ Experiences{activeTab === 'bundles' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
-              </>
-            ) : currentUser?.role === 'user' ? (
-              <>
-                <button onClick={() => setActiveTab('home')} className={`py-2 px-1 relative transition-colors ${activeTab === 'home' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  Browse{activeTab === 'home' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                <button onClick={() => setActiveTab('business-lagos')} className={`py-2 px-1 relative transition-colors ${activeTab === 'business-lagos' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
+                  💼 Business{activeTab === 'business-lagos' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
-                <button onClick={() => setActiveTab('explorer')} className={`py-2 px-1 relative transition-colors ${activeTab === 'explorer' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  Stays{activeTab === 'explorer' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                <button onClick={() => setActiveTab('events')} className={`py-2 px-1 relative transition-colors ${activeTab === 'events' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
+                  📅 Events{activeTab === 'events' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
-                <button onClick={() => setActiveTab('explore-lagos')} className={`py-2 px-1 relative transition-colors ${activeTab === 'explore-lagos' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  Explore Lagos{activeTab === 'explore-lagos' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-                <button onClick={() => setActiveTab('bundles')} className={`py-2 px-1 relative transition-colors ${activeTab === 'bundles' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  Bundles{activeTab === 'bundles' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-                <button onClick={() => setActiveTab('guest-dashboard')} className={`py-2 px-1 relative transition-colors ${activeTab === 'guest-dashboard' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  My Dashboard{activeTab === 'guest-dashboard' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
+                {isAuthenticated && (
+                  <button onClick={() => setActiveTab('favorites')} className={`py-2 px-1 relative transition-colors ${activeTab === 'favorites' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
+                    ❤️ Favorites{activeTab === 'favorites' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                  </button>
+                )}
               </>
             ) : currentUser?.role === 'service_provider' ? (
-              <>
-                <button onClick={() => setActiveTab('overview')} className={`py-2 px-1 relative transition-colors ${activeTab === 'overview' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  Dashboard{activeTab === 'overview' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-                <button onClick={() => setActiveTab('listings')} className={`py-2 px-1 relative transition-colors ${activeTab === 'listings' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  My Services{activeTab === 'listings' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-                <button onClick={() => setActiveTab('calendar')} className={`py-2 px-1 relative transition-colors ${activeTab === 'calendar' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  Schedule{activeTab === 'calendar' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-                <button onClick={() => setActiveTab('payouts')} className={`py-2 px-1 relative transition-colors ${activeTab === 'payouts' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  Earnings{activeTab === 'payouts' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-              </>
-            ) : currentUser?.role === 'admin' ? (
-              <>
-                <button onClick={() => setActiveTab('admin-dashboard')} className={`py-2 px-1 relative transition-colors ${activeTab === 'admin-dashboard' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  Admin Panel{activeTab === 'admin-dashboard' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-                <button onClick={() => setActiveTab('listings')} className={`py-2 px-1 relative transition-colors ${activeTab === 'listings' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  All Properties{activeTab === 'listings' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-                <button onClick={() => setActiveTab('overview')} className={`py-2 px-1 relative transition-colors ${activeTab === 'overview' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  Analytics{activeTab === 'overview' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-              </>
-            ) : currentUser?.role === 'super_admin' ? (
-              <>
-                <button onClick={() => setActiveTab('super-admin-dashboard')} className={`py-2 px-1 relative transition-colors ${activeTab === 'super-admin-dashboard' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  Super Admin{activeTab === 'super-admin-dashboard' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-                <button onClick={() => setActiveTab('admin-dashboard')} className={`py-2 px-1 relative transition-colors ${activeTab === 'admin-dashboard' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  Management{activeTab === 'admin-dashboard' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-                <button onClick={() => setActiveTab('overview')} className={`py-2 px-1 relative transition-colors ${activeTab === 'overview' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  System Stats{activeTab === 'overview' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-              </>
+              <span className="text-charcoal/40 text-[10px]">Use sidebar for navigation</span>
+            ) : currentUser?.role === 'admin' || currentUser?.role === 'super_admin' ? (
+              <span className="text-charcoal/40 text-[10px]">Use sidebar for navigation</span>
             ) : null}
           </nav>
 
@@ -276,26 +234,24 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
             <div className="fixed inset-0 bg-charcoal/40 backdrop-blur-sm" onClick={() => setShowMobileMenu(false)} />
             <div className="fixed top-20 right-0 left-0 bg-parchment border-b border-charcoal/5 shadow-xl max-h-[75vh] overflow-y-auto rounded-b-2xl">
               <div className="p-3 space-y-1">
-                {(!isAuthenticated ? [
-                  { tab: 'home', label: 'Home' },
-                  { tab: 'explorer', label: 'Stays' },
-                  { tab: 'explore-lagos', label: 'Explore Lagos' },
-                  { tab: 'bundles', label: 'Bundles' },
-                ] : currentUser?.role === 'user' ? [
-                  { tab: 'home', label: 'Browse' },
-                  { tab: 'explorer', label: 'Stays' },
-                  { tab: 'explore-lagos', label: 'Explore Lagos' },
-                  { tab: 'bundles', label: 'Bundles' },
-                  { tab: 'guest-dashboard', label: 'My Dashboard' },
+                {(!isAuthenticated || currentUser?.role === 'user' ? [
+                  { tab: 'home', label: '🏡 Lagos Gems' },
+                  { tab: 'explore-lagos', label: '🌴 Explore Lagos' },
+                  { tab: 'vip-services', label: '🤝 Lagos Assist' },
+                  { tab: 'bundles', label: '✨ Signature Experiences' },
+                  { tab: 'business-lagos', label: '💼 Business Lagos' },
+                  { tab: 'events', label: '📅 Events' },
+                  ...(isAuthenticated ? [{ tab: 'favorites', label: '❤️ Favorites' }] : []),
+                  ...(isAuthenticated ? [{ tab: 'guest-dashboard', label: '👤 My Dashboard' }] : []),
                 ] : currentUser?.role === 'service_provider' ? [
-                  { tab: 'overview', label: 'Dashboard' },
-                  { tab: 'listings', label: 'My Services' },
-                  { tab: 'calendar', label: 'Schedule' },
-                  { tab: 'payouts', label: 'Earnings' },
+                  { tab: 'overview', label: '📊 Dashboard' },
+                  { tab: 'listings', label: '🏠 My Services' },
+                  { tab: 'calendar', label: '📅 Schedule' },
+                  { tab: 'payouts', label: '💰 Earnings' },
                 ] : currentUser?.role === 'admin' ? [
-                  { tab: 'admin-dashboard', label: 'Admin Panel' },
-                  { tab: 'listings', label: 'All Properties' },
-                  { tab: 'overview', label: 'Analytics' },
+                  { tab: 'admin-dashboard', label: '🛡️ Admin Panel' },
+                  { tab: 'listings', label: '🏠 All Properties' },
+                  { tab: 'overview', label: '📈 Analytics' },
                 ] : currentUser?.role === 'super_admin' ? [
                   { tab: 'super-admin-dashboard', label: 'Super Admin' },
                   { tab: 'admin-dashboard', label: 'Management' },

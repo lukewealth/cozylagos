@@ -23,6 +23,10 @@ import ListingWizardView from './components/ListingWizardView';
 import ConciergeHubView from './components/ConciergeHubView';
 import SmartRecommendationsView from './components/SmartRecommendationsView';
 import ServiceBundlesView from './components/ServiceBundlesView';
+import SignatureExperiencesView from './components/SignatureExperiencesView';
+import BusinessLagosView from './components/BusinessLagosView';
+import EventsView from './components/EventsView';
+import FavoritesView from './components/FavoritesView';
 import WhatsAppConcierge from './components/WhatsAppConcierge';
 import CookiesAlert from './components/PrivacyPolicy';
 import { useDatabase } from './hooks/useDatabase';
@@ -37,7 +41,7 @@ function AppContent() {
   const { addToast } = useToast();
 
   const [activeTab, setActiveTab] = useState<
-    'home' | 'explorer' | 'explore-lagos' | 'bundles' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations'
+    'home' | 'explorer' | 'explore-lagos' | 'bundles' | 'vip-services' | 'business-lagos' | 'events' | 'favorites' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations' | 'listing-detail'
   >('home');
   
   const [searchDestination, setSearchDestination] = useState<string>('');
@@ -242,7 +246,11 @@ function AppContent() {
               {activeTab === 'explore-lagos' && (
                 <ExploreLagosView onNavigateBundles={() => setActiveTab('bundles')} />
               )}
-              {activeTab === 'bundles' && <ServiceBundlesView />}
+              {activeTab === 'bundles' && <SignatureExperiencesView />}
+              {activeTab === 'vip-services' && <VIPServicesView />}
+              {activeTab === 'business-lagos' && <BusinessLagosView />}
+              {activeTab === 'events' && <EventsView />}
+              {activeTab === 'favorites' && <FavoritesView onNavigate={(tab, data) => setActiveTab(tab as any)} />}
               {activeTab === 'concierge-hub' && <ConciergeHubView />}
               {activeTab === 'smart-recommendations' && <SmartRecommendationsView />}
               {activeTab === 'guest-dashboard' && <GuestDashboard />}

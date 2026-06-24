@@ -1,91 +1,43 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, MapPin, Sparkles, TrendingUp, X, Loader2, SlidersHorizontal, Flame, Star, Clock } from 'lucide-react';
+import { Search, MapPin, Sparkles, TrendingUp, X, Loader2, Flame, Star, Clock, Home, Compass, HandHelping, Crown, Briefcase, CalendarDays } from 'lucide-react';
 import { Listing } from '../types';
+import { 
+  buildSearchIndex, 
+  searchIndex, 
+  getCategorySuggestions, 
+  getSearchHistory, 
+  addToSearchHistory, 
+  clearSearchHistory,
+  SEARCH_CATEGORIES,
+  SearchResult 
+} from '../utils/searchIndex';
 
 interface SmartSearchBarProps {
   listings: Listing[];
   onResultsChange: (results: Listing[], query: string) => void;
+  onNavigate?: (tab: string, data?: any) => void;
 }
 
-const TRENDING_SEARCHES = [
-  { label: 'Ikoyi Penthouse', icon: '🏙️', category: 'location' },
-  { label: 'Lekki Pool Villa', icon: '🏊', category: 'amenity' },
-  { label: 'Victoria Island 2BR', icon: '🌊', category: 'location' },
-  { label: 'Banana Island Luxury', icon: '🏝️', category: 'location' },
-  { label: 'Cinema Room', icon: '🎬', category: 'amenity' },
-  { label: 'Ocean View', icon: '🌅', category: 'feature' },
-  { label: 'Private Chef', icon: '👨‍🍳', category: 'service' },
-  { label: 'Under ₦200k', icon: '💰', category: 'price' },
-];
+const CATEGORY_ICONS: Record<string, React.ReactNode> = {
+  stay: <Home className="w-4 h-4" />,
+  explore: <Compass className="w-4 h-4" />,
+  assist: <HandHelping className="w-4 h-4" />,
+  experience: <Crown className="w-4 h-4" />,
+  business: <Briefcase className="w-4 h-4" />,
+  event: <CalendarDays className="w-4 h-4" />,
+};
 
-const AI_SUGGESTIONS = [
-  'Romantic getaway with ocean view',
-  'Family-friendly with pool and gym',
-  'Business trip near Victoria Island',
-  'Luxury penthouse with cinema',
-  'Budget-friendly studio in Lekki',
-  'Waterfront villa with yacht access',
-];
+const CATEGORY_COLORS: Record<string, string> = {
+  stay: 'bg-amber-100 text-amber-700',
+  explore: 'bg-emerald-100 text-emerald-700',
+  assist: 'bg-blue-100 text-blue-700',
+  experience: 'bg-purple-100 text-purple-700',
+  business: 'bg-slate-100 text-slate-700',
+  event: 'bg-rose-100 text-rose-700',
+};
 
-function tokenize(query: string): string[] {
-  return query
-    .toLowerCase()
-    .replace(/[₦,]/g, '')
-    .split(/[\s,;|]+/)
-    .map(t => t.trim())
-    .filter(t => t.length >= 2);
-}
-
-function scoreListing(listing: Listing, tokens: string[]): number {
-  if (tokens.length === 0) return 0;
-  let score = 0;
-  const searchable = [
-    { text: listing.title, weight: 10 },
-    { text: listing.location, weight: 8 },
-    { text: listing.category, weight: 6 },
-    { text: listing.description, weight: 4 },
-    { text: (listing.keywords || []).join(' '), weight: 7 },
-    { text: listing.amenities.join(' '), weight: 5 },
-  ];
-
-  for (const token of tokens) {
-    for (const { text, weight } of searchable) {
-      const lower = text.toLowerCase();
-      if (lower.includes(token)) {
-        score += weight;
-        if (lower.startsWith(token)) score += weight * 0.5;
-        if (lower === token) score += weight * 2;
-      }
-    }
-  }
-
-  // Price token handling
-  const priceToken = tokens.find(t => /^\d+$/.test(t) || t.includes('k') || t.includes('m'));
-  if (priceToken) {
-    let priceLimit = 0;
-    if (priceToken.includes('k')) priceLimit = parseInt(priceToken.replace('k', '')) * 1000;
-    else if (priceToken.includes('m')) priceLimit = parseInt(priceToken.replace('m', '')) * 1000000;
-    else if (/^\d+$/.test(priceToken)) {
-      const num = parseInt(priceToken);
-      priceLimit = num < 10000 ? num * 1000 : num;
-    }
-    if (priceLimit > 0 && listing.nightlyRate <= priceLimit) {
-      score += 15;
-    }
-  }
-
-  // Bedroom token
-  const bedToken = tokens.find(t => t.includes('br') || t.includes('bed'));
-  if (bedToken) {
-    const beds = parseInt(bedToken);
-    if (!isNaN(beds) && listing.bedrooms >= beds) score += 10;
-  }
-
-  return score;
-}
-
-export default function SmartSearchBar({ listings, onResultsChange }: SmartSearchBarProps) {
+export default function SmartSearchBar({ listings, onResultsChange, onNavigate }: SmartSearchBarProps) {
   const [query, setQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -94,6 +46,12 @@ export default function SmartSearchBar({ listings, onResultsChange }: SmartSearc
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const searchIndexData = useMemo(() => buildSearchIndex(listings), [listings]);
+
+  useEffect(() => {
+    setSearchHistory(getSearchHistory());
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -106,16 +64,18 @@ export default function SmartSearchBar({ listings, onResultsChange }: SmartSearc
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const tokens = useMemo(() => tokenize(query), [query]);
-
   const searchResults = useMemo(() => {
-    if (tokens.length === 0) return [];
-    const scored = listings
-      .map(l => ({ listing: l, score: scoreListing(l, tokens) }))
-      .filter(({ score }) => score > 0)
-      .sort((a, b) => b.score - a.score);
-    return scored.map(s => s.listing);
-  }, [tokens, listings]);
+    if (!query.trim()) return [];
+    return searchIndex(searchIndexData, query);
+  }, [query, searchIndexData]);
+
+  const categorySuggestions = useMemo(() => {
+    return getCategorySuggestions(query);
+  }, [query]);
+
+  const listingResults = useMemo(() => {
+    return searchResults.filter(r => r.category === 'stay').slice(0, 5);
+  }, [searchResults]);
 
   const handleQueryChange = (value: string) => {
     setQuery(value);
@@ -124,42 +84,67 @@ export default function SmartSearchBar({ listings, onResultsChange }: SmartSearc
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       setIsLoading(false);
-      onResultsChange(searchResults, value);
+      const listings = searchResults.filter(r => r.category === 'stay').map(r => r.data as Listing);
+      onResultsChange(listings.length > 0 ? listings : listings, value);
     }, 300);
   };
 
-  const handleTrendingClick = (label: string) => {
-    setQuery(label);
-    setIsFocused(true);
+  const handleResultClick = (result: SearchResult) => {
+    addToSearchHistory(query);
+    setIsFocused(false);
     setShowSuggestions(false);
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      const newTokens = tokenize(label);
-      const scored = listings
-        .map(l => ({ listing: l, score: scoreListing(l, newTokens) }))
-        .filter(({ score }) => score > 0)
-        .sort((a, b) => b.score - a.score);
-      onResultsChange(scored.map(s => s.listing), label);
-      setSearchHistory(prev => [label, ...prev.filter(h => h !== label)].slice(0, 5));
-    }, 400);
+
+    switch (result.action) {
+      case 'view_listing':
+        onNavigate?.('listing-detail', result.data);
+        break;
+      case 'view_bundle':
+        onNavigate?.('bundles', result.data);
+        break;
+      case 'view_service':
+        onNavigate?.('vip-services', result.data);
+        break;
+      case 'view_explore':
+        onNavigate?.('explore-lagos', result.data);
+        break;
+    }
   };
 
-  const handleSuggestionClick = (suggestion: string) => {
-    setQuery(suggestion);
-    setIsFocused(true);
+  const handleCategoryClick = (categoryId: string) => {
+    const category = SEARCH_CATEGORIES.find(c => c.id === categoryId);
+    if (category) {
+      setQuery(category.label);
+      addToSearchHistory(category.label);
+      
+      switch (categoryId) {
+        case 'stay':
+          onNavigate?.('explorer');
+          break;
+        case 'explore':
+          onNavigate?.('explore-lagos');
+          break;
+        case 'assist':
+          onNavigate?.('vip-services');
+          break;
+        case 'experience':
+          onNavigate?.('bundles');
+          break;
+        case 'business':
+          onNavigate?.('business-lagos');
+          break;
+        case 'event':
+          onNavigate?.('events');
+          break;
+      }
+    }
+    setIsFocused(false);
     setShowSuggestions(false);
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      const newTokens = tokenize(suggestion);
-      const scored = listings
-        .map(l => ({ listing: l, score: scoreListing(l, newTokens) }))
-        .filter(({ score }) => score > 0)
-        .sort((a, b) => b.score - a.score);
-      onResultsChange(scored.map(s => s.listing), suggestion);
-      setSearchHistory(prev => [suggestion, ...prev.filter(h => h !== suggestion)].slice(0, 5));
-    }, 400);
+  };
+
+  const handleHistoryClick = (historyItem: string) => {
+    setQuery(historyItem);
+    setIsFocused(true);
+    setShowSuggestions(true);
   };
 
   const clearSearch = () => {
@@ -169,23 +154,13 @@ export default function SmartSearchBar({ listings, onResultsChange }: SmartSearc
     inputRef.current?.focus();
   };
 
-  const filteredTrending = useMemo(() => {
-    if (tokens.length > 0) return [];
-    return TRENDING_SEARCHES;
-  }, [tokens]);
-
-  const filteredSuggestions = useMemo(() => {
-    if (tokens.length === 0) return AI_SUGGESTIONS;
-    return AI_SUGGESTIONS.filter(s => {
-      const lower = s.toLowerCase();
-      return tokens.some(t => lower.includes(t));
-    }).slice(0, 4);
-  }, [tokens]);
-
-  const resultCount = searchResults.length;
+  const clearHistory = () => {
+    clearSearchHistory();
+    setSearchHistory([]);
+  };
 
   return (
-    <div ref={containerRef} className="w-full max-w-3xl mx-auto relative">
+    <div ref={containerRef} className="w-full max-w-4xl mx-auto relative">
       {/* Main Search Input */}
       <div className={`relative bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-full shadow-2xl border transition-all duration-300 ${
         isFocused ? 'border-gold/40 shadow-gold/10 shadow-lg' : 'border-white/20'
@@ -202,7 +177,7 @@ export default function SmartSearchBar({ listings, onResultsChange }: SmartSearc
             value={query}
             onChange={(e) => handleQueryChange(e.target.value)}
             onFocus={() => { setIsFocused(true); setShowSuggestions(true); }}
-            placeholder="Search Lagos homes, areas, or experiences..."
+            placeholder="Stay. Explore. Get Assisted."
             className="flex-1 bg-transparent outline-none text-sm sm:text-base text-charcoal placeholder:text-charcoal/30 font-medium min-w-0"
           />
           {query && (
@@ -214,21 +189,21 @@ export default function SmartSearchBar({ listings, onResultsChange }: SmartSearc
             </button>
           )}
           <button className="hidden sm:flex items-center gap-1.5 bg-charcoal text-parchment px-4 py-2 rounded-full text-xs font-bold hover:bg-gold-dark transition-colors shrink-0">
-            <SlidersHorizontal className="w-3.5 h-3.5" />
-            Filters
+            <Search className="w-3.5 h-3.5" />
+            Search
           </button>
         </div>
 
         {/* Result count badge */}
         <AnimatePresence>
-          {query && !isLoading && (
+          {query && !isLoading && searchResults.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: -5 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
               className="absolute -top-3 right-6 bg-gold text-charcoal text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-md"
             >
-              {resultCount} {resultCount === 1 ? 'result' : 'results'}
+              {searchResults.length} {searchResults.length === 1 ? 'result' : 'results'}
             </motion.div>
           )}
         </AnimatePresence>
@@ -247,15 +222,23 @@ export default function SmartSearchBar({ listings, onResultsChange }: SmartSearc
             {/* Search History */}
             {searchHistory.length > 0 && !query && (
               <div className="p-4 border-b border-charcoal/5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Clock className="w-3.5 h-3.5 text-charcoal/40" />
-                  <span className="text-[10px] font-bold text-charcoal/40 uppercase tracking-widest">Recent</span>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-3.5 h-3.5 text-charcoal/40" />
+                    <span className="text-[10px] font-bold text-charcoal/40 uppercase tracking-widest">Recent</span>
+                  </div>
+                  <button 
+                    onClick={clearHistory}
+                    className="text-[10px] text-charcoal/40 hover:text-charcoal transition-colors"
+                  >
+                    Clear
+                  </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {searchHistory.map((h, i) => (
+                  {searchHistory.slice(0, 8).map((h, i) => (
                     <button
                       key={i}
-                      onClick={() => handleTrendingClick(h)}
+                      onClick={() => handleHistoryClick(h)}
                       className="px-3 py-1.5 bg-charcoal/5 hover:bg-charcoal/10 rounded-full text-xs text-charcoal font-medium transition-colors"
                     >
                       {h}
@@ -265,100 +248,93 @@ export default function SmartSearchBar({ listings, onResultsChange }: SmartSearc
               </div>
             )}
 
-            {/* Trending Searches */}
-            {filteredTrending.length > 0 && !query && (
-              <div className="p-4 border-b border-charcoal/5">
-                <div className="flex items-center gap-2 mb-3">
-                  <TrendingUp className="w-3.5 h-3.5 text-gold-dark" />
-                  <span className="text-[10px] font-bold text-charcoal/40 uppercase tracking-widest">Trending in Lagos</span>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {filteredTrending.map((item, i) => (
-                    <button
-                      key={i}
-                      onClick={() => handleTrendingClick(item.label)}
-                      className="flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-charcoal/5 transition-colors text-left group"
-                    >
-                      <span className="text-lg">{item.icon}</span>
-                      <span className="text-xs font-medium text-charcoal group-hover:text-gold-dark transition-colors truncate">
-                        {item.label}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* AI Suggestions */}
-            {filteredSuggestions.length > 0 && (
+            {/* Category Quick Access */}
+            {!query && (
               <div className="p-4 border-b border-charcoal/5">
                 <div className="flex items-center gap-2 mb-3">
                   <Sparkles className="w-3.5 h-3.5 text-gold-dark" />
-                  <span className="text-[10px] font-bold text-charcoal/40 uppercase tracking-widest">AI Suggestions</span>
+                  <span className="text-[10px] font-bold text-charcoal/40 uppercase tracking-widest">Browse Categories</span>
                 </div>
-                <div className="space-y-1.5">
-                  {filteredSuggestions.map((suggestion, i) => (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {SEARCH_CATEGORIES.map((cat) => (
                     <button
-                      key={i}
-                      onClick={() => handleSuggestionClick(suggestion)}
-                      className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-charcoal/5 transition-colors text-left group"
+                      key={cat.id}
+                      onClick={() => handleCategoryClick(cat.id)}
+                      className="flex items-center gap-2 p-3 rounded-xl hover:bg-charcoal/5 transition-colors text-left group"
                     >
-                      <div className="w-7 h-7 rounded-lg bg-gold/10 flex items-center justify-center shrink-0">
-                        <Sparkles className="w-3.5 h-3.5 text-gold-dark" />
+                      <span className="text-lg">{cat.icon}</span>
+                      <div className="flex-1 min-w-0">
+                        <span className="text-xs font-semibold text-charcoal group-hover:text-gold-dark transition-colors block truncate">
+                          {cat.label}
+                        </span>
+                        <span className="text-[9px] text-charcoal/40">
+                          {cat.items.length} options
+                        </span>
                       </div>
-                      <span className="text-xs font-medium text-charcoal group-hover:text-gold-dark transition-colors">
-                        {suggestion}
-                      </span>
                     </button>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Quick Results Preview */}
+            {/* Category Suggestions when searching */}
+            {query && categorySuggestions.length > 0 && categorySuggestions.length < SEARCH_CATEGORIES.length && (
+              <div className="p-4 border-b border-charcoal/5">
+                <div className="flex items-center gap-2 mb-3">
+                  <TrendingUp className="w-3.5 h-3.5 text-gold-dark" />
+                  <span className="text-[10px] font-bold text-charcoal/40 uppercase tracking-widest">Categories</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {categorySuggestions.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => handleCategoryClick(cat.id)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${CATEGORY_COLORS[cat.id]}`}
+                    >
+                      <span>{cat.icon}</span>
+                      <span>{cat.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Search Results */}
             {query && searchResults.length > 0 && (
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <Flame className="w-3.5 h-3.5 text-red-500" />
                   <span className="text-[10px] font-bold text-charcoal/40 uppercase tracking-widest">Top Matches</span>
                 </div>
-                <div className="space-y-2">
-                  {searchResults.slice(0, 4).map((listing) => (
+                <div className="space-y-1">
+                  {searchResults.slice(0, 8).map((result) => (
                     <button
-                      key={listing.id}
-                      onClick={() => {
-                        onResultsChange([listing], query);
-                        setIsFocused(false);
-                        setShowSuggestions(false);
-                      }}
+                      key={`${result.category}-${result.id}`}
+                      onClick={() => handleResultClick(result)}
                       className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-charcoal/5 transition-colors text-left group"
                     >
-                      <img
-                        src={listing.image}
-                        alt={listing.title}
-                        className="w-12 h-12 rounded-lg object-cover shrink-0"
-                      />
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${CATEGORY_COLORS[result.category]}`}>
+                        <span className="text-lg">{result.icon}</span>
+                      </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-2">
                           <span className="text-xs font-semibold text-charcoal truncate group-hover:text-gold-dark transition-colors">
-                            {listing.title}
+                            {result.title}
                           </span>
-                          <Star className="w-3 h-3 text-gold-dark fill-current shrink-0" />
-                          <span className="text-[10px] font-bold text-charcoal/60">{listing.rating}</span>
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${CATEGORY_COLORS[result.category]}`}>
+                            {result.category.toUpperCase()}
+                          </span>
                         </div>
-                        <div className="flex items-center gap-1 mt-0.5">
-                          <MapPin className="w-2.5 h-2.5 text-charcoal/40" />
-                          <span className="text-[10px] text-charcoal/50">{listing.location}</span>
-                          <span className="text-[10px] text-charcoal/30 mx-1">•</span>
-                          <span className="text-[10px] font-bold text-gold-dark">₦{listing.nightlyRate.toLocaleString()}/night</span>
-                        </div>
+                        <p className="text-[10px] text-charcoal/50 truncate mt-0.5">
+                          {result.subtitle}
+                        </p>
                       </div>
                     </button>
                   ))}
                 </div>
-                {searchResults.length > 4 && (
+                {searchResults.length > 8 && (
                   <p className="text-[10px] text-charcoal/40 text-center mt-2">
-                    +{searchResults.length - 4} more results
+                    +{searchResults.length - 8} more results
                   </p>
                 )}
               </div>
@@ -371,7 +347,7 @@ export default function SmartSearchBar({ listings, onResultsChange }: SmartSearc
                   <Search className="w-5 h-5 text-charcoal/30" />
                 </div>
                 <p className="text-sm font-semibold text-charcoal mb-1">No matches found</p>
-                <p className="text-xs text-charcoal/50">Try searching for a location, amenity, or property type</p>
+                <p className="text-xs text-charcoal/50">Try searching for stays, experiences, or services</p>
               </div>
             )}
 
@@ -382,7 +358,7 @@ export default function SmartSearchBar({ listings, onResultsChange }: SmartSearc
                   <Loader2 className="w-5 h-5 text-gold-dark animate-spin" />
                 </div>
                 <p className="text-sm font-semibold text-charcoal mb-1">Searching Lagos...</p>
-                <p className="text-xs text-charcoal/50">Finding your perfect stay</p>
+                <p className="text-xs text-charcoal/50">Finding your perfect experience</p>
               </div>
             )}
           </motion.div>
