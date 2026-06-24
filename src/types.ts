@@ -122,3 +122,127 @@ export interface ServiceBundle {
   activities: BundleActivity[];
   highlights: string[];
 }
+
+export type ArrivalStatus = 'en_route' | 'arriving' | 'checked_in' | 'awaiting_concierge' | 'departed';
+export type GuestTier = 'vip' | 'platinum' | 'gold' | 'new';
+
+export interface ArrivalRecord {
+  id: string;
+  guestName: string;
+  guestInitials: string;
+  guestTier: GuestTier;
+  listingTitle: string;
+  unitCode: string;
+  status: ArrivalStatus;
+  eta?: string;
+  checkedInAt?: string;
+  bookingId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SecurityLogEntry {
+  id: string;
+  timestamp: string;
+  type: 'access_granted' | 'service_pass' | 'auth_entry' | 'alert' | 'key_entry';
+  title: string;
+  description: string;
+  propertyRef?: string;
+  guestRef?: string;
+}
+
+export type StaffRole = 'butler' | 'concierge' | 'driver' | 'chef' | 'security' | 'housekeeping' | 'wellness' | 'photographer';
+export type StaffStatus = 'on_duty' | 'available' | 'off_duty' | 'on_leave';
+
+export interface StaffRecord {
+  id: string;
+  name: string;
+  role: StaffRole;
+  status: StaffStatus;
+  avatar?: string;
+  certifications: string[];
+  specializations: string[];
+  rating: number;
+  phone?: string;
+  email?: string;
+  availabilityFrom?: string;
+  currentAssignment?: string;
+  tenureYears: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ServiceRequest {
+  id: string;
+  title: string;
+  category: string;
+  location: string;
+  scheduledTime: string;
+  guestName?: string;
+  skillsRequired: string[];
+  priority: 'urgent' | 'high' | 'normal' | 'low';
+  assignedStaffIds: string[];
+  status: 'unassigned' | 'partially_assigned' | 'assigned' | 'in_progress' | 'completed';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface StaffScheduleEntry {
+  id: string;
+  staffId: string;
+  staffName: string;
+  role: StaffRole;
+  date: string;
+  startTime: string;
+  endTime: string;
+  shiftType: 'day' | 'night' | 'event' | 'off';
+  assignmentTitle?: string;
+  assignmentType?: 'arrival_pickup' | 'dinner_transfer' | 'escort' | 'catering' | 'maintenance' | 'general';
+  hasConflict?: boolean;
+  createdAt: string;
+}
+
+export interface TimeOffRequest {
+  id: string;
+  staffId: string;
+  staffName: string;
+  staffInitials: string;
+  type: 'sick_leave' | 'annual_leave' | 'personal' | 'emergency';
+  startDate: string;
+  endDate: string;
+  reason: string;
+  status: 'pending' | 'approved' | 'denied';
+  requestedAt: string;
+  reviewedAt?: string;
+}
+
+export type AssetCategory = 'fleet' | 'culinary' | 'comms_security' | 'tech' | 'access';
+export type AssetStatus = 'available' | 'in_use' | 'service_required' | 'maintenance' | 'decommissioned';
+
+export interface AssetRecord {
+  id: string;
+  name: string;
+  category: AssetCategory;
+  status: AssetStatus;
+  assetCode: string;
+  image?: string;
+  assignedTo?: string;
+  lastServiceDate?: string;
+  tags: string[];
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface StaffAssetAssignment {
+  id: string;
+  staffId: string;
+  staffName: string;
+  staffAvatar?: string;
+  assetId: string;
+  assetCode: string;
+  missionContext: string;
+  checkoutTime: string;
+  status: 'active' | 'on_site' | 'returned';
+  createdAt: string;
+}

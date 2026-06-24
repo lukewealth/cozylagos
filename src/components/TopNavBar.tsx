@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { User, Bell, ChevronRight, ShoppingCart, LogIn, LogOut, Menu, X, Shield, Eye, EyeOff, Check } from 'lucide-react';
-import { useAuth } from '../auth';
+import { useAuth, getDefaultDashboardTab } from '../auth';
 import { PrivacyPolicyModal } from './PrivacyPolicy';
 
 interface TopNavBarProps {
@@ -32,6 +32,15 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  React.useEffect(() => {
+    if (isAuthenticated && currentUser) {
+      const defaultTab = getDefaultDashboardTab(currentUser.role);
+      if (activeTab === 'home' && currentUser.role !== 'guest') {
+        setActiveTab(defaultTab);
+      }
+    }
+  }, [isAuthenticated, currentUser]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
@@ -49,9 +58,8 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
       setLoginPassword('');
       setLoginError('');
       setPrivacyAccepted(false);
-      setActiveTab(currentUser?.role === 'user' ? 'home' : 'overview');
     } else {
-      setLoginError('Invalid credentials. Please try again.');
+      setLoginError('Invalid email or password. Please try again.');
     }
   };
 
@@ -463,20 +471,28 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
               {loginStep === 'login' && (
                 <div className="mt-6 pt-6 border-t border-charcoal/10">
                   <p className="text-[10px] text-charcoal/50 text-center mb-3">Quick Demo Access:</p>
-                  <div className="grid grid-cols-2 gap-2 text-[9px]">
+                  <div className="grid grid-cols-1 gap-2 text-[9px]">
                     {[
-                      { role: 'Guest', email: 'lukeokagha@gmail.com' },
-                      { role: 'Admin', email: 'contact@tricode.pro' },
-                      { role: 'Super Admin', email: 'luke.o@tricode.pro' },
-                      { role: 'Host', email: 'chef@cozylagos.ng' },
-                    ].map(({ role, email }) => (
+                      { role: 'Guest User', email: 'lukeokagha@gmail.com', password: 'cozy_guest_2024', desc: 'Browse & book stays' },
+                      { role: 'Service Provider', email: 'chef@cozylagos.ng', password: 'cozy_host_2024', desc: 'Manage services & earnings' },
+                      { role: 'Admin', email: 'contact@tricode.pro', password: 'cozy_admin_2024', desc: 'Platform management' },
+                      { role: 'Super Admin', email: 'luke.o@tricode.pro', password: 'cozy_super_2024', desc: 'Full system control' },
+                    ].map(({ role, email, password, desc }) => (
                       <button
                         key={email}
-                        onClick={() => { setLoginEmail(email); setLoginPassword('demo'); }}
-                        className="p-2.5 bg-charcoal/5 hover:bg-charcoal/10 rounded-lg text-left transition-colors"
+                        onClick={() => { setLoginEmail(email); setLoginPassword(password); }}
+                        className="p-3 bg-charcoal/5 hover:bg-charcoal/10 rounded-lg text-left transition-colors flex justify-between items-center group"
                       >
-                        <div className="font-bold text-charcoal">{role}</div>
-                        <div className="text-charcoal/60 truncate">{email}</div>
+                        <div>
+                          <div className="font-bold text-charcoal flex items-center gap-2">
+                            {role}
+                            <span className="text-[8px] font-normal text-charcoal/50">({desc})</span>
+                          </div>
+                          <div className="text-charcoal/60 truncate">{email}</div>
+                        </div>
+                        <div className="text-[8px] text-charcoal/40 group-hover:text-gold-dark transition-colors">
+                          Click to fill
+                        </div>
                       </button>
                     ))}
                   </div>

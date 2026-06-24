@@ -1,1 +1,26 @@
 node_modules/
+dist/
+.DS_Store
+*.zip
+*.mp4
+
+# Root-level bundle images (copies live in public/assets/bundles/)
+Bundles Background.jpeg
+Business Bundle.png
+Diaspora Bundle.png
+Edu - Care Package.png
+Executive Elite Package.png
+Lagos Premium Bundle.png
+Tourist Bundle.png
+
+# Root-level reference images
+Home HQ1.jpg
+Home oage.jpg
+Mobile.jpg
+apartment booking flow .jpg
+home HQ.jpg
+moib.jpg
+property search .jpg
+
+# Admin/Service Provider HTML exports
+Admin and service Provider/

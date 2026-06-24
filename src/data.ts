@@ -609,7 +609,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Corporate Executive",
     description: "Designed for the corporate leader who requires zero distractions and maximum efficiency.",
     icon: "briefcase",
-    image: "/assets/images/horizontal/IMG-20260621-WA0164.jpg",
+    image: "/assets/bundles/business-bundle.png",
     highlights: [
       "24/7 Dedicated IT Support",
       "Executive SUV with Chauffeur",
@@ -679,7 +679,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Reconnect with Lagos",
     description: "Reconnect with Lagos, beautifully.",
     icon: "globe",
-    image: "/assets/images/horizontal/IMG-20260621-WA0173.jpg",
+    image: "/assets/bundles/diaspora-bundle.png",
     highlights: [
       "Private Cultural Tour Guide",
       "Professional Photography Sessions",
@@ -755,7 +755,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Hassle-Free Discovery",
     description: "Discover the best of Lagos, hassle-free.",
     icon: "map",
-    image: "/assets/images/vertical/IMG-20260621-WA0041.jpg",
+    image: "/assets/bundles/tourist-bundle.png",
     highlights: [
       "Curated Local Experiences",
       "Guided City Tours",
@@ -824,7 +824,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Total Mobility",
     description: "Zero downtime. Total mobility.",
     icon: "crown",
-    image: "/assets/images/vertical/IMG-20260621-WA0038.jpg",
+    image: "/assets/bundles/executive-elite-bundle.png",
     highlights: [
       "Private Jet Charter Flights",
       "Presidential Suite Accommodation",
@@ -896,7 +896,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Families & Sabbaticals",
     description: "Relocation and educational support for the whole family.",
     icon: "graduation",
-    image: "/assets/images/vertical/IMG-20260621-WA0043.jpg",
+    image: "/assets/bundles/edu-care-bundle.png",
     highlights: [
       "School Placement Consultations",
       "Family Health Insurance Coverage",
@@ -963,7 +963,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Romance & Milestones",
     description: "Milestone moments, perfected.",
     icon: "heart",
-    image: "/assets/images/vertical/IMG-20260621-WA0044.jpg",
+    image: "/assets/bundles/lagos-premium-bundle.png",
     highlights: [
       "Full Event Planning Service",
       "Private Yacht Cruise",
@@ -1040,7 +1040,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Wellness & Nightlife",
     description: "Sophisticated escapism.",
     icon: "sparkles",
-    image: "/assets/images/vertical/IMG-20260621-WA0045.jpg",
+    image: "/assets/bundles/lagos-premium-bundle.png",
     highlights: [
       "In-Room Spa Treatments",
       "Resort Day Passes",

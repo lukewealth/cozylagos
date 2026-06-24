@@ -461,7 +461,7 @@ export default function ServiceBundlesView() {
             animate={{ scale: 1 }}
             transition={{ duration: 8, ease: [0.16, 1, 0.3, 1] }}
             className="w-full h-full object-cover opacity-40 select-none pointer-events-none"
-            src="/assets/images/horizontal/Premium bondle.jpg"
+            src="/assets/bundles/bundles-hero-background.jpeg"
             alt="Premium bundles"
             onError={(e) => { (e.target as HTMLImageElement).src = '/assets/images/horizontal/CozyLagos.jpeg'; }}
           />
