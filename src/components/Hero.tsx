@@ -103,7 +103,7 @@ export default function Hero({ children }: HeroProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          <div className="flex items-center justify-center gap-2 mb-6">
+          <div className="flex items-center justify-center gap-2 mb-4">
             <div className="w-12 h-[1px] bg-gold/50" />
             <span className="text-gold-light text-[10px] md:text-xs font-bold tracking-[0.4em] uppercase">
               Exquisite Lagos Living
@@ -111,7 +111,7 @@ export default function Hero({ children }: HeroProps) {
             <div className="w-12 h-[1px] bg-gold/50" />
           </div>
 
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-7xl xl:text-8xl text-white mb-5 sm:mb-6 md:mb-8 drop-shadow-2xl leading-[1.1]">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-7xl xl:text-8xl text-white mb-4 sm:mb-5 md:mb-6 drop-shadow-2xl leading-[1.1]">
             Find Your Perfect <br /> <span className="text-gold-light italic">Sanctuary</span>
           </h1>
 
@@ -119,7 +119,7 @@ export default function Hero({ children }: HeroProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 1 }}
-            className="text-white/80 text-xs sm:text-sm md:text-lg xl:text-xl font-light mb-6 sm:mb-8 md:mb-12 max-w-2xl mx-auto drop-shadow-md leading-relaxed px-4"
+            className="text-white/80 text-xs sm:text-sm md:text-lg xl:text-xl font-light mb-4 sm:mb-6 md:mb-8 max-w-2xl mx-auto drop-shadow-md leading-relaxed px-4"
           >
             Experience the pinnacle of luxury through our curated collection of Lagos' most prestigious residences.
           </motion.p>
@@ -129,6 +129,7 @@ export default function Hero({ children }: HeroProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.8 }}
+          className="-mt-2 sm:-mt-4"
         >
           {children}
         </motion.div>
@@ -138,7 +139,7 @@ export default function Hero({ children }: HeroProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.6 }}
-          className="mt-8 md:mt-10 flex items-center justify-center"
+          className="mt-6 md:mt-8 flex items-center justify-center"
         >
           <div className="inline-flex items-center bg-white/10 backdrop-blur-md rounded-full p-1 border border-white/20">
             <button

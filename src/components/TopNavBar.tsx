@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { User, Bell, ChevronRight, ShoppingCart, LogIn, LogOut, Menu, X, Shield, Eye, EyeOff, Check } from 'lucide-react';
+import { HomeIcon, MapIcon, HandRaisedIcon, CubeIcon, SparklesIcon, BriefcaseIcon, CalendarIcon, HeartIcon } from '@heroicons/react/24/outline';
 import { useAuth, getDefaultDashboardTab } from '../auth';
 import { PrivacyPolicyModal } from './PrivacyPolicy';
 import Tooltip from './ui/Tooltip';
@@ -138,30 +139,70 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
           <nav className="hidden lg:flex items-center gap-6 text-[11px] font-bold tracking-[0.15em] uppercase">
             {!isAuthenticated || currentUser?.role === 'user' ? (
               <>
-                <button onClick={() => setActiveTab('home')} className={`py-2 px-1 relative transition-colors ${activeTab === 'home' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  🏡 Lagos Gems{activeTab === 'home' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                <button 
+                  onClick={() => setActiveTab('home')} 
+                  className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'home' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+                >
+                  <HomeIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'home' ? 'text-gold-dark' : ''}`} />
+                  <span>Lagos Gems</span>
+                  {activeTab === 'home' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
-                <button onClick={() => setActiveTab('explore-lagos')} className={`py-2 px-1 relative transition-colors ${activeTab === 'explore-lagos' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  🌴 Explore{activeTab === 'explore-lagos' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                <button 
+                  onClick={() => setActiveTab('explore-lagos')} 
+                  className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'explore-lagos' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+                >
+                  <MapIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'explore-lagos' ? 'text-gold-dark' : ''}`} />
+                  <span>Explore</span>
+                  {activeTab === 'explore-lagos' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
-                <button onClick={() => setActiveTab('vip-services')} className={`py-2 px-1 relative transition-colors ${activeTab === 'vip-services' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  🤝 Assist{activeTab === 'vip-services' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                <button 
+                  onClick={() => setActiveTab('vip-services')} 
+                  className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'vip-services' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+                >
+                  <HandRaisedIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'vip-services' ? 'text-gold-dark' : ''}`} />
+                  <span>Assist</span>
+                  {activeTab === 'vip-services' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
-                <button onClick={() => setActiveTab('bundles')} className={`py-2 px-1 relative transition-colors ${activeTab === 'bundles' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  📦 Bundles{activeTab === 'bundles' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                <button 
+                  onClick={() => setActiveTab('bundles')} 
+                  className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'bundles' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+                >
+                  <CubeIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'bundles' ? 'text-gold-dark' : ''}`} />
+                  <span>Bundles</span>
+                  {activeTab === 'bundles' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
-                <button onClick={() => setActiveTab('signature-experiences')} className={`py-2 px-1 relative transition-colors ${activeTab === 'signature-experiences' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  ✨ Experiences{activeTab === 'signature-experiences' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                <button 
+                  onClick={() => setActiveTab('signature-experiences')} 
+                  className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'signature-experiences' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+                >
+                  <SparklesIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'signature-experiences' ? 'text-gold-dark' : ''}`} />
+                  <span>Experiences</span>
+                  {activeTab === 'signature-experiences' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
-                <button onClick={() => setActiveTab('business-lagos')} className={`py-2 px-1 relative transition-colors ${activeTab === 'business-lagos' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  💼 Business{activeTab === 'business-lagos' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                <button 
+                  onClick={() => setActiveTab('business-lagos')} 
+                  className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'business-lagos' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+                >
+                  <BriefcaseIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'business-lagos' ? 'text-gold-dark' : ''}`} />
+                  <span>Business</span>
+                  {activeTab === 'business-lagos' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
-                <button onClick={() => setActiveTab('events')} className={`py-2 px-1 relative transition-colors ${activeTab === 'events' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  📅 Events{activeTab === 'events' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                <button 
+                  onClick={() => setActiveTab('events')} 
+                  className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'events' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+                >
+                  <CalendarIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'events' ? 'text-gold-dark' : ''}`} />
+                  <span>Events</span>
+                  {activeTab === 'events' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
                 {isAuthenticated && (
-                  <button onClick={() => setActiveTab('favorites')} className={`py-2 px-1 relative transition-colors ${activeTab === 'favorites' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                    ❤️ Favorites{activeTab === 'favorites' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                  <button 
+                    onClick={() => setActiveTab('favorites')} 
+                    className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'favorites' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+                  >
+                    <HeartIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'favorites' ? 'text-gold-dark' : ''}`} />
+                    <span>Favorites</span>
+                    {activeTab === 'favorites' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                   </button>
                 )}
               </>
@@ -238,37 +279,38 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
             <div className="fixed top-20 right-0 left-0 bg-parchment border-b border-charcoal/5 shadow-xl max-h-[75vh] overflow-y-auto rounded-b-2xl">
               <div className="p-3 space-y-1">
                 {(!isAuthenticated || currentUser?.role === 'user' ? [
-                  { tab: 'home', label: '🏡 Lagos Gems' },
-                  { tab: 'explore-lagos', label: '🌴 Explore Lagos' },
-                  { tab: 'vip-services', label: '🤝 Lagos Assist' },
-                  { tab: 'bundles', label: '📦 Bundles' },
-                  { tab: 'signature-experiences', label: '✨ Signature Experiences' },
-                  { tab: 'business-lagos', label: '💼 Business Lagos' },
-                  { tab: 'events', label: '📅 Events' },
-                  ...(isAuthenticated ? [{ tab: 'favorites', label: '❤️ Favorites' }] : []),
-                  ...(isAuthenticated ? [{ tab: 'guest-dashboard', label: '👤 My Dashboard' }] : []),
+                  { tab: 'home', label: 'Lagos Gems', icon: HomeIcon },
+                  { tab: 'explore-lagos', label: 'Explore Lagos', icon: MapIcon },
+                  { tab: 'vip-services', label: 'Lagos Assist', icon: HandRaisedIcon },
+                  { tab: 'bundles', label: 'Bundles', icon: CubeIcon },
+                  { tab: 'signature-experiences', label: 'Signature Experiences', icon: SparklesIcon },
+                  { tab: 'business-lagos', label: 'Business Lagos', icon: BriefcaseIcon },
+                  { tab: 'events', label: 'Events', icon: CalendarIcon },
+                  ...(isAuthenticated ? [{ tab: 'favorites', label: 'Favorites', icon: HeartIcon }] : []),
+                  ...(isAuthenticated ? [{ tab: 'guest-dashboard', label: 'My Dashboard', icon: User }] : []),
                 ] : currentUser?.role === 'service_provider' ? [
-                  { tab: 'overview', label: '📊 Dashboard' },
-                  { tab: 'listings', label: '🏠 My Services' },
-                  { tab: 'calendar', label: '📅 Schedule' },
-                  { tab: 'payouts', label: '💰 Earnings' },
+                  { tab: 'overview', label: 'Dashboard', icon: HomeIcon },
+                  { tab: 'listings', label: 'My Services', icon: HomeIcon },
+                  { tab: 'calendar', label: 'Schedule', icon: CalendarIcon },
+                  { tab: 'payouts', label: 'Earnings', icon: BriefcaseIcon },
                 ] : currentUser?.role === 'admin' ? [
-                  { tab: 'admin-dashboard', label: '🛡️ Admin Panel' },
-                  { tab: 'listings', label: '🏠 All Properties' },
-                  { tab: 'overview', label: '📈 Analytics' },
+                  { tab: 'admin-dashboard', label: 'Admin Panel', icon: Shield },
+                  { tab: 'listings', label: 'All Properties', icon: HomeIcon },
+                  { tab: 'overview', label: 'Analytics', icon: BriefcaseIcon },
                 ] : currentUser?.role === 'super_admin' ? [
-                  { tab: 'super-admin-dashboard', label: 'Super Admin' },
-                  { tab: 'admin-dashboard', label: 'Management' },
-                  { tab: 'overview', label: 'System Stats' },
-                ] : []).map(({ tab, label }) => (
+                  { tab: 'super-admin-dashboard', label: 'Super Admin', icon: Shield },
+                  { tab: 'admin-dashboard', label: 'Management', icon: Shield },
+                  { tab: 'overview', label: 'System Stats', icon: BriefcaseIcon },
+                ] : []).map(({ tab, label, icon: Icon }) => (
                   <button
                     key={tab}
                     onClick={() => { setActiveTab(tab); setShowMobileMenu(false); }}
-                    className={`w-full text-left px-4 py-3.5 rounded-lg text-sm font-bold tracking-wider uppercase transition-colors ${
+                    className={`w-full text-left px-4 py-3.5 rounded-lg text-sm font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-3 group ${
                       activeTab === tab ? 'bg-gold/10 text-gold-dark' : 'text-charcoal hover:bg-charcoal/5'
                     }`}
                   >
-                    {label}
+                    <Icon className={`w-5 h-5 transition-transform duration-300 group-hover:scale-125 ${activeTab === tab ? 'text-gold-dark' : ''}`} />
+                    <span>{label}</span>
                   </button>
                 ))}
               </div>

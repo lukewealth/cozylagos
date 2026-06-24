@@ -10,8 +10,9 @@ import {
   Wifi, Calendar, Trophy, Drum, Gift,
   Grid3X3, List, X, ChevronRight, Check, Package, ArrowRight, LayoutGrid,
   SlidersHorizontal, Filter, Search, TrendingUp, Flame, Zap, Crown, Globe,
-  Anchor, Waves, Home, Hotel, Tent as BeachTent, Sun, Moon, Cloud
+  Anchor, Waves, Home, Hotel, Tent as BeachTent, Sun, Moon, Cloud, Hand
 } from 'lucide-react';
+import { HandRaisedIcon } from '@heroicons/react/24/outline';
 import { SERVICE_BUNDLES } from '../data';
 
 interface CategoryItem {
@@ -217,8 +218,9 @@ const categories: Category[] = [
 export default function ExploreLagosView({ onNavigateBundles }: { onNavigateBundles: () => void }) {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [selectedItem, setSelectedItem] = useState<CategoryItem | null>(null);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'horizontal'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState<'discover' | 'assist'>('discover');
 
   const filteredCategories = activeCategory === 'all' 
     ? categories 
@@ -306,13 +308,64 @@ export default function ExploreLagosView({ onNavigateBundles }: { onNavigateBund
         </div>
       </section>
 
-      {/* Category Navigation */}
+      {/* Category Navigation with Discover/Assist Tabs */}
       <section className="sticky top-20 z-30 bg-parchment/95 backdrop-blur-xl border-b border-charcoal/5 shadow-sm">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20 py-4">
+          {/* Discover / Get Assisted Tabs */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setActiveTab('discover')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 ${
+                  activeTab === 'discover'
+                    ? 'bg-charcoal text-parchment'
+                    : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
+                }`}
+              >
+                <Compass className="w-4 h-4" />
+                <span>Discover</span>
+              </button>
+              <button
+                onClick={() => setActiveTab('assist')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 ${
+                  activeTab === 'assist'
+                    ? 'bg-charcoal text-parchment'
+                    : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
+                }`}
+              >
+                <HandRaisedIcon className="w-4 h-4" />
+                <span>Get Assisted</span>
+              </button>
+            </div>
+            
+            {/* View Mode Selector */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-2 rounded-lg transition-all duration-300 hover:scale-110 ${viewMode === 'grid' ? 'bg-charcoal text-parchment' : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'}`}
+              >
+                <Grid3X3 className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-2 rounded-lg transition-all duration-300 hover:scale-110 ${viewMode === 'list' ? 'bg-charcoal text-parchment' : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'}`}
+              >
+                <List className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setViewMode('horizontal')}
+                className={`p-2 rounded-lg transition-all duration-300 hover:scale-110 ${viewMode === 'horizontal' ? 'bg-charcoal text-parchment' : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'}`}
+              >
+                <LayoutGrid className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Category Filters */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
             <button
               onClick={() => setActiveCategory('all')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-300 hover:scale-105 ${
                 activeCategory === 'all'
                   ? 'bg-charcoal text-parchment'
                   : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
@@ -325,7 +378,7 @@ export default function ExploreLagosView({ onNavigateBundles }: { onNavigateBund
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-300 hover:scale-105 ${
                   activeCategory === cat.id
                     ? 'bg-charcoal text-parchment'
                     : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
@@ -408,11 +461,62 @@ export default function ExploreLagosView({ onNavigateBundles }: { onNavigateBund
                 onClick={() => setSelectedItem(item)}
                 className="group cursor-pointer"
               >
-                <div className="bg-parchment border border-charcoal/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+                <div className="bg-parchment border border-charcoal/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
                   <div className={`relative h-48 bg-gradient-to-br ${item.gradient} overflow-hidden`}>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                     <div className="absolute top-4 left-4">
-                      <div className="bg-white/20 backdrop-blur-md p-2 rounded-lg">
+                      <div className="bg-white/20 backdrop-blur-md p-2 rounded-lg group-hover:scale-110 transition-transform duration-300">
+                        {item.icon}
+                      </div>
+                    </div>
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <h3 className="font-serif text-xl font-bold text-white mb-1">{item.title}</h3>
+                      <div className="flex items-center gap-2 text-white/80 text-xs">
+                        <MapPin className="w-3 h-3" />
+                        <span>{item.location}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-xs text-charcoal/60 mb-3 line-clamp-2">{item.description}</p>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 text-gold-dark fill-current" />
+                        <span className="text-sm font-bold text-charcoal">{item.rating}</span>
+                      </div>
+                      <span className="text-sm font-bold text-gold-dark">{item.price}</span>
+                    </div>
+                    {item.highlights && (
+                      <div className="flex flex-wrap gap-1">
+                        {item.highlights.slice(0, 2).map((h, i) => (
+                          <span key={i} className="text-[9px] font-medium text-charcoal/50 bg-charcoal/5 px-2 py-0.5 rounded-full">
+                            {h}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        ) : viewMode === 'horizontal' ? (
+          <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+            {searchedItems.map((item, index) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                onClick={() => setSelectedItem(item)}
+                className="group cursor-pointer flex-shrink-0 w-80"
+              >
+                <div className="bg-parchment border border-charcoal/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
+                  <div className={`relative h-48 bg-gradient-to-br ${item.gradient} overflow-hidden`}>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <div className="absolute top-4 left-4">
+                      <div className="bg-white/20 backdrop-blur-md p-2 rounded-lg group-hover:scale-110 transition-transform duration-300">
                         {item.icon}
                       </div>
                     </div>
@@ -459,9 +563,9 @@ export default function ExploreLagosView({ onNavigateBundles }: { onNavigateBund
                 onClick={() => setSelectedItem(item)}
                 className="group cursor-pointer"
               >
-                <div className="bg-parchment border border-charcoal/5 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex">
+                <div className="bg-parchment border border-charcoal/5 rounded-xl overflow-hidden shadow-sm hover:shadow-lg hover:scale-[1.01] transition-all duration-300 flex">
                   <div className={`w-32 sm:w-48 bg-gradient-to-br ${item.gradient} flex items-center justify-center shrink-0`}>
-                    <div className="text-white/80">{item.icon}</div>
+                    <div className="text-white/80 group-hover:scale-110 transition-transform duration-300">{item.icon}</div>
                   </div>
                   <div className="flex-1 p-4">
                     <div className="flex items-start justify-between mb-2">
