@@ -1,24 +1,25 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { Calendar, MapPin, Clock, Ticket, Filter, ChevronRight, Star, Users, Music, Theater, Briefcase, Utensils, Baby, Trophy, Waves } from 'lucide-react';
+import { CalendarIcon, MusicalNoteIcon, FireIcon, PaintBrushIcon, BriefcaseIcon, MoonIcon, ArrowPathIcon, ClockIcon, SparklesIcon, FlagIcon } from '@heroicons/react/24/outline';
 import { LAGOS_EVENTS, LagosEvent } from '../data-new-sections';
 
 const CATEGORY_FILTERS = [
-  { id: 'all', label: 'All Events', icon: '📅' },
-  { id: 'concert', label: 'Concerts', icon: '🎵' },
-  { id: 'festival', label: 'Festivals', icon: '🎉' },
-  { id: 'exhibition', label: 'Exhibitions', icon: '🎨' },
-  { id: 'conference', label: 'Conferences', icon: '💼' },
-  { id: 'nightlife', label: 'Nightlife', icon: '🌙' },
-  { id: 'weekly', label: 'Weekly', icon: '🔄' },
+  { id: 'all', label: 'All Events', icon: CalendarIcon },
+  { id: 'concert', label: 'Concerts', icon: MusicalNoteIcon },
+  { id: 'festival', label: 'Festivals', icon: FireIcon },
+  { id: 'exhibition', label: 'Exhibitions', icon: PaintBrushIcon },
+  { id: 'conference', label: 'Conferences', icon: BriefcaseIcon },
+  { id: 'nightlife', label: 'Nightlife', icon: MoonIcon },
+  { id: 'weekly', label: 'Weekly', icon: ArrowPathIcon },
 ];
 
 const TIME_FILTERS = [
-  { id: 'today', label: 'Today', icon: '📆' },
-  { id: 'weekend', label: 'This Weekend', icon: '🎊' },
-  { id: 'week', label: 'This Week', icon: '📅' },
-  { id: 'month', label: 'This Month', icon: '🗓️' },
-  { id: 'annual', label: 'Annual Events', icon: '🎆' },
+  { id: 'today', label: 'Today', icon: ClockIcon },
+  { id: 'weekend', label: 'This Weekend', icon: SparklesIcon },
+  { id: 'week', label: 'This Week', icon: CalendarIcon },
+  { id: 'month', label: 'This Month', icon: FlagIcon },
+  { id: 'annual', label: 'Annual Events', icon: FireIcon },
 ];
 
 function getEventDate(event: LagosEvent): Date {
@@ -216,7 +217,7 @@ export default function EventsView() {
             transition={{ duration: 0.8 }}
             className="flex items-center gap-3 mb-4"
           >
-            <Calendar className="w-6 h-6 text-gold" />
+            <CalendarIcon className="w-6 h-6 text-gold" />
             <span className="text-gold text-[10px] font-bold tracking-[0.4em] uppercase">
               What's Happening
             </span>
@@ -247,7 +248,7 @@ export default function EventsView() {
             {todayEvents.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">📆</span>
+                  <ClockIcon className="w-6 h-6 text-gold-dark" />
                   <h3 className="font-serif text-xl font-bold text-charcoal">Happening Today</h3>
                   <span className="px-2 py-0.5 bg-red-100 text-red-700 text-[10px] font-bold rounded-full">
                     {todayEvents.length}
@@ -269,7 +270,7 @@ export default function EventsView() {
             {weekendEvents.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">🎊</span>
+                  <SparklesIcon className="w-6 h-6 text-gold-dark" />
                   <h3 className="font-serif text-xl font-bold text-charcoal">This Weekend</h3>
                   <span className="px-2 py-0.5 bg-gold/20 text-gold-dark text-[10px] font-bold rounded-full">
                     {weekendEvents.length}
@@ -305,23 +306,26 @@ export default function EventsView() {
                   : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
               }`}
             >
-              <Calendar className="w-4 h-4" />
+              <CalendarIcon className="w-4 h-4" />
               <span>All Time</span>
             </button>
-            {TIME_FILTERS.map((filter) => (
-              <button
-                key={filter.id}
-                onClick={() => setSelectedTime(filter.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
-                  selectedTime === filter.id
-                    ? 'bg-charcoal text-parchment'
-                    : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
-                }`}
-              >
-                <span>{filter.icon}</span>
-                <span>{filter.label}</span>
-              </button>
-            ))}
+            {TIME_FILTERS.map((filter) => {
+              const Icon = filter.icon;
+              return (
+                <button
+                  key={filter.id}
+                  onClick={() => setSelectedTime(filter.id)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
+                    selectedTime === filter.id
+                      ? 'bg-charcoal text-parchment'
+                      : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{filter.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -336,20 +340,23 @@ export default function EventsView() {
             </h2>
           </div>
           <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 w-full sm:w-auto">
-            {CATEGORY_FILTERS.map((filter) => (
-              <button
-                key={filter.id}
-                onClick={() => setSelectedCategory(filter.id)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
-                  selectedCategory === filter.id
-                    ? 'bg-charcoal text-parchment'
-                    : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
-                }`}
-              >
-                <span>{filter.icon}</span>
-                <span>{filter.label}</span>
-              </button>
-            ))}
+            {CATEGORY_FILTERS.map((filter) => {
+              const Icon = filter.icon;
+              return (
+                <button
+                  key={filter.id}
+                  onClick={() => setSelectedCategory(filter.id)}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
+                    selectedCategory === filter.id
+                      ? 'bg-charcoal text-parchment'
+                      : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span>{filter.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -363,7 +370,7 @@ export default function EventsView() {
         {filteredEvents.length === 0 && (
           <div className="text-center py-16">
             <div className="w-16 h-16 bg-charcoal/5 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Calendar className="w-8 h-8 text-charcoal/30" />
+              <CalendarIcon className="w-8 h-8 text-charcoal/30" />
             </div>
             <p className="text-lg font-semibold text-charcoal mb-2">No events found</p>
             <p className="text-sm text-charcoal/50">Try selecting a different time period or category</p>
