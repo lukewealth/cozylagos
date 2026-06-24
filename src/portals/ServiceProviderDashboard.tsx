@@ -15,7 +15,7 @@ import { useDatabase } from '../hooks/useDatabase';
 import CollapsibleSidebar from '../components/ui/CollapsibleSidebar';
 import Tooltip from '../components/ui/Tooltip';
 
-type ProviderSection = 'overview' | 'service-dashboard' | 'my-services' | 'schedule' | 'calendar' | 'staffing' | 'arrivals' | 'analytics' | 'earnings' | 'inventory';
+type ProviderSection = 'overview' | 'service-dashboard' | 'my-services' | 'schedule' | 'calendar' | 'earnings' | 'inventory' | 'booking-requests';
 
 const MOCK_STAFF = [
   { id: 's1', name: 'Captain Chidi Okoro', role: 'driver', status: 'on_duty', initials: 'CO', certifications: ['MCA MASTER 3000GT', 'VIP PROTOCOL'], specializations: ['Maritime', 'VIP Transport'], rating: 4.8, availabilityFrom: '22:00', currentAssignment: 'Yacht Leila', tenureYears: 6 },
@@ -138,8 +138,8 @@ export default function ServiceProviderDashboard() {
               <motion.div key="overview" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
                 <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
                   <div>
-                    <h1 className="font-serif text-headline-lg text-on-surface mb-2">Staff Orchestration</h1>
-                    <p className="text-secondary font-body-lg max-w-2xl">Manage personnel deployments and synchronize service requests.</p>
+                    <h1 className="font-serif text-headline-lg text-on-surface mb-2">Dashboard Overview</h1>
+                    <p className="text-secondary font-body-lg max-w-2xl">Manage your services, bookings, and staff.</p>
                   </div>
                   <div className="glass-card px-6 py-3 rounded-xl flex items-center gap-4">
                     <div className="text-right border-r border-outline-variant/30 pr-4">
@@ -147,8 +147,8 @@ export default function ServiceProviderDashboard() {
                       <div className="text-xl font-bold text-primary">{onDutyCount}/{MOCK_STAFF.length}</div>
                     </div>
                     <div className="text-right">
-                      <div className="text-[10px] text-outline font-label-caps">UNASSIGNED</div>
-                      <div className="text-xl font-bold text-error">{unassignedBookings.length}</div>
+                      <div className="text-[10px] text-outline font-label-caps">PENDING</div>
+                      <div className="text-xl font-bold text-error">{pendingBookings.length}</div>
                     </div>
                   </div>
                 </header>
@@ -466,184 +466,77 @@ export default function ServiceProviderDashboard() {
               </motion.div>
             )}
 
-            {activeSection === 'staffing' && (
-              <motion.div key="staffing" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
+            {activeSection === 'booking-requests' && (
+              <motion.div key="booking-requests" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
                 <header className="mb-8">
-                  <h1 className="font-serif text-headline-lg text-on-surface">Staffing</h1>
-                  <p className="text-secondary font-body-lg mt-2">Manage team availability and assignments</p>
+                  <h1 className="font-serif text-headline-lg text-on-surface">Booking Requests</h1>
+                  <p className="text-secondary font-body-lg mt-2">Review and approve booking requests from guests</p>
                 </header>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                   {[
-                    { label: 'On Duty', value: MOCK_STAFF.filter(s => s.status === 'on_duty').length, color: 'text-green-600' },
-                    { label: 'Available', value: MOCK_STAFF.filter(s => s.status === 'available').length, color: 'text-primary' },
-                    { label: 'Off Duty', value: MOCK_STAFF.filter(s => s.status === 'off_duty').length, color: 'text-error' },
-                  ].map((stat) => (
-                    <div key={stat.label} className="glass-card p-6 rounded-2xl luxury-shadow">
-                      <p className="text-[10px] font-bold tracking-widest text-secondary uppercase">{stat.label}</p>
-                      <p className={`text-3xl font-serif font-bold mt-1 ${stat.color}`}>{stat.value}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-3xl overflow-hidden luxury-shadow">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left">
-                      <thead>
-                        <tr className="bg-surface-container-low border-b border-outline-variant/10">
-                          <th className="px-6 py-4 text-label-caps text-secondary font-bold">Staff</th>
-                          <th className="px-6 py-4 text-label-caps text-secondary font-bold">Role</th>
-                          <th className="px-6 py-4 text-label-caps text-secondary font-bold">Status</th>
-                          <th className="px-6 py-4 text-label-caps text-secondary font-bold">Rating</th>
-                          <th className="px-6 py-4 text-label-caps text-secondary font-bold">Assignment</th>
-                          <th className="px-6 py-4 text-label-caps text-secondary font-bold text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-outline-variant/10">
-                        {MOCK_STAFF.map((staff) => {
-                          const badge = getStatusBadge(staff.status);
-                          return (
-                            <tr key={staff.id} className="hover:bg-surface-container-low/50 transition-colors">
-                              <td className="px-6 py-4">
-                                <div className="flex items-center gap-3">
-                                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-sm">{staff.initials}</div>
-                                  <div>
-                                    <p className="font-bold text-on-surface text-sm">{staff.name}</p>
-                                    <p className="text-[10px] text-secondary">{staff.certifications[0]}</p>
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 capitalize text-on-surface-variant text-sm">{staff.role}</td>
-                              <td className="px-6 py-4">
-                                <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full ${badge.bg} ${badge.text}`}>{badge.label}</span>
-                              </td>
-                              <td className="px-6 py-4">
-                                <div className="flex items-center gap-1">
-                                  <Star className="w-3 h-3 text-primary fill-current" />
-                                  <span className="text-sm font-bold">{staff.rating}</span>
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 text-sm text-on-surface-variant">{staff.currentAssignment || '—'}</td>
-                              <td className="px-6 py-4 text-right">
-                                <button className="px-3 py-1.5 border border-primary text-primary rounded-lg text-[10px] font-bold uppercase hover:bg-primary hover:text-on-primary transition-all">
-                                  {staff.status === 'available' ? 'Assign' : 'Edit'}
-                                </button>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {activeSection === 'arrivals' && (
-              <motion.div key="arrivals" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
-                <header className="mb-8">
-                  <h1 className="font-serif text-headline-lg text-on-surface">Arrivals</h1>
-                  <p className="text-secondary font-body-lg mt-2">Monitor guest arrivals and check-in status</p>
-                </header>
-                <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-3xl overflow-hidden luxury-shadow">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left">
-                      <thead>
-                        <tr className="bg-surface-container-low border-b border-outline-variant/10">
-                          <th className="px-6 py-4 text-label-caps text-secondary font-bold">Guest</th>
-                          <th className="px-6 py-4 text-label-caps text-secondary font-bold">Property</th>
-                          <th className="px-6 py-4 text-label-caps text-secondary font-bold">Check-in</th>
-                          <th className="px-6 py-4 text-label-caps text-secondary font-bold">Services</th>
-                          <th className="px-6 py-4 text-label-caps text-secondary font-bold">Status</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-outline-variant/10">
-                        {activeBookings.slice(0, 10).map((booking: any, idx: number) => (
-                          <tr key={booking.id || idx} className="hover:bg-surface-container-low/50 transition-colors">
-                            <td className="px-6 py-4">
-                              <p className="font-bold text-on-surface text-sm">{booking.guestName}</p>
-                              <p className="text-[10px] text-secondary">{booking.guestEmail}</p>
-                            </td>
-                            <td className="px-6 py-4 text-sm text-on-surface-variant">{booking.listingTitle}</td>
-                            <td className="px-6 py-4 text-sm text-on-surface-variant">{booking.checkIn}</td>
-                            <td className="px-6 py-4">
-                              <div className="flex flex-wrap gap-1">
-                                {(booking.services || []).slice(0, 3).map((s: string, i: number) => (
-                                  <span key={i} className="bg-primary/10 text-primary px-2 py-0.5 rounded text-[9px] font-bold">{s}</span>
-                                ))}
-                                {(!booking.services || booking.services.length === 0) && <span className="text-xs text-secondary">—</span>}
-                              </div>
-                            </td>
-                            <td className="px-6 py-4">
-                              <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full ${
-                                booking.status === 'confirmed' || booking.status === 'Confirmed' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
-                              }`}>{booking.status}</span>
-                            </td>
-                          </tr>
-                        ))}
-                        {activeBookings.length === 0 && (
-                          <tr><td colSpan={5} className="px-6 py-12 text-center text-secondary italic text-sm">No arrivals scheduled.</td></tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {activeSection === 'analytics' && (
-              <motion.div key="analytics" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
-                <header className="mb-8">
-                  <h1 className="font-serif text-headline-lg text-on-surface">Analytics</h1>
-                  <p className="text-secondary font-body-lg mt-2">Performance insights and trends</p>
-                </header>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                  {[
-                    { label: 'Total Revenue', value: `₦${(totalEarnings / 1000000).toFixed(1)}M`, icon: DollarSign, color: 'text-green-600' },
-                    { label: 'Bookings Completed', value: activeBookings.filter((b: any) => b.status === 'Confirmed').length.toString(), icon: CheckCircle, color: 'text-primary' },
-                    { label: 'Avg. Service Rating', value: '4.9', icon: Star, color: 'text-primary' },
-                    { label: 'Staff Utilization', value: `${Math.round((onDutyCount / MOCK_STAFF.length) * 100)}%`, icon: Users, color: 'text-primary' },
+                    { label: 'Pending Approval', value: pendingBookings.length, icon: Clock, color: 'text-amber-600' },
+                    { label: 'Confirmed', value: activeBookings.filter((b: any) => b.status === 'Confirmed' || b.status === 'confirmed').length, icon: CheckCircle, color: 'text-green-600' },
+                    { label: 'Total Revenue', value: `₦${(totalEarnings / 1000000).toFixed(1)}M`, icon: DollarSign, color: 'text-primary' },
+                    { label: 'Avg Response Time', value: '2.4h', icon: Star, color: 'text-primary' },
                   ].map((stat, i) => (
                     <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
-                      className="glass-card p-6 rounded-3xl border border-outline-variant/10 luxury-shadow">
-                      <stat.icon className={`w-6 h-6 ${stat.color} mb-4`} />
+                      className="glass-card p-5 rounded-2xl border border-outline-variant/10 luxury-shadow">
+                      <stat.icon className={`w-5 h-5 ${stat.color} mb-3`} />
                       <p className="text-[10px] font-bold tracking-widest text-secondary uppercase">{stat.label}</p>
-                      <p className="text-2xl font-serif font-bold text-on-surface mt-1">{stat.value}</p>
+                      <p className="text-xl font-serif font-bold text-on-surface mt-1">{stat.value}</p>
                     </motion.div>
                   ))}
                 </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  <div className="glass-card p-6 rounded-3xl luxury-shadow">
-                    <h3 className="font-serif text-headline-sm text-on-surface mb-6">Revenue by Service</h3>
-                    <div className="space-y-4">
-                      {MOCK_MY_SERVICES.map(s => (
-                        <div key={s.id}>
-                          <div className="flex justify-between text-sm mb-1">
-                            <span className="text-on-surface font-medium">{s.title}</span>
-                            <span className="text-secondary">₦{(s.revenue / 1000).toFixed(0)}K</span>
-                          </div>
-                          <div className="h-2 bg-surface-container rounded-full overflow-hidden">
-                            <div className="h-full bg-primary rounded-full" style={{ width: `${(s.revenue / Math.max(...MOCK_MY_SERVICES.map(x => x.revenue))) * 100}%` }} />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-3xl overflow-hidden luxury-shadow">
+                  <div className="px-6 py-4 border-b border-outline-variant/10">
+                    <h3 className="font-serif text-headline-sm text-on-surface">Pending Requests</h3>
                   </div>
-                  <div className="glass-card p-6 rounded-3xl luxury-shadow">
-                    <h3 className="font-serif text-headline-sm text-on-surface mb-6">Booking Trends</h3>
-                    <div className="space-y-4">
-                      {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, i) => {
-                        const val = [3, 5, 4, 7, 6, 8, 4][i];
-                        return (
-                          <div key={day} className="flex items-center gap-3">
-                            <span className="text-xs text-secondary w-8">{day}</span>
-                            <div className="flex-1 h-6 bg-surface-container rounded overflow-hidden">
-                              <div className="h-full bg-primary/70 rounded flex items-center px-2" style={{ width: `${val * 12}%` }}>
-                                <span className="text-[9px] font-bold text-on-primary">{val}</span>
+                  <div className="divide-y divide-outline-variant/10">
+                    {pendingBookings.length === 0 ? (
+                      <div className="p-12 text-center">
+                        <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-3" />
+                        <p className="text-sm text-secondary">All caught up! No pending requests.</p>
+                      </div>
+                    ) : (
+                      pendingBookings.slice(0, 10).map((booking: any) => (
+                        <div key={booking.id} className="p-5 hover:bg-surface-container-low/50 transition-colors">
+                          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div className="flex items-start gap-4">
+                              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                                <Calendar className="w-6 h-6 text-primary" />
+                              </div>
+                              <div>
+                                <h4 className="font-bold text-on-surface">{booking.listingTitle}</h4>
+                                <p className="text-xs text-secondary mt-1">{booking.guestName} • {booking.guestEmail}</p>
+                                <div className="flex items-center gap-3 mt-2 text-xs text-secondary">
+                                  <span>{booking.checkIn} → {booking.checkOut}</span>
+                                  <span>•</span>
+                                  <span>{booking.guestsCount} guests</span>
+                                </div>
+                                {booking.services && booking.services.length > 0 && (
+                                  <div className="flex flex-wrap gap-1 mt-2">
+                                    {booking.services.map((s: string, i: number) => (
+                                      <span key={i} className="bg-primary/10 text-primary px-2 py-0.5 rounded text-[9px] font-bold">{s}</span>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex flex-col items-end gap-2">
+                              <span className="font-bold text-primary text-lg">₦{(booking.totalAmount || 0).toLocaleString()}</span>
+                              <div className="flex gap-2">
+                                <button className="px-4 py-2 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 transition-colors flex items-center gap-1">
+                                  <CheckCircle className="w-3.5 h-3.5" /> Approve
+                                </button>
+                                <button className="px-4 py-2 bg-red-600 text-white rounded-lg text-xs font-bold hover:bg-red-700 transition-colors flex items-center gap-1">
+                                  <XCircle className="w-3.5 h-3.5" /> Decline
+                                </button>
                               </div>
                             </div>
                           </div>
-                        );
-                      })}
-                    </div>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -708,14 +601,97 @@ export default function ServiceProviderDashboard() {
 
             {activeSection === 'inventory' && (
               <motion.div key="inventory" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
-                <header className="mb-8">
-                  <h1 className="font-serif text-headline-lg text-on-surface">Inventory & Equipment</h1>
-                  <p className="text-secondary font-body-lg mt-2">Track assets and equipment allocation</p>
+                <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                  <div>
+                    <h1 className="font-serif text-headline-lg text-on-surface">Inventory & Staff</h1>
+                    <p className="text-secondary font-body-lg mt-2">Manage equipment, assets, and staff assignments</p>
+                  </div>
+                  <button className="px-5 py-2.5 bg-primary text-on-primary rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors flex items-center gap-2">
+                    <Package className="w-4 h-4" /> Add Asset
+                  </button>
                 </header>
-                <div className="glass-card p-12 rounded-3xl luxury-shadow text-center">
-                  <Package className="w-12 h-12 text-primary mx-auto mb-4" />
-                  <h3 className="font-serif text-headline-sm text-on-surface mb-2">Inventory Module</h3>
-                  <p className="text-body-md text-secondary max-w-md">Asset management and equipment tracking is being enhanced.</p>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  {[
+                    { label: 'Total Assets', value: '24', icon: Package, color: 'text-primary' },
+                    { label: 'In Use', value: '18', icon: CheckCircle, color: 'text-green-600' },
+                    { label: 'Available', value: '6', icon: Clock, color: 'text-amber-600' },
+                  ].map((stat) => (
+                    <div key={stat.label} className="glass-card p-6 rounded-2xl luxury-shadow">
+                      <stat.icon className={`w-6 h-6 ${stat.color} mb-3`} />
+                      <p className="text-[10px] font-bold tracking-widest text-secondary uppercase">{stat.label}</p>
+                      <p className={`text-3xl font-serif font-bold mt-1 ${stat.color}`}>{stat.value}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-3xl overflow-hidden luxury-shadow">
+                    <div className="px-6 py-4 border-b border-outline-variant/10">
+                      <h3 className="font-serif text-headline-sm text-on-surface">Equipment Inventory</h3>
+                    </div>
+                    <div className="divide-y divide-outline-variant/10">
+                      {[
+                        { name: 'Luxury Sedan - Mercedes S-Class', status: 'in_use', assignedTo: 'Captain Chidi Okoro' },
+                        { name: 'Professional Camera Kit', status: 'available', assignedTo: null },
+                        { name: 'Yacht - 65ft Executive Boat', status: 'in_use', assignedTo: 'Yacht Leila' },
+                        { name: 'Security Equipment Set', status: 'in_use', assignedTo: 'Adebayo Security' },
+                        { name: 'Chef Kitchen Tools', status: 'available', assignedTo: null },
+                      ].map((item, idx) => (
+                        <div key={idx} className="p-5 hover:bg-surface-container-low/50 transition-colors flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                              <Package className="w-5 h-5 text-primary" />
+                            </div>
+                            <div>
+                              <p className="font-bold text-on-surface text-sm">{item.name}</p>
+                              {item.assignedTo && (
+                                <p className="text-[10px] text-secondary mt-1">Assigned to: {item.assignedTo}</p>
+                              )}
+                            </div>
+                          </div>
+                          <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full ${
+                            item.status === 'in_use' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                          }`}>
+                            {item.status === 'in_use' ? 'In Use' : 'Available'}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-3xl overflow-hidden luxury-shadow">
+                    <div className="px-6 py-4 border-b border-outline-variant/10">
+                      <h3 className="font-serif text-headline-sm text-on-surface">Staff Assignments</h3>
+                    </div>
+                    <div className="divide-y divide-outline-variant/10">
+                      {MOCK_STAFF.map((staff) => {
+                        const badge = getStatusBadge(staff.status);
+                        return (
+                          <div key={staff.id} className="p-5 hover:bg-surface-container-low/50 transition-colors">
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-sm">{staff.initials}</div>
+                                <div>
+                                  <p className="font-bold text-on-surface text-sm">{staff.name}</p>
+                                  <p className="text-[10px] text-secondary capitalize">{staff.role}</p>
+                                </div>
+                              </div>
+                              <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full ${badge.bg} ${badge.text}`}>{badge.label}</span>
+                            </div>
+                            {staff.currentAssignment && (
+                              <div className="ml-13 pl-13 border-l-2 border-primary/20">
+                                <p className="text-xs text-secondary">Currently assigned to: <span className="font-semibold text-primary">{staff.currentAssignment}</span></p>
+                              </div>
+                            )}
+                            <button className="mt-3 w-full px-3 py-1.5 border border-primary text-primary rounded-lg text-[10px] font-bold uppercase hover:bg-primary hover:text-on-primary transition-all">
+                              {staff.currentAssignment ? 'Reassign' : 'Assign Task'}
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             )}

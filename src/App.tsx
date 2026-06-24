@@ -31,6 +31,9 @@ import EventsView from './components/EventsView';
 import FavoritesView from './components/FavoritesView';
 import WhatsAppConcierge from './components/WhatsAppConcierge';
 import CookiesAlert from './components/PrivacyPolicy';
+import AccountSettingsView from './components/AccountSettingsView';
+import NotificationsView from './components/NotificationsView';
+import PropertyListingView from './components/PropertyListingView';
 import { useDatabase } from './hooks/useDatabase';
 import { seedDatabase, getListingsWithFallback, syncToLocalStorage } from './db';
 import DashboardSkeleton from './components/ui/DashboardSkeleton';
@@ -45,7 +48,7 @@ function AppContent() {
   const { addToast } = useToast();
 
   const [activeTab, setActiveTab] = useState<
-    'home' | 'explorer' | 'explore-lagos' | 'bundles' | 'signature-experiences' | 'yacht-experience' | 'vip-services' | 'business-lagos' | 'events' | 'favorites' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations' | 'listing-detail'
+    'home' | 'explorer' | 'explore-lagos' | 'bundles' | 'signature-experiences' | 'yacht-experience' | 'vip-services' | 'business-lagos' | 'events' | 'favorites' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations' | 'listing-detail' | 'account-settings' | 'notifications' | 'property-listing'
   >('home');
   
   const [searchDestination, setSearchDestination] = useState<string>('');
@@ -449,6 +452,15 @@ function AppContent() {
                 <Suspense fallback={<DashboardSkeleton />}>
                   <SuperAdminDashboard />
                 </Suspense>
+              )}
+              {activeTab === 'account-settings' && (
+                <AccountSettingsView />
+              )}
+              {activeTab === 'notifications' && (
+                <NotificationsView />
+              )}
+              {activeTab === 'property-listing' && (
+                <PropertyListingView listings={listings} onSelectListing={(listing) => { setSelectedListing(listing); setActiveTab('listing-detail'); }} />
               )}
               {(activeTab === 'overview' || activeTab === 'listings' || activeTab === 'calendar' || activeTab === 'payouts') && (
                 <OwnerDashboardView listings={listings} bookings={bookings} transactions={transactions} onAddListingClick={() => {
