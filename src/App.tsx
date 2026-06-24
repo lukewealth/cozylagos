@@ -24,6 +24,7 @@ import ConciergeHubView from './components/ConciergeHubView';
 import SmartRecommendationsView from './components/SmartRecommendationsView';
 import ServiceBundlesView from './components/ServiceBundlesView';
 import SignatureExperiencesView from './components/SignatureExperiencesView';
+import YachtExperienceView from './components/YachtExperienceView';
 import BusinessLagosView from './components/BusinessLagosView';
 import EventsView from './components/EventsView';
 import FavoritesView from './components/FavoritesView';
@@ -41,7 +42,7 @@ function AppContent() {
   const { addToast } = useToast();
 
   const [activeTab, setActiveTab] = useState<
-    'home' | 'explorer' | 'explore-lagos' | 'bundles' | 'signature-experiences' | 'vip-services' | 'business-lagos' | 'events' | 'favorites' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations' | 'listing-detail'
+    'home' | 'explorer' | 'explore-lagos' | 'bundles' | 'signature-experiences' | 'yacht-experience' | 'vip-services' | 'business-lagos' | 'events' | 'favorites' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations' | 'listing-detail'
   >('home');
   
   const [searchDestination, setSearchDestination] = useState<string>('');
@@ -248,6 +249,7 @@ function AppContent() {
               )}
               {activeTab === 'bundles' && <ServiceBundlesView />}
               {activeTab === 'signature-experiences' && <SignatureExperiencesView />}
+              {activeTab === 'yacht-experience' && <YachtExperienceView onNavigate={(tab) => setActiveTab(tab as any)} />}
               {activeTab === 'vip-services' && <VIPServicesView />}
               {activeTab === 'business-lagos' && <BusinessLagosView />}
               {activeTab === 'events' && <EventsView />}
