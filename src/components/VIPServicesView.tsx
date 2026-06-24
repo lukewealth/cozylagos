@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import {
   Sparkles, Scissors, ShoppingBag, Trophy, Dumbbell, Shirt, ChefHat,
   Camera, MapPin, Star, Clock, Check, X, ShoppingCart, Crown, Award,
-  ChevronRight, Filter, Search, SlidersHorizontal, Grid3X3, List
+  ChevronRight, Filter, Search, SlidersHorizontal, Grid3X3, List,
+  Ship, Wine, Anchor
 } from 'lucide-react';
 import { VIP_SERVICES, VIPService, getAllVIPServices } from '../data/vipServices';
 import { useCart } from '../context/CartContext';
@@ -302,6 +303,13 @@ function ServiceDetailPanel({ service, onClose }: { service: VIPService; onClose
   );
 }
 
+const WELCOME_STEPS = [
+  { icon: <Ship className="w-6 h-6" />, title: 'Board Your Yacht', desc: 'Step aboard your private luxury vessel at the marina' },
+  { icon: <Crown className="w-6 h-6" />, title: 'VIP Welcome', desc: 'Champagne toast, personal concierge & welcome amenities' },
+  { icon: <Wine className="w-6 h-6" />, title: 'Curated Services', desc: 'Spa, dining, entertainment — all at your fingertips' },
+  { icon: <Anchor className="w-6 h-6" />, title: 'Set Sail', desc: 'Cruise Lagos Lagoon in unmatched luxury & privacy' },
+];
+
 export default function VIPServicesView({ showHero = true }: { showHero?: boolean }) {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -321,51 +329,99 @@ export default function VIPServicesView({ showHero = true }: { showHero?: boolea
 
   return (
     <div className="flex-grow bg-parchment text-left">
-      {/* Hero Section - Conditional */}
+      {/* Hero Section - VIP Cruise Yacht Welcome Arrival */}
       {showHero && (
-        <section className="relative overflow-hidden bg-charcoal">
-          <div className="absolute inset-0 bg-gradient-to-br from-charcoal via-charcoal/95 to-gold/20" />
-          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
+        <section className="relative overflow-hidden bg-charcoal min-h-[600px] sm:min-h-[700px] flex items-center">
+          <div className="absolute inset-0 z-0">
+            <motion.img
+              initial={{ scale: 1.1 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 12, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full h-full object-cover opacity-40 select-none pointer-events-none"
+              src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=1600&q=80"
+              alt="VIP Cruise Yacht"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-charcoal/70 via-charcoal/40 to-charcoal/90" />
+            <div className="absolute inset-0 bg-gradient-to-r from-charcoal/80 via-transparent to-charcoal/40" />
+          </div>
 
-          <div className="relative max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 pt-16 sm:pt-24 md:pt-32 pb-16 sm:pb-20">
+          <div className="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 pt-16 sm:pt-24 md:pt-32 pb-16 sm:pb-20">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               className="max-w-3xl"
             >
-              <div className="flex items-center gap-2 mb-5">
-                <div className="w-8 h-[1px] bg-gold" />
-                <span className="text-gold font-bold text-[10px] tracking-[0.25em] uppercase">
-                  Private VIP Guest Services
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-10 h-[1px] bg-gold" />
+                <Ship className="w-5 h-5 text-gold" />
+                <span className="text-gold font-bold text-[10px] tracking-[0.3em] uppercase">
+                  Cozy VIP Cruise Yacht
                 </span>
               </div>
               <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white font-bold leading-[1.05] tracking-tight">
-                VIP{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-dark">
-                  Services
-                </span>
+                Welcome{' '}
+                <span className="italic font-light text-gold-light">Aboard</span>
               </h1>
               <p className="font-sans text-sm sm:text-base md:text-lg text-white/60 font-light max-w-xl mt-5 leading-relaxed">
-                Curated premium services for the distinguished guest. From spa treatments to personal chefs, experience Lagos in ultimate luxury.
+                Step into a world of unmatched luxury. Your private yacht experience begins with a champagne welcome and curated VIP services tailored for the distinguished guest.
               </p>
-              <div className="flex flex-wrap items-center gap-4 mt-8">
-                <div className="flex items-center gap-2 text-white/40">
-                  <Crown className="w-4 h-4" />
-                  <span className="text-xs font-medium">Verified Providers</span>
-                </div>
-                <div className="w-1 h-1 rounded-full bg-white/20" />
-                <div className="flex items-center gap-2 text-white/40">
-                  <Award className="w-4 h-4" />
-                  <span className="text-xs font-medium">Premium Quality</span>
-                </div>
-                <div className="w-1 h-1 rounded-full bg-white/20" />
-                <div className="flex items-center gap-2 text-white/40">
-                  <Sparkles className="w-4 h-4" />
-                  <span className="text-xs font-medium">8 Categories</span>
-                </div>
+            </motion.div>
+
+            {/* Infographic Welcome Steps */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-12 sm:mt-16"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {WELCOME_STEPS.map((step, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.6 + i * 0.15 }}
+                    className="relative group"
+                  >
+                    <div className="bg-white/[0.07] backdrop-blur-xl border border-white/10 rounded-2xl p-5 hover:bg-white/[0.12] hover:border-gold/30 transition-all duration-500">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-11 h-11 rounded-xl bg-gold/20 flex items-center justify-center text-gold shrink-0 group-hover:bg-gold group-hover:text-charcoal transition-all duration-300">
+                          {step.icon}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-full bg-gold/30 text-gold text-[10px] font-bold flex items-center justify-center">
+                            {i + 1}
+                          </span>
+                          {i < WELCOME_STEPS.length - 1 && (
+                            <div className="hidden lg:block w-8 h-[1px] bg-gold/20" />
+                          )}
+                        </div>
+                      </div>
+                      <h3 className="font-serif text-base font-bold text-white mb-1">{step.title}</h3>
+                      <p className="text-xs text-white/50 leading-relaxed">{step.desc}</p>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </motion.div>
+
+            <div className="flex flex-wrap items-center gap-4 mt-8">
+              <div className="flex items-center gap-2 text-white/40">
+                <Crown className="w-4 h-4" />
+                <span className="text-xs font-medium">Verified Providers</span>
+              </div>
+              <div className="w-1 h-1 rounded-full bg-white/20" />
+              <div className="flex items-center gap-2 text-white/40">
+                <Award className="w-4 h-4" />
+                <span className="text-xs font-medium">Premium Quality</span>
+              </div>
+              <div className="w-1 h-1 rounded-full bg-white/20" />
+              <div className="flex items-center gap-2 text-white/40">
+                <Sparkles className="w-4 h-4" />
+                <span className="text-xs font-medium">8 Categories</span>
+              </div>
+            </div>
           </div>
         </section>
       )}

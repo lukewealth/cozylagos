@@ -287,14 +287,17 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                 ] : currentUser?.role === 'service_provider' ? [
                   { tab: 'overview', label: 'Dashboard', icon: HomeIcon },
                   { tab: 'listings', label: 'My Services', icon: HomeIcon },
+                  { tab: 'sp-cms', label: 'Service CMS', icon: BriefcaseIcon },
                   { tab: 'calendar', label: 'Schedule', icon: CalendarIcon },
                   { tab: 'payouts', label: 'Earnings', icon: BriefcaseIcon },
                 ] : currentUser?.role === 'admin' ? [
                   { tab: 'admin-dashboard', label: 'Admin Panel', icon: Shield },
+                  { tab: 'admin-cms', label: 'Content CMS', icon: BriefcaseIcon },
                   { tab: 'listings', label: 'All Properties', icon: HomeIcon },
                   { tab: 'overview', label: 'Analytics', icon: BriefcaseIcon },
                 ] : currentUser?.role === 'super_admin' ? [
                   { tab: 'super-admin-dashboard', label: 'Super Admin', icon: Shield },
+                  { tab: 'admin-cms', label: 'Content CMS', icon: BriefcaseIcon },
                   { tab: 'admin-dashboard', label: 'Management', icon: Shield },
                   { tab: 'overview', label: 'System Stats', icon: BriefcaseIcon },
                 ] : []).map(({ tab, label, icon: Icon }) => (

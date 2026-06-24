@@ -26,7 +26,7 @@ const JOURNEY_STEPS: JourneyStep[] = [
     icon: <Plane className="w-8 h-8" />,
     duration: '1 hour',
     highlights: ['Meet & greet service', 'Luxury sedan', 'Fast-track immigration', 'Cold water & refreshments', 'Luggage assistance'],
-    image: '/assets/images/horizontal/CozyLagos.jpeg',
+    image: 'https://images.unsplash.com/photo-1436491865332-7a61a109db05?w=800&q=80',
     time: 'Arrival Day'
   },
   {
@@ -36,7 +36,7 @@ const JOURNEY_STEPS: JourneyStep[] = [
     icon: <Hotel className="w-8 h-8" />,
     duration: '30 mins',
     highlights: ['Premium apartment', 'Concierge welcome', 'Apartment orientation', 'Welcome package', '24/7 support'],
-    image: '/assets/images/vertical/IMG-20260621-WA0005.jpg',
+    image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
     time: 'Arrival Day'
   },
   {
@@ -46,7 +46,7 @@ const JOURNEY_STEPS: JourneyStep[] = [
     icon: <Ship className="w-8 h-8" />,
     duration: '4-6 hours',
     highlights: ['Private yacht charter', 'Professional crew', 'Champagne & canapés', 'Sunset cruise', 'Lagos Lagoon tour', 'Photography service'],
-    image: '/assets/images/horizontal/CozyLagos.jpeg',
+    image: 'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=800&q=80',
     time: 'Day 2'
   },
   {
@@ -56,7 +56,7 @@ const JOURNEY_STEPS: JourneyStep[] = [
     icon: <Plane className="w-8 h-8" />,
     duration: '30 mins',
     highlights: ['Flexible checkout', 'Airport transfer', 'Luggage assistance', 'Departure coordination', 'Farewell gift'],
-    image: '/assets/images/vertical/IMG-20260621-WA0006.jpg',
+    image: 'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&q=80',
     time: 'Departure Day'
   }
 ];
@@ -79,9 +79,8 @@ export default function YachtExperienceView({ onNavigate }: { onNavigate: (tab: 
             animate={{ scale: 1 }}
             transition={{ duration: 8, ease: [0.16, 1, 0.3, 1] }}
             className="w-full h-full object-cover opacity-50 select-none pointer-events-none"
-            src="/assets/images/horizontal/CozyLagos.jpeg"
+            src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=1600&q=80"
             alt="Yacht Experience"
-            onError={(e) => { (e.target as HTMLImageElement).src = '/assets/bundles/bundles-hero-background.jpeg'; }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-charcoal/60 via-charcoal/30 to-charcoal/90" />
         </div>

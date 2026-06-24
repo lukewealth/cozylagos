@@ -34,6 +34,8 @@ import CookiesAlert from './components/PrivacyPolicy';
 import AccountSettingsView from './components/AccountSettingsView';
 import NotificationsView from './components/NotificationsView';
 import PropertyListingView from './components/PropertyListingView';
+import AdminCMSView from './components/AdminCMSView';
+import SPCMSView from './components/SPCMSView';
 import { useDatabase } from './hooks/useDatabase';
 import { seedDatabase, getListingsWithFallback, syncToLocalStorage } from './db';
 import DashboardSkeleton from './components/ui/DashboardSkeleton';
@@ -48,7 +50,7 @@ function AppContent() {
   const { addToast } = useToast();
 
   const [activeTab, setActiveTab] = useState<
-    'home' | 'explorer' | 'explore-lagos' | 'bundles' | 'signature-experiences' | 'yacht-experience' | 'vip-services' | 'business-lagos' | 'events' | 'favorites' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations' | 'listing-detail' | 'account-settings' | 'notifications' | 'property-listing'
+    'home' | 'explorer' | 'explore-lagos' | 'bundles' | 'signature-experiences' | 'yacht-experience' | 'vip-services' | 'business-lagos' | 'events' | 'favorites' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations' | 'listing-detail' | 'account-settings' | 'notifications' | 'property-listing' | 'admin-cms' | 'sp-cms'
   >('home');
   
   const [searchDestination, setSearchDestination] = useState<string>('');
@@ -472,6 +474,12 @@ function AppContent() {
                 <Suspense fallback={<DashboardSkeleton />}>
                   <AdminDashboard listings={listings} onToggleStatus={handleToggleStatus} onDeleteListing={handleDeleteListing} />
                 </Suspense>
+              )}
+              {activeTab === 'admin-cms' && (
+                <AdminCMSView />
+              )}
+              {activeTab === 'sp-cms' && (
+                <SPCMSView providerId={currentUser?.id || 'sp-default'} />
               )}
               {activeTab === 'super-admin-dashboard' && (
                 <Suspense fallback={<DashboardSkeleton />}>

@@ -36,11 +36,11 @@ const categories: Category[] = [
     icon: <Waves className="w-6 h-6" />,
     gradient: 'from-cyan-500 via-blue-500 to-teal-500',
     items: [
-      { id: 'b1', title: 'Tarkwa Bay Beach', description: 'Secluded beach accessible only by boat — golden sands and clear waters.', location: 'Tarkwa Bay', rating: 4.6, price: '₦5,000', icon: <Waves className="w-6 h-6" />, duration: 'Full day', highlights: ['Boat access', 'Water sports', 'Swimming'] },
-      { id: 'b2', title: 'Elegushi Royal Beach', description: 'The quintessential Lagos beach with live music and VIP areas.', location: 'Lekki Phase 1', rating: 4.5, price: '₦10,000', icon: <Sun className="w-6 h-6" />, duration: 'Full day', highlights: ['Live music', 'VIP sections', 'Food vendors'] },
-      { id: 'b3', title: 'Landmark Beach', description: 'Premium beach club with luxury amenities and restaurants.', location: 'Victoria Island', rating: 4.7, price: '₦15,000', icon: <Crown className="w-6 h-6" />, duration: 'Full day', highlights: ['Luxury amenities', 'Restaurants', 'Beach club'] },
-      { id: 'p1', title: 'Lekki Conservation Centre', description: 'Famous canopy walkway and nature trails through Lagos biodiversity.', location: 'Lekki', rating: 4.7, price: '₦5,000', icon: <TreePine className="w-6 h-6" />, duration: '3-4 hours', highlights: ['Canopy walkway', 'Nature trails', 'Wildlife'] },
-      { id: 'p2', title: 'LUFASI Nature Park', description: 'Serene nature reserve with hiking trails and peaceful picnic spots.', location: 'Lekki-Epe Expressway', rating: 4.5, price: '₦3,000', icon: <TreePine className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Hiking trails', 'Wildlife', 'Picnics'] },
+      { id: 'b1', title: 'Tarkwa Bay Beach', description: 'Secluded beach accessible only by boat — golden sands and clear waters.', location: 'Tarkwa Bay', rating: 4.6, price: '₦5,000', icon: <Waves className="w-6 h-6" />, duration: 'Full day', highlights: ['Boat access', 'Water sports', 'Swimming'], image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80' },
+      { id: 'b2', title: 'Elegushi Royal Beach', description: 'The quintessential Lagos beach with live music and VIP areas.', location: 'Lekki Phase 1', rating: 4.5, price: '₦10,000', icon: <Sun className="w-6 h-6" />, duration: 'Full day', highlights: ['Live music', 'VIP sections', 'Food vendors'], image: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&q=80' },
+      { id: 'b3', title: 'Landmark Beach', description: 'Premium beach club with luxury amenities and restaurants.', location: 'Victoria Island', rating: 4.7, price: '₦15,000', icon: <Crown className="w-6 h-6" />, duration: 'Full day', highlights: ['Luxury amenities', 'Restaurants', 'Beach club'], image: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80' },
+      { id: 'p1', title: 'Lekki Conservation Centre', description: 'Famous canopy walkway and nature trails through Lagos biodiversity.', location: 'Lekki', rating: 4.7, price: '₦5,000', icon: <TreePine className="w-6 h-6" />, duration: '3-4 hours', highlights: ['Canopy walkway', 'Nature trails', 'Wildlife'], image: 'https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80' },
+      { id: 'p2', title: 'LUFASI Nature Park', description: 'Serene nature reserve with hiking trails and peaceful picnic spots.', location: 'Lekki-Epe Expressway', rating: 4.5, price: '₦3,000', icon: <TreePine className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Hiking trails', 'Wildlife', 'Picnics'], image: 'https://images.unsplash.com/photo-1440342359743-84fcb8c21c67?w=800&q=80' },
     ]
   },
   {
@@ -50,11 +50,11 @@ const categories: Category[] = [
     icon: <Building2 className="w-6 h-6" />,
     gradient: 'from-amber-600 via-orange-500 to-red-500',
     items: [
-      { id: 'm1', title: 'National Museum Lagos', description: 'Nigeria\'s premier museum with ancient Nok terracottas and Benin bronzes.', location: 'Onikan, Lagos Island', rating: 4.3, price: '₦2,000', icon: <Building2 className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Historical artifacts', 'Cultural exhibits', 'Guided tours'] },
-      { id: 'm2', title: 'Kalakuta Republic Museum', description: 'The legendary former home of Fela Kuti — celebrating Africa\'s rebel icon.', location: 'Ikeja', rating: 4.4, price: '₦1,500', icon: <Drum className="w-6 h-6" />, duration: '1-2 hours', highlights: ['Music history', 'Memorabilia', 'Cultural significance'] },
-      { id: 'g1', title: 'Nike Art Gallery', description: 'West Africa\'s largest art gallery with over 7,000 works.', location: 'Lekki Phase 1', rating: 4.8, price: 'Free', icon: <Palette className="w-6 h-6" />, duration: '2-3 hours', highlights: ['7,000+ artworks', 'Guided tours', 'Art workshops'] },
-      { id: 'h1', title: 'Freedom Park', description: 'Former colonial prison transformed into a vibrant cultural hub.', location: 'Lagos Island', rating: 4.6, price: '₦3,000', icon: <Landmark className="w-6 h-6" />, duration: '2-4 hours', highlights: ['Historical tours', 'Live performances', 'Art exhibitions'] },
-      { id: 'g2', title: 'Yemisi Shyllon Museum', description: 'One of Nigeria\'s most important modern art museums.', location: 'Pan-Atlantic University', rating: 4.7, price: 'Free', icon: <Gem className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Modern art', 'Private collection', 'Educational'] },
+      { id: 'm1', title: 'National Museum Lagos', description: 'Nigeria\'s premier museum with ancient Nok terracottas and Benin bronzes.', location: 'Onikan, Lagos Island', rating: 4.3, price: '₦2,000', icon: <Building2 className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Historical artifacts', 'Cultural exhibits', 'Guided tours'], image: 'https://images.unsplash.com/photo-1565060169187-5284a3eb7d37?w=800&q=80' },
+      { id: 'm2', title: 'Kalakuta Republic Museum', description: 'The legendary former home of Fela Kuti — celebrating Africa\'s rebel icon.', location: 'Ikeja', rating: 4.4, price: '₦1,500', icon: <Drum className="w-6 h-6" />, duration: '1-2 hours', highlights: ['Music history', 'Memorabilia', 'Cultural significance'], image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80' },
+      { id: 'g1', title: 'Nike Art Gallery', description: 'West Africa\'s largest art gallery with over 7,000 works.', location: 'Lekki Phase 1', rating: 4.8, price: 'Free', icon: <Palette className="w-6 h-6" />, duration: '2-3 hours', highlights: ['7,000+ artworks', 'Guided tours', 'Art workshops'], image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&q=80' },
+      { id: 'h1', title: 'Freedom Park', description: 'Former colonial prison transformed into a vibrant cultural hub.', location: 'Lagos Island', rating: 4.6, price: '₦3,000', icon: <Landmark className="w-6 h-6" />, duration: '2-4 hours', highlights: ['Historical tours', 'Live performances', 'Art exhibitions'], image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800&q=80' },
+      { id: 'g2', title: 'Yemisi Shyllon Museum', description: 'One of Nigeria\'s most important modern art museums.', location: 'Pan-Atlantic University', rating: 4.7, price: 'Free', icon: <Gem className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Modern art', 'Private collection', 'Educational'], image: 'https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=800&q=80' },
     ]
   },
   {
@@ -64,12 +64,12 @@ const categories: Category[] = [
     icon: <UtensilsCrossed className="w-6 h-6" />,
     gradient: 'from-rose-500 via-pink-500 to-fuchsia-500',
     items: [
-      { id: 'f1', title: 'RSVP Restaurant', description: 'Multi-level fine dining with panoramic Lagos skyline views.', location: 'Victoria Island', rating: 4.9, price: '₦₦₦', icon: <Wine className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Skyline views', 'Wine pairing', 'Rooftop'] },
-      { id: 'f2', title: 'Cilantro Lagos', description: 'Award-winning contemporary African cuisine with modern flair.', location: 'Victoria Island', rating: 4.9, price: '₦₦₦₦', icon: <ChefHat className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Award-winning', 'Contemporary African', 'Fine dining'] },
-      { id: 'f3', title: 'Izanagi Restaurant', description: 'Premium Japanese dining with authentic sushi and teppanyaki.', location: 'Victoria Island', rating: 4.8, price: '₦₦₦', icon: <UtensilsCrossed className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Japanese cuisine', 'Sushi bar', 'Teppanyaki'] },
-      { id: 'n1', title: 'Quilox Nightclub', description: 'Lagos\'s most exclusive nightclub with world-class DJs.', location: 'Victoria Island', rating: 4.7, price: '₦₦₦', icon: <Music className="w-6 h-6" />, duration: '4-6 hours', highlights: ['VIP tables', 'World-class DJs', 'Exclusive'] },
-      { id: 'n2', title: 'Cubana Bar', description: 'Open-air luxury lounge with infinity pool and Afrobeats DJs.', location: 'Lekki Phase 1', rating: 4.8, price: '₦₦₦', icon: <Wine className="w-6 h-6" />, duration: '3-5 hours', highlights: ['Infinity pool', 'Afrobeats', 'Luxury lounge'] },
-      { id: 'n3', title: 'New Afrika Shrine', description: 'The spiritual home of Afrobeat culture and Fela\'s legacy.', location: 'Ikeja', rating: 4.6, price: '₦₦', icon: <Drum className="w-6 h-6" />, duration: '3-4 hours', highlights: ['Live Afrobeat', 'Cultural venue', 'Historic'] },
+      { id: 'f1', title: 'RSVP Restaurant', description: 'Multi-level fine dining with panoramic Lagos skyline views.', location: 'Victoria Island', rating: 4.9, price: '₦₦₦', icon: <Wine className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Skyline views', 'Wine pairing', 'Rooftop'], image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80' },
+      { id: 'f2', title: 'Cilantro Lagos', description: 'Award-winning contemporary African cuisine with modern flair.', location: 'Victoria Island', rating: 4.9, price: '₦₦₦₦', icon: <ChefHat className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Award-winning', 'Contemporary African', 'Fine dining'], image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80' },
+      { id: 'f3', title: 'Izanagi Restaurant', description: 'Premium Japanese dining with authentic sushi and teppanyaki.', location: 'Victoria Island', rating: 4.8, price: '₦₦₦', icon: <UtensilsCrossed className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Japanese cuisine', 'Sushi bar', 'Teppanyaki'], image: 'https://images.unsplash.com/photo-1579027989536-b7b1f875659b?w=800&q=80' },
+      { id: 'n1', title: 'Quilox Nightclub', description: 'Lagos\'s most exclusive nightclub with world-class DJs.', location: 'Victoria Island', rating: 4.7, price: '₦₦₦', icon: <Music className="w-6 h-6" />, duration: '4-6 hours', highlights: ['VIP tables', 'World-class DJs', 'Exclusive'], image: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=800&q=80' },
+      { id: 'n2', title: 'Cubana Bar', description: 'Open-air luxury lounge with infinity pool and Afrobeats DJs.', location: 'Lekki Phase 1', rating: 4.8, price: '₦₦₦', icon: <Wine className="w-6 h-6" />, duration: '3-5 hours', highlights: ['Infinity pool', 'Afrobeats', 'Luxury lounge'], image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800&q=80' },
+      { id: 'n3', title: 'New Afrika Shrine', description: 'The spiritual home of Afrobeat culture and Fela\'s legacy.', location: 'Ikeja', rating: 4.6, price: '₦₦', icon: <Drum className="w-6 h-6" />, duration: '3-4 hours', highlights: ['Live Afrobeat', 'Cultural venue', 'Historic'], image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80' },
     ]
   },
   {
@@ -79,11 +79,11 @@ const categories: Category[] = [
     icon: <ShoppingBag className="w-6 h-6" />,
     gradient: 'from-violet-500 via-purple-500 to-indigo-500',
     items: [
-      { id: 's1', title: 'Alara Lagos', description: 'Curated luxury concept store with African and international designers.', location: 'Victoria Island', rating: 4.8, price: '₦₦₦', icon: <Gem className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Luxury fashion', 'African designers', 'Premium brands'] },
-      { id: 's2', title: 'Ikeja City Mall', description: 'Lagos\'s largest mall with 150+ stores, cinema, and international brands.', location: 'Ikeja', rating: 4.5, price: 'Free Entry', icon: <ShoppingBag className="w-6 h-6" />, duration: '3-5 hours', highlights: ['150+ stores', 'Cinema', 'International brands'] },
-      { id: 's3', title: 'Balogun Market', description: 'Lagos\'s largest market — fabrics, fashion, and authentic bargaining.', location: 'Lagos Island', rating: 4.3, price: '₦', icon: <ShoppingBag className="w-6 h-6" />, duration: '2-4 hours', highlights: ['Local market', 'Fabrics', 'Authentic experience'] },
-      { id: 's4', title: 'Lekki Arts & Crafts Market', description: 'Handcrafted souvenirs and bespoke jewelry from local artisans.', location: 'Lekki Phase 1', rating: 4.4, price: '₦', icon: <Gift className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Handcrafted', 'Souvenirs', 'Local artisans'] },
-      { id: 's5', title: 'Nigerian Designers', description: 'Shop from top designers — Lisa Folawiyo, Deola Sagoe, Mai Atafo.', location: 'Various Boutiques', rating: 4.7, price: '₦₦₦', icon: <Crown className="w-6 h-6" />, duration: '2-4 hours', highlights: ['Top designers', 'Bespoke', 'Custom tailoring'] },
+      { id: 's1', title: 'Alara Lagos', description: 'Curated luxury concept store with African and international designers.', location: 'Victoria Island', rating: 4.8, price: '₦₦₦', icon: <Gem className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Luxury fashion', 'African designers', 'Premium brands'], image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80' },
+      { id: 's2', title: 'Ikeja City Mall', description: 'Lagos\'s largest mall with 150+ stores, cinema, and international brands.', location: 'Ikeja', rating: 4.5, price: 'Free Entry', icon: <ShoppingBag className="w-6 h-6" />, duration: '3-5 hours', highlights: ['150+ stores', 'Cinema', 'International brands'], image: 'https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?w=800&q=80' },
+      { id: 's3', title: 'Balogun Market', description: 'Lagos\'s largest market — fabrics, fashion, and authentic bargaining.', location: 'Lagos Island', rating: 4.3, price: '₦', icon: <ShoppingBag className="w-6 h-6" />, duration: '2-4 hours', highlights: ['Local market', 'Fabrics', 'Authentic experience'], image: 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=800&q=80' },
+      { id: 's4', title: 'Lekki Arts & Crafts Market', description: 'Handcrafted souvenirs and bespoke jewelry from local artisans.', location: 'Lekki Phase 1', rating: 4.4, price: '₦', icon: <Gift className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Handcrafted', 'Souvenirs', 'Local artisans'], image: 'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?w=800&q=80' },
+      { id: 's5', title: 'Nigerian Designers', description: 'Shop from top designers — Lisa Folawiyo, Deola Sagoe, Mai Atafo.', location: 'Various Boutiques', rating: 4.7, price: '₦₦₦', icon: <Crown className="w-6 h-6" />, duration: '2-4 hours', highlights: ['Top designers', 'Bespoke', 'Custom tailoring'], image: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&q=80' },
     ]
   },
   {
@@ -93,11 +93,11 @@ const categories: Category[] = [
     icon: <Compass className="w-6 h-6" />,
     gradient: 'from-emerald-500 via-teal-500 to-cyan-500',
     items: [
-      { id: 't1', title: 'Lagos Island Heritage Walk', description: 'Guided walking tour through the historical heart of Lagos.', location: 'Lagos Island', rating: 4.8, price: '₦15,000', icon: <Compass className="w-6 h-6" />, duration: '3 hours', highlights: ['Expert guides', 'Historical sites', 'Cultural insights'] },
-      { id: 't2', title: 'Lekki Lagoon Sunset Cruise', description: 'Sunset cruise with champagne, canapés, and skyline views.', location: 'Lekki', rating: 4.9, price: '₦85,000', icon: <Sailboat className="w-6 h-6" />, duration: '3 hours', highlights: ['Sunset cruise', 'Champagne', 'Skyline views'] },
-      { id: 't3', title: 'Private Yacht Experience', description: 'Luxury yacht charter with crew, catering, and waterway exploration.', location: 'Victoria Island', rating: 4.9, price: '₦500,000', icon: <Sailboat className="w-6 h-6" />, duration: '4-6 hours', highlights: ['Private yacht', 'Crew service', 'Catering'] },
-      { id: 't4', title: 'Lagos Food Tour', description: 'Gastronomic adventure — taste 10+ local dishes with a foodie guide.', location: 'Surulere & Yaba', rating: 4.7, price: '₦25,000', icon: <ChefHat className="w-6 h-6" />, duration: '4 hours', highlights: ['10+ dishes', 'Local guide', 'Food adventure'] },
-      { id: 't5', title: 'Corporate Lagos Experience', description: 'Tailored tour for business visitors — innovation hubs and networking.', location: 'VI & Ikoyi', rating: 4.7, price: '₦50,000', icon: <Car className="w-6 h-6" />, duration: '4 hours', highlights: ['Business districts', 'Innovation hubs', 'Networking'] },
+      { id: 't1', title: 'Lagos Island Heritage Walk', description: 'Guided walking tour through the historical heart of Lagos.', location: 'Lagos Island', rating: 4.8, price: '₦15,000', icon: <Compass className="w-6 h-6" />, duration: '3 hours', highlights: ['Expert guides', 'Historical sites', 'Cultural insights'], image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80' },
+      { id: 't2', title: 'Lekki Lagoon Sunset Cruise', description: 'Sunset cruise with champagne, canapés, and skyline views.', location: 'Lekki', rating: 4.9, price: '₦85,000', icon: <Sailboat className="w-6 h-6" />, duration: '3 hours', highlights: ['Sunset cruise', 'Champagne', 'Skyline views'], image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80' },
+      { id: 't3', title: 'Private Yacht Experience', description: 'Luxury yacht charter with crew, catering, and waterway exploration.', location: 'Victoria Island', rating: 4.9, price: '₦500,000', icon: <Sailboat className="w-6 h-6" />, duration: '4-6 hours', highlights: ['Private yacht', 'Crew service', 'Catering'], image: 'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=800&q=80' },
+      { id: 't4', title: 'Lagos Food Tour', description: 'Gastronomic adventure — taste 10+ local dishes with a foodie guide.', location: 'Surulere & Yaba', rating: 4.7, price: '₦25,000', icon: <ChefHat className="w-6 h-6" />, duration: '4 hours', highlights: ['10+ dishes', 'Local guide', 'Food adventure'], image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80' },
+      { id: 't5', title: 'Corporate Lagos Experience', description: 'Tailored tour for business visitors — innovation hubs and networking.', location: 'VI & Ikoyi', rating: 4.7, price: '₦50,000', icon: <Car className="w-6 h-6" />, duration: '4 hours', highlights: ['Business districts', 'Innovation hubs', 'Networking'], image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80' },
     ]
   },
 ];
@@ -134,9 +134,8 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true }:
               animate={{ scale: 1 }}
               transition={{ duration: 10, ease: [0.16, 1, 0.3, 1] }}
               className="w-full h-full object-cover opacity-35 select-none pointer-events-none"
-              src="/assets/images/horizontal/CozyLagos.jpeg"
+              src="/assets/bundles/bundles-hero-background.jpeg"
               alt="Explore Lagos"
-              onError={(e) => { (e.target as HTMLImageElement).src = '/assets/bundles/bundles-hero-background.jpeg'; }}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-charcoal/50 via-charcoal/20 to-charcoal/80" />
           </div>
@@ -388,13 +387,22 @@ function ExperienceCard({ item, index, onClick }: { item: ExploreItem; index: nu
       className="group cursor-pointer"
     >
       <div className="bg-white rounded-2xl overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
-        <div className="relative h-48 bg-gradient-to-br from-charcoal/80 to-charcoal/60 overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-white/30 group-hover:scale-110 transition-transform duration-500">
-              {React.cloneElement(item.icon as React.ReactElement, { className: 'w-16 h-16' })}
+        <div className="relative h-48 overflow-hidden">
+          {item.image ? (
+            <img
+              src={item.image}
+              alt={item.title}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-charcoal/80 to-charcoal/60 flex items-center justify-center">
+              <div className="text-white/30 group-hover:scale-110 transition-transform duration-500">
+                {React.cloneElement(item.icon as React.ReactElement, { className: 'w-16 h-16' })}
+              </div>
             </div>
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
           <div className="absolute bottom-4 left-4 right-4">
             <h3 className="font-serif text-xl font-bold text-white mb-1">{item.title}</h3>
             <div className="flex items-center gap-2 text-white/80 text-xs">
@@ -453,16 +461,23 @@ function ItemDetailModal({ item, onClose }: { item: ExploreItem; onClose: () => 
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-lg bg-parchment rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
       >
-        <div className="relative h-56 bg-gradient-to-br from-charcoal/80 to-charcoal/60 flex items-center justify-center">
+        <div className="relative h-56 overflow-hidden">
+          {item.image ? (
+            <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-charcoal/80 to-charcoal/60 flex items-center justify-center">
+              <div className="text-white/40 scale-150">
+                {React.cloneElement(item.icon as React.ReactElement, { className: 'w-20 h-20' })}
+              </div>
+            </div>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
           <button
             onClick={onClose}
             className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
-          <div className="text-white/40 scale-150">
-            {React.cloneElement(item.icon as React.ReactElement, { className: 'w-20 h-20' })}
-          </div>
           <div className="absolute bottom-4 left-6 right-6">
             <h2 className="font-serif text-2xl font-bold text-white mb-1">{item.title}</h2>
             <div className="flex items-center gap-2 text-white/80 text-sm">
