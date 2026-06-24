@@ -609,7 +609,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Corporate Executive",
     description: "Designed for the corporate leader who requires zero distractions and maximum efficiency.",
     icon: "briefcase",
-    image: "https://images.unsplash.com/photo-1611955167808-29e026258bf8?w=800&q=80",
+    image: "/assets/bundles/business-bundle.png",
     highlights: [
       "24/7 Dedicated IT Support",
       "Executive SUV with Chauffeur",
@@ -679,7 +679,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Reconnect with Lagos",
     description: "Reconnect with Lagos, beautifully.",
     icon: "globe",
-    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&q=80",
+    image: "/assets/bundles/diaspora-bundle.png",
     highlights: [
       "Private Cultural Tour Guide",
       "Professional Photography Sessions",
@@ -755,7 +755,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Hassle-Free Discovery",
     description: "Discover the best of Lagos, hassle-free.",
     icon: "map",
-    image: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80",
+    image: "/assets/bundles/tourist-bundle.png",
     highlights: [
       "Curated Local Experiences",
       "Guided City Tours",
@@ -824,7 +824,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Total Mobility",
     description: "Zero downtime. Total mobility.",
     icon: "crown",
-    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80",
+    image: "/assets/bundles/executive-elite-bundle.png",
     highlights: [
       "Private Jet Charter Flights",
       "Presidential Suite Accommodation",
@@ -896,7 +896,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Families & Sabbaticals",
     description: "Relocation and educational support for the whole family.",
     icon: "graduation",
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80",
+    image: "/assets/bundles/edu-care-bundle.png",
     highlights: [
       "School Placement Consultations",
       "Family Health Insurance Coverage",
@@ -963,7 +963,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Romance & Milestones",
     description: "Milestone moments, perfected.",
     icon: "heart",
-    image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80",
+    image: "/assets/bundles/lavish-love-bundle.png",
     highlights: [
       "Full Event Planning Service",
       "Private Yacht Cruise",
@@ -1040,7 +1040,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Wellness & Nightlife",
     description: "Sophisticated escapism.",
     icon: "sparkles",
-    image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
+    image: "/assets/bundles/pulse-zen-bundle.png",
     highlights: [
       "In-Room Spa Treatments",
       "Resort Day Passes",
