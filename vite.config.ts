@@ -11,6 +11,27 @@ export default defineConfig(() => {
         '@': path.resolve(__dirname, '.'),
       },
     },
+    build: {
+      // Optimize chunk splitting for better loading
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // Split vendor libraries into separate chunks
+            'vendor-motion': ['motion'],
+            'vendor-charts': ['recharts'],
+            'vendor-icons': ['lucide-react'],
+          },
+        },
+      },
+      // Reduce chunk size warning limit
+      chunkSizeWarningLimit: 1000,
+      // Enable source maps for production (optional, can be disabled for smaller builds)
+      sourcemap: false,
+      // Minify CSS
+      cssCodeSplit: true,
+      // Target modern browsers for smaller output
+      target: 'es2015',
+    },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
       // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
