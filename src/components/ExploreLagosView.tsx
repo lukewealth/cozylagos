@@ -1,21 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   MapPin, Star, Clock, DollarSign, Landmark, UtensilsCrossed, Music, ShoppingBag,
   Compass, Car, Sparkles, Users, Briefcase, CalendarDays, Camera, Ship, Coffee,
   Wine, Palette, TreePine, Building2, Store, Gem, GraduationCap, Dumbbell,
-  Heart, Baby, Monitor, Network, Award, Ticket, Map, Sailboat, ChefHat,
-  Theater, FerrisWheel, Film, Gamepad2, BookOpen, Mic2, Piano, PartyPopper,
+  Heart, Baby, Monitor, Award, Ticket, Map, Sailboat, ChefHat,
+  Theater, Film, BookOpen, Mic2, Piano, PartyPopper,
   Plane, KeyRound, Bike, Bus, Flower2, HandHeart, Scissors, Tent,
-  Wifi, Presentation, FolderOpen, Calendar, Trophy, Drum, ArrowUp, Gift,
+  Wifi, Calendar, Trophy, Drum, Gift,
   Grid3X3, List, X, ChevronRight, Check, Package, ArrowRight, LayoutGrid,
   SlidersHorizontal, Filter, Search, TrendingUp, Flame, Zap, Crown, Globe,
-  Anchor, Sparkle
+  Anchor, Waves, Home, Hotel, Tent as BeachTent, Sun, Moon, Cloud
 } from 'lucide-react';
 import { SERVICE_BUNDLES } from '../data';
-import VIPServicesView from './VIPServicesView';
-import ExperienceDetailView from './ExperienceDetailView';
-import VIPServicesView from './VIPServicesView';
 
 interface CategoryItem {
   id: string;
@@ -28,6 +25,7 @@ interface CategoryItem {
   icon: React.ReactNode;
   duration?: string;
   highlights?: string[];
+  image?: string;
 }
 
 interface Category {
@@ -55,17 +53,65 @@ const staggerItem = {
 
 const categories: Category[] = [
   {
-    id: 'attractions',
-    title: 'Attractions & Landmarks',
-    description: 'Discover the iconic sights and hidden gems that define Lagos',
+    id: 'beaches',
+    title: 'Beaches',
+    description: 'Discover Lagos\' stunning coastline — from private resort beaches to pristine natural waterfronts',
+    icon: <Waves className="w-5 h-5" />,
+    items: [
+      { id: 'b1', title: 'Tarkwa Bay Beach', description: 'Secluded beach accessible only by boat — golden sands, clear waters, and weekend beach parties.', location: 'Tarkwa Bay', rating: 4.6, price: '₦5,000', gradient: 'from-cyan-500 via-blue-500 to-indigo-600', icon: <Waves className="w-8 h-8" />, duration: 'Full day', highlights: ['Boat access only', 'Water sports', 'Beach parties', 'Swimming'] },
+      { id: 'b2', title: 'Elegushi Royal Beach', description: 'The quintessential Lagos beach experience with live music, VIP areas, and vibrant weekend energy.', location: 'Lekki Phase 1', rating: 4.5, price: '₦10,000', gradient: 'from-amber-500 via-orange-500 to-red-500', icon: <Sun className="w-8 h-8" />, duration: 'Full day', highlights: ['Live music', 'VIP sections', 'Water sports', 'Food vendors'] },
+      { id: 'b3', title: 'Landmark Beach', description: 'Premium beach club experience with luxury amenities, restaurants, and entertainment.', location: 'Victoria Island', rating: 4.7, price: '₦15,000', gradient: 'from-emerald-500 via-teal-500 to-cyan-500', icon: <Crown className="w-8 h-8" />, duration: 'Full day', highlights: ['Luxury amenities', 'Restaurants', 'Beach club', 'Events'] },
+      { id: 'b4', title: 'Eleko Beach', description: 'Serene and less crowded beach perfect for relaxation and family outings.', location: 'Ibeju-Lekki', rating: 4.4, price: '₦3,000', gradient: 'from-blue-400 via-cyan-400 to-teal-400', icon: <BeachTent className="w-8 h-8" />, duration: 'Full day', highlights: ['Peaceful', 'Family-friendly', 'Swimming', 'Picnics'] },
+      { id: 'b5', title: 'Ilashe Beach', description: 'Hidden gem with pristine sands and crystal-clear waters — perfect for weekend escapes.', location: 'Ilashe', rating: 4.5, price: '₦5,000', gradient: 'from-sky-500 via-blue-500 to-indigo-500', icon: <Waves className="w-8 h-8" />, duration: 'Full day', highlights: ['Pristine sands', 'Clear waters', 'Less crowded', 'Nature'] },
+      { id: 'b6', title: 'Kuramo Beach', description: 'Quiet beach near Victoria Island ideal for morning jogs and peaceful relaxation.', location: 'Victoria Island', rating: 4.2, price: 'Free', gradient: 'from-slate-500 via-gray-500 to-zinc-500', icon: <Sun className="w-8 h-8" />, duration: '2-4 hours', highlights: ['Free entry', 'Near VI', 'Peaceful', 'Morning walks'] },
+    ]
+  },
+  {
+    id: 'museums',
+    title: 'Museums',
+    description: 'Explore Nigeria\'s rich history and cultural heritage through world-class museums',
+    icon: <Building2 className="w-5 h-5" />,
+    items: [
+      { id: 'm1', title: 'National Museum Lagos', description: 'Nigeria\'s premier museum housing ancient Nok terracottas, Benin bronzes, and cultural artifacts spanning millennia.', location: 'Onikan, Lagos Island', rating: 4.3, price: '₦2,000', gradient: 'from-emerald-600 via-teal-500 to-green-400', icon: <Building2 className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Historical artifacts', 'Cultural exhibits', 'Guided tours', 'Gift shop'] },
+      { id: 'm2', title: 'Kalakuta Republic Museum', description: 'The legendary former home of Fela Kuti — celebrating the life, music, and legacy of Africa\'s most iconic rebel.', location: 'Agege Motor Road, Ikeja', rating: 4.4, price: '₦1,500', gradient: 'from-red-600 via-rose-500 to-pink-500', icon: <Drum className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Music history', 'Memorabilia', 'Cultural significance', 'Live music events'] },
+      { id: 'm3', title: 'Badagry Heritage Museum', description: 'Chronicles the trans-Atlantic slave trade and Badagry\'s role in this tragic history.', location: 'Badagry', rating: 4.5, price: '₦1,000', gradient: 'from-amber-700 via-orange-600 to-red-600', icon: <Landmark className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Historical tours', 'Slave route', 'Educational', 'Memorial'] },
+      { id: 'm4', title: 'MOCA Lagos', description: 'Museum of Contemporary Art showcasing cutting-edge Nigerian and African modern art.', location: 'Lagos', rating: 4.6, price: '₦3,000', gradient: 'from-violet-600 via-purple-500 to-fuchsia-500', icon: <Palette className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Contemporary art', 'Modern exhibitions', 'Artist talks', 'Workshops'] },
+    ]
+  },
+  {
+    id: 'galleries',
+    title: 'Art Galleries',
+    description: 'Discover world-class art spaces showcasing Nigeria\'s vibrant contemporary art scene',
+    icon: <Palette className="w-5 h-5" />,
+    items: [
+      { id: 'g1', title: 'Nike Art Gallery', description: 'West Africa\'s largest privately owned art gallery with over 7,000 works spanning traditional and contemporary Nigerian art.', location: 'Lekki Phase 1', rating: 4.8, price: 'Free', gradient: 'from-amber-600 via-orange-500 to-yellow-400', icon: <Palette className="w-8 h-8" />, duration: '2-3 hours', highlights: ['7,000+ artworks', 'Guided tours', 'Art workshops', 'Gift shop'] },
+      { id: 'g2', title: 'Yemisi Shyllon Museum of Art', description: 'One of Nigeria\'s most important modern art museums housing an extensive private collection.', location: 'Pan-Atlantic University', rating: 4.7, price: 'Free', gradient: 'from-indigo-600 via-blue-500 to-cyan-400', icon: <Gem className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Modern art', 'Private collection', 'University setting', 'Educational'] },
+      { id: 'g3', title: 'OX Gallery', description: 'Contemporary art gallery featuring emerging and established Nigerian artists.', location: 'Victoria Island', rating: 4.5, price: 'Free', gradient: 'from-rose-600 via-pink-500 to-fuchsia-500', icon: <Palette className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Contemporary', 'Emerging artists', 'Exhibitions', 'Art sales'] },
+      { id: 'g4', title: 'Terra Kulture Gallery', description: 'Art gallery showcasing Nigerian culture through paintings, sculptures, and multimedia installations.', location: 'Victoria Island', rating: 4.4, price: '₦1,000', gradient: 'from-emerald-500 via-teal-500 to-cyan-500', icon: <Theater className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Cultural art', 'Theater', 'Restaurant', 'Events'] },
+    ]
+  },
+  {
+    id: 'historical',
+    title: 'Historical Landmarks',
+    description: 'Journey through Lagos\'s rich history from colonial times to modern independence',
     icon: <Landmark className="w-5 h-5" />,
     items: [
-      { id: 'a1', title: 'Nike Art Gallery', description: 'West Africa\'s largest art gallery with over 7,000 works spanning traditional and contemporary Nigerian art.', location: 'Lekki Phase 1', rating: 4.8, price: 'Free', gradient: 'from-amber-600 via-orange-500 to-yellow-400', icon: <Palette className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Guided tours', 'Art workshops', 'Gift shop'] },
-      { id: 'a2', title: 'Elegushi Beach', description: 'The quintessential Lagos beach experience with golden sands, live music, and vibrant weekend energy.', location: 'Ikate, Lekki', rating: 4.5, price: '₦5,000', gradient: 'from-cyan-500 via-blue-500 to-indigo-600', icon: <TreePine className="w-8 h-8" />, duration: 'Full day', highlights: ['Live music', 'Water sports', 'Beach bars'] },
-      { id: 'a3', title: 'Lagos National Museum', description: 'A treasure trove of Nigerian cultural heritage featuring ancient Nok terracottas and Benin bronzes.', location: 'Onikan, Lagos Island', rating: 4.3, price: '₦2,000', gradient: 'from-emerald-600 via-teal-500 to-green-400', icon: <Building2 className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Historical artifacts', 'Cultural exhibits', 'Guided tours'] },
-      { id: 'a4', title: 'Freedom Park', description: 'Former colonial prison transformed into a vibrant cultural hub for art, music, and community events.', location: 'Broad Street, Lagos Island', rating: 4.6, price: '₦3,000', gradient: 'from-violet-600 via-purple-500 to-fuchsia-500', icon: <Landmark className="w-8 h-8" />, duration: '2-4 hours', highlights: ['Live performances', 'Art exhibitions', 'Historical tours'] },
-      { id: 'a5', title: 'Eko Atlantic City', description: 'Africa\'s most ambitious real estate project — a futuristic city reclaimed from the Atlantic Ocean.', location: 'Victoria Island', rating: 4.7, price: 'Free', gradient: 'from-slate-600 via-gray-500 to-zinc-400', icon: <Building2 className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Architecture tours', 'Beachfront', 'Modern development'] },
-      { id: 'a6', title: 'Kalakuta Republic Museum', description: 'The legendary former home of Fela Kuti, celebrating the life and music of Africa\'s most iconic rebel.', location: 'Agege Motor Road, Ikeja', rating: 4.4, price: '₦1,500', gradient: 'from-red-600 via-rose-500 to-pink-500', icon: <Drum className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Music history', 'Memorabilia', 'Cultural significance'] },
+      { id: 'h1', title: 'Freedom Park', description: 'Former colonial prison transformed into a vibrant cultural hub for art, music, and community events.', location: 'Broad Street, Lagos Island', rating: 4.6, price: '₦3,000', gradient: 'from-violet-600 via-purple-500 to-fuchsia-500', icon: <Landmark className="w-8 h-8" />, duration: '2-4 hours', highlights: ['Historical tours', 'Live performances', 'Art exhibitions', 'Memorial'] },
+      { id: 'h2', title: 'Jaekel House', description: 'Beautifully restored colonial-era building showcasing Lagos\'s architectural heritage.', location: 'Lagos Island', rating: 4.3, price: '₦1,500', gradient: 'from-amber-600 via-orange-500 to-red-500', icon: <Building2 className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Colonial architecture', 'Historical tours', 'Cultural events', 'Photography'] },
+      { id: 'h3', title: 'John Randle Centre', description: 'Centre for Yoruba Culture and History celebrating the rich heritage of the Yoruba people.', location: 'Lagos Island', rating: 4.5, price: '₦2,000', gradient: 'from-emerald-600 via-green-500 to-teal-500', icon: <BookOpen className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Yoruba culture', 'Historical exhibits', 'Cultural events', 'Educational'] },
+      { id: 'h4', title: 'National Arts Theatre', description: 'Iconic military-era theatre showcasing Nigerian performing arts and cultural performances.', location: 'Iganmu', rating: 4.2, price: '₦2,500', gradient: 'from-rose-600 via-pink-500 to-fuchsia-500', icon: <Theater className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Performing arts', 'Cultural shows', 'Historical venue', 'Events'] },
+    ]
+  },
+  {
+    id: 'parks',
+    title: 'Parks & Nature',
+    description: 'Escape to Lagos\'s green spaces — from conservation centres to nature reserves',
+    icon: <TreePine className="w-5 h-5" />,
+    items: [
+      { id: 'p1', title: 'Lekki Conservation Centre', description: 'Famous for its canopy walkway and nature trails — experience Lagos\'s biodiversity up close.', location: 'Lekki', rating: 4.7, price: '₦5,000', gradient: 'from-green-600 via-emerald-500 to-teal-400', icon: <TreePine className="w-8 h-8" />, duration: '3-4 hours', highlights: ['Canopy walkway', 'Nature trails', 'Wildlife', 'Educational'] },
+      { id: 'p2', title: 'LUFASI Nature Park', description: 'Serene nature reserve with hiking trails, wildlife, and peaceful picnic spots.', location: 'Lekki-Epe Expressway', rating: 4.5, price: '₦3,000', gradient: 'from-lime-600 via-green-500 to-emerald-500', icon: <TreePine className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Hiking trails', 'Wildlife', 'Picnics', 'Nature walks'] },
+      { id: 'p3', title: 'Omu Resort', description: 'Family-friendly resort with zoo, amusement park, and recreational activities.', location: 'Lekki-Epe', rating: 4.4, price: '₦8,000', gradient: 'from-amber-500 via-orange-500 to-red-500', icon: <Baby className="w-8 h-8" />, duration: 'Full day', highlights: ['Zoo', 'Amusement park', 'Family activities', 'Recreation'] },
+      { id: 'p4', title: 'JJT Park', description: 'Johnson Jakande Tinubu Park — urban green space for relaxation and community events.', location: 'Lagos Island', rating: 4.1, price: 'Free', gradient: 'from-teal-500 via-cyan-500 to-blue-500', icon: <TreePine className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Free entry', 'Urban park', 'Events', 'Relaxation'] },
     ]
   },
   {
@@ -74,12 +120,12 @@ const categories: Category[] = [
     description: 'Savor the rich flavors of Lagos — from street-side suya to Michelin-worthy plates',
     icon: <UtensilsCrossed className="w-5 h-5" />,
     items: [
-      { id: 'f1', title: 'The RSVP Restaurant', description: 'Multi-level fine dining destination offering contemporary European cuisine with panoramic Lagos skyline views.', location: 'Victoria Island', rating: 4.9, price: '₦₦₦', gradient: 'from-amber-700 via-yellow-600 to-orange-500', icon: <Wine className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Skyline views', 'Wine pairing', 'Private dining'] },
-      { id: 'f2', title: 'Mama Put Paradise', description: 'Authentic Nigerian jollof rice, pounded yam, and egusi soup served with the warmth of home cooking.', location: 'Surulere', rating: 4.7, price: '₦', gradient: 'from-orange-600 via-red-500 to-rose-600', icon: <ChefHat className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Local cuisine', 'Family-friendly', 'Affordable'] },
-      { id: 'f3', title: 'Sky 16 Rooftop', description: 'Elevated dining 16 floors above Lagos with craft cocktails, tapas, and unforgettable sunset views.', location: 'Eko Hotel, VI', rating: 4.8, price: '₦₦₦', gradient: 'from-indigo-600 via-blue-500 to-cyan-400', icon: <Star className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Rooftop views', 'Craft cocktails', 'Sunset dining'] },
-      { id: 'f4', title: 'Café Neo', description: 'Lagos\'s homegrown specialty coffee brand — single-origin Nigerian beans roasted to perfection.', location: 'Multiple Locations', rating: 4.6, price: '₦₦', gradient: 'from-amber-800 via-yellow-700 to-orange-600', icon: <Coffee className="w-8 h-8" />, duration: '1 hour', highlights: ['Specialty coffee', 'Pastries', 'WiFi'] },
-      { id: 'f5', title: 'Bukka Hut', description: 'Modern twist on Nigerian street food — suya wraps, puff puff bites, and zobo spritzers in a chic setting.', location: 'Lekki Phase 1', rating: 4.5, price: '₦', gradient: 'from-lime-600 via-green-500 to-emerald-500', icon: <UtensilsCrossed className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Street food', 'Modern setting', 'Quick bites'] },
-      { id: 'f6', title: 'Ilu Restaurant', description: 'Award-winning contemporary African cuisine celebrating Yoruba culinary traditions with modern flair.', location: 'Ikoyi', rating: 4.9, price: '₦₦₦₦', gradient: 'from-rose-600 via-pink-500 to-fuchsia-500', icon: <Gem className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Award-winning', 'Contemporary African', 'Fine dining'] },
+      { id: 'f1', title: 'RSVP Restaurant', description: 'Multi-level fine dining destination offering contemporary European cuisine with panoramic Lagos skyline views.', location: 'Victoria Island', rating: 4.9, price: '₦₦₦', gradient: 'from-amber-700 via-yellow-600 to-orange-500', icon: <Wine className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Skyline views', 'Wine pairing', 'Private dining', 'Rooftop'] },
+      { id: 'f2', title: 'Cilantro Lagos', description: 'Award-winning contemporary African cuisine celebrating Yoruba culinary traditions with modern flair.', location: 'Victoria Island', rating: 4.9, price: '₦₦₦₦', gradient: 'from-rose-600 via-pink-500 to-fuchsia-500', icon: <Gem className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Award-winning', 'Contemporary African', 'Fine dining', 'Wine list'] },
+      { id: 'f3', title: 'Izanagi Restaurant', description: 'Premium Japanese dining experience with authentic sushi, sashimi, and teppanyaki.', location: 'Victoria Island', rating: 4.8, price: '₦₦₦', gradient: 'from-red-600 via-rose-500 to-pink-500', icon: <UtensilsCrossed className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Japanese cuisine', 'Sushi bar', 'Teppanyaki', 'Sake selection'] },
+      { id: 'f4', title: 'Buka Hut', description: 'Modern twist on Nigerian street food — suya wraps, puff puff bites, and zobo spritzers in a chic setting.', location: 'Lekki Phase 1', rating: 4.5, price: '₦', gradient: 'from-lime-600 via-green-500 to-emerald-500', icon: <UtensilsCrossed className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Street food', 'Modern setting', 'Quick bites', 'Affordable'] },
+      { id: 'f5', title: 'The Grill by Delis', description: 'Premium seafood and grill restaurant with ocean views and fresh daily catches.', location: 'Victoria Island', rating: 4.7, price: '₦₦₦', gradient: 'from-blue-600 via-cyan-500 to-teal-500', icon: <UtensilsCrossed className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Seafood', 'Ocean views', 'Fresh catches', 'Grill specialties'] },
+      { id: 'f6', title: 'Yellow Chilli', description: 'Popular Nigerian restaurant chain serving authentic local dishes in a family-friendly atmosphere.', location: 'Multiple Locations', rating: 4.6, price: '₦₦', gradient: 'from-yellow-500 via-amber-500 to-orange-500', icon: <ChefHat className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Nigerian cuisine', 'Family-friendly', 'Multiple locations', 'Consistent quality'] },
     ]
   },
   {
@@ -88,12 +134,12 @@ const categories: Category[] = [
     description: 'When the sun sets, Lagos comes alive — discover the city\'s electric after-dark scene',
     icon: <Music className="w-5 h-5" />,
     items: [
-      { id: 'n1', title: 'Quilox Nightclub', description: 'Lagos\'s most exclusive nightclub — world-class DJs, VIP tables, and an energy that lasts till dawn.', location: 'Victoria Island', rating: 4.7, price: '₦₦₦', gradient: 'from-violet-700 via-purple-600 to-indigo-600', icon: <Music className="w-8 h-8" />, duration: '4-6 hours', highlights: ['VIP tables', 'World-class DJs', 'Exclusive'] },
-      { id: 'n2', title: 'The Cubana Bar', description: 'Open-air luxury lounge with infinity pool, premium spirits, and the best Afrobeats DJs in the city.', location: 'Lekki Phase 1', rating: 4.8, price: '₦₦₦', gradient: 'from-fuchsia-600 via-pink-500 to-rose-500', icon: <Wine className="w-8 h-8" />, duration: '3-5 hours', highlights: ['Infinity pool', 'Afrobeats', 'Luxury lounge'] },
-      { id: 'n3', title: 'The Comedy Hub', description: 'Home of Lagos\'s hottest stand-up comedy nights featuring Nigeria\'s top comedians and rising stars.', location: 'Ikeja GRA', rating: 4.6, price: '₦₦', gradient: 'from-yellow-500 via-amber-500 to-orange-500', icon: <Mic2 className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Stand-up comedy', 'Live shows', 'Local comedians'] },
-      { id: 'n4', title: 'Hard Rock Café Lagos', description: 'Live band performances every weekend, signature cocktails, and an iconic rock \'n\' roll atmosphere.', location: 'Victoria Island', rating: 4.5, price: '₦₦₦', gradient: 'from-red-700 via-rose-600 to-pink-600', icon: <Piano className="w-8 h-8" />, duration: '3-4 hours', highlights: ['Live bands', 'Signature cocktails', 'Rock atmosphere'] },
-      { id: 'n5', title: 'Beach Party @ Tarkwa Bay', description: 'Weekend beach parties accessible only by boat — dancing in the sand under the stars.', location: 'Tarkwa Bay', rating: 4.4, price: '₦₦', gradient: 'from-cyan-600 via-teal-500 to-emerald-500', icon: <PartyPopper className="w-8 h-8" />, duration: '4-6 hours', highlights: ['Beach party', 'Boat access', 'Under the stars'] },
-      { id: 'n6', title: 'Eko Convention Centre Events', description: 'Lagos\'s premier venue for mega concerts, award shows, and international entertainment spectaculars.', location: 'Victoria Island', rating: 4.7, price: '₦₦', gradient: 'from-blue-700 via-indigo-600 to-violet-600', icon: <Theater className="w-8 h-8" />, duration: '3-5 hours', highlights: ['Mega concerts', 'Award shows', 'International acts'] },
+      { id: 'n1', title: 'Quilox Nightclub', description: 'Lagos\'s most exclusive nightclub — world-class DJs, VIP tables, and an energy that lasts till dawn.', location: 'Victoria Island', rating: 4.7, price: '₦₦₦', gradient: 'from-violet-700 via-purple-600 to-indigo-600', icon: <Music className="w-8 h-8" />, duration: '4-6 hours', highlights: ['VIP tables', 'World-class DJs', 'Exclusive', 'Celebrity sightings'] },
+      { id: 'n2', title: 'Cubana Bar', description: 'Open-air luxury lounge with infinity pool, premium spirits, and the best Afrobeats DJs in the city.', location: 'Lekki Phase 1', rating: 4.8, price: '₦₦₦', gradient: 'from-fuchsia-600 via-pink-500 to-rose-500', icon: <Wine className="w-8 h-8" />, duration: '3-5 hours', highlights: ['Infinity pool', 'Afrobeats', 'Luxury lounge', 'Outdoor seating'] },
+      { id: 'n3', title: 'New Afrika Shrine', description: 'The spiritual home of Afrobeat culture — live music, cultural performances, and Fela\'s legacy.', location: 'Ikeja', rating: 4.6, price: '₦₦', gradient: 'from-red-700 via-rose-600 to-pink-600', icon: <Drum className="w-8 h-8" />, duration: '3-4 hours', highlights: ['Live Afrobeat', 'Cultural venue', 'Historic', 'Authentic experience'] },
+      { id: 'n4', title: 'Sugar 52 Rooftop', description: 'Elevated rooftop bar with panoramic city views, craft cocktails, and vibrant weekend parties.', location: 'Lekki', rating: 4.7, price: '₦₦₦', gradient: 'from-indigo-600 via-blue-500 to-cyan-400', icon: <Wine className="w-8 h-8" />, duration: '3-4 hours', highlights: ['Rooftop views', 'Craft cocktails', 'Weekend parties', 'Instagram-worthy'] },
+      { id: 'n5', title: 'Sailors Lounge', description: 'Waterfront lounge offering food, drinks, live music, and a relaxed atmosphere by the lagoon.', location: 'Lekki', rating: 4.3, price: '₦₦', gradient: 'from-cyan-600 via-teal-500 to-emerald-500', icon: <Wine className="w-8 h-8" />, duration: '3-5 hours', highlights: ['Waterfront', 'Live music', 'Relaxed vibe', 'Food & drinks'] },
+      { id: 'n6', title: 'The View Rooftop', description: 'Premium rooftop experience with elevated views of Lekki, cocktails, and weekend DJ sets.', location: 'Lekki', rating: 4.4, price: '₦₦₦', gradient: 'from-purple-600 via-violet-500 to-indigo-500', icon: <Moon className="w-8 h-8" />, duration: '3-4 hours', highlights: ['Panoramic views', 'Cocktails', 'DJ sets', 'Premium experience'] },
     ]
   },
   {
@@ -102,11 +148,12 @@ const categories: Category[] = [
     description: 'From luxury boutiques to vibrant markets — Lagos is Africa\'s fashion capital',
     icon: <ShoppingBag className="w-5 h-5" />,
     items: [
-      { id: 's1', title: 'Palm Shopping Mall', description: 'Lekki\'s premier shopping destination with 150+ stores, cinema, bowling alley, and international brands.', location: 'Lekki Phase 1', rating: 4.5, price: 'Free Entry', gradient: 'from-pink-600 via-rose-500 to-red-400', icon: <Store className="w-8 h-8" />, duration: '3-5 hours', highlights: ['150+ stores', 'Cinema', 'International brands'] },
-      { id: 's2', title: 'Balogun Market', description: 'Lagos\'s largest and most vibrant market — a sensory explosion of fabrics, fashion, and bargaining.', location: 'Lagos Island', rating: 4.3, price: '₦', gradient: 'from-orange-500 via-amber-500 to-yellow-400', icon: <ShoppingBag className="w-8 h-8" />, duration: '2-4 hours', highlights: ['Local market', 'Fabrics', 'Bargaining'] },
-      { id: 's3', title: 'Alara Lagos', description: 'Curated luxury concept store featuring African and international designer fashion, art, and lifestyle.', location: 'Victoria Island', rating: 4.8, price: '₦₦₦', gradient: 'from-slate-700 via-gray-600 to-zinc-500', icon: <Gem className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Luxury fashion', 'African designers', 'Art gallery'] },
-      { id: 's4', title: 'Ikoyi Fashion District', description: 'Boutique-lined streets showcasing Nigeria\'s top fashion designers and bespoke tailoring ateliers.', location: 'Ikoyi', rating: 4.6, price: '₦₦₦', gradient: 'from-purple-600 via-violet-500 to-indigo-500', icon: <ShoppingBag className="w-8 h-8" />, duration: '3-4 hours', highlights: ['Fashion boutiques', 'Bespoke tailoring', 'Local designers'] },
-      { id: 's5', title: 'Artisan Market Lekki', description: 'Handcrafted souvenirs, traditional textiles, carved masks, and bespoke jewelry from local artisans.', location: 'Lekki Phase 1', rating: 4.4, price: '₦', gradient: 'from-teal-600 via-emerald-500 to-green-400', icon: <Gift className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Handcrafted', 'Souvenirs', 'Local artisans'] },
+      { id: 's1', title: 'Ikeja City Mall', description: 'Lagos\'s largest shopping mall with 150+ stores, cinema, bowling alley, and international brands.', location: 'Ikeja', rating: 4.5, price: 'Free Entry', gradient: 'from-pink-600 via-rose-500 to-red-400', icon: <Store className="w-8 h-8" />, duration: '3-5 hours', highlights: ['150+ stores', 'Cinema', 'International brands', 'Food court'] },
+      { id: 's2', title: 'Balogun Market', description: 'Lagos\'s largest and most vibrant market — a sensory explosion of fabrics, fashion, and bargaining.', location: 'Lagos Island', rating: 4.3, price: '₦', gradient: 'from-orange-500 via-amber-500 to-yellow-400', icon: <ShoppingBag className="w-8 h-8" />, duration: '2-4 hours', highlights: ['Local market', 'Fabrics', 'Bargaining', 'Authentic experience'] },
+      { id: 's3', title: 'Alara Lagos', description: 'Curated luxury concept store featuring African and international designer fashion, art, and lifestyle.', location: 'Victoria Island', rating: 4.8, price: '₦₦₦', gradient: 'from-slate-700 via-gray-600 to-zinc-500', icon: <Gem className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Luxury fashion', 'African designers', 'Art gallery', 'Premium brands'] },
+      { id: 's4', title: 'Lekki Arts & Crafts Market', description: 'Handcrafted souvenirs, traditional textiles, carved masks, and bespoke jewelry from local artisans.', location: 'Lekki Phase 1', rating: 4.4, price: '₦', gradient: 'from-teal-600 via-emerald-500 to-green-400', icon: <Gift className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Handcrafted', 'Souvenirs', 'Local artisans', 'Bargaining'] },
+      { id: 's5', title: 'Fabric Markets', description: 'Explore vibrant fabric markets specializing in Ankara, Lace, Aso Oke, Adire, and George fabrics.', location: 'Multiple Locations', rating: 4.6, price: '₦₦', gradient: 'from-purple-600 via-violet-500 to-indigo-500', icon: <ShoppingBag className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Ankara', 'Lace', 'Aso Oke', 'Adire'] },
+      { id: 's6', title: 'Nigerian Designers', description: 'Shop from top Nigerian fashion designers — Lisa Folawiyo, Deola Sagoe, Orange Culture, Mai Atafo.', location: 'Various Boutiques', rating: 4.7, price: '₦₦₦', gradient: 'from-rose-600 via-pink-500 to-fuchsia-500', icon: <Crown className="w-8 h-8" />, duration: '2-4 hours', highlights: ['Top designers', 'Bespoke', 'Luxury fashion', 'Custom tailoring'] },
     ]
   },
   {
@@ -115,12 +162,12 @@ const categories: Category[] = [
     description: 'Curated journeys through Lagos — see the city through the eyes of insiders',
     icon: <Compass className="w-5 h-5" />,
     items: [
-      { id: 't1', title: 'Lagos Island Heritage Walk', description: 'Guided walking tour through the historical heart of Lagos — from Broad Street to Marina with expert storytellers.', location: 'Lagos Island', rating: 4.8, price: '₦15,000', gradient: 'from-emerald-600 via-green-500 to-lime-500', icon: <Map className="w-8 h-8" />, duration: '3 hours', highlights: ['Expert guides', 'Historical sites', 'Walking tour'] },
-      { id: 't2', title: 'Lekki Lagoon Boat Cruise', description: 'Sunset cruise across the tranquil Lekki Lagoon with champagne, canapés, and stunning skyline views.', location: 'Lekki', rating: 4.9, price: '₦85,000', gradient: 'from-blue-600 via-cyan-500 to-teal-400', icon: <Sailboat className="w-8 h-8" />, duration: '3 hours', highlights: ['Sunset cruise', 'Champagne', 'Skyline views'] },
-      { id: 't3', title: 'Lagos Food Tour', description: 'A gastronomic adventure through Surulere and Yaba — taste 10+ local dishes with a foodie guide.', location: 'Surulere & Yaba', rating: 4.7, price: '₦25,000', gradient: 'from-orange-600 via-red-500 to-rose-500', icon: <ChefHat className="w-8 h-8" />, duration: '4 hours', highlights: ['10+ dishes', 'Local guide', 'Food adventure'] },
-      { id: 't4', title: 'Lagos by Night City Tour', description: 'Experience Lagos\'s electric nightlife from a luxury bus — club hopping, street food, and live music.', location: 'VI & Lekki', rating: 4.6, price: '35,000', gradient: 'from-indigo-700 via-purple-600 to-violet-500', icon: <Bus className="w-8 h-8" />, duration: '5 hours', highlights: ['Luxury bus', 'Club hopping', 'Live music'] },
-      { id: 't5', title: 'Photography Walk — Makoko', description: 'Capture the floating village of Makoko with a professional photographer guide. Camera rental available.', location: 'Makoko', rating: 4.5, price: '₦20,000', gradient: 'from-amber-600 via-yellow-500 to-orange-400', icon: <Camera className="w-8 h-8" />, duration: '3 hours', highlights: ['Professional guide', 'Camera rental', 'Unique location'] },
-      { id: 't6', title: 'Corporate Lagos Experience', description: 'Tailored tour for business visitors — visit key business districts, innovation hubs, and networking spots.', location: 'VI & Ikoyi', rating: 4.7, price: '₦50,000', gradient: 'from-slate-600 via-gray-500 to-zinc-400', icon: <Briefcase className="w-8 h-8" />, duration: '4 hours', highlights: ['Business districts', 'Innovation hubs', 'Networking'] },
+      { id: 't1', title: 'Lagos Island Heritage Walk', description: 'Guided walking tour through the historical heart of Lagos — from Broad Street to Marina with expert storytellers.', location: 'Lagos Island', rating: 4.8, price: '₦15,000', gradient: 'from-emerald-600 via-green-500 to-lime-500', icon: <Map className="w-8 h-8" />, duration: '3 hours', highlights: ['Expert guides', 'Historical sites', 'Walking tour', 'Cultural insights'] },
+      { id: 't2', title: 'Lekki Lagoon Sunset Cruise', description: 'Sunset cruise across the tranquil Lekki Lagoon with champagne, canapés, and stunning skyline views.', location: 'Lekki', rating: 4.9, price: '₦85,000', gradient: 'from-blue-600 via-cyan-500 to-teal-400', icon: <Sailboat className="w-8 h-8" />, duration: '3 hours', highlights: ['Sunset cruise', 'Champagne', 'Skyline views', 'Romantic'] },
+      { id: 't3', title: 'Private Yacht Experience', description: 'Luxury yacht charter with crew, catering, and the freedom to explore Lagos\'s waterways in style.', location: 'Victoria Island', rating: 4.9, price: '₦500,000', gradient: 'from-indigo-700 via-blue-600 to-cyan-500', icon: <Ship className="w-8 h-8" />, duration: '4-6 hours', highlights: ['Private yacht', 'Crew service', 'Catering', 'Luxury experience'] },
+      { id: 't4', title: 'Lagos Food Tour', description: 'A gastronomic adventure through Surulere and Yaba — taste 10+ local dishes with a foodie guide.', location: 'Surulere & Yaba', rating: 4.7, price: '₦25,000', gradient: 'from-orange-600 via-red-500 to-rose-500', icon: <ChefHat className="w-8 h-8" />, duration: '4 hours', highlights: ['10+ dishes', 'Local guide', 'Food adventure', 'Cultural insights'] },
+      { id: 't5', title: 'Photography Walk — Makoko', description: 'Capture the floating village of Makoko with a professional photographer guide. Camera rental available.', location: 'Makoko', rating: 4.5, price: '₦20,000', gradient: 'from-amber-600 via-yellow-500 to-orange-400', icon: <Camera className="w-8 h-8" />, duration: '3 hours', highlights: ['Professional guide', 'Camera rental', 'Unique location', 'Cultural experience'] },
+      { id: 't6', title: 'Corporate Lagos Experience', description: 'Tailored tour for business visitors — visit key business districts, innovation hubs, and networking spots.', location: 'VI & Ikoyi', rating: 4.7, price: '₦50,000', gradient: 'from-slate-600 via-gray-500 to-zinc-400', icon: <Briefcase className="w-8 h-8" />, duration: '4 hours', highlights: ['Business districts', 'Innovation hubs', 'Networking', 'Professional'] },
     ]
   },
   {
@@ -129,11 +176,12 @@ const categories: Category[] = [
     description: 'Move around Lagos in style — premium rides, airport transfers, and chauffeur services',
     icon: <Car className="w-5 h-5" />,
     items: [
-      { id: 'tr1', title: 'Airport VIP Pickup', description: 'Meet-and-greet service at Murtala Muhammed Airport with luxury sedan, cold water, and fast-track through arrivals.', location: 'MMIA Airport', rating: 4.8, price: '₦35,000', gradient: 'from-sky-600 via-blue-500 to-indigo-500', icon: <Plane className="w-8 h-8" />, duration: '1 hour', highlights: ['Meet & greet', 'Luxury sedan', 'Fast-track'] },
-      { id: 'tr2', title: 'Chauffeur Service', description: 'Professional chauffeur-driven Mercedes or Range Rover for the day — perfect for business or special occasions.', location: 'Island-wide', rating: 4.9, price: '₦150,000', gradient: 'from-gray-700 via-slate-600 to-zinc-500', icon: <KeyRound className="w-8 h-8" />, duration: 'Full day', highlights: ['Mercedes/Range Rover', 'Professional driver', 'All-day service'] },
-      { id: 'tr3', title: 'Luxury Car Rental', description: 'Self-drive or chauffeured rentals — from Toyota Camry to Rolls Royce. Insurance and fuel included.', location: 'All Lagos', rating: 4.6, price: '₦80,000/day', gradient: 'from-red-600 via-rose-500 to-pink-500', icon: <Car className="w-8 h-8" />, duration: 'Per day', highlights: ['Self-drive option', 'Insurance included', 'Wide range'] },
-      { id: 'tr4', title: 'Corporate Fleet Transport', description: 'Dedicated fleet management for businesses — staff shuttles, executive transport, and logistics coordination.', location: 'All Lagos', rating: 4.5, price: 'Custom', gradient: 'from-emerald-700 via-teal-600 to-green-500', icon: <Bus className="w-8 h-8" />, duration: 'Ongoing', highlights: ['Fleet management', 'Staff shuttles', 'Logistics'] },
-      { id: 'tr5', title: 'Inter-City Transfer', description: 'Comfortable door-to-door transfers between Lagos, Ibadan, Abeokuta, and Benin City in premium vehicles.', location: 'Inter-city', rating: 4.4, price: '65,000', gradient: 'from-amber-600 via-orange-500 to-yellow-500', icon: <Bus className="w-8 h-8" />, duration: '2-4 hours', highlights: ['Door-to-door', 'Premium vehicles', 'Multiple cities'] },
+      { id: 'tr1', title: 'Airport VIP Pickup', description: 'Meet-and-greet service at Murtala Muhammed Airport with luxury sedan, cold water, and fast-track through arrivals.', location: 'MMIA Airport', rating: 4.8, price: '₦35,000', gradient: 'from-sky-600 via-blue-500 to-indigo-500', icon: <Plane className="w-8 h-8" />, duration: '1 hour', highlights: ['Meet & greet', 'Luxury sedan', 'Fast-track', 'Cold water'] },
+      { id: 'tr2', title: 'Chauffeur Service', description: 'Professional chauffeur-driven Mercedes or Range Rover for the day — perfect for business or special occasions.', location: 'Island-wide', rating: 4.9, price: '₦150,000', gradient: 'from-gray-700 via-slate-600 to-zinc-500', icon: <KeyRound className="w-8 h-8" />, duration: 'Full day', highlights: ['Mercedes/Range Rover', 'Professional driver', 'All-day service', 'Premium'] },
+      { id: 'tr3', title: 'Luxury Car Rental', description: 'Self-drive or chauffeured rentals — from Toyota Camry to Rolls Royce. Insurance and fuel included.', location: 'All Lagos', rating: 4.6, price: '₦80,000/day', gradient: 'from-red-600 via-rose-500 to-pink-500', icon: <Car className="w-8 h-8" />, duration: 'Per day', highlights: ['Self-drive option', 'Insurance included', 'Wide range', 'Flexible'] },
+      { id: 'tr4', title: 'Water Taxi', description: 'Fast and scenic water transportation across Lagos Lagoon — beat the traffic in style.', location: 'Various Routes', rating: 4.5, price: '₦15,000', gradient: 'from-cyan-600 via-teal-500 to-emerald-500', icon: <Ship className="w-8 h-8" />, duration: '30-60 mins', highlights: ['Scenic route', 'Fast', 'Traffic-free', 'Unique experience'] },
+      { id: 'tr5', title: 'Intercity Transfer', description: 'Comfortable door-to-door transfers between Lagos, Ibadan, Abeokuta, and Benin City in premium vehicles.', location: 'Inter-city', rating: 4.4, price: '₦65,000', gradient: 'from-amber-600 via-orange-500 to-yellow-500', icon: <Bus className="w-8 h-8" />, duration: '2-4 hours', highlights: ['Door-to-door', 'Premium vehicles', 'Multiple cities', 'Comfortable'] },
+      { id: 'tr6', title: 'Ride-Hailing Premium', description: 'Uber, Bolt, and inDrive premium options — economy, comfort, and premium categories available.', location: 'All Lagos', rating: 4.3, price: '₦5,000-₦50,000', gradient: 'from-green-600 via-emerald-500 to-teal-500', icon: <Car className="w-8 h-8" />, duration: 'Variable', highlights: ['Multiple apps', 'All categories', 'Cashless', 'Tracking'] },
     ]
   },
   {
@@ -142,734 +190,438 @@ const categories: Category[] = [
     description: 'Recharge your body and mind at Lagos\'s finest wellness destinations',
     icon: <Sparkles className="w-5 h-5" />,
     items: [
-      { id: 'w1', title: 'Serenity Spa Ikoyi', description: 'Award-winning day spa offering deep tissue massage, aromatherapy, and holistic body treatments.', location: 'Ikoyi', rating: 4.9, price: '₦₦₦', gradient: 'from-teal-500 via-emerald-400 to-green-400', icon: <Flower2 className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Deep tissue', 'Aromatherapy', 'Award-winning'] },
-      { id: 'w2', title: 'The Wellness Hub', description: 'State-of-the-art fitness center with personal trainers, yoga classes, and a rooftop infinity pool.', location: 'Victoria Island', rating: 4.7, price: '₦₦', gradient: 'from-blue-500 via-indigo-400 to-violet-400', icon: <Dumbbell className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Personal trainers', 'Yoga classes', 'Infinity pool'] },
-      { id: 'w3', title: 'Zen Yoga Studio', description: 'Tranquil yoga and meditation studio offering daily classes from Vinyasa to sound healing sessions.', location: 'Lekki Phase 1', rating: 4.8, price: '₦', gradient: 'from-purple-500 via-fuchsia-400 to-pink-400', icon: <Heart className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Daily classes', 'Meditation', 'Sound healing'] },
-      { id: 'w4', title: 'Glow Beauty Lounge', description: 'Premium beauty services — facials, manicures, hair styling, and bridal packages by top stylists.', location: 'Ikoyi', rating: 4.6, price: '₦₦₦', gradient: 'from-rose-500 via-pink-400 to-fuchsia-400', icon: <Scissors className="w-8 h-8" />, duration: '1-3 hours', highlights: ['Facials', 'Bridal packages', 'Top stylists'] },
-      { id: 'w5', title: 'Eko Wellness Retreat', description: 'Full-day wellness escape with spa treatments, organic meals, meditation, and nature walks.', location: 'Epe', rating: 4.8, price: '₦₦₦', gradient: 'from-green-600 via-emerald-500 to-teal-400', icon: <Tent className="w-8 h-8" />, duration: 'Full day', highlights: ['Spa treatments', 'Organic meals', 'Nature walks'] },
-      { id: 'w6', title: 'Therapeutic Massage Studio', description: 'Specialized sports and therapeutic massage for recovery — deep tissue, hot stone, and reflexology.', location: 'Lekki', rating: 4.5, price: '₦₦', gradient: 'from-cyan-500 via-teal-400 to-emerald-400', icon: <HandHeart className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Sports massage', 'Hot stone', 'Reflexology'] },
+      { id: 'w1', title: 'Serenity Spa Ikoyi', description: 'Award-winning day spa offering deep tissue massage, aromatherapy, and holistic body treatments.', location: 'Ikoyi', rating: 4.9, price: '₦₦₦', gradient: 'from-teal-500 via-emerald-400 to-green-400', icon: <Flower2 className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Deep tissue', 'Aromatherapy', 'Award-winning', 'Luxury'] },
+      { id: 'w2', title: 'The Wellness Hub', description: 'State-of-the-art fitness center with personal trainers, yoga classes, and a rooftop infinity pool.', location: 'Victoria Island', rating: 4.7, price: '₦₦', gradient: 'from-blue-500 via-indigo-400 to-violet-400', icon: <Dumbbell className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Personal trainers', 'Yoga classes', 'Infinity pool', 'Modern equipment'] },
+      { id: 'w3', title: 'Zen Yoga Studio', description: 'Tranquil yoga and meditation studio offering daily classes from Vinyasa to sound healing sessions.', location: 'Lekki Phase 1', rating: 4.8, price: '₦', gradient: 'from-purple-500 via-fuchsia-400 to-pink-400', icon: <Heart className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Daily classes', 'Meditation', 'Sound healing', 'Peaceful'] },
+      { id: 'w4', title: 'Glow Beauty Lounge', description: 'Premium beauty services — facials, manicures, hair styling, and bridal packages by top stylists.', location: 'Ikoyi', rating: 4.6, price: '₦₦₦', gradient: 'from-rose-500 via-pink-400 to-fuchsia-400', icon: <Scissors className="w-8 h-8" />, duration: '1-3 hours', highlights: ['Facials', 'Bridal packages', 'Top stylists', 'Premium products'] },
+      { id: 'w5', title: 'Eko Wellness Retreat', description: 'Full-day wellness escape with spa treatments, organic meals, meditation, and nature walks.', location: 'Epe', rating: 4.8, price: '₦₦₦', gradient: 'from-green-600 via-emerald-500 to-teal-400', icon: <Tent className="w-8 h-8" />, duration: 'Full day', highlights: ['Spa treatments', 'Organic meals', 'Nature walks', 'Full escape'] },
+      { id: 'w6', title: 'Therapeutic Massage Studio', description: 'Specialized sports and therapeutic massage for recovery — deep tissue, hot stone, and reflexology.', location: 'Lekki', rating: 4.5, price: '₦₦', gradient: 'from-cyan-500 via-teal-400 to-emerald-400', icon: <HandHeart className="w-8 h-8" />, duration: '1-2 hours', highlights: ['Sports massage', 'Hot stone', 'Reflexology', 'Recovery'] },
     ]
   },
   {
     id: 'family',
     title: 'Family Activities',
-    description: 'Create lasting memories with family-friendly fun across Lagos',
-    icon: <Users className="w-5 h-5" />,
+    description: 'Fun and educational experiences for the whole family — from theme parks to nature reserves',
+    icon: <Baby className="w-5 h-5" />,
     items: [
-      { id: 'fa1', title: 'Fantasy Dome', description: 'Enchanting children\'s theme park with rides, arcade games, puppet shows, and birthday party packages.', location: 'Lekki Phase 1', rating: 4.6, price: '₦8,000', gradient: 'from-pink-500 via-rose-400 to-red-400', icon: <Baby className="w-8 h-8" />, duration: '3-5 hours', highlights: ['Theme park', 'Arcade games', 'Birthday packages'] },
-      { id: 'fa2', title: 'Lekki Conservation Centre', description: 'Walk the longest canopy walkway in Africa, spot monkeys, and explore nature trails in the heart of Lagos.', location: 'Lekki', rating: 4.7, price: '₦5,000', gradient: 'from-green-600 via-lime-500 to-emerald-400', icon: <TreePine className="w-8 h-8" />, duration: '2-4 hours', highlights: ['Canopy walkway', 'Wildlife', 'Nature trails'] },
-      { id: 'fa3', title: 'Silverbird Cinemas', description: 'Premium movie experience with IMAX screens, plush recliners, and the best popcorn in Lagos.', location: 'Victoria Island', rating: 4.5, price: '₦5,000', gradient: 'from-indigo-600 via-blue-500 to-purple-500', icon: <Film className="w-8 h-8" />, duration: '2-3 hours', highlights: ['IMAX screens', 'Plush recliners', 'Premium experience'] },
-      { id: 'fa4', title: 'Adventure Hub Lagos', description: 'Indoor trampoline parks, laser tag, go-karting, and climbing walls for the whole family.', location: 'Ikeja', rating: 4.4, price: '₦12,000', gradient: 'from-orange-500 via-amber-400 to-yellow-400', icon: <Gamepad2 className="w-8 h-8" />, duration: '3-4 hours', highlights: ['Trampoline park', 'Laser tag', 'Go-karting'] },
-      { id: 'fa5', title: 'Lagos Planetarium', description: 'Interactive science museum and planetarium — educational space shows and hands-on exhibits for kids.', location: 'Marina, Lagos Island', rating: 4.6, price: '₦3,500', gradient: 'from-violet-600 via-indigo-500 to-blue-500', icon: <BookOpen className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Space shows', 'Interactive exhibits', 'Educational'] },
-    ]
-  },
-  {
-    id: 'business',
-    title: 'Business & Corporate Lagos',
-    description: 'Premium workspaces and networking venues for the modern professional',
-    icon: <Briefcase className="w-5 h-5" />,
-    items: [
-      { id: 'b1', title: 'Co-Creation Hub', description: 'Africa\'s leading innovation hub — co-working spaces, mentorship programs, and a thriving startup community.', location: 'Yaba', rating: 4.8, price: '₦₦', gradient: 'from-slate-600 via-gray-500 to-zinc-400', icon: <Wifi className="w-8 h-8" />, duration: 'Flexible', highlights: ['Co-working', 'Mentorship', 'Startup community'] },
-      { id: 'b2', title: 'Radisson Blu Meeting Rooms', description: 'Executive boardrooms with AV equipment, catering, and dedicated event coordinators for corporate meetings.', location: 'Victoria Island', rating: 4.7, price: '₦₦', gradient: 'from-blue-700 via-indigo-600 to-violet-600', icon: <Presentation className="w-8 h-8" />, duration: 'Half/Full day', highlights: ['AV equipment', 'Catering', 'Event coordinators'] },
-      { id: 'b3', title: 'The Zone Business Center', description: 'Fully serviced offices and hot desks in Ikoyi — high-speed internet, printing, and reception services.', location: 'Ikoyi', rating: 4.5, price: '₦₦', gradient: 'from-emerald-600 via-teal-500 to-cyan-500', icon: <FolderOpen className="w-8 h-8" />, duration: 'Flexible', highlights: ['Serviced offices', 'High-speed internet', 'Reception'] },
-      { id: 'b4', title: 'Lagos Networking Lounge', description: 'Exclusive members-only lounge for business networking — weekly mixers, pitch nights, and industry panels.', location: 'Victoria Island', rating: 4.6, price: '₦₦₦', gradient: 'from-amber-600 via-yellow-500 to-orange-500', icon: <Network className="w-8 h-8" />, duration: '2-4 hours', highlights: ['Members-only', 'Weekly mixers', 'Pitch nights'] },
-      { id: 'b5', title: 'Eko Hotels Conference Centre', description: 'World-class conference facilities for up to 5,000 guests — ideal for summits, expos, and galas.', location: 'Victoria Island', rating: 4.9, price: '₦₦₦', gradient: 'from-rose-600 via-pink-500 to-fuchsia-500', icon: <Monitor className="w-8 h-8" />, duration: 'Full day', highlights: ['5,000 capacity', 'World-class', 'Summits & expos'] },
-    ]
-  },
-  {
-    id: 'events',
-    title: 'Events Calendar',
-    description: 'Don\'t miss a thing — the hottest festivals, concerts, and cultural events in Lagos',
-    icon: <CalendarDays className="w-5 h-5" />,
-    items: [
-      { id: 'e1', title: 'Eko Fest Carnival', description: 'Lagos\'s biggest annual street carnival — colorful floats, masquerades, live music, and cultural displays.', location: 'Tafawa Balewa Square', rating: 4.8, price: '₦10,000', gradient: 'from-yellow-500 via-orange-500 to-red-500', icon: <PartyPopper className="w-8 h-8" />, duration: 'Full day', highlights: ['Street carnival', 'Live music', 'Cultural displays'] },
-      { id: 'e2', title: 'AfroNation Lagos', description: 'The world\'s largest Afrobeats festival — 3 days, 100+ artists, and 50,000 fans dancing on the beach.', location: 'Elegushi Beach', rating: 4.9, price: '₦75,000', gradient: 'from-purple-600 via-violet-500 to-indigo-500', icon: <Drum className="w-8 h-8" />, duration: '3 days', highlights: ['100+ artists', 'Beach venue', '50,000 fans'] },
-      { id: 'e3', title: 'Lagos Art Fair', description: 'Premier contemporary art exhibition showcasing 200+ African artists — gallery talks and live auctions.', location: 'Eko Hotel, VI', rating: 4.7, price: '₦5,000', gradient: 'from-teal-600 via-emerald-500 to-green-400', icon: <Palette className="w-8 h-8" />, duration: '2-3 days', highlights: ['200+ artists', 'Gallery talks', 'Live auctions'] },
-      { id: 'e4', title: 'Lagos Trade Fair', description: 'West Africa\'s largest trade exhibition — 1,000+ exhibitors across industries from tech to agriculture.', location: 'Lagos Trade Fair Complex', rating: 4.5, price: '₦3,000', gradient: 'from-blue-600 via-sky-500 to-cyan-400', icon: <Award className="w-8 h-8" />, duration: '5 days', highlights: ['1,000+ exhibitors', 'Multiple industries', 'Networking'] },
-      { id: 'e5', title: 'Lagos Marathon', description: 'Annual city marathon through iconic Lagos landmarks — 10K, half, and full marathon categories.', location: 'Lagos Island', rating: 4.6, price: '₦15,000', gradient: 'from-rose-600 via-red-500 to-orange-500', icon: <Trophy className="w-8 h-8" />, duration: 'Half day', highlights: ['10K/Half/Full', 'City landmarks', 'Annual event'] },
-      { id: 'e6', title: 'Detty December Festival', description: 'The ultimate end-of-year celebration — concerts, beach parties, and cultural events all through December.', location: 'Multiple Venues', rating: 4.9, price: '₦₦₦', gradient: 'from-fuchsia-600 via-pink-500 to-rose-500', icon: <Calendar className="w-8 h-8" />, duration: 'All December', highlights: ['Concerts', 'Beach parties', 'Cultural events'] },
+      { id: 'fa1', title: 'Omu Resort', description: 'Family-friendly resort with zoo, amusement park, water activities, and recreational facilities.', location: 'Lekki-Epe', rating: 4.4, price: '₦8,000', gradient: 'from-amber-500 via-orange-500 to-red-500', icon: <Baby className="w-8 h-8" />, duration: 'Full day', highlights: ['Zoo', 'Amusement park', 'Water activities', 'Family fun'] },
+      { id: 'fa2', title: 'Lekki Conservation Centre', description: 'Nature reserve with canopy walkway, nature trails, and educational programs for children.', location: 'Lekki', rating: 4.7, price: '₦5,000', gradient: 'from-green-600 via-emerald-500 to-teal-400', icon: <TreePine className="w-8 h-8" />, duration: '3-4 hours', highlights: ['Canopy walkway', 'Nature trails', 'Educational', 'Wildlife'] },
+      { id: 'fa3', title: 'Landmark Beach', description: 'Family-friendly beach with calm waters, playgrounds, and beach activities for all ages.', location: 'Victoria Island', rating: 4.7, price: '₦15,000', gradient: 'from-cyan-500 via-blue-500 to-indigo-500', icon: <Waves className="w-8 h-8" />, duration: 'Full day', highlights: ['Calm waters', 'Playgrounds', 'Beach activities', 'Family-friendly'] },
+      { id: 'fa4', title: 'Cinema Experiences', description: 'Premium cinema experiences at Ikeja City Mall, Palms Mall, and Silverbird — latest movies and family screenings.', location: 'Multiple Locations', rating: 4.5, price: '₦5,000', gradient: 'from-purple-600 via-violet-500 to-indigo-500', icon: <Film className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Latest movies', 'Family screenings', 'Premium seating', 'Popcorn & snacks'] },
+      { id: 'fa5', title: 'National Museum Lagos', description: 'Educational and cultural experience with historical artifacts and interactive exhibits for children.', location: 'Onikan, Lagos Island', rating: 4.3, price: '₦2,000', gradient: 'from-emerald-600 via-teal-500 to-green-400', icon: <Building2 className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Historical artifacts', 'Educational', 'Cultural exhibits', 'Family-friendly'] },
+      { id: 'fa6', title: 'Bowling & Arcade', description: 'Indoor entertainment with bowling alleys, arcade games, and family fun zones.', location: 'Ikeja City Mall', rating: 4.4, price: '₦10,000', gradient: 'from-rose-500 via-pink-500 to-fuchsia-500', icon: <Trophy className="w-8 h-8" />, duration: '2-3 hours', highlights: ['Bowling', 'Arcade games', 'Indoor fun', 'All ages'] },
     ]
   },
 ];
 
-const featuredItems: (CategoryItem & { categoryLabel: string })[] = [
-  { ...categories[1].items[0], categoryLabel: 'Food & Dining' },
-  { ...categories[4].items[1], categoryLabel: 'Tours & Experiences' },
-  { ...categories[9].items[1], categoryLabel: 'Events Calendar' },
-];
-
-const categoryNav = categories.map(c => ({ id: c.id, title: c.title, icon: c.icon }));
-
-function ItemCard({ item, index, viewMode, onSelect }: { item: CategoryItem; index: number; viewMode: 'grid' | 'list'; onSelect: (item: CategoryItem) => void; key?: string }) {
-  if (viewMode === 'list') {
-    return (
-      <motion.div
-        variants={staggerItem}
-        whileHover={{ x: 4 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-        onClick={() => onSelect(item)}
-        className="group cursor-pointer"
-      >
-        <div className="bg-white rounded-xl overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-lg transition-shadow duration-300 flex">
-          <div className={`w-32 sm:w-40 bg-gradient-to-br ${item.gradient} flex items-center justify-center shrink-0`}>
-            <div className="text-white/90 group-hover:scale-110 transition-transform duration-300">
-              {item.icon}
-            </div>
-          </div>
-          <div className="flex-1 p-4 sm:p-5">
-            <div className="flex items-start justify-between mb-2">
-              <div className="flex-1 min-w-0">
-                <h3 className="font-serif text-base sm:text-lg font-semibold text-charcoal group-hover:text-primary transition-colors truncate">
-                  {item.title}
-                </h3>
-                <div className="flex items-center gap-2 mt-1">
-                  <div className="flex items-center gap-1">
-                    <MapPin className="w-3 h-3 text-charcoal/40" />
-                    <span className="text-[10px] text-charcoal/50">{item.location}</span>
-                  </div>
-                  {item.duration && (
-                    <>
-                      <span className="text-charcoal/20">•</span>
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-3 h-3 text-charcoal/40" />
-                        <span className="text-[10px] text-charcoal/50">{item.duration}</span>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center gap-1.5 shrink-0 ml-3">
-                <Star className="w-3.5 h-3.5 fill-primary-container text-primary-container" />
-                <span className="text-xs font-bold text-charcoal/70">{item.rating}</span>
-              </div>
-            </div>
-            <p className="text-xs sm:text-sm text-charcoal/60 leading-relaxed line-clamp-2 mb-3">
-              {item.description}
-            </p>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-bold text-primary">{item.price}</span>
-              <button className="text-xs font-semibold text-primary hover:text-primary-container transition-colors flex items-center gap-1">
-                View Details
-                <ChevronRight className="w-3 h-3" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    );
-  }
-
-  return (
-    <motion.div
-      variants={staggerItem}
-      whileHover={{ y: -6, scale: 1.02 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      onClick={() => onSelect(item)}
-      className="group cursor-pointer"
-    >
-      <div className="bg-white rounded-2xl overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-xl transition-shadow duration-500">
-        <div className={`relative h-44 sm:h-48 bg-gradient-to-br ${item.gradient} flex items-center justify-center overflow-hidden`}>
-          <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-500" />
-          <div className="text-white/90 group-hover:scale-110 transition-transform duration-500">
-            {item.icon}
-          </div>
-          <div className="absolute top-3 right-3">
-            <span className="px-2.5 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold text-white tracking-wide">
-              {item.price}
-            </span>
-          </div>
-          <div className="absolute bottom-3 left-3 flex items-center gap-1.5 text-white/80">
-            <MapPin className="w-3 h-3" />
-            <span className="text-[10px] font-semibold tracking-wide">{item.location}</span>
-          </div>
-        </div>
-        <div className="p-4 sm:p-5">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-serif text-base sm:text-lg font-semibold text-charcoal group-hover:text-primary transition-colors">
-              {item.title}
-            </h3>
-            <div className="flex items-center gap-1 shrink-0 ml-2">
-              <Star className="w-3.5 h-3.5 fill-primary-container text-primary-container" />
-              <span className="text-xs font-bold text-charcoal/70">{item.rating}</span>
-            </div>
-          </div>
-          <p className="text-xs sm:text-sm text-charcoal/60 leading-relaxed line-clamp-2 mb-3">
-            {item.description}
-          </p>
-          {item.duration && (
-            <div className="flex items-center gap-1 text-[10px] text-charcoal/40 mb-3">
-              <Clock className="w-3 h-3" />
-              <span>{item.duration}</span>
-            </div>
-          )}
-          <button className="text-xs font-semibold text-primary hover:text-primary-container transition-colors flex items-center gap-1">
-            View Details
-            <ChevronRight className="w-3 h-3" />
-          </button>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-function CategorySection({ category, viewMode, onSelectItem }: { category: Category; viewMode: 'grid' | 'list'; onSelectItem: (item: CategoryItem) => void; key?: string }) {
-  return (
-    <motion.section
-      id={`category-${category.id}`}
-      variants={fadeInUp}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-80px' }}
-      className="scroll-mt-28"
-    >
-      <div className="flex items-center gap-3 mb-2">
-        <div className="w-10 h-10 rounded-xl bg-primary-container/15 flex items-center justify-center text-primary">
-          {category.icon}
-        </div>
-        <div>
-          <h2 className="font-serif text-xl sm:text-2xl md:text-3xl font-semibold text-charcoal">
-            {category.title}
-          </h2>
-        </div>
-      </div>
-      <p className="text-sm sm:text-base text-charcoal/50 mb-6 sm:mb-8 max-w-2xl">
-        {category.description}
-      </p>
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-40px' }}
-        className={viewMode === 'grid' 
-          ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5'
-          : 'space-y-3'
-        }
-      >
-        {category.items.map((item, i) => (
-          <ItemCard key={item.id} item={item} index={i} viewMode={viewMode} onSelect={onSelectItem} />
-        ))}
-      </motion.div>
-    </motion.section>
-  );
-}
-
-function SidePanel({ item, onClose, onBookBundle }: { item: CategoryItem; onClose: () => void; onBookBundle: () => void }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[80] flex justify-end"
-      onClick={onClose}
-    >
-      <div className="absolute inset-0 bg-charcoal/40 backdrop-blur-sm" />
-      <motion.div
-        initial={{ x: '100%' }}
-        animate={{ x: 0 }}
-        exit={{ x: '100%' }}
-        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-md bg-parchment h-full overflow-y-auto shadow-2xl"
-      >
-        <div className={`relative h-64 bg-gradient-to-br ${item.gradient} flex items-center justify-center`}>
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-          <div className="text-white/90 scale-150">
-            {item.icon}
-          </div>
-          <div className="absolute bottom-4 left-4 right-4">
-            <span className="px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold text-white tracking-wider uppercase">
-              {item.price}
-            </span>
-          </div>
-        </div>
-
-        <div className="p-6 space-y-6">
-          <div>
-            <h2 className="font-serif text-2xl font-bold text-charcoal mb-2">{item.title}</h2>
-            <div className="flex items-center gap-3 text-sm text-charcoal/60">
-              <div className="flex items-center gap-1">
-                <MapPin className="w-4 h-4" />
-                <span>{item.location}</span>
-              </div>
-              {item.duration && (
-                <>
-                  <span className="text-charcoal/20">•</span>
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    <span>{item.duration}</span>
-                  </div>
-                </>
-              )}
-              <span className="text-charcoal/20">•</span>
-              <div className="flex items-center gap-1">
-                <Star className="w-4 h-4 fill-primary-container text-primary-container" />
-                <span className="font-semibold">{item.rating}</span>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-bold text-charcoal uppercase tracking-widest mb-3">About</h3>
-            <p className="text-sm text-charcoal/70 leading-relaxed">{item.description}</p>
-          </div>
-
-          {item.highlights && item.highlights.length > 0 && (
-            <div>
-              <h3 className="text-sm font-bold text-charcoal uppercase tracking-widest mb-3">Highlights</h3>
-              <div className="space-y-2">
-                {item.highlights.map((highlight, i) => (
-                  <div key={i} className="flex items-center gap-3 p-3 bg-white rounded-xl border border-charcoal/5">
-                    <div className="w-8 h-8 rounded-lg bg-primary-container/15 flex items-center justify-center text-primary shrink-0">
-                      <Check className="w-4 h-4" />
-                    </div>
-                    <span className="text-sm text-charcoal font-medium">{highlight}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="pt-4 border-t border-charcoal/10 space-y-3">
-            <button
-              onClick={onBookBundle}
-              className="w-full py-3.5 bg-primary-container text-charcoal font-bold text-sm rounded-xl hover:bg-inverse-primary transition-colors flex items-center justify-center gap-2"
-            >
-              <Package className="w-4 h-4" />
-              Book with Bundle Package
-            </button>
-            <button className="w-full py-3.5 bg-charcoal text-parchment font-bold text-sm rounded-xl hover:bg-charcoal-light transition-colors">
-              Request Booking
-            </button>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-export default function ExploreLagosView({ onNavigateBundles }: { onNavigateBundles?: () => void }) {
-  const [activeTab, setActiveTab] = useState<'discover' | 'experiences' | 'vip'>('discover');
-  const [activeCategory, setActiveCategory] = useState<string>('attractions');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+export default function ExploreLagosView({ onNavigateBundles }: { onNavigateBundles: () => void }) {
+  const [activeCategory, setActiveCategory] = useState<string>('all');
   const [selectedItem, setSelectedItem] = useState<CategoryItem | null>(null);
-  const [showBooking, setShowBooking] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string>('2026-06-27');
-  const [selectedTime, setSelectedTime] = useState<string>('02:00 PM');
-  const [guestCount, setGuestCount] = useState<string>('up-to-5');
-  const [bookingRequested, setBookingRequested] = useState(false);
-  const navRef = useRef<HTMLDivElement>(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const scrollToCategory = (id: string) => {
-    setActiveCategory(id);
-    const el = document.getElementById(`category-${id}`);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
+  const filteredCategories = activeCategory === 'all' 
+    ? categories 
+    : categories.filter(cat => cat.id === activeCategory);
 
-  const handleBookBundle = () => {
-    setSelectedItem(null);
-    if (onNavigateBundles) {
-      onNavigateBundles();
-    }
-  };
+  const allItems = filteredCategories.flatMap(cat => 
+    cat.items.map(item => ({ ...item, categoryId: cat.id, categoryTitle: cat.title, categoryIcon: cat.icon }))
+  );
 
-  const handleBookingRequest = (e: React.FormEvent) => {
-    e.preventDefault();
-    setBookingRequested(true);
-  };
+  const searchedItems = searchQuery
+    ? allItems.filter(item => 
+        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.location.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : allItems;
 
   return (
-    <div className="flex-grow bg-parchment text-left">
-      {/* HERO SECTION */}
-      <section className="relative overflow-hidden bg-charcoal">
-        <div className="absolute inset-0 bg-gradient-to-br from-charcoal via-charcoal/95 to-primary/20" />
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
+    <div className="flex-grow flex flex-col animate-fade-in-up">
+      {/* Hero Section */}
+      <section className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0 bg-charcoal">
+          <motion.img
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 8, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full h-full object-cover opacity-40 select-none pointer-events-none"
+            src="/assets/images/horizontal/CozyLagos.jpeg"
+            alt="Explore Lagos"
+            onError={(e) => { (e.target as HTMLImageElement).src = '/assets/bundles/bundles-hero-background.jpeg'; }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-charcoal/60 via-charcoal/30 to-charcoal/90" />
+        </div>
 
-        <div className="relative max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 pt-16 sm:pt-24 md:pt-32 pb-16 sm:pb-20">
+        <div className="relative z-10 w-full max-w-[1440px] px-4 sm:px-6 md:px-12 xl:px-20 mx-auto flex flex-col items-center text-center">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-3xl"
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="flex items-center gap-3 mb-4 sm:mb-6"
           >
-            <div className="flex items-center gap-2 mb-5">
-              <div className="w-8 h-[1px] bg-primary-container" />
-              <span className="text-primary-container font-bold text-[10px] tracking-[0.25em] uppercase">
-                Your Lagos Guide
-              </span>
-            </div>
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white font-bold leading-[1.05] tracking-tight">
-              Explore{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-container to-inverse-primary">
-                Lagos
-              </span>
-            </h1>
-            <p className="font-sans text-sm sm:text-base md:text-lg text-white/60 font-light max-w-xl mt-5 leading-relaxed">
-              Discover the pulse of Africa's most dynamic city — from pristine beaches and world-class dining to electric nightlife and cultural treasures. Your curated guide to the best of Lagos awaits.
-            </p>
-            <div className="flex flex-wrap items-center gap-4 mt-8">
-              <div className="flex items-center gap-2 text-white/40">
-                <MapPin className="w-4 h-4" />
-                <span className="text-xs font-medium">10 Categories</span>
-              </div>
-              <div className="w-1 h-1 rounded-full bg-white/20" />
-              <div className="flex items-center gap-2 text-white/40">
-                <Star className="w-4 h-4" />
-                <span className="text-xs font-medium">50+ Destinations</span>
-              </div>
-              <div className="w-1 h-1 rounded-full bg-white/20" />
-              <div className="flex items-center gap-2 text-white/40">
-                <Compass className="w-4 h-4" />
-                <span className="text-xs font-medium">Curated Experiences</span>
-              </div>
+            <div className="w-8 sm:w-10 h-[1px] bg-gold/50" />
+            <span className="text-gold-light text-[9px] sm:text-[10px] font-bold tracking-[0.4em] uppercase">
+              Discover Lagos
+            </span>
+            <div className="w-8 sm:w-10 h-[1px] bg-gold/50" />
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.35 }}
+            className="font-serif text-4xl sm:text-5xl md:text-6xl xl:text-7xl text-parchment leading-tight tracking-tight max-w-4xl mb-3 sm:mb-4"
+          >
+            Explore <span className="italic font-light text-gold-light">Lagos</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="font-sans text-xs sm:text-sm md:text-base text-parchment/70 max-w-2xl font-light leading-relaxed px-2"
+          >
+            From pristine beaches to vibrant nightlife, world-class dining to cultural landmarks — experience the best of Lagos through curated guides and insider recommendations.
+          </motion.p>
+
+          {/* Search Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="mt-8 w-full max-w-2xl"
+          >
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal/40" />
+              <input
+                type="text"
+                placeholder="Search beaches, restaurants, attractions..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-4 bg-white/95 backdrop-blur-xl rounded-full text-sm sm:text-base text-charcoal placeholder:text-charcoal/40 focus:outline-none focus:ring-2 focus:ring-gold/50 shadow-2xl"
+              />
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* TAB NAVIGATION */}
-      <div className="bg-parchment border-b border-charcoal/5">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20">
-          <div className="flex gap-1 py-3">
-            {[
-              { id: 'discover' as const, label: 'Discover Lagos', icon: <Compass className="w-4 h-4" /> },
-              { id: 'experiences' as const, label: 'Experiences', icon: <Sparkles className="w-4 h-4" /> },
-              { id: 'vip' as const, label: 'VIP Services', icon: <Crown className="w-4 h-4" /> },
-            ].map((tab) => (
+      {/* Category Navigation */}
+      <section className="sticky top-20 z-30 bg-parchment/95 backdrop-blur-xl border-b border-charcoal/5 shadow-sm">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20 py-4">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
+            <button
+              onClick={() => setActiveCategory('all')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
+                activeCategory === 'all'
+                  ? 'bg-charcoal text-parchment'
+                  : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
+              }`}
+            >
+              <LayoutGrid className="w-4 h-4" />
+              <span>All</span>
+            </button>
+            {categories.map((cat) => (
               <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 ${
-                  activeTab === tab.id
-                    ? 'bg-charcoal text-white shadow-lg shadow-charcoal/20'
-                    : 'bg-white/70 text-charcoal/60 hover:bg-white hover:text-charcoal border border-charcoal/5'
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
+                  activeCategory === cat.id
+                    ? 'bg-charcoal text-parchment'
+                    : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
                 }`}
               >
-                {tab.icon}
-                <span className="hidden sm:inline">{tab.label}</span>
-                <span className="sm:hidden">{tab.label.split(' ')[0]}</span>
+                {cat.icon}
+                <span>{cat.title}</span>
               </button>
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* VIP SERVICES TAB */}
-      {activeTab === 'vip' && <VIPServicesView />}
-
-      {/* EXPERIENCES TAB */}
-      {activeTab === 'experiences' && (
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 py-10 sm:py-14 md:py-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <Anchor className="w-4 h-4 text-gold-dark" />
-              <span className="font-bold text-[10px] tracking-[0.2em] uppercase text-gold-dark">
-                Premier Ocean Experience
-              </span>
+      {/* Content Section */}
+      <section className="py-10 sm:py-16 px-4 sm:px-6 md:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
+        {searchQuery ? (
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-charcoal">
+                  Search Results
+                </h2>
+                <p className="text-sm text-charcoal/60 mt-1">
+                  {searchedItems.length} result{searchedItems.length !== 1 ? 's' : ''} for "{searchQuery}"
+                </p>
+              </div>
+              <button
+                onClick={() => setSearchQuery('')}
+                className="flex items-center gap-2 px-4 py-2 bg-charcoal/5 hover:bg-charcoal/10 rounded-lg text-xs font-bold text-charcoal transition-colors"
+              >
+                <X className="w-4 h-4" />
+                <span>Clear</span>
+              </button>
             </div>
-            <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-charcoal mb-4">
-              Private Yacht Charter
-            </h2>
-            <p className="text-sm sm:text-base text-charcoal/60 max-w-2xl mb-8 leading-relaxed">
-              Ascend to the waters of Lagos in absolute style. A deeply curated custom voyage across the Lekki peninsula, merging pure skyline backdrops with elite in-house service.
-            </p>
-          </motion.div>
-
-          <ExperienceDetailView onBackToHome={() => setActiveTab('discover')} />
-
-          <div className="mt-16">
-            <div className="text-center mb-12">
-              <span className="text-gold-dark font-bold text-[10px] tracking-[0.25em] uppercase block mb-2">
-                More Experiences
-              </span>
-              <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-3">
-                Curated Lagos Adventures
-              </h2>
-              <p className="text-sm text-charcoal/60 max-w-xl mx-auto">
-                From sunset cruises to cultural tours, discover unforgettable experiences.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {categories[4].items.slice(0, 6).map((item) => (
-                <motion.div
-                  key={item.id}
-                  whileHover={{ y: -6, scale: 1.02 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  onClick={() => setSelectedItem(item)}
-                  className="group cursor-pointer"
+          </div>
+        ) : (
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <span className="text-gold-dark font-bold text-[9px] sm:text-[10px] tracking-[0.25em] uppercase block mb-2">
+                  {filteredCategories.length} {filteredCategories.length === 1 ? 'Category' : 'Categories'}
+                </span>
+                <h2 className="font-serif font-semibold text-2xl sm:text-3xl md:text-4xl text-charcoal">
+                  {activeCategory === 'all' ? 'All Experiences' : filteredCategories[0]?.title}
+                </h2>
+                <p className="text-xs sm:text-sm text-charcoal-light mt-2 max-w-xl">
+                  {activeCategory === 'all' 
+                    ? 'Discover everything Lagos has to offer'
+                    : filteredCategories[0]?.description
+                  }
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-charcoal text-parchment' : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'}`}
                 >
-                  <div className="bg-white rounded-2xl overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-xl transition-shadow duration-500">
-                    <div className={`relative h-48 bg-gradient-to-br ${item.gradient} flex items-center justify-center`}>
-                      <div className="text-white/90 group-hover:scale-110 transition-transform duration-500">
+                  <Grid3X3 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-charcoal text-parchment' : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'}`}
+                >
+                  <List className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {viewMode === 'grid' ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {searchedItems.map((item, index) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ duration: 0.5, delay: index * 0.05 }}
+                onClick={() => setSelectedItem(item)}
+                className="group cursor-pointer"
+              >
+                <div className="bg-parchment border border-charcoal/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+                  <div className={`relative h-48 bg-gradient-to-br ${item.gradient} overflow-hidden`}>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <div className="absolute top-4 left-4">
+                      <div className="bg-white/20 backdrop-blur-md p-2 rounded-lg">
                         {item.icon}
                       </div>
-                      <div className="absolute top-3 right-3">
-                        <span className="px-2.5 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold text-white tracking-wide">
-                          {item.price}
-                        </span>
-                      </div>
                     </div>
-                    <div className="p-5">
-                      <h3 className="font-serif text-lg font-semibold text-charcoal group-hover:text-gold-dark transition-colors mb-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-xs text-charcoal/60 line-clamp-2 mb-3">{item.description}</p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1 text-charcoal/40">
-                          <MapPin className="w-3 h-3" />
-                          <span className="text-[10px]">{item.location}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Star className="w-3 h-3 fill-gold text-gold" />
-                          <span className="text-xs font-bold">{item.rating}</span>
-                        </div>
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <h3 className="font-serif text-xl font-bold text-white mb-1">{item.title}</h3>
+                      <div className="flex items-center gap-2 text-white/80 text-xs">
+                        <MapPin className="w-3 h-3" />
+                        <span>{item.location}</span>
                       </div>
                     </div>
                   </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* MAIN CONTENT (Discover & Experiences) */}
-      {activeTab !== 'vip' && (
-        <>
-          {/* CATEGORY NAV PILLS */}
-      <div className="sticky top-0 z-40 bg-parchment/90 backdrop-blur-xl border-b border-charcoal/5">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20">
-          <div className="flex items-center justify-between py-3 sm:py-4">
-            <div
-              ref={navRef}
-              className="flex gap-2 overflow-x-auto scrollbar-hide flex-1 mr-4"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              {categoryNav.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => scrollToCategory(cat.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-300 shrink-0 ${
-                    activeCategory === cat.id
-                      ? 'bg-charcoal text-white shadow-lg shadow-charcoal/20'
-                      : 'bg-white/70 text-charcoal/60 hover:bg-white hover:text-charcoal border border-charcoal/5'
-                  }`}
-                >
-                  <span className={`transition-colors ${activeCategory === cat.id ? 'text-primary-container' : ''}`}>
-                    {cat.icon}
-                  </span>
-                  <span className="hidden sm:inline">{cat.title}</span>
-                  <span className="sm:hidden">{cat.title.split(' ')[0]}</span>
-                </button>
-              ))}
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-charcoal text-white' : 'bg-white/70 text-charcoal/60 hover:bg-white'}`}
-              >
-                <Grid3X3 className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-charcoal text-white' : 'bg-white/70 text-charcoal/60 hover:bg-white'}`}
-              >
-                <List className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* FEATURED THIS WEEK */}
-      <section className="max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 pt-10 sm:pt-14 md:pt-20 pb-8 sm:pb-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="w-4 h-4 text-primary-container" />
-            <span className="font-bold text-[10px] tracking-[0.2em] uppercase text-primary">
-              Featured This Week
-            </span>
-          </div>
-          <h2 className="font-serif text-2xl sm:text-3xl font-semibold text-charcoal mb-8">
-            Editor's Picks
-          </h2>
-        </motion.div>
-
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6"
-        >
-          {featuredItems.map((item, i) => (
-            <motion.div
-              key={item.id}
-              variants={staggerItem}
-              whileHover={{ y: -8, scale: 1.01 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              onClick={() => setSelectedItem(item)}
-              className="group cursor-pointer"
-            >
-              <div className="relative bg-white rounded-2xl overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-2xl transition-shadow duration-500">
-                <div className={`relative h-52 sm:h-60 bg-gradient-to-br ${item.gradient} flex items-center justify-center`}>
-                  <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-500" />
-                  <div className="text-white/80 group-hover:scale-110 transition-transform duration-700">
-                    {item.icon}
-                  </div>
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold text-white tracking-wider uppercase">
-                      {item.categoryLabel}
-                    </span>
-                  </div>
-                  <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 bg-white/20 backdrop-blur-md rounded-full">
-                    <Star className="w-3 h-3 fill-white text-white" />
-                    <span className="text-[11px] font-bold text-white">{item.rating}</span>
+                  <div className="p-4">
+                    <p className="text-xs text-charcoal/60 mb-3 line-clamp-2">{item.description}</p>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 text-gold-dark fill-current" />
+                        <span className="text-sm font-bold text-charcoal">{item.rating}</span>
+                      </div>
+                      <span className="text-sm font-bold text-gold-dark">{item.price}</span>
+                    </div>
+                    {item.highlights && (
+                      <div className="flex flex-wrap gap-1">
+                        {item.highlights.slice(0, 2).map((h, i) => (
+                          <span key={i} className="text-[9px] font-medium text-charcoal/50 bg-charcoal/5 px-2 py-0.5 rounded-full">
+                            {h}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
-                <div className="p-5 sm:p-6">
-                  <h3 className="font-serif text-lg sm:text-xl font-semibold text-charcoal group-hover:text-primary transition-colors mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-charcoal/55 leading-relaxed line-clamp-2 mb-4">
-                    {item.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 text-charcoal/40">
-                      <MapPin className="w-3.5 h-3.5" />
-                      <span className="text-xs font-medium">{item.location}</span>
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {searchedItems.map((item, index) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                onClick={() => setSelectedItem(item)}
+                className="group cursor-pointer"
+              >
+                <div className="bg-parchment border border-charcoal/5 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex">
+                  <div className={`w-32 sm:w-48 bg-gradient-to-br ${item.gradient} flex items-center justify-center shrink-0`}>
+                    <div className="text-white/80">{item.icon}</div>
+                  </div>
+                  <div className="flex-1 p-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <h3 className="font-serif text-lg font-bold text-charcoal group-hover:text-gold-dark transition-colors">{item.title}</h3>
+                        <div className="flex items-center gap-2 text-xs text-charcoal/60 mt-1">
+                          <MapPin className="w-3 h-3" />
+                          <span>{item.location}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 text-gold-dark fill-current" />
+                        <span className="text-sm font-bold text-charcoal">{item.rating}</span>
+                      </div>
                     </div>
-                    <span className="text-sm font-bold text-primary">
-                      {item.price}
-                    </span>
+                    <p className="text-xs text-charcoal/60 mb-3 line-clamp-2">{item.description}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold text-gold-dark">{item.price}</span>
+                      {item.duration && (
+                        <div className="flex items-center gap-1 text-xs text-charcoal/60">
+                          <Clock className="w-3 h-3" />
+                          <span>{item.duration}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {searchedItems.length === 0 && (
+          <div className="text-center py-16">
+            <div className="w-16 h-16 bg-charcoal/5 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Search className="w-8 h-8 text-charcoal/30" />
+            </div>
+            <p className="text-lg font-semibold text-charcoal mb-2">No results found</p>
+            <p className="text-sm text-charcoal/50">Try adjusting your search or browse categories</p>
+          </div>
+        )}
+      </section>
+
+      {/* Bundle Integration CTA */}
+      <section className="py-16 px-4 sm:px-6 md:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
+        <div className="bg-gradient-to-br from-charcoal via-charcoal to-charcoal/90 rounded-3xl p-8 sm:p-12 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
+          <div className="relative z-10 max-w-2xl">
+            <span className="text-gold uppercase tracking-[0.3em] font-bold text-[9px] sm:text-[10px] block mb-3">
+              Curated Experiences
+            </span>
+            <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl text-parchment leading-tight mb-4">
+              Bundle Your Lagos Adventure
+            </h3>
+            <p className="text-xs sm:text-sm text-parchment/70 font-light leading-relaxed mb-6">
+              Combine accommodation, transportation, tours, and experiences into seamless packages. Save time and money with our curated bundles designed for every type of traveler.
+            </p>
+            <button
+              onClick={onNavigateBundles}
+              className="inline-flex items-center gap-2 bg-gold text-charcoal hover:bg-gold-dark px-6 py-3 rounded-xl font-bold text-xs tracking-widest uppercase transition-all"
+            >
+              <span>View Bundles</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Detail Modal */}
+      <AnimatePresence>
+        {selectedItem && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center p-0 sm:p-4"
+            onClick={() => setSelectedItem(null)}
+          >
+            <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
+            <motion.div
+              initial={{ y: '100%', opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: '100%', opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="relative bg-parchment w-full sm:max-w-2xl sm:rounded-3xl rounded-t-3xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className={`relative h-48 sm:h-64 bg-gradient-to-br ${selectedItem.gradient} overflow-hidden shrink-0`}>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <button
+                  onClick={() => setSelectedItem(null)}
+                  className="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+                <div className="absolute bottom-4 left-4 right-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="bg-white/20 backdrop-blur-md p-2 rounded-lg text-white">
+                      {selectedItem.icon}
+                    </div>
+                  </div>
+                  <h2 className="font-serif text-2xl sm:text-3xl font-bold text-white">{selectedItem.title}</h2>
+                  <div className="flex items-center gap-2 text-white/80 text-xs mt-2">
+                    <MapPin className="w-3 h-3" />
+                    <span>{selectedItem.location}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <Star className="w-5 h-5 text-gold-dark fill-current" />
+                    <span className="text-lg font-bold text-charcoal">{selectedItem.rating}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-lg font-bold text-gold-dark">{selectedItem.price}</span>
+                    {selectedItem.duration && (
+                      <div className="flex items-center gap-1 text-xs text-charcoal/60 mt-1">
+                        <Clock className="w-3 h-3" />
+                        <span>{selectedItem.duration}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <p className="text-sm text-charcoal/70 leading-relaxed mb-6">{selectedItem.description}</p>
+
+                {selectedItem.highlights && (
+                  <div className="mb-6">
+                    <h4 className="text-[10px] font-bold text-charcoal/40 uppercase tracking-widest mb-3">Highlights</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {selectedItem.highlights.map((h, i) => (
+                        <div key={i} className="flex items-center gap-2 p-2.5 rounded-lg bg-gold/5 border border-gold/10">
+                          <Check className="w-3.5 h-3.5 text-gold-dark shrink-0" />
+                          <span className="text-xs text-charcoal font-medium">{h}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="bg-charcoal text-parchment rounded-2xl p-4 sm:p-6">
+                  <span className="text-[9px] font-bold text-gold uppercase tracking-widest block mb-1">Ready to Visit?</span>
+                  <p className="text-xs text-parchment/70 mb-4">
+                    Book this experience as part of a bundle or contact our concierge for custom arrangements.
+                  </p>
+                  <div className="flex gap-3">
+                    <button className="flex-1 py-3 bg-gold text-charcoal hover:bg-gold-dark font-bold text-xs tracking-widest uppercase rounded-xl transition-all">
+                      Book Now
+                    </button>
+                    <button className="px-4 py-3 border border-parchment/30 text-parchment hover:bg-parchment/10 font-bold text-xs tracking-widest uppercase rounded-xl transition-all">
+                      Inquire
+                    </button>
                   </div>
                 </div>
               </div>
             </motion.div>
-          ))}
-        </motion.div>
-      </section>
-
-      {/* DIVIDER */}
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20">
-        <div className="h-px bg-gradient-to-r from-transparent via-charcoal/10 to-transparent" />
-      </div>
-
-      {/* ALL CATEGORY SECTIONS */}
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 py-10 sm:py-14 md:py-20 space-y-16 sm:space-y-20 md:space-y-28">
-        {categories.map((category) => (
-          <CategorySection key={category.id} category={category} viewMode={viewMode} onSelectItem={setSelectedItem} />
-        ))}
-      </div>
-
-      {/* BUNDLES SECTION */}
-      <section className="max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 py-10 sm:py-16 md:py-24">
-        <div className="text-center mb-12">
-          <span className="text-primary font-bold text-[10px] tracking-[0.25em] uppercase block mb-2">
-            Premium Packages
-          </span>
-          <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-3">
-            Curated Experience Bundles
-          </h2>
-          <p className="text-sm text-charcoal/60 max-w-xl mx-auto">
-            All-inclusive packages from 3-day escapes to 21-day luxury immersions.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-          {SERVICE_BUNDLES.map((bundle) => {
-            const iconMap: Record<string, React.ReactNode> = {
-              briefcase: <Briefcase className="w-5 h-5" />,
-              globe: <Globe className="w-5 h-5" />,
-              map: <Map className="w-5 h-5" />,
-              crown: <Crown className="w-5 h-5" />,
-              graduation: <GraduationCap className="w-5 h-5" />,
-              heart: <Heart className="w-5 h-5" />,
-              sparkles: <Sparkles className="w-5 h-5" />
-            };
-            const lowestPrice = Math.min(...bundle.tiers.map(t => t.price));
-            return (
-              <motion.div
-                key={bundle.id}
-                whileHover={{ y: -4, scale: 1.02 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                onClick={onNavigateBundles}
-                className="group bg-white border border-charcoal/5 rounded-2xl overflow-hidden hover:shadow-xl transition-shadow duration-500 cursor-pointer"
-              >
-                <div className="p-5">
-                  <div className="w-10 h-10 bg-primary-container/15 rounded-xl flex items-center justify-center mb-3 text-primary group-hover:scale-110 transition-transform">
-                    {iconMap[bundle.icon]}
-                  </div>
-                  <h3 className="font-serif text-lg font-bold text-charcoal mb-1">{bundle.title}</h3>
-                  <p className="text-[11px] text-charcoal/50 mb-3">{bundle.tagline}</p>
-                  <p className="text-xs text-charcoal/60 line-clamp-2 mb-4 leading-relaxed">{bundle.description}</p>
-                  <div className="flex items-center justify-between pt-3 border-t border-charcoal/5">
-                    <div>
-                      <span className="text-[9px] text-charcoal/40 uppercase tracking-widest block">From</span>
-                      <span className="font-serif font-bold text-primary">{lowestPrice.toLocaleString()}</span>
-                    </div>
-                    <span className="text-[10px] text-charcoal/40">{bundle.tiers.length} tiers</span>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* FOOTER CTA */}
-      <section className="bg-charcoal relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-charcoal via-charcoal to-primary/10" />
-        <div className="relative max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 py-16 sm:py-20 md:py-28 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-white font-bold mb-4">
-              Ready to Explore?
-            </h2>
-            <p className="text-white/50 text-sm sm:text-base max-w-lg mx-auto mb-8 leading-relaxed">
-              Let Cozy Lagos curate the perfect experience for you. From hidden gems to iconic landmarks, your adventure starts here.
-            </p>
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="inline-flex items-center gap-2 px-8 py-3.5 bg-primary-container text-charcoal font-bold text-sm rounded-full hover:bg-inverse-primary transition-colors duration-300"
-            >
-              <ArrowUp className="w-4 h-4" />
-              Back to Top
-            </button>
           </motion.div>
-        </div>
-      </section>
-        </>
-      )}
-
-      {/* SIDE PANEL */}
-      <AnimatePresence>
-        {selectedItem && (
-          <SidePanel
-            item={selectedItem}
-            onClose={() => setSelectedItem(null)}
-            onBookBundle={handleBookBundle}
-          />
         )}
       </AnimatePresence>
     </div>
