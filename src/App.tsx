@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { 
-  INITIAL_LISTINGS, 
-  INITIAL_BOOKINGS, 
-  INITIAL_TRANSACTIONS 
+import {
+  INITIAL_LISTINGS,
+  INITIAL_BOOKINGS,
+  INITIAL_TRANSACTIONS
 } from './data';
 import { Listing, Booking, Transaction } from './types';
 import { CartProvider, useCart } from './context/CartContext';
@@ -32,10 +32,12 @@ import WhatsAppConcierge from './components/WhatsAppConcierge';
 import CookiesAlert from './components/PrivacyPolicy';
 import { useDatabase } from './hooks/useDatabase';
 import { seedDatabase, getListingsWithFallback, syncToLocalStorage } from './db';
-import UserDashboard from './portals/UserDashboard';
-import ServiceProviderDashboard from './portals/ServiceProviderDashboard';
-import AdminDashboard from './portals/AdminDashboard';
-import SuperAdminDashboard from './portals/SuperAdminDashboard';
+import DashboardSkeleton from './components/ui/DashboardSkeleton';
+
+const UserDashboard = lazy(() => import('./portals/UserDashboard'));
+const ServiceProviderDashboard = lazy(() => import('./portals/ServiceProviderDashboard'));
+const AdminDashboard = lazy(() => import('./portals/AdminDashboard'));
+const SuperAdminDashboard = lazy(() => import('./portals/SuperAdminDashboard'));
 
 function AppContent() {
   const { currentUser, isAuthenticated } = useAuth();
@@ -257,12 +259,26 @@ function AppContent() {
               {activeTab === 'concierge-hub' && <ConciergeHubView />}
               {activeTab === 'smart-recommendations' && <SmartRecommendationsView />}
               {activeTab === 'guest-dashboard' && <GuestDashboard />}
-              {activeTab === 'user-dashboard' && <UserDashboard />}
-              {activeTab === 'service-dashboard' && <ServiceProviderDashboard />}
-              {activeTab === 'admin-dashboard' && (
-                <AdminDashboard listings={listings} onToggleStatus={handleToggleStatus} onDeleteListing={handleDeleteListing} />
+              {activeTab === 'user-dashboard' && (
+                <Suspense fallback={<DashboardSkeleton />}>
+                  <UserDashboard />
+                </Suspense>
               )}
-              {activeTab === 'super-admin-dashboard' && <SuperAdminDashboard />}
+              {activeTab === 'service-dashboard' && (
+                <Suspense fallback={<DashboardSkeleton />}>
+                  <ServiceProviderDashboard />
+                </Suspense>
+              )}
+              {activeTab === 'admin-dashboard' && (
+                <Suspense fallback={<DashboardSkeleton />}>
+                  <AdminDashboard listings={listings} onToggleStatus={handleToggleStatus} onDeleteListing={handleDeleteListing} />
+                </Suspense>
+              )}
+              {activeTab === 'super-admin-dashboard' && (
+                <Suspense fallback={<DashboardSkeleton />}>
+                  <SuperAdminDashboard />
+                </Suspense>
+              )}
               {(activeTab === 'overview' || activeTab === 'listings' || activeTab === 'calendar' || activeTab === 'payouts') && (
                 <OwnerDashboardView listings={listings} bookings={bookings} transactions={transactions} onAddListingClick={() => setActiveTab('wizard')} onUpdateListingsStatus={handleUpdateListingStatus} onUpdateListing={handleUpdateListing} />
               )}

@@ -135,7 +135,7 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
             </div>
           </div>
 
-          {/* Center Links - New Navigation Structure */}
+          {/* Center Links - Simplified Guest Navigation */}
           <nav className="hidden lg:flex items-center gap-6 text-[11px] font-bold tracking-[0.15em] uppercase">
             {!isAuthenticated || currentUser?.role === 'user' ? (
               <>
@@ -144,24 +144,16 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                   className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'home' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
                 >
                   <HomeIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'home' ? 'text-gold-dark' : ''}`} />
-                  <span>Lagos Gems</span>
+                  <span>Gems</span>
                   {activeTab === 'home' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
                 <button 
-                  onClick={() => setActiveTab('explore-lagos')} 
-                  className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'explore-lagos' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+                  onClick={() => setActiveTab('explore-hub')} 
+                  className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'explore-hub' || activeTab === 'explore-lagos' || activeTab === 'vip-services' || activeTab === 'business-lagos' || activeTab === 'events' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
                 >
-                  <MapIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'explore-lagos' ? 'text-gold-dark' : ''}`} />
+                  <MapIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'explore-hub' || activeTab === 'explore-lagos' || activeTab === 'vip-services' || activeTab === 'business-lagos' || activeTab === 'events' ? 'text-gold-dark' : ''}`} />
                   <span>Explore</span>
-                  {activeTab === 'explore-lagos' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-                <button 
-                  onClick={() => setActiveTab('vip-services')} 
-                  className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'vip-services' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
-                >
-                  <HandRaisedIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'vip-services' ? 'text-gold-dark' : ''}`} />
-                  <span>Assist</span>
-                  {activeTab === 'vip-services' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                  {(activeTab === 'explore-hub' || activeTab === 'explore-lagos' || activeTab === 'vip-services' || activeTab === 'business-lagos' || activeTab === 'events') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
                 <button 
                   onClick={() => setActiveTab('bundles')} 
@@ -172,22 +164,6 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                   {activeTab === 'bundles' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
                 <button 
-                  onClick={() => setActiveTab('signature-experiences')} 
-                  className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'signature-experiences' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
-                >
-                  <SparklesIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'signature-experiences' ? 'text-gold-dark' : ''}`} />
-                  <span>Experiences</span>
-                  {activeTab === 'signature-experiences' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-                <button 
-                  onClick={() => setActiveTab('business-lagos')} 
-                  className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'business-lagos' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
-                >
-                  <BriefcaseIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'business-lagos' ? 'text-gold-dark' : ''}`} />
-                  <span>Business</span>
-                  {activeTab === 'business-lagos' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                </button>
-                <button 
                   onClick={() => setActiveTab('events')} 
                   className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'events' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
                 >
@@ -195,16 +171,6 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                   <span>Events</span>
                   {activeTab === 'events' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
-                {isAuthenticated && (
-                  <button 
-                    onClick={() => setActiveTab('favorites')} 
-                    className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'favorites' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
-                  >
-                    <HeartIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'favorites' ? 'text-gold-dark' : ''}`} />
-                    <span>Favorites</span>
-                    {activeTab === 'favorites' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
-                  </button>
-                )}
               </>
             ) : currentUser?.role === 'service_provider' ? (
               <span className="text-charcoal/40 text-[10px]">Use sidebar for navigation</span>
@@ -279,15 +245,11 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
             <div className="fixed top-20 right-0 left-0 bg-parchment border-b border-charcoal/5 shadow-xl max-h-[75vh] overflow-y-auto rounded-b-2xl">
               <div className="p-3 space-y-1">
                 {(!isAuthenticated || currentUser?.role === 'user' ? [
-                  { tab: 'home', label: 'Lagos Gems', icon: HomeIcon },
-                  { tab: 'explore-lagos', label: 'Explore Lagos', icon: MapIcon },
-                  { tab: 'vip-services', label: 'Lagos Assist', icon: HandRaisedIcon },
+                  { tab: 'home', label: 'Gems', icon: HomeIcon },
+                  { tab: 'explore-hub', label: 'Explore', icon: MapIcon },
                   { tab: 'bundles', label: 'Bundles', icon: CubeIcon },
-                  { tab: 'signature-experiences', label: 'Signature Experiences', icon: SparklesIcon },
-                  { tab: 'business-lagos', label: 'Business Lagos', icon: BriefcaseIcon },
                   { tab: 'events', label: 'Events', icon: CalendarIcon },
-                  ...(isAuthenticated ? [{ tab: 'favorites', label: 'Favorites', icon: HeartIcon }] : []),
-                  ...(isAuthenticated ? [{ tab: 'guest-dashboard', label: 'My Dashboard', icon: User }] : []),
+                  ...(isAuthenticated ? [{ tab: 'user-dashboard', label: 'My Dashboard', icon: User }] : []),
                 ] : currentUser?.role === 'service_provider' ? [
                   { tab: 'overview', label: 'Dashboard', icon: HomeIcon },
                   { tab: 'listings', label: 'My Services', icon: HomeIcon },

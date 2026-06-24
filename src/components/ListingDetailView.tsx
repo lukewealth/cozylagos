@@ -350,11 +350,49 @@ export default function ListingDetailView({ listing, onBack, onConfirmBooking, o
             </div>
           </motion.div>
 
-          {/* Review Highlight (Image 3 style) */}
-          <motion.div 
+          {/* Location Map */}
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
+            className="space-y-6"
+          >
+            <div className="flex items-center justify-between border-b border-charcoal/5 pb-4">
+              <h2 className="font-serif text-3xl font-bold text-charcoal">Location</h2>
+              <span className="text-xs font-bold text-gold-dark uppercase tracking-widest flex items-center gap-1">
+                <MapPin className="w-3 h-3" />
+                {listing.location}
+              </span>
+            </div>
+            <div className="rounded-2xl overflow-hidden border border-charcoal/5 h-[300px] bg-charcoal/5">
+              <iframe
+                title={`Map - ${listing.title}`}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                src={`https://www.openstreetmap.org/export/embed.html?bbox=${(listing.lng || 3.439) - 0.02},${(listing.lat || 6.454) - 0.02},${(listing.lng || 3.439) + 0.02},${(listing.lat || 6.454) + 0.02}&layer=mapnik&marker=${listing.lat || 6.454},${listing.lng || 3.439}`}
+              />
+            </div>
+            <div className="flex items-center gap-3 text-sm text-charcoal-light">
+              <MapPin className="w-4 h-4 text-gold-dark shrink-0" />
+              <span>{listing.title}, {listing.location}, Lagos, Nigeria</span>
+              <a
+                href={`https://www.google.com/maps/search/${listing.lat || 6.454},${listing.lng || 3.439}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-auto text-gold-dark font-bold text-xs uppercase tracking-widest hover:underline"
+              >
+                Open in Google Maps
+              </a>
+            </div>
+          </motion.div>
+
+          {/* Review Highlight (Image 3 style) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
             className="p-8 bg-white border border-charcoal/5 rounded-3xl space-y-4"
           >
             <div className="flex items-center justify-between">

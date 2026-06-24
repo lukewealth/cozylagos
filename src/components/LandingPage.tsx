@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Anchor, ArrowRight, Shield, Waves, Wifi, Flame } from 'lucide-react';
+import { Anchor, ArrowRight, Shield, Waves, Wifi, Flame, MapPin } from 'lucide-react';
 import { Listing } from '../types';
 import { INITIAL_LISTINGS } from '../data';
 import ApartmentCard from './ui/ApartmentCard';
@@ -119,9 +119,10 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
           </div>
           <button
             onClick={() => setShowMap(!showMap)}
-            className="px-5 py-2.5 bg-charcoal text-parchment hover:bg-gold-dark rounded-lg text-xs font-bold uppercase tracking-wider transition-colors"
+            className="px-5 py-2.5 bg-charcoal text-parchment hover:bg-gold-dark rounded-lg text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-2"
           >
-            {showMap ? 'Hide Map' : 'Show Map'}
+            <MapPin className="w-4 h-4" />
+            {showMap ? 'Hide Map' : 'View Property Map'}
           </button>
         </div>
         <AnimatePresence>
@@ -167,7 +168,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
               className="bg-parchment/5 backdrop-blur-md border border-parchment/10 rounded-2xl p-6 hover:bg-parchment/10 transition-all group cursor-pointer"
-              onClick={() => setActiveTab('experience')}
+              onClick={() => setActiveTab('yacht-experience')}
             >
               <div className="w-12 h-12 bg-gold/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Anchor className="w-6 h-6 text-gold-light" />
@@ -211,17 +212,17 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
               className="bg-parchment/5 backdrop-blur-md border border-parchment/10 rounded-2xl p-6 hover:bg-parchment/10 transition-all group cursor-pointer"
-              onClick={() => setActiveTab('concierge-hub')}
+              onClick={() => setActiveTab('vip-services')}
             >
               <div className="w-12 h-12 bg-gold/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Shield className="w-6 h-6 text-gold-light" />
               </div>
-              <h3 className="font-serif text-xl font-bold text-parchment mb-2">AI Concierge Hub</h3>
+              <h3 className="font-serif text-xl font-bold text-parchment mb-2">Lagos Assist</h3>
               <p className="text-sm text-parchment/60 leading-relaxed mb-4">
-                24/7 proactive concierge with smart recommendations, itinerary planning, and instant booking.
+                Premium concierge services, transportation, wellness, and personalized assistance for your stay.
               </p>
               <div className="flex items-center justify-between">
-                <span className="text-gold-light font-serif font-bold text-lg">Complimentary</span>
+                <span className="text-gold-light font-serif font-bold text-lg">Premium</span>
                 <span className="text-[10px] text-parchment/40 uppercase tracking-widest">For all guests</span>
               </div>
             </motion.div>
