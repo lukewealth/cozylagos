@@ -3,8 +3,11 @@ import { motion, AnimatePresence } from 'motion/react';
 import {
   MapPin, Star, Clock, Waves, TreePine, Building2, Palette, Landmark,
   UtensilsCrossed, Music, ShoppingBag, Compass, Car, Sparkles, Crown,
-  Search, X, ArrowRight, Sun, Wine, Gem, Drum, Gift, ChefHat, Sailboat
+  Search, X, ArrowRight, Sun, Wine, Gem, Drum, Gift, ChefHat, Sailboat,
+  ShoppingCart, Calendar, CheckCircle
 } from 'lucide-react';
+import { useCart } from '../context/CartContext';
+import { useToast } from './Toast';
 
 interface ExploreItem {
   id: string;
@@ -102,10 +105,32 @@ const categories: Category[] = [
   },
 ];
 
-export default function ExploreLagosView({ onNavigateBundles, showHero = true }: { onNavigateBundles: () => void; showHero?: boolean }) {
+export default function ExploreLagosView({ onNavigateBundles, showHero = true, onNavigateCheckout }: { onNavigateBundles: () => void; showHero?: boolean; onNavigateCheckout?: () => void }) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState<ExploreItem | null>(null);
+  const { addExperienceToCart, experienceCart } = useCart();
+  const { addToast } = useToast();
+
+  const handleAddToCart = (item: ExploreItem) => {
+    const priceNum = parseInt(item.price.replace(/[^\d]/g, '')) || 0;
+    addExperienceToCart({
+      id: item.id,
+      title: item.title,
+      category: 'explore-lagos',
+      price: priceNum,
+      guestsCount: 1,
+      date: new Date().toISOString().split('T')[0],
+      vendorName: item.location,
+      image: item.image,
+      duration: item.duration,
+    });
+    addToast({ type: 'success', title: 'Added to Cart', message: `${item.title} added to your experience cart.` });
+  };
+
+  const handleBookExperience = () => {
+    onNavigateCheckout?.();
+  };
 
   const filteredCategories = activeCategory
     ? categories.filter(cat => cat.id === activeCategory)
@@ -280,6 +305,7 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true }:
                   item={item}
                   index={index}
                   onClick={() => setSelectedItem(item)}
+                  onAddToCart={handleAddToCart}
                 />
               ))}
             </div>
@@ -313,6 +339,7 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true }:
                   item={item}
                   index={index}
                   onClick={() => setSelectedItem(item)}
+                  onAddToCart={handleAddToCart}
                 />
               ))}
             </div>
@@ -350,6 +377,7 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true }:
                       item={item}
                       index={index}
                       onClick={() => setSelectedItem(item)}
+                      onAddToCart={handleAddToCart}
                     />
                   ))}
                 </div>
@@ -369,25 +397,27 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true }:
       {/* Detail Modal */}
       <AnimatePresence>
         {selectedItem && (
-          <ItemDetailModal item={selectedItem} onClose={() => setSelectedItem(null)} />
+          <ItemDetailModal item={selectedItem} onClose={() => setSelectedItem(null)} onAddToCart={handleAddToCart} onBookExperience={handleBookExperience} />
         )}
       </AnimatePresence>
     </div>
   );
 }
 
-function ExperienceCard({ item, index, onClick }: { item: ExploreItem; index: number; onClick: () => void; key?: string | number }) {
+function ExperienceCard({ item, index, onClick, onAddToCart }: { item: ExploreItem; index: number; onClick: () => void; onAddToCart: (item: ExploreItem) => void; key?: string | number }) {
+  const priceNum = parseInt(item.price.replace(/[^\d]/g, '')) || 0;
+  const isInCart = false;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.5, delay: index * 0.05 }}
-      onClick={onClick}
-      className="group cursor-pointer"
+      className="group"
     >
       <div className="bg-white rounded-2xl overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
-        <div className="relative h-48 overflow-hidden">
+        <div className="relative h-48 overflow-hidden cursor-pointer" onClick={onClick}>
           {item.image ? (
             <img
               src={item.image}
@@ -437,13 +467,32 @@ function ExperienceCard({ item, index, onClick }: { item: ExploreItem; index: nu
               ))}
             </div>
           )}
+          <div className="flex items-center gap-2 mt-4">
+            <button
+              onClick={(e) => { e.stopPropagation(); onAddToCart(item); }}
+              className="flex-1 py-2.5 bg-charcoal text-parchment hover:bg-charcoal/90 font-bold text-xs tracking-wider uppercase rounded-xl transition-colors flex items-center justify-center gap-1.5"
+            >
+              <ShoppingCart className="w-3.5 h-3.5" />
+              Add to Cart
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); onClick(); }}
+              className="py-2.5 px-4 bg-gold text-charcoal hover:bg-gold-dark font-bold text-xs tracking-wider uppercase rounded-xl transition-colors flex items-center justify-center gap-1.5"
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              Book
+            </button>
+          </div>
         </div>
       </div>
     </motion.div>
   );
 }
 
-function ItemDetailModal({ item, onClose }: { item: ExploreItem; onClose: () => void }) {
+function ItemDetailModal({ item, onClose, onAddToCart, onBookExperience }: { item: ExploreItem; onClose: () => void; onAddToCart: (item: ExploreItem) => void; onBookExperience?: () => void }) {
+  const [guests, setGuests] = useState(1);
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -527,13 +576,42 @@ function ItemDetailModal({ item, onClose }: { item: ExploreItem; onClose: () => 
             </div>
           )}
 
-          <button
-            onClick={onClose}
-            className="w-full py-4 bg-gold text-charcoal font-bold text-sm rounded-xl hover:bg-gold-dark hover:text-parchment transition-colors flex items-center justify-center gap-2"
-          >
-            <span>Book Experience</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Date</label>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="w-full px-3 py-2.5 bg-white border border-charcoal/10 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gold/30"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Guests</label>
+              <div className="flex items-center gap-2 bg-white border border-charcoal/10 rounded-xl px-3 py-2.5">
+                <button onClick={() => setGuests(Math.max(1, guests - 1))} className="w-6 h-6 flex items-center justify-center text-charcoal/40 hover:text-charcoal">-</button>
+                <span className="text-sm font-bold text-charcoal w-6 text-center">{guests}</span>
+                <button onClick={() => setGuests(guests + 1)} className="w-6 h-6 flex items-center justify-center text-charcoal/40 hover:text-charcoal">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 pt-2">
+            <button
+              onClick={() => { onAddToCart(item); onClose(); }}
+              className="flex-1 py-3.5 bg-charcoal text-parchment font-bold text-sm rounded-xl hover:bg-charcoal/90 transition-colors flex items-center justify-center gap-2"
+            >
+              <ShoppingCart className="w-4 h-4" />
+              Add to Cart
+            </button>
+            <button
+              onClick={() => { onAddToCart(item); onBookExperience?.(); onClose(); }}
+              className="flex-1 py-3.5 bg-gold text-charcoal font-bold text-sm rounded-xl hover:bg-gold-dark hover:text-parchment transition-colors flex items-center justify-center gap-2"
+            >
+              <CheckCircle className="w-4 h-4" />
+              Book Now
+            </button>
+          </div>
         </div>
       </motion.div>
     </motion.div>

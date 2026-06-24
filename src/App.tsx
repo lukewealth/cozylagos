@@ -423,7 +423,7 @@ function AppContent() {
                 <ExplorerView listings={listings.filter(l => l.isActive)} onSelectListing={(stay) => setSelectedListing(stay)} searchDestination={searchDestination} setSearchDestination={setSearchDestination} />
               )}
               {activeTab === 'explore-lagos' && (
-                <ExploreLagosView onNavigateBundles={() => setActiveTab('bundles')} />
+                <ExploreLagosView onNavigateBundles={() => setActiveTab('bundles')} onNavigateCheckout={() => setIsCheckoutOpen(true)} />
               )}
               {activeTab === 'bundles' && <ServiceBundlesView />}
               {activeTab === 'signature-experiences' && <SignatureExperiencesView />}
