@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Booking Confirmed | Welcome Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&amp;family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e3e2e1",
+                        "secondary-fixed": "#e5e2e1",
+                        "surface-container-low": "#f4f3f2",
+                        "surface-container": "#eeeeed",
+                        "surface-dim": "#dadad9",
+                        "on-surface": "#1a1c1c",
+                        "tertiary": "#625e56",
+                        "on-primary-fixed-variant": "#574500",
+                        "primary-fixed-dim": "#e9c349",
+                        "inverse-surface": "#2f3130",
+                        "outline": "#7f7663",
+                        "secondary": "#5f5e5e",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#e8e2d8",
+                        "tertiary-fixed-dim": "#ccc6bc",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#faf9f8",
+                        "surface-container-highest": "#e3e2e1",
+                        "tertiary-container": "#b8b2a9",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#faf9f8",
+                        "on-primary-fixed": "#241a00",
+                        "primary-container": "#d4af37",
+                        "on-tertiary-fixed": "#1e1b15",
+                        "on-primary-container": "#554300",
+                        "on-tertiary-container": "#48453e",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#ffe088",
+                        "on-background": "#1a1c1c",
+                        "primary": "#735c00",
+                        "error-container": "#ffdad6",
+                        "on-surface-variant": "#4d4635",
+                        "inverse-primary": "#e9c349",
+                        "on-secondary-container": "#636262",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#e2dfde",
+                        "inverse-on-surface": "#f1f0f0",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#e9e8e7",
+                        "on-tertiary-fixed-variant": "#4a463f",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#735c00",
+                        "outline-variant": "#d0c5af",
+                        "background": "#faf9f8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "section-gap": "120px",
+                        "stack-md": "32px",
+                        "gutter": "32px",
+                        "container-padding": "80px",
+                        "stack-lg": "64px",
+                        "stack-sm": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "headline-sm": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Manrope"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-lg": ["Manrope"],
+                        "label-caps": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["36px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-sm": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "headline-lg": ["48px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Glassmorphism utilities */
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 100%);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(26, 26, 26, 0.05);
+        }
+
+        .gold-button {
+            background-color: #D4AF37;
+            color: #1a1c1c;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+        }
+        
+        .gold-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+            background-color: #e9c349;
+        }
+
+        .ghost-button {
+            background-color: transparent;
+            border: 1px solid #1a1c1c;
+            color: #1a1c1c;
+            transition: all 0.3s ease;
+        }
+
+        .ghost-button:hover {
+            background-color: rgba(26, 28, 28, 0.05);
+        }
+
+        /* Ambient Entrance Animation */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-up {
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+        
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col font-body-md overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation Shell Suppressed for Transactional Success Screen -->
+<main class="flex-grow flex flex-col relative">
+<!-- Hero Background Area -->
+<div class="relative h-[460px] md:h-[563px] w-full overflow-hidden shrink-0">
+<!-- Full bleed property image -->
+<div class="absolute inset-0 w-full h-full bg-cover bg-center" data-alt="A luxurious, modern villa in Lagos at golden hour. High-end architectural photography style. The scene features warm, golden sunlight illuminating sleek, minimalist white walls and a shimmering infinity pool overlooking the coastline. Tall palm trees sway gently in the background. The mood is serene, opulent, and welcoming, embodying a high-end luxury lifestyle. Deep blacks in the shadows contrast with bright, crisp whites and the vibrant blue of the pool, perfectly suited for a light-mode premium UI." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAqCm3xRju2OusTCImL9nEmaDoq3im0tSLJB-RoBR_JwfuW_aY-1artPcoLXlwA10gCNPk4pp5G_Oehz0t17uvmiHsms5fArv9uKpWilJTp1BIjPk7jHhuDfVv0vzyC60ucOzo7lZnkuKchvXD1u-CLkMFGbR0lsz9Dc_1it-ATv_jl5ubRhKo2MpJbrnAEkaQlS0LtsHhjsPgXoUZPmu5LH0PpCSlMU8wRFHbKQqLc9Cq88xFkE5qJBUjwCGQcPWCvsaAoTwsKNoER')"></div>
+<!-- Soft gradient overlay for text readability if needed, though primary content is below -->
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-surface"></div>
+<!-- Floating Success Indicator -->
+<div class="absolute bottom-[-40px] left-1/2 transform -translate-x-1/2 z-10 animate-fade-up delay-100">
+<div class="w-20 h-20 md:w-24 md:h-24 bg-surface rounded-full flex items-center justify-center shadow-[0px_20px_50px_rgba(26,26,26,0.08)]">
+<div class="w-16 h-16 md:w-20 md:h-20 bg-primary-container rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined fill text-on-primary-container" data-icon="check_circle" style="font-size: 36px; font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Content Area -->
+<div class="flex-grow flex flex-col items-center px-6 md:px-gutter pt-16 pb-section-gap z-20 bg-surface">
+<!-- Typography Header -->
+<div class="text-center max-w-2xl mx-auto mb-stack-md animate-fade-up delay-200">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-4">Welcome Home.</h1>
+<p class="font-body-lg text-body-lg text-secondary">Your booking request has been confirmed by our Concierge team. We look forward to hosting you in Lagos.</p>
+</div>
+<!-- Booking Details Glass Card -->
+<div class="glass-card rounded-xl w-full max-w-3xl p-6 md:p-10 mb-stack-lg animate-fade-up delay-300">
+<!-- Property Title & Ref -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-outline/10 pb-6 mb-6">
+<div>
+<p class="font-label-caps text-label-caps text-primary tracking-widest mb-2">CONFIRMED BOOKING</p>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">The Ikoyi Glasshouse</h2>
+</div>
+<div class="mt-4 md:mt-0 text-left md:text-right">
+<p class="font-label-caps text-label-caps text-secondary mb-1">REFERENCE</p>
+<p class="font-body-md text-body-md text-on-surface font-medium">LX-7829-AB</p>
+</div>
+</div>
+<!-- Stay Details Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+<div>
+<p class="font-label-caps text-label-caps text-secondary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary" data-icon="calendar_today" style="font-size: 16px;">calendar_today</span>
+                            CHECK-IN
+                        </p>
+<p class="font-body-md text-body-md text-on-surface">Oct 12, 2024</p>
+<p class="font-body-md text-body-md text-secondary text-sm">3:00 PM</p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-secondary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary" data-icon="event_busy" style="font-size: 16px;">event_busy</span>
+                            CHECK-OUT
+                        </p>
+<p class="font-body-md text-body-md text-on-surface">Oct 19, 2024</p>
+<p class="font-body-md text-body-md text-secondary text-sm">11:00 AM</p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-secondary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary" data-icon="group" style="font-size: 16px;">group</span>
+                            GUESTS
+                        </p>
+<p class="font-body-md text-body-md text-on-surface">2 Adults</p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-secondary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary" data-icon="bed" style="font-size: 16px;">bed</span>
+                            ROOMS
+                        </p>
+<p class="font-body-md text-body-md text-on-surface">1 Master Suite</p>
+</div>
+</div>
+<!-- Extras/Perks Chips -->
+<div class="flex flex-wrap gap-3 mb-8">
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface-container-low rounded-full font-label-caps text-label-caps text-on-surface border border-outline/10">
+<span class="material-symbols-outlined text-primary" data-icon="local_taxi" style="font-size: 14px;">local_taxi</span>
+                        AIRPORT TRANSFER
+                    </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface-container-low rounded-full font-label-caps text-label-caps text-on-surface border border-outline/10">
+<span class="material-symbols-outlined text-primary" data-icon="restaurant" style="font-size: 14px;">restaurant</span>
+                        PRIVATE CHEF
+                    </span>
+</div>
+<!-- Actions -->
+<div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-outline/10">
+<button class="gold-button flex-1 py-4 px-6 rounded-lg font-label-caps text-label-caps flex items-center justify-center gap-2">
+<span>VIEW MY ITINERARY</span>
+<span class="material-symbols-outlined" data-icon="arrow_forward" style="font-size: 18px;">arrow_forward</span>
+</button>
+<button class="ghost-button flex-none py-4 px-6 rounded-lg font-label-caps text-label-caps flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="download" style="font-size: 18px;">download</span>
+                        RECEIPT
+                    </button>
+</div>
+</div>
+<!-- Support Link -->
+<div class="text-center animate-fade-up delay-400">
+<a class="inline-flex items-center gap-2 font-body-md text-body-md text-secondary hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="support_agent" style="font-size: 18px;">support_agent</span>
+                    Message Concierge for special requests
+                </a>
+</div>
+</div>
+</main>
+<!-- Bottom Nav Suppressed for Transactional Success Screen -->
+</body></html>

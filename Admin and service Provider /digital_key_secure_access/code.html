@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Digital Key | LUXE LAGOS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-container-low": "#f4f3f2",
+                "surface-container-highest": "#e3e2e1",
+                "secondary-fixed": "#e5e2e1",
+                "on-primary-fixed": "#241a00",
+                "surface": "#faf9f8",
+                "on-tertiary-fixed": "#1e1b15",
+                "tertiary-container": "#b8b2a9",
+                "surface-dim": "#dadad9",
+                "surface-container-high": "#e9e8e7",
+                "on-tertiary": "#ffffff",
+                "error-container": "#ffdad6",
+                "tertiary-fixed": "#e8e2d8",
+                "primary-container": "#d4af37",
+                "on-secondary": "#ffffff",
+                "surface-variant": "#e3e2e1",
+                "on-tertiary-fixed-variant": "#4a463f",
+                "secondary": "#5f5e5e",
+                "tertiary": "#625e56",
+                "inverse-surface": "#2f3130",
+                "outline": "#7f7663",
+                "on-secondary-container": "#636262",
+                "on-primary": "#ffffff",
+                "surface-container-lowest": "#ffffff",
+                "on-primary-fixed-variant": "#574500",
+                "on-error": "#ffffff",
+                "on-secondary-fixed": "#1c1b1b",
+                "tertiary-fixed-dim": "#ccc6bc",
+                "surface-tint": "#735c00",
+                "primary-fixed": "#ffe088",
+                "on-tertiary-container": "#48453e",
+                "outline-variant": "#d0c5af",
+                "secondary-container": "#e2dfde",
+                "surface-bright": "#faf9f8",
+                "surface-container": "#eeeeed",
+                "on-background": "#1a1c1c",
+                "on-surface-variant": "#4d4635",
+                "inverse-primary": "#e9c349",
+                "on-secondary-fixed-variant": "#474746",
+                "on-primary-container": "#554300",
+                "secondary-fixed-dim": "#c8c6c5",
+                "primary-fixed-dim": "#e9c349",
+                "on-surface": "#1a1c1c",
+                "primary": "#735c00",
+                "on-error-container": "#93000a",
+                "error": "#ba1a1a",
+                "inverse-on-surface": "#f1f0f0",
+                "background": "#faf9f8"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "stack-sm": "16px",
+                "gutter": "32px",
+                "section-gap": "120px",
+                "container-padding": "80px",
+                "unit": "8px",
+                "stack-md": "32px",
+                "stack-lg": "64px"
+            },
+            "fontFamily": {
+                "label-caps": ["Manrope"],
+                "headline-lg-mobile": ["Playfair Display"],
+                "headline-md": ["Playfair Display"],
+                "body-lg": ["Manrope"],
+                "body-md": ["Manrope"],
+                "headline-sm": ["Playfair Display"],
+                "headline-lg": ["Playfair Display"],
+                "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                "headline-lg-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+      .gold-gradient {
+        background: linear-gradient(135deg, #D4AF37 0%, #F4EDE3 50%, #B8860B 100%);
+      }
+      @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(200%) rotate(45deg); }
+      }
+      .shimmer::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 50%; height: 100%;
+        background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+        animation: shine 3s infinite;
+      }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen">
+<!-- Top Navigation (Shell Implementation) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface/80 backdrop-blur-xl dark:bg-inverse-surface/80 border-b border-outline/10 shadow-sm">
+<div class="font-display-lg text-headline-sm tracking-widest text-primary dark:text-primary-fixed-dim">LUXE LAGOS</div>
+<div class="flex items-center gap-6">
+<button class="text-secondary dark:text-secondary-fixed-dim hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="text-primary font-bold hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas Area -->
+<main class="pt-24 pb-32 min-h-screen relative overflow-hidden">
+<!-- Background Ambient Image -->
+<div class="fixed inset-0 -z-10 opacity-30">
+<div class="absolute inset-0 bg-cover bg-center filter blur-xl scale-110" data-alt="A high-end, luxury penthouse interior in Lagos at sunset. The room features floor-to-ceiling windows overlooking the Atlantic ocean, sophisticated Italian furniture in champagne and charcoal tones, and warm, indirect ambient lighting that casts a soft gold glow across the polished marble floors. The atmosphere is serene, elite, and intensely modern." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAs-8M98t6hWnqewLr2Xo63Jykw-9NHg1QW3yfrS_LSDh6m_qxbUbB1-VSr1Ka-vTDLHDl7jLpCpcIPry1GuJvomG7WF_8p2yAZvbkiGv9Zj17buojccHHHdoibgRWXkJSxBYck-mo3bGMG4gZG_nKfHk5GOvyZB2GzIrO6uWn59IPE9nJVw8Ukf7lqNYZW9IgfCu1k8c5qbbIGQR7AlKy4tgnqU6UWzV97RJggbBEGWkrrgvSOrh-EkG3hrmfnLrSIHWKr6oiOw_VC')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-b from-surface via-transparent to-surface"></div>
+</div>
+<div class="max-w-7xl mx-auto px-gutter grid grid-cols-1 lg:grid-cols-12 gap-stack-lg">
+<!-- Left Column: Key Visual & Entry Controls -->
+<div class="lg:col-span-7 flex flex-col items-center justify-center space-y-stack-md">
+<!-- Page Title -->
+<div class="w-full text-left mb-8">
+<h1 class="font-headline-lg text-headline-lg text-primary-container">Secure Access</h1>
+<p class="font-body-lg text-secondary mt-2">Ocean-Front Suite 402, Eko Atlantic</p>
+</div>
+<!-- Digital Key Card Visual -->
+<div class="relative group cursor-pointer perspective-1000">
+<div class="w-[340px] h-[520px] md:w-[400px] md:h-[600px] gold-gradient rounded-[32px] shadow-2xl relative overflow-hidden transition-transform duration-700 preserve-3d group-hover:rotate-y-12 group-hover:-rotate-x-6 border-[0.5px] border-white/50 shimmer">
+<!-- Key Design Elements -->
+<div class="absolute inset-0 p-10 flex flex-col justify-between text-on-primary-fixed">
+<div class="flex justify-between items-start">
+<span class="font-display-lg text-headline-sm tracking-tighter opacity-80">LUXE</span>
+<span class="material-symbols-outlined text-4xl">contactless</span>
+</div>
+<div class="space-y-4">
+<div class="w-16 h-12 bg-white/20 backdrop-blur-md rounded-lg border border-white/30 flex items-center justify-center">
+<div class="w-10 h-6 bg-yellow-600/40 rounded-sm"></div>
+</div>
+<div class="font-label-caps tracking-[0.2em] text-sm opacity-60">DIGITAL ENTRY SYSTEM</div>
+</div>
+<div class="space-y-2">
+<div class="text-3xl font-bold tracking-widest">•••• •••• 4022</div>
+<div class="flex justify-between items-end">
+<div>
+<div class="font-label-caps text-[10px] opacity-60 mb-1">VALID UNTIL</div>
+<div class="font-medium">12 OCT 2024</div>
+</div>
+<div class="text-right">
+<div class="font-label-caps text-[10px] opacity-60 mb-1">HOLDER</div>
+<div class="font-medium tracking-wide">MR. ADEBAYO</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Pressed Effect Glow -->
+<div class="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity"></div>
+</div>
+</div>
+<!-- NFC Instructions -->
+<div class="glass-card p-stack-sm rounded-2xl flex items-center gap-4 max-w-md w-full animate-pulse">
+<div class="bg-primary-container text-white p-3 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sensors</span>
+</div>
+<div>
+<p class="font-bold text-primary">Hold near reader to unlock</p>
+<p class="text-sm text-secondary">NFC and Bluetooth enabled</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Security Features & Log -->
+<div class="lg:col-span-5 space-y-stack-md">
+<!-- Quick Actions Bento -->
+<div class="grid grid-cols-2 gap-4">
+<button class="glass-card p-6 rounded-3xl flex flex-col items-center justify-center gap-4 hover:bg-surface-container transition-all active:scale-95">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">share</span>
+</div>
+<span class="font-label-caps">SHARE ACCESS</span>
+</button>
+<button class="glass-card p-6 rounded-3xl flex flex-col items-center justify-center gap-4 hover:bg-surface-container transition-all active:scale-95">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">lock_reset</span>
+</div>
+<span class="font-label-caps">REVOKE ALL</span>
+</button>
+</div>
+<!-- Security Log Section -->
+<div class="glass-card rounded-[40px] overflow-hidden flex flex-col h-[500px]">
+<div class="p-8 border-b border-outline/10 flex justify-between items-center">
+<h2 class="font-headline-sm text-primary">Security Log</h2>
+<span class="font-label-caps text-secondary text-xs">LIVE FEED</span>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- Log Items -->
+<div class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/40 transition-colors">
+<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-700">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div class="flex-1">
+<p class="font-medium">Primary Key Entry</p>
+<p class="text-xs text-secondary">Today, 14:24 PM • Front Door</p>
+</div>
+<span class="material-symbols-outlined text-secondary opacity-50">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/40 transition-colors">
+<div class="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">person_add</span>
+</div>
+<div class="flex-1">
+<p class="font-medium">Guest Access Granted</p>
+<p class="text-xs text-secondary">Today, 09:15 AM • Chioma Adeyemi</p>
+</div>
+<span class="material-symbols-outlined text-secondary opacity-50">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/40 transition-colors">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-lg">door_open</span>
+</div>
+<div class="flex-1">
+<p class="font-medium">Housekeeping Entry</p>
+<p class="text-xs text-secondary">Yesterday, 11:30 AM • Authorized</p>
+</div>
+<span class="material-symbols-outlined text-secondary opacity-50">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/40 transition-colors">
+<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-700">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div class="flex-1">
+<p class="font-medium">Primary Key Entry</p>
+<p class="text-xs text-secondary">Yesterday, 19:40 PM • Parking Level 2</p>
+</div>
+<span class="material-symbols-outlined text-secondary opacity-50">chevron_right</span>
+</div>
+</div>
+<!-- View All Footer -->
+<button class="p-6 text-center font-label-caps text-primary hover:bg-primary/5 transition-colors border-t border-outline/10">
+                        View Full Security Report
+                    </button>
+</div>
+<!-- Concierge Alert Tip -->
+<div class="bg-primary-container/10 border border-primary-container/20 p-6 rounded-3xl flex gap-4">
+<span class="material-symbols-outlined text-primary-container">verified_user</span>
+<p class="text-sm leading-relaxed text-on-surface-variant">
+<strong>Security Tip:</strong> Your digital key is encrypted with biometric-level security. If you lose your device, contact the <strong>Luxe Concierge</strong> immediately to deactivate remote access.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-2 bg-surface/90 backdrop-blur-2xl dark:bg-inverse-surface/90 border-t border-outline/10 shadow-[0px_-10px_30px_rgba(26,26,26,0.05)] rounded-t-xl">
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-surface-variant/50 transition-all active:scale-95">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-caps text-[10px] mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-surface-variant/50 transition-all active:scale-95">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-caps text-[10px] mt-1">Bookings</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-surface-variant/50 transition-all active:scale-95">
+<span class="material-symbols-outlined">support_agent</span>
+<span class="font-label-caps text-[10px] mt-1">Concierge</span>
+</button>
+<button class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-container/10 rounded-xl px-4 py-2 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">key</span>
+<span class="font-label-caps text-[10px] mt-1">Key</span>
+</button>
+</nav>
+<!-- Interactive Layer: Card Tilt & Haptics Simulation -->
+<script>
+        const card = document.querySelector('.perspective-1000 > div');
+        const container = document.querySelector('.perspective-1000');
+
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 20;
+            const rotateY = (centerX - x) / 20;
+            
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        container.addEventListener('mouseleave', () => {
+            card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
+
+        // Simulate NFC tap
+        card.addEventListener('click', () => {
+            card.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                card.style.transform = 'scale(1)';
+                // Visual feedback for successful "tap"
+                const toast = document.createElement('div');
+                toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface px-8 py-3 rounded-full font-label-caps shadow-2xl z-50 animate-bounce';
+                toast.innerText = 'KEY ACTIVE • READY TO UNLOCK';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }, 150);
+        });
+    </script>
+</body></html>

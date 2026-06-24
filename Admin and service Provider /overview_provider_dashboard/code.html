@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Luxury Lagos Provider Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Manrope:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#ffe088",
+                    "on-tertiary-container": "#48453e",
+                    "on-primary-fixed": "#241a00",
+                    "inverse-surface": "#2f3130",
+                    "surface-container-high": "#e9e8e7",
+                    "on-primary-container": "#554300",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "surface": "#faf9f8",
+                    "surface-variant": "#e3e2e1",
+                    "on-secondary-container": "#636262",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#7f7663",
+                    "inverse-on-surface": "#f1f0f0",
+                    "on-surface-variant": "#4d4635",
+                    "surface-dim": "#dadad9",
+                    "on-surface": "#1a1c1c",
+                    "on-tertiary-fixed-variant": "#4a463f",
+                    "surface-container-highest": "#e3e2e1",
+                    "secondary-fixed": "#e5e2e1",
+                    "outline-variant": "#d0c5af",
+                    "on-tertiary-fixed": "#1e1b15",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-container": "#b8b2a9",
+                    "surface-bright": "#faf9f8",
+                    "surface-tint": "#735c00",
+                    "on-secondary-fixed-variant": "#474746",
+                    "tertiary-fixed-dim": "#ccc6bc",
+                    "secondary": "#5f5e5e",
+                    "on-primary-fixed-variant": "#574500",
+                    "tertiary-fixed": "#e8e2d8",
+                    "inverse-primary": "#e9c349",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#1a1c1c",
+                    "surface-container": "#eeeeed",
+                    "error": "#ba1a1a",
+                    "secondary-container": "#e2dfde",
+                    "surface-container-low": "#f4f3f2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "16px",
+                    "unit": "8px",
+                    "stack-md": "32px",
+                    "gutter": "32px",
+                    "container-padding": "80px",
+                    "stack-lg": "64px",
+                    "section-gap": "120px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-lg": ["Manrope"],
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Manrope"],
+                    "headline-md": ["Playfair Display"],
+                    "label-caps": ["Manrope"],
+                    "headline-lg-mobile": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                    "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        background-color: #faf9f8;
+        color: #1a1c1c;
+        overflow-x: hidden;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0px 20px 50px rgba(26, 26, 26, 0.05);
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .sidebar-scroll::-webkit-scrollbar {
+        width: 4px;
+      }
+      .sidebar-scroll::-webkit-scrollbar-thumb {
+        background: rgba(115, 92, 0, 0.1);
+        border-radius: 10px;
+      }
+      .chart-container {
+        position: relative;
+        height: 240px;
+        width: 100%;
+      }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased">
+<!-- SideNavBar Shell -->
+<aside class="h-screen w-72 fixed left-0 top-0 z-50 bg-surface-container-lowest border-r border-outline-variant/20 shadow-md flex flex-col py-stack-sm hidden md:flex">
+<div class="px-gutter mb-stack-md">
+<h1 class="font-headline-md text-headline-md text-primary">Lagos Elite Services</h1>
+<p class="text-secondary text-sm">Verified Provider</p>
+</div>
+<nav class="flex-grow sidebar-scroll overflow-y-auto space-y-1">
+<!-- Active Tab: Dashboard -->
+<a class="flex items-center gap-4 bg-primary text-on-primary rounded-lg px-4 py-3 mx-2 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 text-secondary hover:bg-primary-container/10 px-4 py-3 mx-2 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-body-md">Services</span>
+</a>
+<a class="flex items-center gap-4 text-secondary hover:bg-primary-container/10 px-4 py-3 mx-2 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-body-md">Bookings</span>
+</a>
+<a class="flex items-center gap-4 text-secondary hover:bg-primary-container/10 px-4 py-3 mx-2 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md">Earnings</span>
+</a>
+<a class="flex items-center gap-4 text-secondary hover:bg-primary-container/10 px-4 py-3 mx-2 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-body-md">Profile</span>
+</a>
+</nav>
+<div class="px-4 mb-stack-md">
+<button class="w-full bg-primary-container text-on-primary-container py-4 rounded-lg font-bold flex items-center justify-center gap-2 shadow-sm hover:brightness-105 transition-all">
+<span class="material-symbols-outlined">add</span>
+                Add New Service
+            </button>
+</div>
+<div class="border-t border-outline-variant/20 pt-4">
+<a class="flex items-center gap-4 text-secondary hover:bg-primary-container/10 px-4 py-3 mx-2 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+<a class="flex items-center gap-4 text-secondary hover:bg-primary-container/10 px-4 py-3 mx-2 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-body-md">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-72 min-h-screen">
+<!-- TopNavBar Shell -->
+<header class="w-full sticky top-0 z-40 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/20 shadow-sm flex justify-between items-center px-gutter py-4">
+<div class="flex items-center gap-4">
+<span class="md:hidden material-symbols-outlined text-primary cursor-pointer">menu</span>
+<h2 class="font-headline-sm text-headline-sm text-primary font-bold">Luxury Lagos Provider</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex items-center bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant/30">
+<span class="material-symbols-outlined text-secondary mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-48" placeholder="Search bookings..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary cursor-pointer hover:text-primary transition-colors">notifications</span>
+<span class="material-symbols-outlined text-secondary cursor-pointer hover:text-primary transition-colors">chat_bubble</span>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-full font-bold text-sm hover:opacity-90 transition-all">Go Live</button>
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden border-2 border-primary-container">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a premium concierge service provider in Lagos, wearing a tailored charcoal suit against a minimalist ivory background. High-end portrait photography with soft, warm studio lighting that highlights a sophisticated and welcoming expression. The aesthetic is clean, professional, and elite, fitting for a luxury brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHD1DmaRIjN6afc6qM8sIuRi9ZpOaJ9jPU8qxXmoLAZgCB7wF_8PTuxLpZRupWYjeqBToYfQaZ3bRUJaNpQ7Btr_0rTZaRHFbHguTsEnpsiculO4sMGC2tzws6hz7wjlq3xcEUNOllKFJ2t-pZBXvJEJOfQnSbuSgJ4uQUugja0ep6NYkCr6968dnt4L5PRw7PgNMOVm6UQEax9MB_VtJHf2JWniq5F2yZer6pUI6eHkpycJxnmAdLKKPcQ3C88-WXlK369G9exwPC"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-8 lg:p-gutter max-w-7xl mx-auto space-y-stack-lg">
+<!-- Welcome Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Good Morning, Victoria Island</h1>
+<p class="text-secondary font-body-lg">Here's what's happening with your services today.</p>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-3 border border-outline text-on-surface rounded-full font-bold hover:bg-surface-container-high transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">calendar_today</span>
+                        Update Availability
+                    </button>
+</div>
+</div>
+<!-- Bento Financial Summary -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md">
+<div class="glass-card p-stack-md rounded-2xl flex flex-col justify-between group cursor-pointer transition-transform duration-300 hover:-translate-y-1">
+<div>
+<div class="flex justify-between items-center mb-4">
+<span class="label-caps text-secondary">TOTAL EARNINGS</span>
+<span class="material-symbols-outlined text-primary">payments</span>
+</div>
+<h3 class="font-display-lg text-primary">₦2.4M</h3>
+<p class="text-green-600 text-sm font-bold flex items-center gap-1 mt-2">
+<span class="material-symbols-outlined text-sm">trending_up</span> +12% from last month
+                        </p>
+</div>
+</div>
+<div class="glass-card p-stack-md rounded-2xl flex flex-col justify-between group cursor-pointer transition-transform duration-300 hover:-translate-y-1">
+<div>
+<div class="flex justify-between items-center mb-4">
+<span class="label-caps text-secondary">PENDING PAYOUTS</span>
+<span class="material-symbols-outlined text-primary">account_balance_wallet</span>
+</div>
+<h3 class="font-display-lg text-on-surface">₦850K</h3>
+<p class="text-secondary text-sm mt-2">Scheduled for Friday, Oct 27</p>
+</div>
+</div>
+<div class="glass-card p-stack-md rounded-2xl flex flex-col justify-between group cursor-pointer transition-transform duration-300 hover:-translate-y-1 bg-primary-fixed/20">
+<div>
+<div class="flex justify-between items-center mb-4">
+<span class="label-caps text-primary">ACTIVE BOOKINGS</span>
+<span class="material-symbols-outlined text-primary">event_note</span>
+</div>
+<h3 class="font-display-lg text-on-primary-fixed">14</h3>
+<p class="text-primary text-sm mt-2 font-bold">4 starts today</p>
+</div>
+</div>
+</div>
+<!-- Performance Chart & Upcoming Bookings -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-stack-md">
+<!-- Service Performance Chart -->
+<div class="lg:col-span-2 glass-card p-stack-md rounded-2xl">
+<div class="flex justify-between items-center mb-stack-md">
+<h4 class="font-headline-sm text-on-surface">Service Performance</h4>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container text-xs font-bold rounded-full cursor-pointer">Monthly</span>
+<span class="px-3 py-1 text-xs text-secondary font-bold rounded-full cursor-pointer hover:bg-surface-container">Weekly</span>
+</div>
+</div>
+<div class="chart-container flex items-end justify-between gap-4 px-4 pb-8 border-b border-outline-variant/30">
+<!-- Simulated Chart Bars -->
+<div class="flex flex-col items-center gap-2 flex-1 group">
+<div class="w-full bg-primary/20 rounded-t-lg transition-all duration-500 group-hover:bg-primary/40" style="height: 40%"></div>
+<span class="text-[10px] text-secondary font-bold uppercase">Jan</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1 group">
+<div class="w-full bg-primary/20 rounded-t-lg transition-all duration-500 group-hover:bg-primary/40" style="height: 60%"></div>
+<span class="text-[10px] text-secondary font-bold uppercase">Feb</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1 group">
+<div class="w-full bg-primary/20 rounded-t-lg transition-all duration-500 group-hover:bg-primary/40" style="height: 55%"></div>
+<span class="text-[10px] text-secondary font-bold uppercase">Mar</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1 group">
+<div class="w-full bg-primary rounded-t-lg transition-all duration-500 group-hover:opacity-80" style="height: 85%"></div>
+<span class="text-[10px] text-primary font-bold uppercase">Apr</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1 group">
+<div class="w-full bg-primary/20 rounded-t-lg transition-all duration-500 group-hover:bg-primary/40" style="height: 70%"></div>
+<span class="text-[10px] text-secondary font-bold uppercase">May</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1 group">
+<div class="w-full bg-primary/20 rounded-t-lg transition-all duration-500 group-hover:bg-primary/40" style="height: 90%"></div>
+<span class="text-[10px] text-secondary font-bold uppercase">Jun</span>
+</div>
+</div>
+<div class="mt-6 flex items-center gap-4 text-sm text-secondary">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-primary rounded-full"></div>
+<span>Bookings</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-primary/20 rounded-full"></div>
+<span>Previous Period</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Sidebar / Upcoming -->
+<div class="lg:col-span-1 space-y-stack-md">
+<div class="glass-card p-stack-md rounded-2xl h-full">
+<div class="flex justify-between items-center mb-stack-md">
+<h4 class="font-headline-sm text-on-surface">Upcoming Bookings</h4>
+<a class="text-primary text-xs font-bold hover:underline" href="#">View All</a>
+</div>
+<div class="space-y-6">
+<!-- Booking Item -->
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close up portrait of a high-net-worth client, a woman with elegant braids and minimalist gold jewelry, smiling warmly. The photo is taken in a sun-drenched luxury penthouse in Lagos with blurred architectural details in the background. Cinematic lighting, soft bokeh, sophisticated color grading." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAYtqAdhhSoveEWK5WTFxLbPQnT6PEAEGeHGrEOlGszzywX5Zt6Fb7kXEcNn8AniMayjy_Qow0OV1TKhg8vdwcNmKZwrsRHXKXfy9Nz7CNG4DlCY6Y6j0wdlh_Yt_lNz_A-OArbqAEBT3ylrS5F6PLVmhzIPIb0BpCwZhvtDMAgjdtuWgNvyQFNZoMZPP3I4ypPK37QWvXdzW635ezHYRn8LhfBQo0nkpSVWNn7AmGR8tJr66mcN0gWpHYb11yqS_KwQPOBgztgQd4"/>
+</div>
+<div class="flex-grow">
+<h5 class="font-bold text-on-surface">Adewale Johnson</h5>
+<p class="text-sm text-secondary">Private Chef Experience</p>
+<div class="flex gap-2 mt-2">
+<span class="px-2 py-0.5 bg-surface-container-high rounded text-[10px] font-bold">14:00 Today</span>
+<span class="px-2 py-0.5 bg-primary-container/20 text-primary-container rounded text-[10px] font-bold">Confirmed</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary cursor-pointer hover:text-primary transition-colors">more_vert</span>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Portrait of an international traveler, a man with a sharp beard and designer sunglasses, looking thoughtful while holding a glass of champagne. The background is a blurry luxury yacht deck with Lagos coastline in the far distance under a golden hour sky. High-end travel lifestyle photography, vibrant yet elegant colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD34BTEDltvl01rgrzoFwY3awiXWztBpopCB3YDJ0WQE5v99QQc8H7_4bZMrcs7JEer7LKO99yIZIyayQ625XAQxRqOV6QBfaYrz0yID5rMD79NeOk0CPVZUiHrngjMdNBoePqOgPxYsCp2gYLAhFKvC4vWIucKXuba0rlE6qRs9yvP9-lnfByCbjNK67s8jk4mVEu8Egn0Ln-JKvHs5kH7tQMuohytdz8C1M8Wgxd_jn99xy6v3vhVjNt6CWTQyocNpPm6ib1893PL"/>
+</div>
+<div class="flex-grow">
+<h5 class="font-bold text-on-surface">Sarah Oritse</h5>
+<p class="text-sm text-secondary">Yacht Charter - 4hr</p>
+<div class="flex gap-2 mt-2">
+<span class="px-2 py-0.5 bg-surface-container-high rounded text-[10px] font-bold">Tomorrow</span>
+<span class="px-2 py-0.5 bg-secondary-container text-secondary rounded text-[10px] font-bold">Pending</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary cursor-pointer hover:text-primary transition-colors">more_vert</span>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Portrait of a young executive, dressed in a sleek black turtleneck, in a modern, glass-walled office overlooking a city skyline. Evening lighting with blue and amber tones, high-end commercial aesthetic. Professional, focused, and wealthy vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnUWU9l8I0kZxqQ35L1cP_ZQ7gFF-B8pnTr7Osy6ZTqKoB42y_BvQHdi5LPTSGHoux7OURzp55Fzt7hhGjZV22U27CpNlZXDmhAjKJZjBXfn9qRNAyamk6M_oqbENCecOILCxnmsYqNTmaZ2fWGwsmxq-NDYdxFK-QAJNmR1KfrBXqXa_LlnTKZkiNMGFwYjLMbhzC_6_sDmatnINYj6Lfz4ZfOWtOy2mevA3gVxqppN4kveM6i82Una5JJOShrMyNzarI_QjrRDsY"/>
+</div>
+<div class="flex-grow">
+<h5 class="font-bold text-on-surface">David Mensah</h5>
+<p class="text-sm text-secondary">Airport Transfer (VIP)</p>
+<div class="flex gap-2 mt-2">
+<span class="px-2 py-0.5 bg-surface-container-high rounded text-[10px] font-bold">Oct 28</span>
+<span class="px-2 py-0.5 bg-primary-container/20 text-primary-container rounded text-[10px] font-bold">Confirmed</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary cursor-pointer hover:text-primary transition-colors">more_vert</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Services Overview / Bento Style -->
+<div class="space-y-stack-md">
+<div class="flex justify-between items-center">
+<h4 class="font-headline-sm text-on-surface">Your Services</h4>
+<button class="text-primary font-bold flex items-center gap-1 group">
+                        Manage Catalog <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-stack-md">
+<div class="glass-card rounded-2xl overflow-hidden group">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A luxurious table setting with gourmet Nigerian fusion cuisine, including jollof rice presented elegantly with gold leaf, succulent grilled meats, and artisanal cocktails. The background is a dimly lit, high-end Lagos restaurant with warm wood textures and brass accents. Soft candle lighting, professional food photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKQpsOVMgl_Pn-oSdnMYP38hr5XwFPu0vNjLf5CKi0MnNA4UyIm4RPTyI-LU4d7zFMTlVyCBDCWUhCzrFJ8fgljH_YozC_G6CshIYZZZlCJQdJ3vHCK_j9MZfGORHDCFaR-UetWiQls-btowmno9aRpw6VbloOAGvmLTW40oYqDd9G09JAQeA9x6lMXqQkqdpTA321377VFEYnioZRAC0SXzAkeprsh-8TvaBRA__vqGCuPn2dbGkvbmzLCzjJ9VjkNWZbWiBorvgQ"/>
+<div class="absolute top-4 right-4 px-3 py-1 bg-primary text-on-primary text-[10px] font-bold rounded-full">ACTIVE</div>
+</div>
+<div class="p-stack-md">
+<h5 class="font-headline-sm text-[18px] mb-2">Private Dining Experience</h5>
+<div class="flex justify-between items-center">
+<span class="text-primary font-bold">₦120K / guest</span>
+<div class="flex items-center text-xs text-secondary">
+<span class="material-symbols-outlined text-primary text-sm mr-1" style="font-variation-settings: 'FILL' 1;">star</span>
+                                    4.9 (124)
+                                </div>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-2xl overflow-hidden group">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A sleek white yacht cutting through the Atlantic waters off the coast of Lagos at sunset. The sky is a gradient of deep orange and purple. The boat is pristine, with luxury seating and an elegant silhouette. Professional marine photography with high dynamic range." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsNZsDXotfHqXx7B43A30QfdYUFzEvFfMrP0GLb2juW2Sj7OP6_b2glN12m7mUE0IduI6CiymO363r3lvWaPp87VckEbCiNJVMbePnfa_ZKz23Idgr-ZQXeC-_u3DZuSUgfsUch0iZeMkjM7zulNj08ZzA2BLBdsw4YzIQ576pbc-WnW5FnDbHjao0I6q9WBd7oKKj6rsjSsjDJGbdk961XQKvqGZLBFFwUV8dC_YXl4_0Z5tpEgkMA-3lBOgQUa2BkItXYTr0n5GP"/>
+<div class="absolute top-4 right-4 px-3 py-1 bg-primary text-on-primary text-[10px] font-bold rounded-full">ACTIVE</div>
+</div>
+<div class="p-stack-md">
+<h5 class="font-headline-sm text-[18px] mb-2">Coastal Yacht Charter</h5>
+<div class="flex justify-between items-center">
+<span class="text-primary font-bold">₦450K / trip</span>
+<div class="flex items-center text-xs text-secondary">
+<span class="material-symbols-outlined text-primary text-sm mr-1" style="font-variation-settings: 'FILL' 1;">star</span>
+                                    5.0 (42)
+                                </div>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-2xl overflow-hidden group border-dashed border-2 border-outline-variant/50 bg-transparent flex items-center justify-center min-h-[300px] cursor-pointer hover:border-primary transition-colors">
+<div class="text-center space-y-4">
+<div class="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center mx-auto">
+<span class="material-symbols-outlined text-on-primary-container">add</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Add New Service</p>
+<p class="text-xs text-secondary">Expand your luxury portfolio</p>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-2xl p-stack-md flex flex-col items-center justify-center text-center space-y-4 relative overflow-hidden group">
+<!-- Visual Ornament -->
+<div class="absolute -right-8 -bottom-8 w-32 h-32 bg-primary-fixed/30 rounded-full blur-3xl transition-transform duration-700 group-hover:scale-150"></div>
+<span class="material-symbols-outlined text-primary text-4xl">insights</span>
+<div>
+<h5 class="font-bold text-on-surface">Service Insights</h5>
+<p class="text-sm text-secondary mt-2">Your 'Private Dining' service is trending. Consider adding weekend slots.</p>
+</div>
+<button class="label-caps text-primary hover:underline">View Analytics</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation Shell -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface/90 backdrop-blur-xl border-t border-outline-variant/20 z-50 px-6 py-3 flex justify-between items-center shadow-lg">
+<a class="flex flex-col items-center text-primary" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-bold mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center text-secondary" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="text-[10px] font-bold mt-1">Services</span>
+</a>
+<a class="flex flex-col items-center text-secondary" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="text-[10px] font-bold mt-1">Bookings</span>
+</a>
+<a class="flex flex-col items-center text-secondary" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-[10px] font-bold mt-1">Earnings</span>
+</a>
+<a class="flex flex-col items-center text-secondary" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold mt-1">Profile</span>
+</a>
+</nav>
+<script>
+        // Subtle interaction for glass cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Simple dashboard notification toast simulation
+        setTimeout(() => {
+            console.log("Dashboard Loaded: Provider view initialized.");
+        }, 1000);
+    </script>
+</body></html>

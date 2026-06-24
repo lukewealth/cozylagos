@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Service Provider Orchestration | Lagos Elite</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#e3e2e1",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "inverse-primary": "#e9c349",
+                    "primary-container": "#d4af37",
+                    "on-primary": "#ffffff",
+                    "tertiary-container": "#b8b2a9",
+                    "on-tertiary-fixed-variant": "#4a463f",
+                    "background": "#faf9f8",
+                    "inverse-surface": "#2f3130",
+                    "surface-container": "#eeeeed",
+                    "surface-bright": "#faf9f8",
+                    "surface-container-low": "#f4f3f2",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#735c00",
+                    "tertiary-fixed-dim": "#ccc6bc",
+                    "tertiary-fixed": "#e8e2d8",
+                    "on-secondary-container": "#636262",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "outline": "#7f7663",
+                    "surface": "#faf9f8",
+                    "on-primary-container": "#554300",
+                    "secondary": "#5f5e5e",
+                    "outline-variant": "#d0c5af",
+                    "surface-container-high": "#e9e8e7",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "secondary-container": "#e2dfde",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-primary-fixed": "#241a00",
+                    "on-surface": "#1a1c1c",
+                    "on-tertiary-fixed": "#1e1b15",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#e5e2e1",
+                    "on-surface-variant": "#4d4635",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-container": "#48453e",
+                    "on-primary-fixed-variant": "#574500",
+                    "inverse-on-surface": "#f1f0f0",
+                    "primary-fixed-dim": "#e9c349",
+                    "on-background": "#1a1c1c",
+                    "primary-fixed": "#ffe088",
+                    "surface-tint": "#735c00",
+                    "tertiary": "#625e56",
+                    "surface-variant": "#e3e2e1",
+                    "surface-dim": "#dadad9",
+                    "surface-container-lowest": "#ffffff",
+                    "error-container": "#ffdad6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "64px",
+                    "stack-md": "32px",
+                    "unit": "8px",
+                    "section-gap": "120px",
+                    "gutter": "32px",
+                    "stack-sm": "16px",
+                    "container-padding": "80px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Playfair Display"],
+                    "body-md": ["Manrope"],
+                    "headline-sm": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"],
+                    "body-lg": ["Manrope"],
+                    "label-caps": ["Manrope"]
+            },
+            "fontSize": {
+                    "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                    "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #faf9f8;
+            color: #1a1c1c;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d0c5af;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- SIDE NAVIGATION SHELL -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-inverse-surface shadow-sm flex flex-col h-full py-stack-sm z-50">
+<div class="px-gutter mb-stack-md">
+<h1 class="font-headline-sm text-headline-sm text-primary dark:text-primary-fixed-dim tracking-tight">Lagos Elite</h1>
+<p class="text-[10px] uppercase tracking-widest text-outline">Concierge Portal</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-gutter py-3 text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center px-gutter py-3 text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">concierge</span>
+                Requests
+            </a>
+<a class="flex items-center px-gutter py-3 text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">group</span>
+                Guests
+            </a>
+<a class="flex items-center px-gutter py-3 text-primary dark:text-primary-fixed-dim border-r-4 border-primary font-bold bg-primary-container/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">hotel_class</span>
+                Services
+            </a>
+<a class="flex items-center px-gutter py-3 text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">analytics</span>
+                Reports
+            </a>
+<a class="flex items-center px-gutter py-3 text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="px-gutter pt-stack-sm">
+<button class="w-full bg-primary-container text-on-primary-fixed font-bold py-3 px-4 rounded-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                New Request
+            </button>
+</div>
+</aside>
+<!-- MAIN CONTENT AREA -->
+<main class="ml-64 min-h-screen">
+<!-- TOP NAV BAR -->
+<header class="flex justify-between items-center h-20 px-gutter sticky top-0 z-40 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30">
+<div class="flex items-center gap-6 flex-1">
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">Service Provider Orchestration</h2>
+<div class="relative w-96 max-w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 focus:ring-2 focus:ring-primary-container text-body-md" placeholder="Search providers or skills..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-all duration-300">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-all duration-300">
+<span class="material-symbols-outlined">chat_bubble</span>
+</button>
+<div class="h-10 w-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a luxury concierge administrator in a bright, modern studio. The lighting is soft and flattering, highlighting their confident expression and sophisticated attire. The background is a blurred, high-end office environment in Lagos, featuring warm wooden accents and gold trim, perfectly aligned with the luxury brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc4zvEtlSzRZiL3pG_OxWbvEa8mUyZoxFzNPm505OSY1cefSvlyOEw5IY1kfWFpdaD4O0yeCsskm0RuOqx2HW2zsR-EzGju771P84b_EWQnyzTDl_zR5OORIOFwTGoxS8Vlzffgsxlt_NCPMXj03dxpd3W5jLP_1Gss_XHe-kLUVrjtmLip13_okwzlSAsQ_wCujBQZP7j4Ph8ClJpaeFHiyyB-AAnzuL3f-7P5oIa_C-dO5dFH6rQpyj43otpoLRTWPjLGPXmTfxT"/>
+</div>
+</div>
+</header>
+<section class="p-gutter max-w-7xl mx-auto space-y-stack-md">
+<!-- BENTO HEADER: KEY METRICS -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="glass-card p-stack-sm rounded-xl space-y-2">
+<p class="font-label-caps text-outline uppercase">Active Providers</p>
+<h3 class="font-headline-md text-headline-md">142</h3>
+<div class="flex items-center text-primary text-sm gap-1">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>12% from last week</span>
+</div>
+</div>
+<div class="glass-card p-stack-sm rounded-xl space-y-2">
+<p class="font-label-caps text-outline uppercase">Live Assignments</p>
+<h3 class="font-headline-md text-headline-md">28</h3>
+<div class="flex items-center text-on-secondary-container text-sm gap-1">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>8 starting in 1 hour</span>
+</div>
+</div>
+<div class="glass-card p-stack-sm rounded-xl space-y-2">
+<p class="font-label-caps text-outline uppercase">Network Rating</p>
+<h3 class="font-headline-md text-headline-md">4.92</h3>
+<div class="flex items-center text-primary text-sm gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span>Elite status maintained</span>
+</div>
+</div>
+<div class="glass-card p-stack-sm rounded-xl space-y-2">
+<p class="font-label-caps text-outline uppercase">Avg Match Time</p>
+<h3 class="font-headline-md text-headline-md">4.2m</h3>
+<div class="flex items-center text-secondary text-sm gap-1">
+<span class="material-symbols-outlined text-sm">bolt</span>
+<span>Instant response target</span>
+</div>
+</div>
+</div>
+<!-- MAIN ORCHESTRATION GRID -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter items-start">
+<!-- COLUMN 1: LIVE REQUESTS / QUEUE -->
+<div class="lg:col-span-1 space-y-stack-sm">
+<div class="flex items-center justify-between mb-2">
+<h4 class="font-headline-sm text-headline-sm">Pending Requests</h4>
+<span class="bg-primary-container/20 text-primary px-3 py-1 rounded-full font-bold text-xs">5 NEW</span>
+</div>
+<!-- Request Card 1 -->
+<div class="glass-card p-5 rounded-xl border-l-4 border-primary hover:shadow-lg transition-all duration-300 cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<div>
+<span class="bg-surface-container-highest px-2 py-1 rounded text-[10px] font-bold tracking-widest text-secondary">PRIVATE CHEF</span>
+<h5 class="font-bold text-lg mt-1">Eko Atlantic Soiree</h5>
+</div>
+<span class="text-xs text-outline">12m ago</span>
+</div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-outline text-lg">location_on</span>
+<span class="text-sm">Penthouse B, Azuri Towers</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-primary-container/10 flex items-center justify-center text-xs font-bold">JD</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-container-highest flex items-center justify-center text-xs font-bold">+2</div>
+</div>
+<button class="text-primary font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                                Match Now <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Request Card 2 -->
+<div class="glass-card p-5 rounded-xl border-l-4 border-outline-variant/30 hover:shadow-lg transition-all duration-300 cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div>
+<span class="bg-surface-container-highest px-2 py-1 rounded text-[10px] font-bold tracking-widest text-secondary">EXECUTIVE CHAUFFEUR</span>
+<h5 class="font-bold text-lg mt-1">Lekki Airport Transfer</h5>
+</div>
+<span class="text-xs text-outline">45m ago</span>
+</div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-outline text-lg">flight_takeoff</span>
+<span class="text-sm">Muritala Muhammed Int'l</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs text-on-error bg-error/10 px-2 py-1 rounded">High Priority</span>
+<button class="text-primary font-bold text-sm">Assign</button>
+</div>
+</div>
+</div>
+<!-- COLUMN 2 & 3: PROVIDER ORCHESTRATION ENGINE -->
+<div class="lg:col-span-2 space-y-stack-sm">
+<div class="flex items-center justify-between mb-2">
+<div class="flex gap-4">
+<button class="font-bold border-b-2 border-primary text-primary pb-1">All Providers</button>
+<button class="text-secondary hover:text-primary transition-colors pb-1">Chefs</button>
+<button class="text-secondary hover:text-primary transition-colors pb-1">Drivers</button>
+<button class="text-secondary hover:text-primary transition-colors pb-1">Security</button>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs text-outline">Status:</span>
+<div class="flex items-center gap-1 text-xs">
+<div class="status-dot bg-green-500"></div> Online
+                            </div>
+</div>
+</div>
+<!-- Provider Matrix -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Provider 1 -->
+<div class="glass-card rounded-2xl overflow-hidden flex flex-col hover:border-primary-container transition-colors group">
+<div class="h-32 relative">
+<img class="w-full h-full object-cover" data-alt="A cinematic, shallow-depth-of-field photograph of a gourmet chef expertly plating a Nigerian fusion dish in a high-end, stainless steel professional kitchen in Lagos. The lighting is dramatic and warm, with gold reflections and soft steam rising from the plate. The chef is dressed in a crisp, white professional jacket with gold embroidery." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDt5DbKxfBTvFX-r3AFLn7-yMtc8UoMAUNuBgpRrNG1liNZ23dPLumKnVerPYcj2n_8-l9HIPrE_RIBbu4WxDZroGogopCcH1oZI2KB0_SBcIyPDz0EKuOi9tASRPD8PPLmUPMIG7ne96wu8N32P0Mc5dDRfa5rLuDugQFzQAxxP77x7fGFUl7YWghR2DpAqWGc3oOE9ZBjrPQh2iG_DrYuZg_wgqHmVeNQj28XlrbMh-E6fcS2Q0WSIsttYc4ICXh12H_NuZk9dKwS"/>
+<div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings: 'FILL' 1;">star</span> 4.9
+                                </div>
+<div class="absolute bottom-3 left-3 flex items-center gap-1.5 bg-green-500/80 backdrop-blur text-white px-2 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider">
+<div class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div> Available
+                                </div>
+</div>
+<div class="p-4 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h6 class="font-bold text-on-surface">Chef Tunde Balogun</h6>
+<p class="text-xs text-outline">French &amp; Pan-African Fusion</p>
+</div>
+<span class="text-primary font-bold">₦250k+</span>
+</div>
+<div class="flex flex-wrap gap-1.5 mb-4">
+<span class="bg-surface-container text-[10px] px-2 py-0.5 rounded uppercase tracking-tighter">Private Dining</span>
+<span class="bg-surface-container text-[10px] px-2 py-0.5 rounded uppercase tracking-tighter">Event Catering</span>
+<span class="bg-surface-container text-[10px] px-2 py-0.5 rounded uppercase tracking-tighter">Wine Pairing</span>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant/20 flex gap-2">
+<button class="flex-1 border border-outline py-2 rounded-lg text-sm font-medium hover:bg-surface-container-high transition-colors">Profile</button>
+<button class="flex-1 bg-primary text-white py-2 rounded-lg text-sm font-bold active:scale-95 transition-transform">Match</button>
+</div>
+</div>
+</div>
+<!-- Provider 2 -->
+<div class="glass-card rounded-2xl overflow-hidden flex flex-col hover:border-primary-container transition-colors group">
+<div class="h-32 relative">
+<img class="w-full h-full object-cover" data-alt="A portrait of a professional executive driver standing beside a polished, black luxury SUV at sunset in Victoria Island, Lagos. The city skyline is visible in the background with glowing golden hour light. The driver is wearing a sharp, tailored dark grey suit and a subtle, luxury watch, looking professional and attentive." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC84mxJEaVlXg-kCY4ETqi4AqYNmnr9Glvjovv4hs8N5AC0z4KXtLgEw37fSf9yEa4PhH-nD4eyEOxAXr34cWXhdknNwcfjkhWb5H_2OE-bjylhwaZWyV600ujMTLf6PRhty5fJIZerdla6c_iC2sf9vUybnKyEr4IeKkyFEeIeM9dqwtWUyfHeRHqpQaBu64IjCa3Mjfcu5LD1gFTJhOqI4-K-yWVexzOkZIFsRUzHEz5fR0zhR5PC1j4bp0srZuqxgQOafZK7kHJS"/>
+<div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings: 'FILL' 1;">star</span> 5.0
+                                </div>
+<div class="absolute bottom-3 left-3 flex items-center gap-1.5 bg-orange-500/80 backdrop-blur text-white px-2 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider">
+<div class="w-1.5 h-1.5 bg-white rounded-full"></div> On Assignment
+                                </div>
+</div>
+<div class="p-4 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h6 class="font-bold text-on-surface">Captain Chidi Okoro</h6>
+<p class="text-xs text-outline">Armored Vehicle Specialist</p>
+</div>
+<span class="text-primary font-bold">₦85k/hr</span>
+</div>
+<div class="flex flex-wrap gap-1.5 mb-4">
+<span class="bg-surface-container text-[10px] px-2 py-0.5 rounded uppercase tracking-tighter">Class A License</span>
+<span class="bg-surface-container text-[10px] px-2 py-0.5 rounded uppercase tracking-tighter">Tactical Driving</span>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant/20 flex gap-2">
+<button class="flex-1 border border-outline py-2 rounded-lg text-sm font-medium hover:bg-surface-container-high transition-colors">Details</button>
+<button class="flex-1 border border-primary text-primary py-2 rounded-lg text-sm font-bold opacity-50 cursor-not-allowed">Free at 18:00</button>
+</div>
+</div>
+</div>
+<!-- Provider 3 -->
+<div class="glass-card rounded-2xl overflow-hidden flex flex-col hover:border-primary-container transition-colors group">
+<div class="h-32 relative">
+<img class="w-full h-full object-cover" data-alt="A focused high-end mixologist preparing a vibrant, artistic cocktail at a marble-topped bar in a luxurious Lagos lounge. Ambient neon indigo and gold lighting creates a sophisticated nighttime vibe. Crystal glassware and premium liquor bottles are arranged neatly in the background. The scene exudes luxury and exclusivity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaNlk-ETiVYFZfHLT4aDjfIzNUc8Y7x14d9DhYD5pqxTqYcy7Pze7ItkVaKK7-Xsb0yiuL1oyTRYJKcWUsgoGbnB5QJTCIYIFtMQhSprALdJwI-r09ls0ZbJleAcXxwSyvRz5E4md0XzRLAKMgBPE9u8wj3dyMCa_aHTOf7g_uZVdq5UNSA5q1m7N9ckVQSYfXwK2gIhfDSdde4vW_5wvHS9FQiFzZbfmGdJK89MCl6LlxNsg_YruAF3dFBlyXkXiGR-ydcBYz7Way"/>
+<div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings: 'FILL' 1;">star</span> 4.8
+                                </div>
+<div class="absolute bottom-3 left-3 flex items-center gap-1.5 bg-green-500/80 backdrop-blur text-white px-2 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider">
+<div class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div> Available
+                                </div>
+</div>
+<div class="p-4 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h6 class="font-bold text-on-surface">Amaka Williams</h6>
+<p class="text-xs text-outline">Master Mixologist</p>
+</div>
+<span class="text-primary font-bold">₦120k</span>
+</div>
+<div class="flex flex-wrap gap-1.5 mb-4">
+<span class="bg-surface-container text-[10px] px-2 py-0.5 rounded uppercase tracking-tighter">Mixology</span>
+<span class="bg-surface-container text-[10px] px-2 py-0.5 rounded uppercase tracking-tighter">Event Staffing</span>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant/20 flex gap-2">
+<button class="flex-1 border border-outline py-2 rounded-lg text-sm font-medium hover:bg-surface-container-high transition-colors">Profile</button>
+<button class="flex-1 bg-primary text-white py-2 rounded-lg text-sm font-bold active:scale-95 transition-transform">Match</button>
+</div>
+</div>
+</div>
+<!-- Provider 4 -->
+<div class="glass-card rounded-2xl overflow-hidden flex flex-col hover:border-primary-container transition-colors group">
+<div class="h-32 relative">
+<div class="absolute inset-0 bg-gradient-to-br from-surface-container-highest to-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-outline-variant">person_add</span>
+</div>
+</div>
+<div class="p-4 flex-1 flex flex-col items-center justify-center text-center space-y-3">
+<h6 class="font-bold">Add New Provider</h6>
+<p class="text-xs text-outline px-4">Onboard a new elite service provider to the Lagos network.</p>
+<button class="w-full border-2 border-dashed border-outline-variant py-3 rounded-xl hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">add_circle</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- GEOGRAPHIC DISTRIBUTION (SUBTLE) -->
+<div class="space-y-4">
+<h4 class="font-headline-sm text-headline-sm">Network Coverage</h4>
+<div class="glass-card h-80 rounded-2xl overflow-hidden relative">
+<!-- Placeholder for Map -->
+<div class="absolute inset-0 grayscale opacity-40 hover:opacity-70 transition-opacity">
+<img class="w-full h-full object-cover" data-location="Lagos, Nigeria" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgYIQo4x-z9lBZQLQjJklCQKVwLcZsxcYI_g2-E5BG8JIn_B0rd54pAGlrwPrw4n-ZVeiykTerrrW7YJfwp8OI5K_S52aojMiseyEo6j4M4sKk4_EFootAPD-HaNB-Vjzpszc_E6gOMj7QcZ2x_LVEDx1vhhzN-L_wGdIx2G2C6QQOIe31JCaorkw7dmoYQRuDpI-G7hF2fAvRVs6rfCyr-vHwSyEINjRw9ClFOQM8QkdJ_R_bsnFrQUHUXpTEdIngA_T9uvCbWz9J"/>
+</div>
+<!-- Overlay Controls -->
+<div class="absolute top-4 right-4 flex flex-col gap-2">
+<button class="bg-white p-2 rounded-lg shadow hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined">zoom_in</span>
+</button>
+<button class="bg-white p-2 rounded-lg shadow hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined">zoom_out</span>
+</button>
+</div>
+<!-- Live Indicators -->
+<div class="absolute inset-0 pointer-events-none">
+<!-- Simulated Hotspots -->
+<div class="absolute top-1/2 left-1/3 w-4 h-4 bg-primary-container/40 rounded-full flex items-center justify-center">
+<div class="w-2 h-2 bg-primary rounded-full animate-ping"></div>
+</div>
+<div class="absolute top-1/4 left-1/2 w-4 h-4 bg-primary-container/40 rounded-full flex items-center justify-center">
+<div class="w-2 h-2 bg-primary rounded-full animate-ping" style="animation-delay: 0.5s"></div>
+</div>
+<div class="absolute bottom-1/3 right-1/4 w-4 h-4 bg-primary-container/40 rounded-full flex items-center justify-center">
+<div class="w-2 h-2 bg-primary rounded-full animate-ping" style="animation-delay: 1s"></div>
+</div>
+</div>
+<!-- Legend -->
+<div class="absolute bottom-4 left-4 glass-card p-3 rounded-lg text-xs space-y-2">
+<div class="flex items-center gap-2">
+<div class="status-dot bg-primary"></div> Active Assignment
+                        </div>
+<div class="flex items-center gap-2">
+<div class="status-dot bg-outline-variant"></div> Free Provider
+                        </div>
+</div>
+</div>
+</div>
+</section>
+<!-- FOOTER / UTILITY -->
+<footer class="p-gutter border-t border-outline-variant/20 flex justify-between items-center text-xs text-outline">
+<p>© 2024 Lagos Elite. Service Orchestration v2.4.1</p>
+<div class="flex gap-6">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Operational Terms</a>
+<a class="hover:text-primary transition-colors" href="#">Support Portal</a>
+</div>
+</footer>
+</main>
+<!-- AI CONCIERGE ASSISTANT FAB -->
+<div class="fixed bottom-gutter right-gutter z-50 group">
+<button class="bg-on-surface text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center active:scale-95 transition-all duration-300 hover:rotate-12">
+<span class="material-symbols-outlined text-3xl">auto_awesome</span>
+</button>
+<div class="absolute bottom-20 right-0 w-80 glass-card rounded-2xl p-4 shadow-2xl opacity-0 translate-y-4 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
+<div class="flex items-center gap-2 mb-3">
+<span class="bg-primary-container text-on-primary-fixed p-1.5 rounded-lg">
+<span class="material-symbols-outlined text-sm">smart_toy</span>
+</span>
+<span class="font-bold text-sm">Elite Intelligence</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-4">"I've identified 3 chefs with 5-star ratings who are currently available for the Eko Atlantic request. Would you like to auto-match?"</p>
+<div class="flex gap-2">
+<button class="flex-1 bg-primary text-white py-2 rounded-lg text-xs font-bold">Auto-Match</button>
+<button class="flex-1 bg-surface-container-high py-2 rounded-lg text-xs font-bold">View Choices</button>
+</div>
+</div>
+</div>
+<!-- Micro-interactions Script -->
+<script>
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('click', (e) => {
+                // Subtle feedback logic could go here
+            });
+        });
+    </script>
+</body></html>

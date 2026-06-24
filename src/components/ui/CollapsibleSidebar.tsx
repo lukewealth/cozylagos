@@ -6,6 +6,8 @@ interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   userRole: 'admin' | 'super_admin' | 'service_provider';
+  onLogout?: () => void;
+  onHelp?: () => void;
 }
 
 interface NavItem {
@@ -34,7 +36,7 @@ const PROVIDER_NAV: NavItem[] = [
   { id: 'payouts', label: 'Earnings', icon: Key, description: 'Financial reports' },
 ];
 
-export default function CollapsibleSidebar({ activeTab, setActiveTab, userRole }: SidebarProps) {
+export default function CollapsibleSidebar({ activeTab, setActiveTab, userRole, onLogout, onHelp }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
@@ -47,6 +49,18 @@ export default function CollapsibleSidebar({ activeTab, setActiveTab, userRole }
   };
 
   const config = roleConfig[userRole];
+
+  const handleLogout = () => {
+    if (onLogout) {
+      onLogout();
+    }
+  };
+
+  const handleHelp = () => {
+    if (onHelp) {
+      onHelp();
+    }
+  };
 
   return (
     <motion.aside
@@ -148,44 +162,82 @@ export default function CollapsibleSidebar({ activeTab, setActiveTab, userRole }
 
       {/* Footer */}
       <div className="px-4 pb-6 space-y-2 border-t border-outline-variant/10 pt-4">
-        <button
-          onMouseEnter={() => setHoveredItem('help')}
-          onMouseLeave={() => setHoveredItem(null)}
-          className="w-full flex items-center gap-4 px-4 py-2 rounded-lg text-secondary hover:text-primary hover:bg-surface-container-high transition-colors relative"
-        >
-          <HelpCircle className="w-5 h-5 flex-shrink-0" />
-          <AnimatePresence mode="wait">
-            {!isCollapsed && (
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="text-sm"
+        <div className="relative">
+          <button
+            onClick={handleHelp}
+            onMouseEnter={() => setHoveredItem('help')}
+            onMouseLeave={() => setHoveredItem(null)}
+            className="w-full flex items-center gap-4 px-4 py-2 rounded-lg text-secondary hover:text-primary hover:bg-surface-container-high transition-colors relative"
+            aria-label="Help & Support"
+          >
+            <HelpCircle className="w-5 h-5 flex-shrink-0" />
+            <AnimatePresence mode="wait">
+              {!isCollapsed && (
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="text-sm"
+                >
+                  Help & Support
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+          <AnimatePresence>
+            {isCollapsed && hoveredItem === 'help' && (
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.15 }}
+                className="absolute left-full top-1/2 -translate-y-1/2 ml-3 px-3 py-2 bg-on-surface text-inverse-on-surface rounded-lg text-xs font-semibold whitespace-nowrap z-50 shadow-lg pointer-events-none"
               >
-                Help & Support
-              </motion.span>
+                <div className="font-bold">Help & Support</div>
+                <div className="text-[10px] opacity-70 font-normal">Get assistance and documentation</div>
+                <div className="absolute right-full top-1/2 -translate-y-1/2 w-2 h-2 bg-on-surface rotate-45" />
+              </motion.div>
             )}
           </AnimatePresence>
-        </button>
-        <button
-          onMouseEnter={() => setHoveredItem('logout')}
-          onMouseLeave={() => setHoveredItem(null)}
-          className="w-full flex items-center gap-4 px-4 py-2 rounded-lg text-secondary hover:text-error hover:bg-error/5 transition-colors relative"
-        >
-          <LogOut className="w-5 h-5 flex-shrink-0" />
-          <AnimatePresence mode="wait">
-            {!isCollapsed && (
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="text-sm"
+        </div>
+        <div className="relative">
+          <button
+            onClick={handleLogout}
+            onMouseEnter={() => setHoveredItem('logout')}
+            onMouseLeave={() => setHoveredItem(null)}
+            className="w-full flex items-center gap-4 px-4 py-2 rounded-lg text-secondary hover:text-error hover:bg-error/5 transition-colors relative"
+            aria-label="Logout"
+          >
+            <LogOut className="w-5 h-5 flex-shrink-0" />
+            <AnimatePresence mode="wait">
+              {!isCollapsed && (
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="text-sm"
+                >
+                  Logout
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+          <AnimatePresence>
+            {isCollapsed && hoveredItem === 'logout' && (
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.15 }}
+                className="absolute left-full top-1/2 -translate-y-1/2 ml-3 px-3 py-2 bg-on-surface text-inverse-on-surface rounded-lg text-xs font-semibold whitespace-nowrap z-50 shadow-lg pointer-events-none"
               >
-                Logout
-              </motion.span>
+                <div className="font-bold">Logout</div>
+                <div className="text-[10px] opacity-70 font-normal">Sign out of your account</div>
+                <div className="absolute right-full top-1/2 -translate-y-1/2 w-2 h-2 bg-on-surface rotate-45" />
+              </motion.div>
             )}
           </AnimatePresence>
-        </button>
+        </div>
       </div>
     </motion.aside>
   );

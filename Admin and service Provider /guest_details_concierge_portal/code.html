@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Guest CRM | Lagos Elite Concierge</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e3e2e1",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "inverse-primary": "#e9c349",
+                        "primary-container": "#d4af37",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#b8b2a9",
+                        "on-tertiary-fixed-variant": "#4a463f",
+                        "background": "#faf9f8",
+                        "inverse-surface": "#2f3130",
+                        "surface-container": "#eeeeed",
+                        "surface-bright": "#faf9f8",
+                        "surface-container-low": "#f4f3f2",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#735c00",
+                        "tertiary-fixed-dim": "#ccc6bc",
+                        "tertiary-fixed": "#e8e2d8",
+                        "on-secondary-container": "#636262",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "outline": "#7f7663",
+                        "surface": "#faf9f8",
+                        "on-primary-container": "#554300",
+                        "secondary": "#5f5e5e",
+                        "outline-variant": "#d0c5af",
+                        "surface-container-high": "#e9e8e7",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#e2dfde",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-primary-fixed": "#241a00",
+                        "on-surface": "#1a1c1c",
+                        "on-tertiary-fixed": "#1e1b15",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-surface-variant": "#4d4635",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#48453e",
+                        "on-primary-fixed-variant": "#574500",
+                        "inverse-on-surface": "#f1f0f0",
+                        "primary-fixed-dim": "#e9c349",
+                        "on-background": "#1a1c1c",
+                        "primary-fixed": "#ffe088",
+                        "surface-tint": "#735c00",
+                        "tertiary": "#625e56",
+                        "surface-variant": "#e3e2e1",
+                        "surface-dim": "#dadad9",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "64px",
+                        "stack-md": "32px",
+                        "unit": "8px",
+                        "section-gap": "120px",
+                        "gutter": "32px",
+                        "stack-sm": "16px",
+                        "container-padding": "80px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Manrope"],
+                        "headline-sm": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "body-lg": ["Manrope"],
+                        "label-caps": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0px 20px 50px rgba(26, 26, 26, 0.05);
+        }
+        .gold-glow {
+            box-shadow: inset 0 0 8px rgba(212, 175, 55, 0.3), 0 4px 12px rgba(212, 175, 55, 0.2);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d0c5af;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- Side Navigation Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-inverse-surface shadow-sm flex flex-col py-stack-sm z-50">
+<div class="px-gutter mb-stack-md">
+<h1 class="font-headline-sm text-headline-sm text-primary tracking-tight font-bold">Lagos Elite</h1>
+<p class="text-label-caps text-secondary uppercase tracking-widest text-[10px]">Concierge Portal</p>
+</div>
+<nav class="flex-grow space-y-1">
+<!-- Dashboard Tab -->
+<a class="flex items-center px-gutter py-3 text-secondary hover:text-primary hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<!-- Requests Tab -->
+<a class="flex items-center px-gutter py-3 text-secondary hover:text-primary hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">concierge</span>
+<span class="font-body-md">Requests</span>
+</a>
+<!-- Guests Tab (Active) -->
+<a class="flex items-center px-gutter py-3 text-primary border-r-4 border-primary font-bold bg-primary-container/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">group</span>
+<span class="font-body-md">Guests</span>
+</a>
+<!-- Services Tab -->
+<a class="flex items-center px-gutter py-3 text-secondary hover:text-primary hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">hotel_class</span>
+<span class="font-body-md">Services</span>
+</a>
+<!-- Reports Tab -->
+<a class="flex items-center px-gutter py-3 text-secondary hover:text-primary hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">analytics</span>
+<span class="font-body-md">Reports</span>
+</a>
+<!-- Settings Tab -->
+<a class="flex items-center px-gutter py-3 text-secondary hover:text-primary hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+</nav>
+<div class="px-gutter mt-auto">
+<button class="w-full py-3 bg-primary-container text-on-primary-container font-bold rounded-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>New Request</span>
+</button>
+</div>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="flex justify-between items-center h-20 px-gutter ml-64 bg-surface/80 backdrop-blur-md sticky top-0 z-40 border-b border-outline-variant/30">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full text-body-md focus:ring-1 focus:ring-primary-container transition-all" placeholder="Search guests or reservations..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-all duration-300">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-all duration-300">
+<span class="material-symbols-outlined text-on-surface-variant">chat_bubble</span>
+</button>
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-all duration-300">
+<span class="material-symbols-outlined text-on-surface-variant">help</span>
+</button>
+</div>
+<div class="h-10 w-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a luxury concierge manager in Lagos, wearing a tailored charcoal suit against a minimalist ivory background. The lighting is soft and flattering, emphasizing a polished and hospitable demeanor. The image is crisp, with a high-end editorial aesthetic consistent with premium lifestyle branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIBqaqsFHmUSygMEK-gW8nQZYj4P0FvU7FsEJ6JeLyYCQ0HC1zlPbc9ZzcpDauvLV4vjyr7RaFnWmdQvAGpEU9tnvqfeA4MO2hWLHLzWlvtVta5us3aN_dkqR_m89F3--c1RD3ORRafGgP4wYpadgfnJNFYKZqmFb27RRG9T4ym2PHrWi6TnOrSSPCoWapVsEybvUzQRNDCVN2RiB2WR3TIalHoMYsHpIa25b0wfmp7XHVB4nHz750N56AZS_Yju4YTVr9IMmscpPV"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 p-gutter max-w-[1440px]">
+<!-- Breadcrumbs / Top Actions -->
+<div class="flex justify-between items-center mb-stack-md">
+<nav class="flex items-center text-label-caps text-on-surface-variant">
+<a class="hover:text-primary" href="#">GUESTS</a>
+<span class="material-symbols-outlined text-[14px] mx-2">chevron_right</span>
+<span class="text-primary font-bold">ALIKO DANGOTE JR.</span>
+</nav>
+<div class="flex gap-3">
+<button class="px-6 py-2 border border-outline text-label-caps font-bold rounded-lg hover:bg-surface-container-high transition-all">EDIT PROFILE</button>
+<button class="px-6 py-2 bg-primary text-on-primary text-label-caps font-bold rounded-lg hover:shadow-lg transition-all">BOOK SERVICE</button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Guest Identity Card -->
+<section class="col-span-12 lg:col-span-4 space-y-gutter">
+<div class="glass-card p-stack-md rounded-xl text-center relative overflow-hidden">
+<div class="absolute top-4 right-4 bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-label-caps gold-glow">
+                        GOLD MEMBER
+                    </div>
+<div class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-primary-container p-1 bg-surface shadow-lg">
+<img class="w-full h-full rounded-full object-cover" data-alt="A portrait of a sophisticated West African male in his late 30s, featuring a warm, confident expression. He is styled in a modern, luxury minimalist aesthetic with a cream-colored linen shirt. The background is a soft-focus, high-end hotel lobby in Lagos with warm, ambient lighting and golden accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrQhud55QZtb2ZEe_8xCVbYH4FM_vr3yGAWLWI2jV0IExCWSH31J7F9cPllp2eqJ1QBbOlemzrucNTcZqczA2c85ybdQE_5GlcKLbgNWUaRlpu3AwvRDmjZr_W26JempIK8Vmtayf0H2u3zM3ozxsvf4AVNOLxfPKwlqDzSjMuc_B0oW8rct-j71BvOcixwfuNtnCplwXYiFc-NtsKeIXWOaJk_OojaAYdhsg5lzUhClOtxc8Jd-6f6Q4b36YWf1DmogkqoqDgll9Y"/>
+</div>
+<h2 class="font-headline-md text-headline-md mb-1">Aliko Dangote Jr.</h2>
+<p class="text-on-surface-variant font-body-md mb-6">Lagos, Nigeria • Member since 2021</p>
+<div class="grid grid-cols-2 gap-4 text-left border-t border-outline-variant/30 pt-6">
+<div>
+<p class="text-label-caps text-secondary mb-1">TOTAL SPEND</p>
+<p class="font-headline-sm text-primary">₦42,500,000</p>
+</div>
+<div>
+<p class="text-label-caps text-secondary mb-1">VISITS</p>
+<p class="font-headline-sm text-on-surface">14</p>
+</div>
+</div>
+</div>
+<!-- Contact Info -->
+<div class="glass-card p-stack-md rounded-xl space-y-4">
+<h3 class="text-label-caps font-bold text-secondary mb-2">CONTACT INFORMATION</h3>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">mail</span>
+<span class="text-body-md">a.dangote.jr@nexus-group.com</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">phone_iphone</span>
+<span class="text-body-md">+234 809 123 4567</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<span class="text-body-md">Ikoyi, Lagos State</span>
+</div>
+</div>
+</section>
+<!-- AI Preferences & Insights -->
+<section class="col-span-12 lg:col-span-8 space-y-gutter">
+<div class="glass-card p-stack-md rounded-xl">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h3 class="text-label-caps font-bold text-on-surface">AI-DETECTED PREFERENCES</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-surface-container-low p-4 rounded-lg border-l-4 border-primary-container">
+<h4 class="font-bold text-primary mb-2">Dining Lifestyle</h4>
+<p class="text-body-md mb-3 italic">"Prefers intimate dining settings with low ambient noise and extensive vintage wine lists."</p>
+<div class="flex flex-wrap gap-2">
+<span class="bg-white px-2 py-1 rounded text-label-caps text-[10px] shadow-sm">PRIVATE ROOMS</span>
+<span class="bg-white px-2 py-1 rounded text-label-caps text-[10px] shadow-sm">BORDEAUX SELECTION</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg border-l-4 border-primary-container">
+<h4 class="font-bold text-primary mb-2">Cultural Interests</h4>
+<p class="text-body-md mb-3 italic">"Loves contemporary African art and exclusive gallery previews in Victoria Island."</p>
+<div class="flex flex-wrap gap-2">
+<span class="bg-white px-2 py-1 rounded text-label-caps text-[10px] shadow-sm">ART PREVIEWS</span>
+<span class="bg-white px-2 py-1 rounded text-label-caps text-[10px] shadow-sm">CONTEMPORARY NIGERIAN</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg border-l-4 border-primary-container">
+<h4 class="font-bold text-primary mb-2">Transportation</h4>
+<p class="text-body-md mb-3 italic">"Favors chauffeured SUV transport; specifically requested Range Rover Autobiography."</p>
+<div class="flex flex-wrap gap-2">
+<span class="bg-white px-2 py-1 rounded text-label-caps text-[10px] shadow-sm">CHAUFFEUR ONLY</span>
+<span class="bg-white px-2 py-1 rounded text-label-caps text-[10px] shadow-sm">ARMORED PREFERRED</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg border-l-4 border-primary-container">
+<h4 class="font-bold text-primary mb-2">Wellness</h4>
+<p class="text-body-md mb-3 italic">"Requests high-floor suites for meditation; morning yoga session preferred at 6:00 AM."</p>
+<div class="flex flex-wrap gap-2">
+<span class="bg-white px-2 py-1 rounded text-label-caps text-[10px] shadow-sm">WELLNESS RETREATS</span>
+<span class="bg-white px-2 py-1 rounded text-label-caps text-[10px] shadow-sm">HIGH FLOORS</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Booking History Table -->
+<div class="glass-card rounded-xl overflow-hidden">
+<div class="p-stack-md flex justify-between items-center bg-surface-container-low/50">
+<h3 class="text-label-caps font-bold text-on-surface">RECENT BOOKINGS &amp; HISTORY</h3>
+<button class="text-primary text-label-caps hover:underline">VIEW ALL</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container border-y border-outline-variant/30">
+<th class="px-6 py-4 text-label-caps text-secondary font-bold">DATE</th>
+<th class="px-6 py-4 text-label-caps text-secondary font-bold">SERVICE</th>
+<th class="px-6 py-4 text-label-caps text-secondary font-bold">LOCATION</th>
+<th class="px-6 py-4 text-label-caps text-secondary font-bold">STATUS</th>
+<th class="px-6 py-4 text-label-caps text-secondary font-bold text-right">VALUE</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5 text-body-md font-medium">Oct 12, 2023</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container">restaurant</span>
+<span class="text-body-md">Chef's Table Experience</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">The Grill, Eko Atlantic</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-[12px] font-bold">COMPLETED</span>
+</td>
+<td class="px-6 py-5 text-right font-bold">₦850,000</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5 text-body-md font-medium">Sep 28, 2023</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container">directions_boat</span>
+<span class="text-body-md">Private Yacht Charter</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">Lagos Lagoon</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-[12px] font-bold">COMPLETED</span>
+</td>
+<td class="px-6 py-5 text-right font-bold">₦4,200,000</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5 text-body-md font-medium">Aug 15, 2023</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container">apartment</span>
+<span class="text-body-md">Presidential Suite (3 Nights)</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">The Wings, Ikoyi</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-[12px] font-bold">COMPLETED</span>
+</td>
+<td class="px-6 py-5 text-right font-bold">₦12,000,000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- Map / Lifestyle Grid -->
+<section class="col-span-12 grid grid-cols-1 md:grid-cols-3 gap-gutter mt-stack-md">
+<div class="glass-card rounded-xl overflow-hidden h-64 relative group">
+<div class="w-full h-full bg-cover bg-center" data-alt="A top-down stylized map of Victoria Island and Ikoyi in Lagos, designed with a luxury dark mode aesthetic, featuring golden pin markers for high-end dining and exclusive clubs. The map is minimalist, with subtle glowing lines indicating routes and premium hotspots." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBt-wJgivXfyJVh9FCBsVkHzluJfEeK3TepxqD8Ib7TryWBihbRbS9duzYPk7M9PQGiEMmM31No2BjoLEsXv9TSSDdGuA29xrhyaTQGUaxRjZTORWO2DdsQoWYRGE6XGRixDNQD7M_L1I2nC6kjChiRX6nX3vZ3RKBlNx2HULynl2iQ3EQAzeZ7yFFiIKPIHrSglqOxeF0zPz3nWlI9SLztKsik4EW1Z0A94PMOff8MDSCbI5qwjTWs8Cgg8C4ZN8KbpBhzR_tGgjHl')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 to-transparent p-4 flex flex-col justify-end">
+<p class="text-white text-label-caps font-bold">FREQUENT HOTSPOTS</p>
+<p class="text-white/70 text-body-md">VI &amp; Ikoyi Elite Circuit</p>
+</div>
+</div>
+<div class="glass-card rounded-xl p-stack-md flex flex-col justify-between">
+<div>
+<h4 class="text-label-caps font-bold text-secondary mb-4">MEMBER MILESTONES</h4>
+<div class="space-y-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary-container/20 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">stars</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">3-Year Anniversary</p>
+<p class="text-[12px] text-on-surface-variant">Coming up: Dec 12</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary-container/20 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">cake</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Birthday</p>
+<p class="text-[12px] text-on-surface-variant">Nov 22 (Plan exclusive event)</p>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full py-2 border border-primary text-primary text-label-caps font-bold rounded hover:bg-primary hover:text-white transition-all">VIEW CALENDAR</button>
+</div>
+<div class="glass-card rounded-xl p-stack-md bg-inverse-surface">
+<h4 class="text-label-caps font-bold text-surface-container-highest mb-4">INTERNAL NOTES</h4>
+<div class="custom-scrollbar h-32 overflow-y-auto mb-4">
+<p class="text-white/80 text-[14px] leading-relaxed italic">
+                            "Last visit: Guest mentioned they are looking for a new personal art curator. Consider recommending the curator from the Lagos Art Fair VIP lounge. Always stock the suite with fresh hibiscus tea upon arrival."
+                        </p>
+</div>
+<div class="flex items-center gap-2">
+<input class="flex-1 bg-white/10 border-none rounded text-[12px] text-white py-2 px-3 focus:ring-1 focus:ring-primary" placeholder="Add private note..." type="text"/>
+<button class="bg-primary-container p-2 rounded text-on-primary-container">
+<span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Section Gap Footer -->
+<div class="h-stack-lg"></div>
+</main>
+<!-- Floating Action Button for AI Assistance -->
+<div class="fixed bottom-gutter right-gutter group">
+<button class="w-16 h-16 bg-primary rounded-full shadow-2xl flex items-center justify-center text-on-primary hover:scale-110 active:scale-95 transition-all gold-glow relative overflow-hidden">
+
+<span class="material-symbols-outlined text-[32px] relative z-10" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</button>
+<div class="absolute bottom-20 right-0 bg-white shadow-2xl rounded-xl p-4 w-72 opacity-0 translate-y-4 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+<p class="text-primary font-bold text-label-caps mb-2">AI CONCIERGE ASSISTANT</p>
+<p class="text-body-md text-on-surface">"Would you like me to draft an anniversary invitation for Mr. Dangote Jr.?"</p>
+<div class="flex gap-2 mt-3">
+<button class="bg-primary text-on-primary text-[12px] px-3 py-1 rounded">Yes, please</button>
+<button class="border border-outline text-[12px] px-3 py-1 rounded">Later</button>
+</div>
+</div>
+</div>
+<script>
+        // Simple Micro-interaction for hover states
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                // Potential for subtle sound or vibration API triggers
+            });
+        });
+        
+        // Dynamic search highlighting (placeholder logic)
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('input', (e) => {
+            console.log('Searching for:', e.target.value);
+        });
+    </script>
+</body></html>

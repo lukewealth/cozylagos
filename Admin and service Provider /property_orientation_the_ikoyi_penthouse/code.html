@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Luxe Lagos - Property Orientation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f4f3f2",
+                    "surface-container-highest": "#e3e2e1",
+                    "secondary-fixed": "#e5e2e1",
+                    "on-primary-fixed": "#241a00",
+                    "surface": "#faf9f8",
+                    "on-tertiary-fixed": "#1e1b15",
+                    "tertiary-container": "#b8b2a9",
+                    "surface-dim": "#dadad9",
+                    "surface-container-high": "#e9e8e7",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#e8e2d8",
+                    "primary-container": "#d4af37",
+                    "on-secondary": "#ffffff",
+                    "surface-variant": "#e3e2e1",
+                    "on-tertiary-fixed-variant": "#4a463f",
+                    "secondary": "#5f5e5e",
+                    "tertiary": "#625e56",
+                    "inverse-surface": "#2f3130",
+                    "outline": "#7f7663",
+                    "on-secondary-container": "#636262",
+                    "on-primary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed-variant": "#574500",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "tertiary-fixed-dim": "#ccc6bc",
+                    "surface-tint": "#735c00",
+                    "primary-fixed": "#ffe088",
+                    "on-tertiary-container": "#48453e",
+                    "outline-variant": "#d0c5af",
+                    "secondary-container": "#e2dfde",
+                    "surface-bright": "#faf9f8",
+                    "surface-container": "#eeeeed",
+                    "on-background": "#1a1c1c",
+                    "on-surface-variant": "#4d4635",
+                    "inverse-primary": "#e9c349",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-primary-container": "#554300",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "primary-fixed-dim": "#e9c349",
+                    "on-surface": "#1a1c1c",
+                    "primary": "#735c00",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "inverse-on-surface": "#f1f0f0",
+                    "background": "#faf9f8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "16px",
+                    "gutter": "32px",
+                    "section-gap": "120px",
+                    "container-padding": "80px",
+                    "unit": "8px",
+                    "stack-md": "32px",
+                    "stack-lg": "64px"
+            },
+            "fontFamily": {
+                    "label-caps": ["Manrope"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Manrope"],
+                    "body-md": ["Manrope"],
+                    "headline-sm": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .gold-glow:focus {
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            border-color: #D4AF37;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation -->
+<header class="fixed top-0 left-0 w-full z-50 bg-surface/80 backdrop-blur-xl flex justify-between items-center px-gutter py-4 border-b border-outline/10 shadow-sm">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-2xl cursor-pointer hover:opacity-70 transition-opacity">arrow_back</span>
+<h1 class="font-display-lg text-headline-sm tracking-widest text-primary">LUXE LAGOS</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-secondary cursor-pointer hover:text-primary transition-colors">help</span>
+<span class="material-symbols-outlined text-secondary cursor-pointer hover:text-primary transition-colors">account_circle</span>
+</div>
+</header>
+<main class="pt-24 pb-32 px-4 md:px-container-padding max-w-[1440px] mx-auto">
+<!-- Welcome Header -->
+<section class="mb-stack-lg animate-in fade-in slide-in-from-bottom-4 duration-700">
+<p class="font-label-caps text-label-caps text-primary mb-2 uppercase">Your Orientation Guide</p>
+<h2 class="font-headline-lg text-headline-lg text-on-surface leading-tight mb-4">The Eko Atlantic Penthouse</h2>
+<p class="font-body-lg text-secondary max-w-2xl">Welcome to your coastal sanctuary. Use this guide to master your environment, from climate control to curated neighborhood escapes.</p>
+</section>
+<!-- Main Bento Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- 3D Style Hero Gallery / Floorplan (8 Columns) -->
+<div class="lg:col-span-8 space-y-gutter">
+<div class="relative aspect-[16/9] w-full rounded-2xl overflow-hidden glass-card group cursor-pointer shadow-lg">
+<div class="absolute inset-0 z-10 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105" data-alt="A high-end, photorealistic 3D architectural rendering of a luxury Lagos penthouse interior with floor-to-ceiling windows overlooking the ocean. The space is filled with minimalist mid-century modern furniture in charcoal and champagne tones. Golden hour sunlight streams through the glass, highlighting polished marble floors and bespoke wooden textures. The aesthetic is elite and serene." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDpe7tQD5x765w9dCXvBV7eryyqvuMN4Y90XfyTQsleFv9AYKdEMnxRjORMoOr_zn2ePuABHlvOdo5VoNIeraxrUjuev-O9uWWvhh1WFKN70vGsM9QWyYylxxtPG_NZmwv2m-TRl3hmsC1Hx9BDpqx_SDSipwBI8CzjXhAmVPd9LUgRMqZnEwdXc_QEU0Y1TPyeJo2s7BshmF2zuCyKMDxCO9ALBzRyUmGj-gYr0KmnnWemOV0oSB2hyaWJo2FBd_8cXv-VV0wbkpLV')"></div>
+<div class="absolute bottom-gutter left-gutter z-20 flex flex-col gap-2">
+<span class="inline-block px-3 py-1 bg-primary text-white font-label-caps text-[10px] rounded-full w-fit">INTERACTIVE VIEW</span>
+<h3 class="font-headline-sm text-white">Main Living Suite</h3>
+</div>
+<!-- Interactive Hotspots -->
+<div class="absolute top-1/2 left-1/3 z-20 group/pin">
+<div class="w-8 h-8 rounded-full bg-primary/80 backdrop-blur-md flex items-center justify-center animate-pulse border-2 border-white cursor-pointer transition-transform hover:scale-110">
+<span class="material-symbols-outlined text-white text-sm">lightbulb</span>
+</div>
+</div>
+<div class="absolute bottom-1/3 right-1/4 z-20 group/pin">
+<div class="w-8 h-8 rounded-full bg-primary/80 backdrop-blur-md flex items-center justify-center animate-pulse border-2 border-white cursor-pointer transition-transform hover:scale-110">
+<span class="material-symbols-outlined text-white text-sm">ac_unit</span>
+</div>
+</div>
+</div>
+<!-- Gallery Row -->
+<div class="grid grid-cols-3 gap-4">
+<div class="aspect-square rounded-xl overflow-hidden glass-card">
+<div class="w-full h-full bg-cover bg-center" data-alt="A luxury bedroom suite in a high-rise Lagos apartment, featuring a plush king-sized bed with silk linens in champagne gold. Large windows reveal a city skyline at dusk. Soft ambient lighting glows from hidden coves in the ceiling. The design is modern, opulent, and calm." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDGa6rncbTDSyFkS_CGQY2YGPVEJoqYzJTtSsOrG_vTu2W8Qt8e6axV5XaBpjxJRrgI-MSySKmcCl9-jPKDTeRJVs3r3yNiPIPgU1YpnDlc_JtkgwGL1IQuUlEQUIsrmhAKi8VPQWVNqF80l0VyyBX2XTHXc4KDhEuN2Mk0oJDVU7CFseirgEicEAYBv1Vbt_OfQlhdIepROunQch2LBByUrrJg72C7qEJDm9Pu69AHi-rXueHftq9R5AivlGuEI_yfFpqkz_trUd-4')"></div>
+</div>
+<div class="aspect-square rounded-xl overflow-hidden glass-card">
+<div class="w-full h-full bg-cover bg-center" data-alt="A state-of-the-art designer kitchen with charcoal matte cabinetry, gold hardware, and a massive white marble island. Integrated high-end appliances and minimalist bar stools create a sophisticated culinary space. Soft light highlights the clean lines and premium materials." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC4U8AHItsv8mWrvu3n94qLAW_DOk6ffQYCMbNO4_rrbyLg2hFI3RdoXBrhoBYfZOMgkL3CpcbLWiVa_J_qG4GOzrr8f2ku8oNrYAeQ5PRqraBZa9GUjJyH_j9eT4m71H0zl-edDaYaYzHXafh1NvzcIoM5nkYU5O98oUbhL4hOQolhc-D9E45scD-EzLqIvD4cuvXJwbysvqdgxU4hegcEuRIyxC87QxvuadIQ2fKuDWrCrHcb4Qj8F4vO3IS63lejaWp8eUdk0mIP')"></div>
+</div>
+<div class="aspect-square rounded-xl overflow-hidden glass-card relative group cursor-pointer">
+<div class="w-full h-full bg-cover bg-center" data-alt="A luxurious bathroom with a freestanding stone tub, gold faucets, and floor-to-ceiling travertine tiles. A large window offers a view of palm trees. The mood is spa-like and ultra-exclusive, reflecting a high-octane luxury lifestyle." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDvDAzbnzPKS1WjrKM5gz-ieUKjUyHOwLJmqC-xWwUGrNsuB1L11r0eFjFWK52QtkV9x0rFZ02uRMpySxrjijWnVbPJwqnH4ZWy8EvxN1WBqcE2WcG9_cvM4JiIlLJFBSeqcWiVgqD4q_1okxY8oSafaBihodPRtqoGnKJSiaDsaRnb3zH-YjEmR7DlGLp6S9hsT7vWnZBQovPjAkKpCjQTs_YlTnqtJ3U6--oGxqRGPGZvwa1ZlyQ-tErywITU5w31Tw0G_NVJKijs')"></div>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<p class="text-white font-label-caps">+12 MORE</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Essential Controls (4 Columns) -->
+<div class="lg:col-span-4 flex flex-col gap-gutter">
+<div class="glass-card rounded-2xl p-stack-md shadow-sm border-outline/10 h-full">
+<div class="flex items-center gap-3 mb-stack-md">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">settings_input_component</span>
+<h3 class="font-headline-sm text-on-surface">Essential Controls</h3>
+</div>
+<div class="space-y-6">
+<!-- Lighting -->
+<div class="p-4 rounded-xl bg-surface-container-low border border-outline/5 transition-all hover:border-primary/30">
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">wb_incandescent</span>
+<div>
+<p class="font-body-md font-bold">Smart Lighting</p>
+<p class="text-xs text-secondary">Evening Preset Active</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-secondary-container rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<input class="w-full h-1 bg-secondary-container rounded-lg appearance-none cursor-pointer accent-primary" type="range" value="65"/>
+</div>
+<!-- Climate -->
+<div class="p-4 rounded-xl bg-surface-container-low border border-outline/5">
+<div class="flex justify-between items-center mb-2">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">ac_unit</span>
+<div>
+<p class="font-body-md font-bold">Climate Control</p>
+<p class="text-xs text-secondary">Cooling • 22°C</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 rounded-full border border-outline/20 flex items-center justify-center hover:bg-surface">-</button>
+<button class="w-8 h-8 rounded-full border border-outline/20 flex items-center justify-center hover:bg-surface">+</button>
+</div>
+</div>
+</div>
+<!-- Smart Lock -->
+<div class="p-4 rounded-xl bg-surface-container-low border border-outline/5 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">lock_open</span>
+<div>
+<p class="font-body-md font-bold">Main Entry</p>
+<p class="text-xs text-secondary">Unlocked via Bluetooth</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary cursor-pointer">sync</span>
+</div>
+<!-- Quick Actions -->
+<button class="w-full py-4 bg-primary text-white rounded-xl font-label-caps tracking-widest hover:bg-primary/90 transition-colors shadow-lg active:scale-95 duration-200">
+                            EVENING SCENE
+                        </button>
+</div>
+</div>
+</div>
+<!-- Amenities Guide (Full Row on Small, 6 Columns on Large) -->
+<section class="lg:col-span-6 space-y-stack-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm">Amenities Guide</h3>
+<span class="font-label-caps text-primary cursor-pointer hover:underline">VIEW MAP</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Amenity Card 1 -->
+<div class="glass-card rounded-xl p-4 flex items-center gap-4 group hover:bg-white transition-all cursor-pointer">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="An infinity pool overlooking the Lagos coastline at sunset. The water is crystalline blue, reflecting the golden sky. Luxury loungers and white umbrellas line the deck. The mood is high-end leisure and relaxation in a tropical city setting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA3TWk7kj2uoa3UsZv3PUurkIth3EDaJJdBRqJeIE2HgK7B6AitL3rRG6xOXHACZ-BMllGxibs7AK5cePoQFs1-295JOB12sY0JyEsggOC4HLCJON-MKepLvhqcYVNY08KKaEvHlAx61v-Wraae00-M7JCiHldtXSQlsmxNq7ojdYz1Pi2AIGSSrW73diTdbL3DJEskLmZ_5sRBT2m8YWmC966uCpTTa-xTnAXitaq9XseNJ-Sr7RShAHxqulcmXKvXEvf6Pc5ZJI5J')"></div>
+</div>
+<div>
+<p class="font-label-caps text-[10px] text-primary">LEVEL 42</p>
+<h4 class="font-body-md font-bold">Infinity Pool</h4>
+<p class="text-xs text-secondary">Open 24/7 • Heated</p>
+</div>
+<span class="material-symbols-outlined ml-auto text-outline/30">chevron_right</span>
+</div>
+<!-- Amenity Card 2 -->
+<div class="glass-card rounded-xl p-4 flex items-center gap-4 group hover:bg-white transition-all cursor-pointer">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="A modern, high-tech fitness center with charcoal-colored equipment and large windows showing a lush garden. The space is brightly lit with warm white lights and features high-end weight machines and cardio equipment. Clean, elite aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCTbDuo06RhAfKinjs5DNCX9KvkiMOIbzoclY44QVXz0U0glqyRusSOfarehbETdOuz-K9a2aOfx33STb_zv4mXXkKM5UVwJarkX6e03huboFVArJZoD9n2IftlAr3wnS2SE8amze8u8tLO92DzDkWrRoI5poJDIIkarlFCY8dAbX7OuMUUI9uCUREtUzhc9WPqGKjy9RxbKO0c0xNP_clUBJlsvVVrX1ByDv1e-j0WCfm4mRPqQpZBFf-t6MaZphquimrlZtf5u0DR')"></div>
+</div>
+<div>
+<p class="font-label-caps text-[10px] text-primary">LEVEL 2</p>
+<h4 class="font-body-md font-bold">Elite Fitness</h4>
+<p class="text-xs text-secondary">Private Trainers available</p>
+</div>
+<span class="material-symbols-outlined ml-auto text-outline/30">chevron_right</span>
+</div>
+<!-- Amenity Card 3 -->
+<div class="glass-card rounded-xl p-4 flex items-center gap-4 group hover:bg-white transition-all cursor-pointer">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="A tranquil luxury spa room with candlelight, smooth river stones, and soft gold accents. The atmosphere is serene and expensive, designed for deep relaxation. Minimalist furniture and plush white towels create a sanctuary feel." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBfTlQR-b7MC-PishxQ1QNWgGadEx5SQYRXfgwdAyd4IEld0szozJ6rOf8AQ9tCCzjgJqnvEgL10UYuWv1AyCfUfI3VWzzrlEpBigMuxCgM_dvmlWzxI_lvnuTtAET4iLCPb4sVY0Ey0IDj9Ca2q6qvDx0dyAJWialDeCcjGqC5awQlBxD4kt2rHPvi_UjuAJIx2GgmgG-OFw6h19hQkRQ1JJEFjkNgvcMOje7pEml7aXW26cX5nfjPT5NQ4pMak3lo_yObVChu2Lc9')"></div>
+</div>
+<div>
+<p class="font-label-caps text-[10px] text-primary">LEVEL 3</p>
+<h4 class="font-body-md font-bold">Serene Spa</h4>
+<p class="text-xs text-secondary">Book via Concierge</p>
+</div>
+<span class="material-symbols-outlined ml-auto text-outline/30">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Neighborhood Guide (6 Columns) -->
+<section class="lg:col-span-6 space-y-stack-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm">Neighborhood Guide</h3>
+<span class="font-label-caps text-primary cursor-pointer hover:underline">EXPLORE MORE</span>
+</div>
+<div class="no-scrollbar flex overflow-x-auto gap-4 pb-4">
+<!-- Spot 1 -->
+<div class="min-w-[280px] rounded-xl overflow-hidden glass-card shadow-sm group">
+<div class="h-40 relative">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700" data-alt="An upscale fine dining restaurant in Victoria Island, Lagos, with opulent gold light fixtures, dark velvet seating, and a sophisticated crowd. The architecture is modern West African luxury. Soft evening light creates an intimate, elite atmosphere." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCJZNqUMBTAX2sVlQ2PRy06otlWYw-6YHJ-f_5ti_VKdD8F0YR9jmnsanKdey6nGYHt7DH3nvHROh84a7z3sLTYY-9Vjfrj07hr7hJpIuPUul2hHH8GCzkC8hDZ3gv7ClI4lOUN-2b6mAi4bolvLdNn4LfXcN3Mn3rCatD6T-Yw-QKszs7JWpn_Pv9Pt_NteWIJgfITZyWRMq5uM4z9nBBZGMLOSTYYQwTFFbSiKeLa-nHYIopSsNJb3qu4zBg2fO3sOzrsLmDsQW6W')"></div>
+<div class="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold">8 MIN WALK</div>
+</div>
+<div class="p-4">
+<div class="flex gap-1 mb-2">
+<span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<h4 class="font-body-md font-bold">Nok by Alara</h4>
+<p class="text-xs text-secondary mb-3">Contemporary African Dining</p>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-surface-container-high rounded text-[10px] font-label-caps">DINING</span>
+<span class="px-2 py-1 bg-surface-container-high rounded text-[10px] font-label-caps">ART</span>
+</div>
+</div>
+</div>
+<!-- Spot 2 -->
+<div class="min-w-[280px] rounded-xl overflow-hidden glass-card shadow-sm group">
+<div class="h-40 relative">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700" data-alt="A trendy rooftop bar in Lagos at night with glowing blue neon lights, white leather booths, and a panoramic view of the city skyline. Stylish people are seen socializing. The vibe is high-energy, modern, and ultra-exclusive." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBf9O-SEwAWCFU0TXHacf5f6VrnmJOnfqH911Jp_NekWe1lmlxpmWvJui14Np2xkT9RMqHJQDeTI4NKPkDq42lxjQmVcMc9SANd2XJ9pWa62D-WkuTvoeOmgBEbkRFgShwG0Fiy-oCsBV0kbkOGI9fKljDhvppu1t9UMs6JAy79HRexxPSVAaRs3Ru1ZI0pLMrfsjoP3lizpnMnx0yIPEcA1maiTNwIZ9FNaXK_frv6x0dJUalaMGYZt7Z2122tXBKmHHhCEGjbF-oL')"></div>
+<div class="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold">12 MIN DRIVE</div>
+</div>
+<div class="p-4">
+<div class="flex gap-1 mb-2">
+<span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-xs">star</span>
+</div>
+<h4 class="font-body-md font-bold">Sky Bar Lagos</h4>
+<p class="text-xs text-secondary mb-3">Rooftop Cocktails &amp; Views</p>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-surface-container-high rounded text-[10px] font-label-caps">NIGHTLIFE</span>
+<span class="px-2 py-1 bg-surface-container-high rounded text-[10px] font-label-caps">CHIC</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface/90 backdrop-blur-2xl flex justify-around items-center px-4 pb-safe-offset-4 pt-2 border-t border-outline/10 shadow-[0px_-10px_30px_rgba(26,26,26,0.05)] md:hidden">
+<a class="flex flex-col items-center justify-center text-primary bg-primary-container/10 rounded-xl px-4 py-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-caps text-[10px] mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-2 hover:bg-surface-variant/50 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-caps text-[10px] mt-1">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-2 hover:bg-surface-variant/50 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined">support_agent</span>
+<span class="font-label-caps text-[10px] mt-1">Concierge</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-2 hover:bg-surface-variant/50 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-[10px] mt-1">Profile</span>
+</a>
+</nav>
+<!-- Floating AI Concierge FAB (Contextual) -->
+<button class="fixed bottom-24 right-8 z-40 w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95 duration-200">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">support_agent</span>
+</button>
+<script>
+        // Simple micro-interaction for lighting slider and buttons
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                const val = e.target.value;
+                const label = e.target.previousElementSibling.querySelector('.text-secondary');
+                if (label) label.innerText = `Brightness: ${val}%`;
+            });
+        });
+
+        // Toggle state simulation for switches
+        document.querySelectorAll('input[type="checkbox"]').forEach(toggle => {
+            toggle.addEventListener('change', (e) => {
+                const card = e.target.closest('.p-4');
+                if (e.target.checked) {
+                    card.classList.add('border-primary/30');
+                } else {
+                    card.classList.remove('border-primary/30');
+                }
+            });
+        });
+
+        // Simple entrance animation trigger
+        window.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('opacity-100');
+        });
+    </script>
+</body></html>

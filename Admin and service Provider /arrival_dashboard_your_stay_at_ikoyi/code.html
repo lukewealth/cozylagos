@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Luxe Lagos | Arrival Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f4f3f2",
+                    "surface-container-highest": "#e3e2e1",
+                    "secondary-fixed": "#e5e2e1",
+                    "on-primary-fixed": "#241a00",
+                    "surface": "#faf9f8",
+                    "on-tertiary-fixed": "#1e1b15",
+                    "tertiary-container": "#b8b2a9",
+                    "surface-dim": "#dadad9",
+                    "surface-container-high": "#e9e8e7",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#e8e2d8",
+                    "primary-container": "#d4af37",
+                    "on-secondary": "#ffffff",
+                    "surface-variant": "#e3e2e1",
+                    "on-tertiary-fixed-variant": "#4a463f",
+                    "secondary": "#5f5e5e",
+                    "tertiary": "#625e56",
+                    "inverse-surface": "#2f3130",
+                    "outline": "#7f7663",
+                    "on-secondary-container": "#636262",
+                    "on-primary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed-variant": "#574500",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "tertiary-fixed-dim": "#ccc6bc",
+                    "surface-tint": "#735c00",
+                    "primary-fixed": "#ffe088",
+                    "on-tertiary-container": "#48453e",
+                    "outline-variant": "#d0c5af",
+                    "secondary-container": "#e2dfde",
+                    "surface-bright": "#faf9f8",
+                    "surface-container": "#eeeeed",
+                    "on-background": "#1a1c1c",
+                    "on-surface-variant": "#4d4635",
+                    "inverse-primary": "#e9c349",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-primary-container": "#554300",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "primary-fixed-dim": "#e9c349",
+                    "on-surface": "#1a1c1c",
+                    "primary": "#735c00",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "inverse-on-surface": "#f1f0f0",
+                    "background": "#faf9f8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "16px",
+                    "gutter": "32px",
+                    "section-gap": "120px",
+                    "container-padding": "80px",
+                    "unit": "8px",
+                    "stack-md": "32px",
+                    "stack-lg": "64px"
+            },
+            "fontFamily": {
+                    "label-caps": ["Manrope"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Manrope"],
+                    "body-md": ["Manrope"],
+                    "headline-sm": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .gold-glow {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+        .animate-unlock {
+            animation: pulse-gold 2s infinite;
+        }
+        body {
+            background-color: #faf9f8;
+            color: #1a1c1c;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface/80 backdrop-blur-xl dark:bg-inverse-surface/80 border-b border-outline/10 shadow-sm">
+<div class="font-display-lg text-headline-sm tracking-widest text-primary dark:text-primary-fixed-dim">LUXE LAGOS</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-primary font-bold font-label-caps text-label-caps transition-colors" href="#">Home</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary-container font-label-caps text-label-caps transition-colors" href="#">Bookings</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary-container font-label-caps text-label-caps transition-colors" href="#">Concierge</a>
+</div>
+<div class="flex items-center space-x-4">
+<button class="material-symbols-outlined text-primary text-2xl">help</button>
+<button class="material-symbols-outlined text-primary text-2xl">account_circle</button>
+</div>
+</header>
+<main class="pt-24 pb-32 min-h-screen">
+<!-- Hero Section -->
+<section class="px-gutter mb-stack-lg relative overflow-hidden h-[614px] flex items-end pb-12 rounded-b-[40px]">
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-[10s] hover:scale-105" data-alt="A sprawling, ultra-modern luxury penthouse living room in Ikoyi, Lagos, featuring floor-to-ceiling glass windows that reveal a breathtaking sunset over the Atlantic Ocean. The interior is curated with minimalist ivory furniture, gold accents, and lush tropical indoor plants. The lighting is warm and cinematic, casting long, soft shadows across the polished marble floors, creating an atmosphere of elite serenity and contemporary African elegance." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAvbdF5PXmI2xF3hhCqPJqOFya0rsRaoU0nI_nN1ZZkhoCKEp7FhdclfFR_O4lBvpeFW_ZkXgMiU-chse6S0eelMlw_utnAlLnSyUnXoKpyNfB_P57-Gsi8M5Xk3j5Hturf4C83xTrw1u3JR-SFEprxaZrMNooS8IpPchbs0THQLBGjfrbjbC0aZJ4pPS-foo1ln26F2MHUj2RZ3oko7iumLZlGoU9y450pgvNO7-oyT788Ds1KaqXnGcx8URXKrczZREgJ-E-kkYZd')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+</div>
+<div class="relative z-10 w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end gap-6">
+<div>
+<span class="font-label-caps text-label-caps text-primary-container mb-2 block tracking-[0.2em]">CURRENT STAY</span>
+<h1 class="font-display-lg text-white text-5xl md:text-7xl mb-2">Welcome, Alexander</h1>
+<p class="font-headline-sm text-white/90">The Ikoyi Penthouse, Suite 1004</p>
+</div>
+<div class="glass-panel p-6 rounded-2xl flex flex-col items-center min-w-[200px]">
+<span class="font-label-caps text-label-caps text-primary mb-1">CHECK-IN IN</span>
+<div class="flex gap-4">
+<div class="text-center">
+<div class="text-3xl font-bold text-on-surface">02</div>
+<div class="text-[10px] text-secondary font-bold uppercase tracking-widest">Hrs</div>
+</div>
+<div class="text-3xl font-bold text-on-surface">:</div>
+<div class="text-center">
+<div class="text-3xl font-bold text-on-surface">45</div>
+<div class="text-[10px] text-secondary font-bold uppercase tracking-widest">Min</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid Interaction Layer -->
+<section class="max-w-7xl mx-auto px-gutter grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Digital Key Card -->
+<div class="md:col-span-4 group cursor-pointer h-full">
+<div class="h-full bg-inverse-surface rounded-[32px] p-8 flex flex-col justify-between relative overflow-hidden transition-all duration-500 hover:shadow-2xl" id="digital-key">
+<!-- Geometric texture for the key card -->
+<div class="absolute top-0 right-0 opacity-10 pointer-events-none">
+
+</div>
+<div class="flex justify-between items-start z-10">
+<div class="material-symbols-outlined text-primary-container text-4xl" style="font-variation-settings: 'FILL' 1;">contactless</div>
+<div class="text-white/40 font-label-caps text-[10px] tracking-[0.3em]">LUXE ACCESS VERIFIED</div>
+</div>
+<div class="flex flex-col items-center py-12 z-10">
+<div class="w-24 h-24 rounded-full bg-primary-container/20 flex items-center justify-center mb-6 animate-unlock">
+<div class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center transition-transform group-active:scale-90">
+<span class="material-symbols-outlined text-on-primary-fixed text-4xl">key</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-white mb-2">Tap to Unlock</h3>
+<p class="text-white/60 text-sm text-center">Hold near your penthouse entry panel</p>
+</div>
+<div class="z-10 bg-white/5 border border-white/10 rounded-xl p-4 flex items-center gap-4">
+<div class="w-12 h-8 bg-gradient-to-br from-primary-container to-primary rounded-md"></div>
+<div>
+<div class="text-white font-bold text-sm">•••• 4022</div>
+<div class="text-white/40 text-[10px] uppercase">Active Session</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Actions & Info -->
+<div class="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+<!-- WiFi Access -->
+<div class="glass-panel p-8 rounded-[32px] group hover:bg-white transition-all cursor-pointer border-none shadow-sm hover:shadow-md">
+<div class="flex justify-between items-start mb-12">
+<div class="w-12 h-12 rounded-2xl bg-surface-container-high flex items-center justify-center group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary-container transition-colors">wifi</span>
+</div>
+<button class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity">content_copy</button>
+</div>
+<h4 class="font-headline-sm text-on-surface mb-2">WiFi Access</h4>
+<p class="text-secondary text-sm mb-6">High-speed fiber connectivity included throughout the suite.</p>
+<div class="flex items-center gap-2">
+<span class="px-3 py-1 bg-surface-container-lowest rounded-full text-xs font-bold text-primary border border-outline/10">LAGOS_LUXE_1004</span>
+</div>
+</div>
+<!-- Message Concierge -->
+<div class="bg-primary-container p-8 rounded-[32px] group hover:opacity-95 transition-all cursor-pointer shadow-lg">
+<div class="flex justify-between items-start mb-12">
+<div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container">support_agent</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-on-primary-container mb-2">Message Concierge</h4>
+<p class="text-on-primary-container/70 text-sm mb-6">24/7 dedicated assistance for reservations, transport, or inquiries.</p>
+<div class="flex -space-x-3 overflow-hidden">
+<div class="inline-block h-8 w-8 rounded-full ring-2 ring-primary-container bg-surface-container-high" data-alt="A professional, friendly female hospitality concierge with a warm smile, wearing a sharp tailored suit, set against a luxury hotel lobby background. High-key lighting, soft focus, professional corporate photography style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD4Kfp8EGPGAQQzTmlZVRFgA955i8bZe-PKjKntrq0ia5et0xOsFmJqb7B6nk741N-ED9-sh6oho9wwdiwxBjlTz9iyP2wCFTheBGnelt9dvIgKVtvBgr2gjLB3fIUgoyXH_D7LduJAsA2YNwKXJAZ2Ju60qwY9bCoxNjOssmQmkNtFto08Iy4VRPTk9kR1qrWSG_oZzJ7XVLD33V5_D-mZtsI14xO0y1ZdXJSIIc81jg7LNN4DVEX2h-YH94SQzbRnfg0TzNxQZTSj')"></div>
+<div class="inline-block h-8 w-8 rounded-full ring-2 ring-primary-container bg-surface-container-high" data-alt="A sophisticated male concierge in a premium uniform, smiling warmly, holding a tablet. Studio lighting with warm tones, high-end lifestyle photography, Lagos luxury context." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBpfVY8I1lxlVrwdQxTdexlZw0nfDmojXyC4kA6vLp-L8AEUwE685-81dgEr5FC78LIGGgMZk9JHpB1vPPQaesazCdA16SeoMhRgxPtuU2dIef9vhF4G7yAqPfZTGpgor6qIjh_fzMJizkUDknwEo7HvLoRc7IPtJ_nbOHtkFA_gpLOvrJhFmg-QZUzYq8sDWujLhUq43BEEtGfwt4jlPSzxm73Qy9GoJsuuqDAQHsc2mRrJTidHoleJpSLJ-rkEQQP67lLuhGTpXG4')"></div>
+<div class="flex items-center justify-center h-8 w-8 rounded-full ring-2 ring-primary-container bg-white/20 text-[10px] text-on-primary-container font-bold">+2</div>
+</div>
+</div>
+<!-- House Rules Bento -->
+<div class="sm:col-span-2 glass-panel p-8 rounded-[32px] flex flex-col md:flex-row gap-8 items-center border-none shadow-sm hover:shadow-md transition-all">
+<div class="w-full md:w-1/3 h-48 rounded-2xl overflow-hidden relative">
+<div class="w-full h-full bg-cover bg-center" data-alt="Close up of a luxury welcome booklet on a heavy marble coffee table, accompanied by a single orchid in a minimalist glass vase. The aesthetic is clean, expensive, and tranquil, with soft morning light streaming through sheer curtains in the background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDdKo-s_2kjswth8CO6pzSSig_tG9FGIUzAgpbWNch9K0OFB0te-PV7gNI82ec4ymZRD6hcTbvUk5VWHpCY8zQy1AgY9JsL3gabYYoGO5I4oPAbzfuWTi3H0Xl-fOBqQtsgCF9yhQtRktQlXguA8lMnAlC3dMMOA8uGSzL6Sdrw8VpNscqk2o1oMQLJRJ30J24XlNe1YsgvsYqZmN5F3-hkNs7J0B0xiapyD3iLmcjD5jYt18wMat1pmOA5t199TbpXLZ9bO9SOo_Nc')"></div>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">menu_book</span>
+<span class="font-label-caps text-label-caps text-primary tracking-widest">RESIDENT GUIDELINES</span>
+</div>
+<h4 class="font-headline-sm text-on-surface mb-2">House Rules &amp; Amenities</h4>
+<p class="text-secondary text-sm mb-6">Explore detailed instructions for the infinity pool, gym access, and smart home controls in the penthouse.</p>
+<button class="border border-outline/30 px-6 py-2.5 rounded-full font-label-caps text-label-caps text-on-surface hover:bg-on-surface hover:text-white transition-all uppercase tracking-widest">View Digital Guide</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe-offset-4 pt-2 bg-surface/90 backdrop-blur-2xl border-t border-outline/10 shadow-[0px_-10px_30px_rgba(26,26,26,0.05)] rounded-t-xl">
+<button class="flex flex-col items-center justify-center text-primary bg-primary-container/10 rounded-xl px-4 py-2 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-caps text-[10px] mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-2 hover:bg-surface-variant/50 transition-all active:scale-95">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-caps text-[10px] mt-1">Bookings</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-2 hover:bg-surface-variant/50 transition-all active:scale-95">
+<span class="material-symbols-outlined">support_agent</span>
+<span class="font-label-caps text-[10px] mt-1">Concierge</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-2 hover:bg-surface-variant/50 transition-all active:scale-95">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-[10px] mt-1">Profile</span>
+</button>
+</nav>
+<!-- Micro-interaction Scripts -->
+<script>
+        const keyCard = document.getElementById('digital-key');
+        if (keyCard) {
+            keyCard.addEventListener('click', function() {
+                const icon = this.querySelector('.material-symbols-outlined:not(.text-4xl)');
+                const label = this.querySelector('h3');
+                
+                // Visual feedback
+                this.classList.add('scale-95');
+                setTimeout(() => this.classList.remove('scale-95'), 200);
+
+                // Simulation of success
+                label.innerText = "Access Granted";
+                label.classList.add('text-primary-container');
+                icon.innerText = "lock_open";
+                
+                setTimeout(() => {
+                    label.innerText = "Tap to Unlock";
+                    label.classList.remove('text-primary-container');
+                    icon.innerText = "key";
+                }, 3000);
+            });
+        }
+
+        // Countdown simulation
+        let minutes = 45;
+        setInterval(() => {
+            if (minutes > 0) minutes--;
+            const minDisplays = document.querySelectorAll('.text-center .text-3xl');
+            if (minDisplays.length > 1) {
+                minDisplays[1].innerText = minutes.toString().padStart(2, '0');
+            }
+        }, 60000);
+    </script>
+</body></html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lagos Elite | Concierge Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Manrope:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e3e2e1",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "inverse-primary": "#e9c349",
+                        "primary-container": "#d4af37",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#b8b2a9",
+                        "on-tertiary-fixed-variant": "#4a463f",
+                        "background": "#faf9f8",
+                        "inverse-surface": "#2f3130",
+                        "surface-container": "#eeeeed",
+                        "surface-bright": "#faf9f8",
+                        "surface-container-low": "#f4f3f2",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#735c00",
+                        "tertiary-fixed-dim": "#ccc6bc",
+                        "tertiary-fixed": "#e8e2d8",
+                        "on-secondary-container": "#636262",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "outline": "#7f7663",
+                        "surface": "#faf9f8",
+                        "on-primary-container": "#554300",
+                        "secondary": "#5f5e5e",
+                        "outline-variant": "#d0c5af",
+                        "surface-container-high": "#e9e8e7",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#e2dfde",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-primary-fixed": "#241a00",
+                        "on-surface": "#1a1c1c",
+                        "on-tertiary-fixed": "#1e1b15",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-surface-variant": "#4d4635",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#48453e",
+                        "on-primary-fixed-variant": "#574500",
+                        "inverse-on-surface": "#f1f0f0",
+                        "primary-fixed-dim": "#e9c349",
+                        "on-background": "#1a1c1c",
+                        "primary-fixed": "#ffe088",
+                        "surface-tint": "#735c00",
+                        "tertiary": "#625e56",
+                        "surface-variant": "#e3e2e1",
+                        "surface-dim": "#dadad9",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "64px",
+                        "stack-md": "32px",
+                        "unit": "8px",
+                        "section-gap": "120px",
+                        "gutter": "32px",
+                        "stack-sm": "16px",
+                        "container-padding": "80px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Manrope"],
+                        "headline-sm": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-lg": ["Manrope"],
+                        "label-caps": ["Manrope"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .whatsapp-glow {
+            box-shadow: 0 0 15px rgba(37, 211, 102, 0.3);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d0c5af; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen">
+<!-- Side Navigation Bar -->
+<nav class="h-screen w-64 fixed left-0 top-0 flex flex-col h-full py-stack-sm bg-surface-container-low shadow-sm z-50">
+<div class="px-6 mb-10">
+<h1 class="font-headline-sm text-headline-sm text-primary tracking-tight">Lagos Elite</h1>
+<p class="text-[10px] font-label-caps text-secondary tracking-widest">Concierge Portal</p>
+</div>
+<div class="flex-1 flex flex-col space-y-1">
+<!-- Navigation Items Mapping from JSON -->
+<a class="flex items-center px-6 py-3 space-x-3 text-secondary hover:text-primary hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<!-- Active Item: Requests -->
+<a class="flex items-center px-6 py-3 space-x-3 text-primary border-r-4 border-primary font-bold bg-primary-container/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="concierge">concierge</span>
+<span class="font-body-md text-body-md">Requests</span>
+</a>
+<a class="flex items-center px-6 py-3 space-x-3 text-secondary hover:text-primary hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body-md text-body-md">Guests</span>
+</a>
+<a class="flex items-center px-6 py-3 space-x-3 text-secondary hover:text-primary hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="hotel_class">hotel_class</span>
+<span class="font-body-md text-body-md">Services</span>
+</a>
+<a class="flex items-center px-6 py-3 space-x-3 text-secondary hover:text-primary hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+<a class="flex items-center px-6 py-3 space-x-3 text-secondary hover:text-primary hover:bg-surface-container-highest transition-colors duration-200 mt-auto" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</div>
+<div class="px-6 pt-6">
+<button class="w-full bg-primary-container text-on-primary-container font-bold py-3 rounded-lg active:scale-95 transition-transform flex items-center justify-center space-x-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span>New Request</span>
+</button>
+</div>
+</nav>
+<!-- Top Navigation Bar -->
+<header class="flex justify-between items-center h-20 px-gutter ml-64 bg-surface/80 backdrop-blur-md sticky top-0 z-40 border-b border-outline-variant/30">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 text-body-md focus:ring-1 focus:ring-primary-container transition-all" placeholder="Search concierge requests..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<div class="flex items-center space-x-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center space-x-3">
+<div class="text-right">
+<p class="text-body-md font-bold text-on-surface leading-none">Oluwaseun A.</p>
+<p class="text-[10px] font-label-caps text-secondary">Chief Concierge</p>
+</div>
+<img class="w-10 h-10 rounded-full object-cover ring-2 ring-primary-container/20" data-alt="Close-up portrait of a professional African man in a tailored charcoal suit, smiling warmly in a bright, modern luxury hotel lobby. High-key lighting, soft champagne bokeh in the background, sharp focus, professional photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMmI_3N4uKyE3vPtrpZVLsTLPLhQz3LXQyvG21Y5eG_GG7ThaXCffReDOtc94kRUhVlunabR7SBGl64L2XXXfK13e8rdGULLvFSJ6w_7fNxit01lksCQcWk7a7S2GbSr1C0SLvDdSScMcFHicE1UFvqPLOZPqF2BRBqkVnveLFVDd5EqGwJ_QKU-quDd00XFmatNGCnJK6oABBaDoqeNnTgg2WIK1U2taNXb-hVFlE7zQVe38PYpEPi00CtTj-Hl-7Sayo8iu1_9lh"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 p-stack-md min-h-[calc(100vh-80px)]">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-stack-md">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-1">Active Concierge Requests</h2>
+<p class="text-secondary font-body-md">Managing 24 ongoing guest interactions today.</p>
+</div>
+<div class="flex space-x-3">
+<button class="flex items-center space-x-2 px-4 py-2 rounded-full border border-outline-variant text-body-md hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+<span>High Priority</span>
+</button>
+<button class="flex items-center space-x-2 px-4 py-2 rounded-full border border-outline-variant text-body-md hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">workspace_premium</span>
+<span>VIP Guests</span>
+</button>
+</div>
+</div>
+<!-- Request Status Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-stack-md">
+<div class="glass-card p-6 rounded-xl flex flex-col justify-between">
+<span class="text-secondary font-label-caps mb-4">AWAITING WHATSAPP</span>
+<div class="flex items-baseline space-x-2">
+<span class="text-headline-lg font-headline-lg text-primary">08</span>
+<span class="text-error text-sm font-bold flex items-center">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span> 12%
+                    </span>
+</div>
+<p class="text-sm text-secondary mt-2">Requires immediate verification</p>
+</div>
+<div class="glass-card p-6 rounded-xl flex flex-col justify-between">
+<span class="text-secondary font-label-caps mb-4">TOTAL PENDING</span>
+<div class="flex items-baseline space-x-2">
+<span class="text-headline-lg font-headline-lg text-on-surface">14</span>
+</div>
+<p class="text-sm text-secondary mt-2">Within standard SLA</p>
+</div>
+<div class="glass-card p-6 rounded-xl flex flex-col justify-between">
+<span class="text-secondary font-label-caps mb-4">IN PROGRESS</span>
+<div class="flex items-baseline space-x-2">
+<span class="text-headline-lg font-headline-lg text-on-surface">06</span>
+</div>
+<p class="text-sm text-secondary mt-2">Active service delivery</p>
+</div>
+<div class="bg-primary-container p-6 rounded-xl flex flex-col justify-between text-on-primary-container">
+<span class="font-label-caps mb-4 opacity-80">AVERAGE RESPONSE</span>
+<div class="flex items-baseline space-x-2">
+<span class="text-headline-lg font-headline-lg">4m</span>
+<span class="text-xs font-bold px-2 py-0.5 bg-white/20 rounded-full">ELITE</span>
+</div>
+<p class="text-sm mt-2 opacity-80">Top 1% service tier</p>
+</div>
+</div>
+<!-- Requests Dense View -->
+<div class="glass-card rounded-xl overflow-hidden">
+<div class="px-gutter py-4 bg-surface-container-low border-b border-outline-variant/30 flex items-center justify-between">
+<h3 class="font-bold text-on-surface">Live Request Stream</h3>
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+<span class="text-xs font-label-caps text-secondary uppercase">Live Syncing</span>
+</div>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-[11px] font-label-caps text-secondary border-b border-outline-variant/20">
+<th class="px-gutter py-4">Guest Identity</th>
+<th class="px-gutter py-4">Request Category</th>
+<th class="px-gutter py-4">Verification Status</th>
+<th class="px-gutter py-4">Current State</th>
+<th class="px-gutter py-4 text-right">Instant Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Row 1: WhatsApp Priority -->
+<tr class="group hover:bg-surface-container-low transition-colors">
+<td class="px-gutter py-5">
+<div class="flex items-center space-x-3">
+<div class="relative">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Professional headshot of a sophisticated woman in silk attire, soft golden lighting of a luxury lounge, minimalist and elegant aesthetic with high-end photography qualities." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEmdh1mSiLz6z9r46LqfjDTPjqQpPMyS4WAWiVz_v6Ji71X0lXoxF3zLSj7zwLjKtblw3PnUi7ge1aI0W1z_CHJWixyAo2n-QwAExqv90pCcUmxHsJnbL8uwg0WMN5f_i4iJyJK-E6HJUcOdBUPfxCglLPOgBkouVCmBicy28KbEDwqg79z5a_k7GtzBVonEOkUlPrioif1V-rnWkno6Ji7P5jt0XfsKNOH3LK7b2VJM-jq7XzAdKjPh-8kLxiKWOmQw-2MJx6cVJR"/>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full border-2 border-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-[10px] text-white" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+</div>
+<div>
+<p class="font-bold text-on-surface">Elena Rodriguez</p>
+<p class="text-xs text-secondary italic">Suite 402 • VIP Elite</p>
+</div>
+</div>
+</td>
+<td class="px-gutter py-5">
+<div class="flex flex-col">
+<span class="text-xs font-label-caps text-primary mb-1">EXPERIENCE</span>
+<span class="text-body-md text-on-surface">Private Yacht Charter</span>
+</div>
+</td>
+<td class="px-gutter py-5">
+<div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-100 text-orange-700">
+<span class="material-symbols-outlined text-[18px]">pending_actions</span>
+<span class="text-xs font-bold">AWAITING WHATSAPP</span>
+</div>
+</td>
+<td class="px-gutter py-5">
+<span class="text-body-md text-secondary">Pending Agent</span>
+</td>
+<td class="px-gutter py-5 text-right">
+<button class="whatsapp-glow bg-[#25D366] text-white px-4 py-2 rounded-lg font-bold text-sm inline-flex items-center space-x-2 hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">chat</span>
+<span>Verify &amp; Chat</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-surface-container-low transition-colors">
+<td class="px-gutter py-5">
+<div class="flex items-center space-x-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Portrait of a distinguished middle-aged man in a linen shirt, relaxed luxury beach club setting, natural sunlight, high-quality lens blur in the background, warm Lagos vibes." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVsUgQzxSWHZjBysh-H_jxk1kOY2WspLyYDyAgQsIol_Icb6bSAvOoeXbGHoxqG2fG-Xjc8Kd8-e1pMrLrgEjyktj2rmwRHjCwPlr19Z0FsxMpwNL-kZXxX1N7PMY5Si881yIg0xbmCJTdHpBwZYIzhIOvRpKfKgp98myab3JZjwi19qe3K4SWBmi7g_khjWNaE76s4hWlKl6hJ42AkJBZ7J55AsvtzE5gYswv29sSWHyFifMYoxSAbcyVn8_Mtg_Wp9d9MLHJhh77"/>
+<div>
+<p class="font-bold text-on-surface">Marcus Chen</p>
+<p class="text-xs text-secondary italic">Penthouse A • VIP</p>
+</div>
+</div>
+</td>
+<td class="px-gutter py-5">
+<div class="flex flex-col">
+<span class="text-xs font-label-caps text-secondary mb-1">SERVICE</span>
+<span class="text-body-md text-on-surface">In-Room Spa Ritual</span>
+</div>
+</td>
+<td class="px-gutter py-5">
+<div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-green-50 border border-green-100 text-green-700">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-xs font-bold">VERIFIED</span>
+</div>
+</td>
+<td class="px-gutter py-5">
+<span class="text-body-md text-on-surface">In-Progress</span>
+</td>
+<td class="px-gutter py-5 text-right">
+<button class="bg-surface-container-high text-on-surface px-4 py-2 rounded-lg font-bold text-sm inline-flex items-center space-x-2 hover:bg-surface-container-highest active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px]">forum</span>
+<span>Quick Chat</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: High Priority -->
+<tr class="group hover:bg-surface-container-low transition-colors">
+<td class="px-gutter py-5">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-secondary font-bold">
+                                        AA
+                                    </div>
+<div>
+<p class="font-bold text-on-surface">Amina Abubakar</p>
+<p class="text-xs text-secondary italic">Suite 108 • Regular</p>
+</div>
+</div>
+</td>
+<td class="px-gutter py-5">
+<div class="flex flex-col">
+<span class="text-xs font-label-caps text-red-600 mb-1">BOOKING</span>
+<span class="text-body-md text-on-surface">Bespoke Dining - Shiro</span>
+</div>
+</td>
+<td class="px-gutter py-5">
+<div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-100 text-orange-700">
+<span class="material-symbols-outlined text-[18px]">pending_actions</span>
+<span class="text-xs font-bold">AWAITING WHATSAPP</span>
+</div>
+</td>
+<td class="px-gutter py-5">
+<div class="flex items-center space-x-1 text-error">
+<span class="material-symbols-outlined text-[16px]">priority_high</span>
+<span class="text-body-md font-bold">High Priority</span>
+</div>
+</td>
+<td class="px-gutter py-5 text-right">
+<button class="whatsapp-glow bg-[#25D366] text-white px-4 py-2 rounded-lg font-bold text-sm inline-flex items-center space-x-2 hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">chat</span>
+<span>Verify &amp; Chat</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="group hover:bg-surface-container-low transition-colors">
+<td class="px-gutter py-5">
+<div class="flex items-center space-x-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Candid professional headshot of a young tech entrepreneur in a modern minimal office in Lagos. Clean lighting, soft shadows, high-end commercial aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCK7eZkaGD9Kdf6-HEs-jxuoZkw2y7okTNCVuDao2kI_-TzS6X4dR75KZiaFIlkJm7PWXrBLZS5TnDqmGAVel2VDyvEvsJyn4a3g9QzIY7KgEKOCU8K95_K1Bm7lkI-yXMj-YtHmwVOC5myMjbs7zF6euFvxQF7ISHcQH5vVQ_3PKUoFBLme5mSQ0JyvVfLvWDZ3FIflx8K0mAvyRkYt1QyUBU_FJPU02UKnC6yu4WHdkTB_w517GZ2MxLRJmtapG27VvOAtwZLO1Y6"/>
+<div>
+<p class="font-bold text-on-surface">Jordan Smith</p>
+<p class="text-xs text-secondary italic">Room 205 • First Stay</p>
+</div>
+</div>
+</td>
+<td class="px-gutter py-5">
+<div class="flex flex-col">
+<span class="text-xs font-label-caps text-secondary mb-1">SERVICE</span>
+<span class="text-body-md text-on-surface">Airport Transfer (G-Wagon)</span>
+</div>
+</td>
+<td class="px-gutter py-5">
+<div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-green-50 border border-green-100 text-green-700">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-xs font-bold">VERIFIED</span>
+</div>
+</td>
+<td class="px-gutter py-5">
+<span class="text-body-md text-secondary">Awaiting Confirmation</span>
+</td>
+<td class="px-gutter py-5 text-right">
+<button class="bg-surface-container-high text-on-surface px-4 py-2 rounded-lg font-bold text-sm inline-flex items-center space-x-2 hover:bg-surface-container-highest active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px]">forum</span>
+<span>Quick Chat</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-gutter py-4 bg-surface-container-low/50 border-t border-outline-variant/30 flex justify-between items-center">
+<span class="text-xs text-secondary">Showing 4 of 24 active requests</span>
+<div class="flex space-x-1">
+<button class="p-2 rounded hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="px-3 py-1 bg-primary text-white rounded font-bold text-xs">1</button>
+<button class="px-3 py-1 hover:bg-surface-container-high rounded font-bold text-xs">2</button>
+<button class="px-3 py-1 hover:bg-surface-container-high rounded font-bold text-xs">3</button>
+<button class="p-2 rounded hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- AI Concierge Floating Assistant (Contextual) -->
+<div class="fixed bottom-8 right-8 z-50">
+<button class="w-14 h-14 rounded-full bg-primary-container text-on-primary-container shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all" id="ai-assistant-toggle">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</button>
+<!-- Mini AI Bubble for interaction -->
+<div class="absolute bottom-16 right-0 glass-card p-4 rounded-xl shadow-2xl w-64 mb-4 transform translate-y-4 opacity-0 transition-all pointer-events-none" id="ai-hint">
+<p class="text-sm font-body-md text-on-surface">"Elena's yacht request has been pending for 15 mins. Would you like me to ping the port authority?"</p>
+<div class="mt-3 flex space-x-2">
+<button class="text-xs font-bold text-primary px-3 py-1 rounded-full border border-primary/20 bg-primary/5">Execute</button>
+<button class="text-xs font-bold text-secondary px-3 py-1">Ignore</button>
+</div>
+</div>
+</div>
+<script>
+        // Micro-interaction for AI Assistant hint
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const hint = document.getElementById('ai-hint');
+                hint.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                hint.classList.add('opacity-100', 'translate-y-0');
+            }, 2000);
+        });
+
+        // Search Bar Focus Effect
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('scale-[1.02]');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('scale-[1.02]');
+        });
+
+        // Tab Active State Toggle Logic (Mock)
+        const navItems = document.querySelectorAll('nav a');
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                navItems.forEach(i => {
+                    i.classList.remove('text-primary', 'border-r-4', 'border-primary', 'font-bold', 'bg-primary-container/10');
+                    i.classList.add('text-secondary');
+                });
+                item.classList.add('text-primary', 'border-r-4', 'border-primary', 'font-bold', 'bg-primary-container/10');
+                item.classList.remove('text-secondary');
+            });
+        });
+    </script>
+</body></html>

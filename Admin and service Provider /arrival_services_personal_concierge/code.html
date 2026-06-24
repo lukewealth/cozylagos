@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Service &amp; Support | LUXE LAGOS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f4f3f2",
+                    "surface-container-highest": "#e3e2e1",
+                    "secondary-fixed": "#e5e2e1",
+                    "on-primary-fixed": "#241a00",
+                    "surface": "#faf9f8",
+                    "on-tertiary-fixed": "#1e1b15",
+                    "tertiary-container": "#b8b2a9",
+                    "surface-dim": "#dadad9",
+                    "surface-container-high": "#e9e8e7",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#e8e2d8",
+                    "primary-container": "#d4af37",
+                    "on-secondary": "#ffffff",
+                    "surface-variant": "#e3e2e1",
+                    "on-tertiary-fixed-variant": "#4a463f",
+                    "secondary": "#5f5e5e",
+                    "tertiary": "#625e56",
+                    "inverse-surface": "#2f3130",
+                    "outline": "#7f7663",
+                    "on-secondary-container": "#636262",
+                    "on-primary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed-variant": "#574500",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "tertiary-fixed-dim": "#ccc6bc",
+                    "surface-tint": "#735c00",
+                    "primary-fixed": "#ffe088",
+                    "on-tertiary-container": "#48453e",
+                    "outline-variant": "#d0c5af",
+                    "secondary-container": "#e2dfde",
+                    "surface-bright": "#faf9f8",
+                    "surface-container": "#eeeeed",
+                    "on-background": "#1a1c1c",
+                    "on-surface-variant": "#4d4635",
+                    "inverse-primary": "#e9c349",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-primary-container": "#554300",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "primary-fixed-dim": "#e9c349",
+                    "on-surface": "#1a1c1c",
+                    "primary": "#735c00",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "inverse-on-surface": "#f1f0f0",
+                    "background": "#faf9f8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "16px",
+                    "gutter": "32px",
+                    "section-gap": "120px",
+                    "container-padding": "80px",
+                    "unit": "8px",
+                    "stack-md": "32px",
+                    "stack-lg": "64px"
+            },
+            "fontFamily": {
+                    "label-caps": ["Manrope"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Manrope"],
+                    "body-md": ["Manrope"],
+                    "headline-sm": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(127, 118, 99, 0.1);
+        }
+        .gold-button-gradient {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        @keyframes subtle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .float-animation {
+            animation: subtle-float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased scroll-smooth">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface/80 backdrop-blur-xl dark:bg-inverse-surface/80 border-b border-outline/10 shadow-sm">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-container transition-colors rounded-full md:hidden">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-display-lg text-headline-sm tracking-widest text-primary dark:text-primary-fixed-dim">LUXE LAGOS</h1>
+</div>
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-secondary dark:text-secondary-fixed-dim hover:text-primary-container transition-colors cursor-pointer">help</span>
+<span class="material-symbols-outlined text-secondary dark:text-secondary-fixed-dim hover:text-primary-container transition-colors cursor-pointer">account_circle</span>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-[1440px] mx-auto min-h-screen">
+<!-- Welcome Section -->
+<section class="mb-stack-lg">
+<span class="font-label-caps text-label-caps text-primary tracking-widest mb-2 block">CHECK-IN PHASE</span>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-4">How may we assist you today?</h2>
+<p class="font-body-lg text-body-lg text-secondary max-w-2xl">Welcome to your sanctuary. Our team is standing by to ensure your arrival and stay are nothing short of extraordinary.</p>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-stack-md">
+<!-- Left Column: Primary Support Actions -->
+<div class="lg:col-span-8 space-y-stack-md">
+<!-- Quick Request Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-sm">
+<!-- Request Luggage Assistance -->
+<div class="glass-card rounded-xl p-8 flex flex-col justify-between group cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden relative min-h-[220px]">
+<div class="relative z-10">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">luggage</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-2">Request Luggage Assistance</h3>
+<p class="text-secondary mb-6">Our porters will handle your bags and deliver them to your suite immediately.</p>
+</div>
+<button class="gold-button-gradient text-on-primary-fixed font-bold py-4 px-6 rounded-lg flex items-center justify-center gap-2 group-hover:scale-[1.02] transition-transform">
+<span>Request Now</span>
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+<!-- Background Pattern -->
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-9xl">luggage</span>
+</div>
+</div>
+<!-- Valet Pickup -->
+<div class="glass-card rounded-xl p-8 flex flex-col justify-between group cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden relative min-h-[220px]">
+<div class="relative z-10">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">directions_car</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-2">Valet Pickup</h3>
+<p class="text-secondary mb-6">Retrieve your vehicle or request a chauffeured airport transfer.</p>
+</div>
+<button class="border border-outline/30 hover:border-primary text-on-surface font-bold py-4 px-6 rounded-lg flex items-center justify-center gap-2 transition-all">
+<span>Schedule Pickup</span>
+<span class="material-symbols-outlined">schedule</span>
+</button>
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-9xl">directions_car</span>
+</div>
+</div>
+</div>
+<!-- Report an Issue Form -->
+<div class="glass-card rounded-xl p-8 md:p-10">
+<div class="flex items-center gap-4 mb-8">
+<span class="material-symbols-outlined text-primary text-3xl">report_problem</span>
+<h3 class="font-headline-sm text-headline-sm">Report an Issue</h3>
+</div>
+<form class="grid grid-cols-1 md:grid-cols-2 gap-stack-sm">
+<div class="col-span-1">
+<label class="font-label-caps text-label-caps text-secondary mb-2 block">Issue Category</label>
+<select class="w-full bg-transparent border-b border-outline/20 focus:border-primary focus:ring-0 px-0 py-3 transition-colors appearance-none font-body-md">
+<option>In-Room Maintenance</option>
+<option>Housekeeping</option>
+<option>Technical / Wi-Fi</option>
+<option>Dining Service</option>
+<option>Other</option>
+</select>
+</div>
+<div class="col-span-1">
+<label class="font-label-caps text-label-caps text-secondary mb-2 block">Urgency Level</label>
+<div class="flex gap-4 pt-2">
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="text-primary focus:ring-primary" name="urgency" type="radio"/>
+<span class="text-body-md">Standard</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="text-primary focus:ring-primary" name="urgency" type="radio"/>
+<span class="text-body-md">Urgent</span>
+</label>
+</div>
+</div>
+<div class="col-span-1 md:col-span-2 mt-4">
+<label class="font-label-caps text-label-caps text-secondary mb-2 block">Describe the situation</label>
+<textarea class="w-full bg-transparent border-b border-outline/20 focus:border-primary focus:ring-0 px-0 py-3 transition-colors font-body-md resize-none" placeholder="Details help us serve you better..." rows="3"></textarea>
+</div>
+<div class="col-span-1 md:col-span-2 pt-6">
+<button class="w-full md:w-auto px-10 py-4 bg-inverse-surface text-surface rounded-lg font-bold hover:bg-primary transition-all active:scale-95" type="button">
+                                Submit Report
+                            </button>
+</div>
+</form>
+</div>
+</div>
+<!-- Right Column: Dedicated Concierge -->
+<div class="lg:col-span-4">
+<div class="sticky top-28 space-y-stack-md">
+<!-- Concierge Profile Card -->
+<div class="bg-primary-container/5 rounded-xl border border-primary-container/20 p-8 text-center relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+<div class="relative mb-6 mx-auto w-32 h-32 group">
+<div class="absolute inset-0 rounded-full border-2 border-primary-container border-dashed animate-[spin_10s_linear_infinite]"></div>
+<div class="w-full h-full rounded-full border-4 border-surface overflow-hidden relative shadow-xl">
+<img class="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-700" data-alt="A professional and warm portrait of a luxury hotel concierge, a middle-aged West African man with a welcoming smile, wearing a sharp charcoal suit and a gold lapel pin. The background is a blurred, high-end hotel lobby with warm ambient lighting and marble textures, reflecting the premium Luxe Lagos brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtqx_eNmusUw02UceaKM60R57lD5Gv_JJr_cDcmRUrbDwS9ApAHaXY_GLgiw7TS_afEZUsAcEO2FXfAskSzYV18fuAMSL9BCPdjEXlh842Yd9kHnBJ4GPvPUxjvfYIyCBwpfBMFsB9ATBHRtHI_st15A6L8gde68G9YZzUHV7N6IsNNXIsWVq49c94_dTei6GSDQKwC1p4DN_IW1_whDHCOCvyFUce7HkuqOT56MqFzWyvXDNF9HB21sAovQ75GoBvpY_v92qUL4PJ"/>
+</div>
+</div>
+<span class="font-label-caps text-label-caps text-primary tracking-widest block mb-1">YOUR DEDICATED CONCIERGE</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">Tunde Adeyemi</h4>
+<p class="text-secondary mb-8 text-body-md px-4">Available 24/7 for bespoke dining reservations, city excursions, or personal shopping.</p>
+<div class="space-y-3">
+<a class="flex items-center justify-center gap-3 w-full bg-[#25D366] text-white py-4 px-6 rounded-lg font-bold hover:opacity-90 transition-opacity shadow-lg shadow-green-500/10" href="https://wa.me/luxe-lagos" target="_blank">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat</span>
+                                Chat via WhatsApp
+                            </a>
+<button class="flex items-center justify-center gap-3 w-full border border-outline/20 bg-surface/50 text-on-surface py-4 px-6 rounded-lg font-bold hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined">call</span>
+                                Voice Call (Room 101)
+                            </button>
+</div>
+</div>
+<!-- Ambient Service Status -->
+<div class="glass-card rounded-xl p-6">
+<h5 class="font-label-caps text-label-caps text-secondary mb-4">SERVICE AVAILABILITY</h5>
+<ul class="space-y-4">
+<li class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<span class="text-body-md font-medium">In-Room Dining</span>
+</div>
+<span class="text-label-caps text-secondary">24 HRS</span>
+</li>
+<li class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<span class="text-body-md font-medium">Spa &amp; Wellness</span>
+</div>
+<span class="text-label-caps text-secondary">OPEN</span>
+</li>
+<li class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span class="text-body-md font-medium">Poolside Service</span>
+</div>
+<span class="text-label-caps text-secondary text-amber-600">8AM - 10PM</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe-offset-4 pt-2 bg-surface/90 backdrop-blur-2xl dark:bg-inverse-surface/90 border-t border-outline/10 shadow-[0px_-10px_30px_rgba(26,26,26,0.05)] md:hidden">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-surface-variant/50 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-caps text-[10px] mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-surface-variant/50 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-caps text-[10px] mt-1">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-container/10 rounded-xl px-4 py-2 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">support_agent</span>
+<span class="font-label-caps text-[10px] mt-1">Concierge</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-surface-variant/50 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-[10px] mt-1">Profile</span>
+</a>
+</nav>
+<!-- Decorative Atmosphere -->
+<div class="fixed top-0 right-0 w-1/3 h-screen pointer-events-none z-[-1] opacity-40">
+
+</div>
+<script>
+        // Micro-interactions for form inputs
+        const inputs = document.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('label').style.color = '#735c00';
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('label').style.color = '#5f5e5e';
+            });
+        });
+
+        // Simple feedback for action buttons
+        const actionButtons = document.querySelectorAll('button');
+        actionButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.innerText.includes('Submit') || this.innerText.includes('Request')) {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Processing...';
+                    this.disabled = true;
+                    this.style.opacity = '0.7';
+                    
+                    setTimeout(() => {
+                        this.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Request Received';
+                        this.style.backgroundColor = '#735c00';
+                        this.style.color = '#ffffff';
+                    }, 1500);
+                }
+            });
+        });
+    </script>
+</body></html>

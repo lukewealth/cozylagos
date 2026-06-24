@@ -963,7 +963,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Romance & Milestones",
     description: "Milestone moments, perfected.",
     icon: "heart",
-    image: "/assets/bundles/lagos-premium-bundle.png",
+    image: "/assets/bundles/lavish-love-bundle.png",
     highlights: [
       "Full Event Planning Service",
       "Private Yacht Cruise",
@@ -1040,7 +1040,7 @@ export const SERVICE_BUNDLES: ServiceBundle[] = [
     tagline: "Wellness & Nightlife",
     description: "Sophisticated escapism.",
     icon: "sparkles",
-    image: "/assets/bundles/lagos-premium-bundle.png",
+    image: "/assets/bundles/pulse-zen-bundle.png",
     highlights: [
       "In-Room Spa Treatments",
       "Resort Day Passes",
