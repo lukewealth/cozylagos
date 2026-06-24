@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
-import { Calendar, MapPin, Clock, Ticket, Filter } from 'lucide-react';
+import { Calendar, MapPin, Clock, Ticket, Filter, ChevronRight, Star, Users, Music, Theater, Briefcase, Utensils, Baby, Trophy, Waves } from 'lucide-react';
 import { LAGOS_EVENTS, LagosEvent } from '../data-new-sections';
 
 const CATEGORY_FILTERS = [
@@ -13,6 +13,70 @@ const CATEGORY_FILTERS = [
   { id: 'weekly', label: 'Weekly', icon: '🔄' },
 ];
 
+const TIME_FILTERS = [
+  { id: 'today', label: 'Today', icon: '📆' },
+  { id: 'weekend', label: 'This Weekend', icon: '🎊' },
+  { id: 'week', label: 'This Week', icon: '📅' },
+  { id: 'month', label: 'This Month', icon: '🗓️' },
+  { id: 'annual', label: 'Annual Events', icon: '🎆' },
+];
+
+function getEventDate(event: LagosEvent): Date {
+  // Parse date string or return future date for recurring events
+  if (event.date.includes('Every') || event.date.includes('Last')) {
+    // For recurring events, return next occurrence
+    const now = new Date();
+    now.setDate(now.getDate() + 7); // Assume next week
+    return now;
+  }
+  
+  // Parse specific date
+  const dateMatch = event.date.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (dateMatch) {
+    return new Date(parseInt(dateMatch[1]), parseInt(dateMatch[2]) - 1, parseInt(dateMatch[3]));
+  }
+  
+  // Default to future date
+  const now = new Date();
+  now.setDate(now.getDate() + 30);
+  return now;
+}
+
+function isToday(date: Date): boolean {
+  const today = new Date();
+  return date.toDateString() === today.toDateString();
+}
+
+function isThisWeekend(date: Date): boolean {
+  const today = new Date();
+  const dayOfWeek = today.getDay();
+  const daysUntilSaturday = 6 - dayOfWeek;
+  const saturday = new Date(today);
+  saturday.setDate(today.getDate() + daysUntilSaturday);
+  const sunday = new Date(saturday);
+  sunday.setDate(saturday.getDate() + 1);
+  
+  return date.toDateString() === saturday.toDateString() || 
+         date.toDateString() === sunday.toDateString();
+}
+
+function isThisWeek(date: Date): boolean {
+  const today = new Date();
+  const weekFromNow = new Date(today);
+  weekFromNow.setDate(today.getDate() + 7);
+  return date >= today && date <= weekFromNow;
+}
+
+function isThisMonth(date: Date): boolean {
+  const today = new Date();
+  return date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
+}
+
+function isAnnual(date: Date): boolean {
+  // Annual events are those with specific dates that recur yearly
+  return !isToday(date) && !isThisWeek(date);
+}
+
 function EventCard({ event, index }: { event: LagosEvent; index: number }) {
   const categoryColors: Record<string, string> = {
     concert: 'bg-purple-100 text-purple-700',
@@ -22,6 +86,13 @@ function EventCard({ event, index }: { event: LagosEvent; index: number }) {
     nightlife: 'bg-pink-100 text-pink-700',
     weekly: 'bg-green-100 text-green-700',
   };
+
+  const eventDate = getEventDate(event);
+  const dateStr = eventDate.toLocaleDateString('en-US', { 
+    weekday: 'short', 
+    month: 'short', 
+    day: 'numeric' 
+  });
 
   return (
     <motion.div
@@ -40,10 +111,25 @@ function EventCard({ event, index }: { event: LagosEvent; index: number }) {
             (e.target as HTMLImageElement).src = '/assets/bundles/bundles-hero-background.jpeg';
           }}
         />
-        <div className="absolute top-3 left-3">
+        <div className="absolute top-3 left-3 flex gap-2">
           <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${categoryColors[event.category]}`}>
             {event.category}
           </span>
+          {isToday(eventDate) && (
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-red-100 text-red-700">
+              TODAY
+            </span>
+          )}
+        </div>
+        <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg">
+          <div className="text-center">
+            <div className="text-[10px] font-bold text-charcoal/60 uppercase">
+              {eventDate.toLocaleDateString('en-US', { month: 'short' })}
+            </div>
+            <div className="text-lg font-bold text-charcoal leading-none">
+              {eventDate.getDate()}
+            </div>
+          </div>
         </div>
       </div>
       <div className="p-5">
@@ -54,7 +140,7 @@ function EventCard({ event, index }: { event: LagosEvent; index: number }) {
         <div className="space-y-2 mb-4">
           <div className="flex items-center gap-2 text-xs text-charcoal/60">
             <Calendar className="w-3.5 h-3.5 text-gold-dark" />
-            <span>{event.date}</span>
+            <span>{dateStr}</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-charcoal/60">
             <MapPin className="w-3.5 h-3.5 text-gold-dark" />
@@ -82,10 +168,42 @@ function EventCard({ event, index }: { event: LagosEvent; index: number }) {
 
 export default function EventsView() {
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedTime, setSelectedTime] = useState('all');
 
-  const filteredEvents = selectedCategory === 'all'
-    ? LAGOS_EVENTS
-    : LAGOS_EVENTS.filter(e => e.category === selectedCategory);
+  const filteredEvents = useMemo(() => {
+    let events = LAGOS_EVENTS;
+
+    // Filter by category
+    if (selectedCategory !== 'all') {
+      events = events.filter(e => e.category === selectedCategory);
+    }
+
+    // Filter by time
+    if (selectedTime !== 'all') {
+      events = events.filter(e => {
+        const eventDate = getEventDate(e);
+        switch (selectedTime) {
+          case 'today':
+            return isToday(eventDate);
+          case 'weekend':
+            return isThisWeekend(eventDate);
+          case 'week':
+            return isThisWeek(eventDate);
+          case 'month':
+            return isThisMonth(eventDate);
+          case 'annual':
+            return isAnnual(eventDate);
+          default:
+            return true;
+        }
+      });
+    }
+
+    return events;
+  }, [selectedCategory, selectedTime]);
+
+  const todayEvents = LAGOS_EVENTS.filter(e => isToday(getEventDate(e)));
+  const weekendEvents = LAGOS_EVENTS.filter(e => isThisWeekend(getEventDate(e)));
 
   return (
     <div className="flex-grow flex flex-col animate-fade-in-up">
@@ -122,14 +240,99 @@ export default function EventsView() {
         </div>
       </section>
 
+      {/* Quick Access: Today & This Weekend */}
+      {(todayEvents.length > 0 || weekendEvents.length > 0) && (
+        <section className="py-8 px-4 sm:px-6 md:px-12 xl:px-20 max-w-[1440px] mx-auto w-full bg-gold/5 border-b border-gold/10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {todayEvents.length > 0 && (
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-2xl">📆</span>
+                  <h3 className="font-serif text-xl font-bold text-charcoal">Happening Today</h3>
+                  <span className="px-2 py-0.5 bg-red-100 text-red-700 text-[10px] font-bold rounded-full">
+                    {todayEvents.length}
+                  </span>
+                </div>
+                <div className="space-y-3">
+                  {todayEvents.slice(0, 2).map((event, i) => (
+                    <div key={event.id} className="bg-white rounded-xl p-4 border border-charcoal/5 hover:shadow-md transition-all">
+                      <h4 className="font-semibold text-charcoal text-sm mb-1">{event.title}</h4>
+                      <div className="flex items-center gap-2 text-xs text-charcoal/60">
+                        <MapPin className="w-3 h-3" />
+                        <span>{event.location}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {weekendEvents.length > 0 && (
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-2xl">🎊</span>
+                  <h3 className="font-serif text-xl font-bold text-charcoal">This Weekend</h3>
+                  <span className="px-2 py-0.5 bg-gold/20 text-gold-dark text-[10px] font-bold rounded-full">
+                    {weekendEvents.length}
+                  </span>
+                </div>
+                <div className="space-y-3">
+                  {weekendEvents.slice(0, 2).map((event, i) => (
+                    <div key={event.id} className="bg-white rounded-xl p-4 border border-charcoal/5 hover:shadow-md transition-all">
+                      <h4 className="font-semibold text-charcoal text-sm mb-1">{event.title}</h4>
+                      <div className="flex items-center gap-2 text-xs text-charcoal/60">
+                        <MapPin className="w-3 h-3" />
+                        <span>{event.location}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
       <section className="py-10 sm:py-16 px-4 sm:px-6 md:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
+        {/* Time-Based Navigation */}
+        <div className="mb-8">
+          <h3 className="font-serif text-lg font-bold text-charcoal mb-4">Browse by Time</h3>
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
+            <button
+              onClick={() => setSelectedTime('all')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
+                selectedTime === 'all'
+                  ? 'bg-charcoal text-parchment'
+                  : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
+              }`}
+            >
+              <Calendar className="w-4 h-4" />
+              <span>All Time</span>
+            </button>
+            {TIME_FILTERS.map((filter) => (
+              <button
+                key={filter.id}
+                onClick={() => setSelectedTime(filter.id)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
+                  selectedTime === filter.id
+                    ? 'bg-charcoal text-parchment'
+                    : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
+                }`}
+              >
+                <span>{filter.icon}</span>
+                <span>{filter.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Category Filters */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <div>
             <span className="text-gold-dark font-bold text-[10px] tracking-[0.25em] uppercase block mb-1">
               {filteredEvents.length} Events
             </span>
             <h2 className="font-serif font-semibold text-2xl text-charcoal">
-              Upcoming Events
+              {selectedTime === 'all' ? 'All Events' : TIME_FILTERS.find(f => f.id === selectedTime)?.label}
             </h2>
           </div>
           <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 w-full sm:w-auto">
@@ -150,6 +353,7 @@ export default function EventsView() {
           </div>
         </div>
 
+        {/* Events Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredEvents.map((event, index) => (
             <EventCard key={event.id} event={event} index={index} />
@@ -162,7 +366,7 @@ export default function EventsView() {
               <Calendar className="w-8 h-8 text-charcoal/30" />
             </div>
             <p className="text-lg font-semibold text-charcoal mb-2">No events found</p>
-            <p className="text-sm text-charcoal/50">Try selecting a different category</p>
+            <p className="text-sm text-charcoal/50">Try selecting a different time period or category</p>
           </div>
         )}
       </section>
