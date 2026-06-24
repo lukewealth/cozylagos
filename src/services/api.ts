@@ -38,8 +38,8 @@ async function request<T>(
     }
 
     return {
-      success: true,
-      data: data as T,
+      success: data.success !== false,
+      data: data.data || data,
       message: data.message,
     };
   } catch (error) {
@@ -51,6 +51,10 @@ async function request<T>(
 }
 
 export const api = {
+  health: {
+    check: () => request<{ status: string; message: string }>('/health'),
+  },
+
   auth: {
     login: (email: string, password: string) =>
       request<{ token: string; user: any }>('/auth/login', {
@@ -69,13 +73,38 @@ export const api = {
     me: () => request<any>('/auth/me'),
   },
 
+  users: {
+    getAll: (params?: Record<string, string>) => {
+      const query = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/users${query}`);
+    },
+
+    create: (data: { email: string; name: string; password: string; role: string; phone?: string }) =>
+      request<any>('/users', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+
+    update: (data: { id: string; [key: string]: any }) =>
+      request<any>('/users', {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }),
+
+    delete: (id: string) =>
+      request<any>('/users', {
+        method: 'DELETE',
+        body: JSON.stringify({ id }),
+      }),
+  },
+
   listings: {
     getAll: (params?: Record<string, string>) => {
       const query = params ? '?' + new URLSearchParams(params).toString() : '';
       return request<any[]>(`/listings${query}`);
     },
 
-    getById: (id: string) => request<any>(`/listings/${id}`),
+    getById: (id: string) => request<any>(`/listings?id=${id}`),
 
     create: (data: any) =>
       request<any>('/listings', {
@@ -83,14 +112,17 @@ export const api = {
         body: JSON.stringify(data),
       }),
 
-    update: (id: string, data: any) =>
-      request<any>(`/listings/${id}`, {
+    update: (data: { id: string; [key: string]: any }) =>
+      request<any>('/listings', {
         method: 'PUT',
         body: JSON.stringify(data),
       }),
 
     delete: (id: string) =>
-      request(`/listings/${id}`, { method: 'DELETE' }),
+      request<any>('/listings', {
+        method: 'DELETE',
+        body: JSON.stringify({ id }),
+      }),
   },
 
   bookings: {
@@ -99,7 +131,7 @@ export const api = {
       return request<any[]>(`/bookings${query}`);
     },
 
-    getById: (id: string) => request<any>(`/bookings/${id}`),
+    getById: (id: string) => request<any>(`/bookings?id=${id}`),
 
     create: (data: any) =>
       request<any>('/bookings', {
@@ -108,16 +140,22 @@ export const api = {
       }),
 
     updateStatus: (id: string, status: string) =>
-      request<any>(`/bookings/${id}/status`, {
+      request<any>('/bookings', {
         method: 'PATCH',
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({ id, status }),
       }),
 
     confirm: (id: string) =>
-      request<any>(`/bookings/${id}/confirm`, { method: 'POST' }),
+      request<any>('/bookings', {
+        method: 'PATCH',
+        body: JSON.stringify({ id, status: 'confirmed' }),
+      }),
 
     cancel: (id: string) =>
-      request<any>(`/bookings/${id}/cancel`, { method: 'POST' }),
+      request<any>('/bookings', {
+        method: 'PATCH',
+        body: JSON.stringify({ id, status: 'cancelled' }),
+      }),
   },
 
   services: {
@@ -129,7 +167,7 @@ export const api = {
     getByCategory: (category: string) =>
       request<any[]>(`/services?category=${category}`),
 
-    getById: (id: string) => request<any>(`/services/${id}`),
+    getById: (id: string) => request<any>(`/services?id=${id}`),
 
     create: (data: any) =>
       request<any>('/services', {
@@ -175,7 +213,10 @@ export const api = {
       }),
 
     processPayout: (id: string) =>
-      request<any>(`/transactions/${id}/payout`, { method: 'POST' }),
+      request<any>('/transactions', {
+        method: 'PATCH',
+        body: JSON.stringify({ id, status: 'processed' }),
+      }),
   },
 
   cart: {
@@ -189,25 +230,25 @@ export const api = {
   },
 
   admin: {
-    getPendingBookings: () => request<any[]>('/admin/bookings/pending'),
+    getPendingBookings: () => request<any[]>('/bookings?status=pending'),
 
     confirmBooking: (id: string, notes?: string) =>
-      request<any>(`/admin/bookings/${id}/confirm`, {
-        method: 'POST',
-        body: JSON.stringify({ notes }),
+      request<any>(`/bookings`, {
+        method: 'PATCH',
+        body: JSON.stringify({ id, status: 'confirmed', notes }),
       }),
 
     rejectBooking: (id: string, reason: string) =>
-      request<any>(`/admin/bookings/${id}/reject`, {
-        method: 'POST',
-        body: JSON.stringify({ reason }),
+      request<any>(`/bookings`, {
+        method: 'PATCH',
+        body: JSON.stringify({ id, status: 'cancelled', reason }),
       }),
 
     getStats: () => request<any>('/admin/stats'),
 
-    getUsers: () => request<any[]>('/admin/users'),
+    getUsers: () => request<any[]>('/users'),
 
-    getTransactions: () => request<any[]>('/admin/transactions'),
+    getTransactions: () => request<any[]>('/transactions'),
   },
 
   whatsapp: {

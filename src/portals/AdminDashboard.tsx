@@ -7,7 +7,7 @@ import {
   MessageCircle, Phone, Mail, RefreshCw, Plane, Lock, Timer, Shield,
   Key, Car, Sparkles, Activity, Download, Radio, Cloud, Moon, Sun,
   LayoutDashboard, ClipboardList, UserCheck, ConciergeBell, BarChart3,
-  ChevronRight, Plus, ArrowUpRight, Wifi, Zap, UserCircle
+  ChevronRight, Plus, ArrowUpRight, Wifi, Zap, UserCircle, Menu, X
 } from 'lucide-react';
 import { Listing } from '../types';
 import { useDatabase } from '../hooks/useDatabase';
@@ -72,6 +72,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
   const [rejectReason, setRejectReason] = useState('');
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const { data: bookings, addRecord: updateBooking } = useDatabase('bookings');
 
@@ -151,6 +152,71 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
 
   return (
     <div className="flex min-h-screen bg-parchment">
+      {/* Mobile Menu Backdrop */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[90] lg:hidden"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Mobile Menu Drawer */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.aside
+            initial={{ x: '-100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '-100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed left-0 top-0 bottom-0 w-80 max-w-[85vw] bg-surface-container-lowest z-[100] lg:hidden shadow-2xl overflow-y-auto"
+          >
+            <div className="px-6 py-8 border-b border-outline-variant/20 flex justify-between items-center">
+              <div>
+                <h1 className="font-serif text-xl font-bold text-primary">Cozy Lagos</h1>
+                <p className="text-[10px] text-secondary uppercase tracking-widest mt-1">Admin Portal</p>
+              </div>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 hover:bg-surface-container-high rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <nav className="flex-1 flex flex-col px-4 py-4 gap-2">
+              {NAV_ITEMS.map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setActiveSection(item.id);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-all relative text-left ${
+                    activeSection === item.id
+                      ? 'text-primary bg-primary-container/10 font-bold'
+                      : 'text-secondary hover:text-primary hover:bg-surface-container-high'
+                  }`}
+                >
+                  <item.icon className="w-5 h-5" />
+                  <span className="text-body-md">{item.label}</span>
+                </button>
+              ))}
+            </nav>
+            <div className="p-4 border-t border-outline-variant/20 flex flex-col gap-2">
+              <button className="w-full bg-primary text-on-primary py-3 px-6 rounded-lg font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+                <Plus className="w-5 h-5" />
+                New Booking
+              </button>
+            </div>
+          </motion.aside>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop Sidebar */}
       <aside className="hidden lg:flex w-72 flex-col fixed left-0 top-0 h-screen border-r border-outline-variant/20 bg-surface-container-lowest z-50">
         <div className="px-8 py-10">
           <h1 className="font-serif text-headline-sm font-bold text-primary tracking-tight">Cozy Lagos</h1>
@@ -194,6 +260,22 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
         </div>
       </aside>
 
+      {/* Mobile Header */}
+      <header className="lg:hidden flex justify-between items-center h-16 px-4 w-full fixed top-0 bg-surface/95 backdrop-blur-md border-b border-outline-variant/10 z-40">
+        <button
+          onClick={() => setIsMobileMenuOpen(true)}
+          className="p-2 hover:bg-surface-container-high rounded-lg transition-colors"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
+        <h1 className="font-serif text-lg font-bold text-primary">Cozy Lagos</h1>
+        <button className="p-2 rounded-full hover:bg-surface-container text-secondary transition-colors relative">
+          <Bell className="w-5 h-5" />
+          <span className="absolute top-1 right-1 w-2 h-2 bg-error rounded-full" />
+        </button>
+      </header>
+
+      {/* Desktop Header */}
       <header className="hidden lg:flex justify-between items-center h-20 pl-80 pr-20 w-full fixed top-0 bg-surface/80 backdrop-blur-md border-b border-outline-variant/10 z-40">
         <div className="flex items-center gap-4">
           <div className="relative focus-within:ring-1 focus-within:ring-primary rounded-lg transition-all">
@@ -233,7 +315,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
         </div>
       </header>
 
-      <main className="flex-1 lg:pl-80 pt-0 lg:pt-20 pb-20 min-h-screen">
+      <main className="flex-1 lg:pl-80 pt-16 lg:pt-20 pb-20 min-h-screen">
         <AnimatePresence mode="wait">
           {activeSection === 'dashboard' && (
             <motion.div
