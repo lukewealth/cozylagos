@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { User, Bell, ChevronRight, ShoppingCart, LogIn, LogOut, Menu, X, Shield, Eye, EyeOff, Check, Settings } from 'lucide-react';
 import { HomeIcon, MapIcon, HandRaisedIcon, CubeIcon, SparklesIcon, BriefcaseIcon, CalendarIcon, HeartIcon } from '@heroicons/react/24/outline';
+import { Compass } from 'lucide-react';
 import { useAuth, getDefaultDashboardTab } from '../auth';
 import { PrivacyPolicyModal } from './PrivacyPolicy';
 import Tooltip from './ui/Tooltip';
@@ -148,10 +149,18 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                   {activeTab === 'home' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
                 <button 
+                  onClick={() => setActiveTab('explorer')} 
+                  className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'explorer' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+                >
+                  <MapIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'explorer' ? 'text-gold-dark' : ''}`} />
+                  <span>Stay</span>
+                  {activeTab === 'explorer' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                </button>
+                <button 
                   onClick={() => setActiveTab('explore-lagos')} 
                   className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'explore-lagos' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
                 >
-                  <MapIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'explore-lagos' ? 'text-gold-dark' : ''}`} />
+                  <Compass className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'explore-lagos' ? 'text-gold-dark' : ''}`} />
                   <span>Explore Lagos</span>
                   {activeTab === 'explore-lagos' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
@@ -265,7 +274,8 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
               <div className="p-3 space-y-1">
                 {(!isAuthenticated || currentUser?.role === 'user' ? [
                   { tab: 'home', label: 'Gems', icon: HomeIcon },
-                  { tab: 'explore-lagos', label: 'Explore Lagos', icon: MapIcon },
+                  { tab: 'explorer', label: 'Stay', icon: MapIcon },
+                  { tab: 'explore-lagos', label: 'Explore Lagos', icon: Compass },
                   { tab: 'vip-services', label: 'Cozy', icon: HandRaisedIcon },
                   { tab: 'bundles', label: 'Bundles', icon: CubeIcon },
                   { tab: 'events', label: 'Events', icon: CalendarIcon },

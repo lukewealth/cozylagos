@@ -38,30 +38,6 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
 
   return (
     <div className="flex-grow flex flex-col animate-fade-in">
-      {/* Tab Navigation - Always visible */}
-      <div className="bg-charcoal py-4 px-4 sm:px-6">
-        <div className="max-w-[1440px] mx-auto flex items-center justify-center gap-2 sm:gap-4">
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = homeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setHomeTab(tab.id)}
-                className={`flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${
-                  isActive
-                    ? 'bg-gold text-charcoal shadow-lg scale-105'
-                    : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white backdrop-blur-md'
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       <AnimatePresence mode="wait">
         {homeTab === 'gems' && (
           <motion.div
@@ -71,12 +47,39 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Hero Section with Search - Only for Gems tab */}
+            {/* Hero Section with Search and Tabs */}
             <Hero>
-              <SmartSearchBar
-                listings={allListings}
-                onResultsChange={handleSearchResults}
-              />
+              <div className="flex flex-col items-center gap-6 w-full">
+                {/* Searchbar - positioned higher */}
+                <div className="w-full max-w-5xl">
+                  <SmartSearchBar
+                    listings={allListings}
+                    onResultsChange={handleSearchResults}
+                  />
+                </div>
+                
+                {/* Tabs below searchbar */}
+                <div className="flex items-center justify-center gap-2 sm:gap-4 mt-4">
+                  {tabs.map((tab) => {
+                    const Icon = tab.icon;
+                    const isActive = homeTab === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setHomeTab(tab.id)}
+                        className={`flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${
+                          isActive
+                            ? 'bg-gold text-charcoal shadow-lg scale-105'
+                            : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white backdrop-blur-md'
+                        }`}
+                      >
+                        <Icon className="w-4 h-4" />
+                        <span>{tab.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </Hero>
             {/* 2. LAGOS GEMS - HOT DEALS */}
             <section className="py-10 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">

@@ -160,7 +160,7 @@ export default function SmartSearchBar({ listings, onResultsChange, onNavigate }
   };
 
   return (
-    <div ref={containerRef} className="w-full max-w-4xl mx-auto relative">
+    <div ref={containerRef} className="w-full max-w-5xl mx-auto relative">
       {/* Main Search Input */}
       <div className={`relative bg-white/98 backdrop-blur-xl rounded-2xl sm:rounded-full shadow-2xl border transition-all duration-300 ${
         isFocused ? 'border-gold/40 shadow-gold/10 shadow-lg scale-[1.02]' : 'border-white/20 hover:scale-[1.01]'
