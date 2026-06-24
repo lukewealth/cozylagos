@@ -1,5 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import { ShieldAlert } from 'lucide-react';
 import {
   INITIAL_LISTINGS,
   INITIAL_BOOKINGS,
@@ -117,35 +118,218 @@ function AppContent() {
   
   const handleConfirmBooking = (bookingData: any) => {
     const bookingId = `booking-${Date.now()}`;
+    const ledgerId = `ledger-${Date.now()}`;
+    const reference = `CL-${Date.now().toString(36).toUpperCase()}`;
+
+    const lineItems: any[] = [];
+    let cartItemCount = 0;
+
+    if (bookingData.nightlyTotal) {
+      lineItems.push({
+        id: `li-accom-${Date.now()}`,
+        description: `Stay: ${bookingData.listingTitle} (${bookingData.totalNights || 1} nights)`,
+        category: 'accommodation',
+        quantity: bookingData.totalNights || 1,
+        unitPrice: Math.round(bookingData.nightlyTotal / (bookingData.totalNights || 1)),
+        total: bookingData.nightlyTotal,
+      });
+      cartItemCount++;
+    }
+    if (bookingData.cleaningFee) {
+      lineItems.push({
+        id: `li-clean-${Date.now()}`,
+        description: 'Cleaning / Sanitation Fee',
+        category: 'fee',
+        quantity: 1,
+        unitPrice: bookingData.cleaningFee,
+        total: bookingData.cleaningFee,
+      });
+    }
+    if (bookingData.includeVipDriver && bookingData.vipDriverTotal) {
+      lineItems.push({
+        id: `li-driver-${Date.now()}`,
+        description: `VIP Chauffeur (${bookingData.totalNights || 1} days)`,
+        category: 'addon',
+        quantity: bookingData.totalNights || 1,
+        unitPrice: 180000,
+        total: bookingData.vipDriverTotal,
+      });
+      cartItemCount++;
+    }
+    if (bookingData.includeChef && bookingData.chefTotal) {
+      lineItems.push({
+        id: `li-chef-${Date.now()}`,
+        description: `Personal Chef (${bookingData.totalNights || 1} days)`,
+        category: 'addon',
+        quantity: bookingData.totalNights || 1,
+        unitPrice: 50000,
+        total: bookingData.chefTotal,
+      });
+      cartItemCount++;
+    }
+    if (bookingData.services && bookingData.services.length > 0) {
+      bookingData.services.forEach((s: string, i: number) => {
+        lineItems.push({
+          id: `li-svc-${Date.now()}-${i}`,
+          description: s,
+          category: 'service',
+          quantity: 1,
+          unitPrice: 0,
+          total: 0,
+        });
+        cartItemCount++;
+      });
+    }
+    if (bookingData.experiences && bookingData.experiences.length > 0) {
+      bookingData.experiences.forEach((e: string, i: number) => {
+        lineItems.push({
+          id: `li-exp-${Date.now()}-${i}`,
+          description: e,
+          category: 'experience',
+          quantity: 1,
+          unitPrice: 0,
+          total: 0,
+        });
+        cartItemCount++;
+      });
+    }
+    if (bookingData.serviceFee) {
+      lineItems.push({
+        id: `li-svcfee-${Date.now()}`,
+        description: 'Platform Service Fee (5%)',
+        category: 'fee',
+        quantity: 1,
+        unitPrice: bookingData.serviceFee,
+        total: bookingData.serviceFee,
+      });
+    }
+    if (bookingData.tax) {
+      lineItems.push({
+        id: `li-tax-${Date.now()}`,
+        description: 'VAT (7.5%)',
+        category: 'tax',
+        quantity: 1,
+        unitPrice: bookingData.tax,
+        total: bookingData.tax,
+      });
+    }
+
+    const totalAmount = bookingData.grandTotal || bookingData.totalAmount || 0;
+    const platformCut = Math.round(totalAmount * 0.15);
+    const providerCut = totalAmount - platformCut;
+
+    const paymentLedger = {
+      id: ledgerId,
+      bookingId,
+      reference,
+      guestName: bookingData.guestName,
+      guestEmail: bookingData.guestEmail,
+      date: new Date().toISOString(),
+      lineItems,
+      subtotal: bookingData.nightlyTotal || totalAmount,
+      serviceFee: bookingData.serviceFee || 0,
+      tax: bookingData.tax || 0,
+      totalAmount,
+      platformCut,
+      providerCut,
+      paymentMethod: 'whatsapp_confirmation',
+      paymentStatus: 'pending' as const,
+      cartItemCount,
+      servicesCount: (bookingData.services || []).length,
+      experiencesCount: (bookingData.experiences || []).length,
+      createdAt: new Date().toISOString(),
+    };
+
     const newBooking: Booking = {
       id: bookingId,
       listingId: bookingData.listingId,
       listingTitle: bookingData.listingTitle,
-      guestId: 'guest-id',
+      guestId: currentUser?.id || 'guest-id',
       guestName: bookingData.guestName,
       guestEmail: bookingData.guestEmail,
+      guestPhone: bookingData.guestPhone,
       checkIn: bookingData.checkIn,
       checkOut: bookingData.checkOut,
       guestsCount: bookingData.guestsCount || 2,
-      status: 'Confirmed' as any,
-      totalAmount: bookingData.totalAmount,
-      services: [],
+      status: 'Pending',
+      totalAmount,
+      nightlyTotal: bookingData.nightlyTotal,
+      serviceFee: bookingData.serviceFee,
+      tax: bookingData.tax,
+      cleaningFee: bookingData.cleaningFee,
+      totalNights: bookingData.totalNights,
+      services: bookingData.services || [],
+      selectedServiceIds: bookingData.selectedServiceIds || [],
+      providerAssignmentStatus: 'unassigned',
+      paymentLedger,
+      specialRequests: bookingData.specialRequests,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
-    
+
     addBooking(newBooking as any);
+
+    const newTx: Transaction = {
+      id: `tx-${Date.now()}`,
+      date: bookingData.checkIn.replace(/-/g, '.'),
+      reference,
+      description: `Booking: ${bookingData.listingTitle} — ${bookingData.guestName}`,
+      type: 'booking_revenue' as any,
+      amount: totalAmount,
+      status: 'Pending' as any,
+      userId: currentUser?.id || 'guest-id',
+      createdAt: new Date().toISOString()
+    };
+    addTransaction(newTx as any);
+
+    const adminLines: string[] = [];
+    adminLines.push('━━━━━━━━━━━━━━━━━━━━━━━━');
+    adminLines.push('NEW BOOKING REQUEST');
+    adminLines.push('━━━━━━━━━━━━━━━━━━━━━━━━');
+    adminLines.push('');
+    adminLines.push(`Ref: ${reference}`);
+    adminLines.push(`Guest: ${bookingData.guestName}`);
+    adminLines.push(`Email: ${bookingData.guestEmail}`);
+    if (bookingData.guestPhone) adminLines.push(`Phone: ${bookingData.guestPhone}`);
+    adminLines.push(`Property: ${bookingData.listingTitle}`);
+    adminLines.push(`Dates: ${bookingData.checkIn} → ${bookingData.checkOut}`);
+    adminLines.push(`Guests: ${bookingData.guestsCount || 2}`);
+    adminLines.push('');
+    adminLines.push('── BILL ──');
+    lineItems.forEach((li: any) => {
+      if (li.total > 0) adminLines.push(`  ${li.description}: ₦${li.total.toLocaleString()}`);
+      else adminLines.push(`  ${li.description}`);
+    });
+    adminLines.push('');
+    adminLines.push(`TOTAL: ₦${totalAmount.toLocaleString()}`);
+    adminLines.push(`Platform (15%): ₦${platformCut.toLocaleString()}`);
+    adminLines.push(`Provider (85%): ₦${providerCut.toLocaleString()}`);
+    adminLines.push('');
+    adminLines.push(`Cart Items: ${cartItemCount}`);
+    adminLines.push(`Services: ${(bookingData.services || []).join(', ') || 'None'}`);
+    adminLines.push(`Experiences: ${(bookingData.experiences || []).join(', ') || 'None'}`);
+    if (bookingData.specialRequests) adminLines.push(`Requests: ${bookingData.specialRequests}`);
+    adminLines.push('');
+    adminLines.push('Status: PENDING CONFIRMATION');
+    adminLines.push('━━━━━━━━━━━━━━━━━━━━━━━━');
+
+    const adminWhatsAppUrl = `https://wa.me/2348064305782?text=${encodeURIComponent(adminLines.join('\n'))}`;
+
+    setTimeout(() => {
+      window.open(adminWhatsAppUrl, '_blank');
+    }, 1000);
+
     setBookingContext({
       listing: selectedListing || undefined,
       checkIn: bookingData.checkIn,
       checkOut: bookingData.checkOut,
       guests: bookingData.guestsCount || 2,
-      totalAmount: bookingData.totalAmount,
+      totalAmount,
       bookingId,
       nightlyTotal: bookingData.nightlyTotal,
       serviceFee: bookingData.serviceFee,
       tax: bookingData.tax,
-      grandTotal: bookingData.grandTotal,
+      grandTotal: totalAmount,
       includeVipDriver: bookingData.includeVipDriver,
       includeChef: bookingData.includeChef,
       vipDriverTotal: bookingData.vipDriverTotal,
@@ -154,20 +338,7 @@ function AppContent() {
       totalNights: bookingData.totalNights,
     });
 
-    const newTx: Transaction = {
-      id: `tx-${Date.now()}`,
-      date: bookingData.checkIn.replace(/-/g, '.'),
-      reference: `BOOKING_REVENUE_${Math.round(Math.random() * 90000 + 10000)}`,
-      description: `Stay: ${bookingData.listingTitle}`,
-      type: 'booking_revenue' as any,
-      amount: Math.round(bookingData.totalAmount * 0.85),
-      status: 'processed' as any,
-      userId: 'system',
-      createdAt: new Date().toISOString()
-    };
-  
-    addTransaction(newTx as any);
-    addToast({ type: 'success', title: 'Booking Confirmed!', message: 'Check WhatsApp for admin confirmation.' });
+    addToast({ type: 'success', title: 'Booking Submitted!', message: `Ref: ${reference}. Admin will confirm via WhatsApp.` });
   };
 
   const handleAcceptCookies = () => {
@@ -280,10 +451,30 @@ function AppContent() {
                 </Suspense>
               )}
               {(activeTab === 'overview' || activeTab === 'listings' || activeTab === 'calendar' || activeTab === 'payouts') && (
-                <OwnerDashboardView listings={listings} bookings={bookings} transactions={transactions} onAddListingClick={() => setActiveTab('wizard')} onUpdateListingsStatus={handleUpdateListingStatus} onUpdateListing={handleUpdateListing} />
+                <OwnerDashboardView listings={listings} bookings={bookings} transactions={transactions} onAddListingClick={() => {
+                  if (currentUser?.role === 'admin' || currentUser?.role === 'super_admin') {
+                    setActiveTab('wizard');
+                  } else {
+                    addToast({ type: 'error', title: 'Admin Only', message: 'Only admins can create property listings.' });
+                  }
+                }} onUpdateListingsStatus={handleUpdateListingStatus} onUpdateListing={handleUpdateListing} />
               )}
-              {activeTab === 'wizard' && (
+              {activeTab === 'wizard' && (currentUser?.role === 'admin' || currentUser?.role === 'super_admin') && (
                 <ListingWizardView onPublishListing={handlePublishListing} onCancel={() => setActiveTab('listings')} />
+              )}
+              {activeTab === 'wizard' && currentUser?.role !== 'admin' && currentUser?.role !== 'super_admin' && (
+                <div className="flex-grow flex items-center justify-center py-20">
+                  <div className="text-center space-y-4 max-w-md">
+                    <div className="w-16 h-16 bg-charcoal/5 rounded-full flex items-center justify-center mx-auto">
+                      <ShieldAlert className="w-8 h-8 text-charcoal/40" />
+                    </div>
+                    <h2 className="font-serif text-2xl font-bold text-charcoal">Admin Access Required</h2>
+                    <p className="text-sm text-charcoal/60">Property listings can only be created by administrators. Contact admin to list a property.</p>
+                    <button onClick={() => setActiveTab('home')} className="px-6 py-3 bg-charcoal text-parchment rounded-xl font-bold text-xs uppercase tracking-widest">
+                      Back to Home
+                    </button>
+                  </div>
+                </div>
               )}
             </motion.div>
           )}

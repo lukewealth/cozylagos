@@ -37,7 +37,7 @@ interface BookingRequest {
   services?: string[];
 }
 
-type AdminSection = 'dashboard' | 'admin-dashboard' | 'requests' | 'guests' | 'services' | 'reports' | 'listings' | 'bookings' | 'analytics' | 'overview';
+type AdminSection = 'dashboard' | 'admin-dashboard' | 'requests' | 'guests' | 'services' | 'reports' | 'listings' | 'bookings' | 'analytics' | 'overview' | 'ledger';
 
 const MOCK_ARRIVALS = [
   { id: 'arr-1', guestName: 'Adewale Johnson', initials: 'AJ', tier: 'vip' as const, listingTitle: 'The Ikoyi Penthouse', unitCode: 'UNIT 402', status: 'en_route' as const, eta: '8 mins away' },
@@ -571,6 +571,115 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                     <p className="text-label-caps text-secondary uppercase">Active Guests</p>
                     <p className="text-headline-md font-serif font-bold text-on-surface mt-1">48</p>
                     <p className="text-xs text-blue-600 mt-1">+8 new this week</p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {activeSection === 'ledger' && (
+              <motion.div
+                key="ledger"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+              >
+                <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                  <div>
+                    <h2 className="font-serif text-headline-lg text-on-surface">Payment Ledger</h2>
+                    <p className="text-body-lg text-secondary mt-2">Complete transaction history with billing metadata</p>
+                  </div>
+                  <Tooltip content="Download Ledger" description="Export as CSV">
+                    <button className="px-5 py-2.5 bg-surface-container-lowest border border-outline-variant/30 rounded-lg text-body-md font-semibold text-on-surface hover:bg-surface-container-low transition-colors flex items-center gap-2">
+                      <Download className="w-4 h-4" /> Export CSV
+                    </button>
+                  </Tooltip>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                  {[
+                    { label: 'Total Revenue', value: `₦${(totalRevenue / 1000000).toFixed(1)}M`, icon: DollarSign, color: 'text-green-600' },
+                    { label: 'Pending Payments', value: pendingBookings.length.toString(), icon: Clock, color: 'text-amber-600' },
+                    { label: 'Platform Cut (15%)', value: `₦${(totalRevenue * 0.15 / 1000).toFixed(0)}K`, icon: TrendingUp, color: 'text-primary' },
+                    { label: 'Provider Cut (85%)', value: `₦${(totalRevenue * 0.85 / 1000).toFixed(0)}K`, icon: Users, color: 'text-primary' },
+                  ].map((stat, i) => (
+                    <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
+                      className="glass-card luxury-shadow p-6 rounded-xl border-l-4 border-primary">
+                      <p className="text-label-caps text-secondary uppercase mb-2">{stat.label}</p>
+                      <span className={`font-serif text-headline-md ${stat.color}`}>{stat.value}</span>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-3xl overflow-hidden luxury-shadow">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="text-label-caps text-secondary bg-surface-container-low border-b border-outline-variant/10">
+                          <th className="px-6 py-4 font-bold">Ref</th>
+                          <th className="px-6 py-4 font-bold">Guest</th>
+                          <th className="px-6 py-4 font-bold">Property</th>
+                          <th className="px-6 py-4 font-bold">Services</th>
+                          <th className="px-6 py-4 font-bold">Total</th>
+                          <th className="px-6 py-4 font-bold">Platform</th>
+                          <th className="px-6 py-4 font-bold">Provider</th>
+                          <th className="px-6 py-4 font-bold">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-sm divide-y divide-outline-variant/10">
+                        {(bookings as any[]).slice(0, 20).map((booking: any) => {
+                          const ledger = booking.paymentLedger;
+                          const total = booking.totalAmount || 0;
+                          const platformCut = Math.round(total * 0.15);
+                          const providerCut = total - platformCut;
+                          return (
+                            <tr key={booking.id} className="hover:bg-surface-container-low/50 transition-colors">
+                              <td className="px-6 py-4">
+                                <span className="font-mono text-[10px] text-secondary">{ledger?.reference || booking.id?.slice(0, 12)}</span>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div>
+                                  <p className="font-bold text-on-surface text-xs">{booking.guestName}</p>
+                                  <p className="text-[10px] text-secondary">{booking.guestEmail}</p>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 text-on-surface-variant text-xs">{booking.listingTitle}</td>
+                              <td className="px-6 py-4">
+                                <div className="flex flex-wrap gap-1">
+                                  {(booking.services || []).slice(0, 2).map((s: string, i: number) => (
+                                    <span key={i} className="bg-primary/10 text-primary px-1.5 py-0.5 rounded text-[8px] font-bold">{s}</span>
+                                  ))}
+                                  {(!booking.services || booking.services.length === 0) && <span className="text-[10px] text-secondary">—</span>}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className="font-bold text-primary text-xs">₦{total.toLocaleString()}</span>
+                              </td>
+                              <td className="px-6 py-4 text-xs text-on-surface-variant">₦{platformCut.toLocaleString()}</td>
+                              <td className="px-6 py-4 text-xs text-green-600 font-semibold">₦{providerCut.toLocaleString()}</td>
+                              <td className="px-6 py-4">
+                                <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full ${
+                                  booking.status === 'confirmed' || booking.status === 'Confirmed'
+                                    ? 'bg-green-100 text-green-700'
+                                    : booking.status === 'cancelled' || booking.status === 'Cancelled'
+                                    ? 'bg-red-100 text-red-700'
+                                    : 'bg-amber-100 text-amber-700'
+                                }`}>
+                                  {ledger?.paymentStatus || booking.status}
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                        {(bookings as any[]).length === 0 && (
+                          <tr>
+                            <td colSpan={8} className="px-6 py-12 text-center text-secondary italic text-sm">
+                              No transactions recorded yet.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </motion.div>

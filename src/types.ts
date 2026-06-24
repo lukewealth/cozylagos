@@ -63,18 +63,62 @@ export interface Booking {
   guestId: string;
   guestName: string;
   guestEmail: string;
+  guestPhone?: string;
   guestAvatar?: string;
   checkIn: string;
   checkOut: string;
   guestsCount: number;
   status: "Pending" | "Confirmed" | "Completed" | "Cancelled";
   totalAmount: number;
+  nightlyTotal?: number;
+  serviceFee?: number;
+  tax?: number;
+  cleaningFee?: number;
+  totalNights?: number;
   chefAdded?: boolean;
   photographerAdded?: boolean;
   jetskiAdded?: boolean;
+  driverAdded?: boolean;
   services: string[];
+  selectedServiceIds?: string[];
+  providerId?: string;
+  providerName?: string;
+  providerAssignmentStatus?: 'unassigned' | 'assigned' | 'in_progress' | 'completed';
+  paymentLedger?: PaymentLedgerEntry;
+  specialRequests?: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface PaymentLedgerEntry {
+  id: string;
+  bookingId: string;
+  reference: string;
+  guestName: string;
+  guestEmail: string;
+  date: string;
+  lineItems: PaymentLineItem[];
+  subtotal: number;
+  serviceFee: number;
+  tax: number;
+  totalAmount: number;
+  platformCut: number;
+  providerCut: number;
+  paymentMethod: string;
+  paymentStatus: 'pending' | 'processed' | 'refunded' | 'disputed';
+  cartItemCount: number;
+  servicesCount: number;
+  experiencesCount: number;
+  createdAt: string;
+}
+
+export interface PaymentLineItem {
+  id: string;
+  description: string;
+  category: 'accommodation' | 'service' | 'experience' | 'fee' | 'tax' | 'addon';
+  quantity: number;
+  unitPrice: number;
+  total: number;
 }
 
 export interface Transaction {

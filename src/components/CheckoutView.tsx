@@ -51,6 +51,7 @@ export default function CheckoutView({
         totalAmount: finalTotal,
         guestName,
         guestEmail,
+        guestPhone,
         guestsCount: cart[0]?.guestsCount || 1,
         nightlyTotal: listingTotal,
         serviceFee,
@@ -60,6 +61,7 @@ export default function CheckoutView({
         totalNights: cart[0] ? Math.ceil((new Date(cart[0].checkOut).getTime() - new Date(cart[0].checkIn).getTime()) / (1000 * 60 * 60 * 24)) : 0,
         specialRequests,
         services: serviceCart.map(s => s.title),
+        selectedServiceIds: serviceCart.map(s => s.id),
         experiences: experienceCart.map(e => e.title),
       };
 
