@@ -7,14 +7,14 @@ import {
   CheckCircle, XCircle, MoreHorizontal, Eye, Edit3, TrendingUp, DollarSign,
   Utensils, Car, Camera, ShieldCheck, Key, Tablet, Radio, Zap, AlertTriangle,
   UserCheck, CircleDot, CalendarDays, Download, Upload, MapPin as MapPinIcon,
-  Sparkles, Briefcase, Heart, Award, UserCircle, ChevronDown, X
+  Sparkles, Briefcase, Heart, Award, UserCircle, ChevronDown, X, Menu
 } from 'lucide-react';
 import { useAuth } from '../auth';
 import { useDatabase } from '../hooks/useDatabase';
 import CollapsibleSidebar from '../components/ui/CollapsibleSidebar';
 import Tooltip from '../components/ui/Tooltip';
 
-type ProviderSection = 'overview' | 'schedule' | 'roster' | 'inventory' | 'concierge';
+type ProviderSection = 'overview' | 'service-dashboard' | 'schedule' | 'calendar' | 'roster' | 'inventory' | 'payouts' | 'concierge';
 
 const MOCK_STAFF = [
   { id: 's1', name: 'Captain Chidi Okoro', role: 'driver' as const, status: 'on_duty' as const, initials: 'CO', certifications: ['MCA MASTER 3000GT', 'VIP PROTOCOL'], specializations: ['Maritime', 'VIP Transport'], rating: 4.8, availabilityFrom: '22:00', currentAssignment: 'Yacht Leila', tenureYears: 6 },
@@ -39,6 +39,8 @@ export default function ServiceProviderDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const { data: bookings } = useDatabase('bookings');
   const { data: transactions } = useDatabase('transactions');
@@ -83,12 +85,23 @@ export default function ServiceProviderDashboard() {
         setActiveTab={setActiveSection as any}
         userRole="service_provider"
         onLogout={handleLogout}
+        onCollapse={setIsSidebarCollapsed}
+        isMobileOpen={isMobileMenuOpen}
+        onMobileClose={() => setIsMobileMenuOpen(false)}
       />
 
-      <main className="flex-1 ml-[280px] transition-all duration-300">
-        <header className="h-20 px-20 w-full sticky top-0 bg-parchment/80 backdrop-blur-xl border-b border-outline-variant/20 shadow-sm z-40 flex justify-between items-center">
-          <div className="flex items-center gap-8">
-            <span className="font-serif text-headline-sm font-bold tracking-tight text-primary">Elite Orchestrator</span>
+      <main className={`flex-1 transition-all duration-300 ${isSidebarCollapsed ? 'lg:ml-[80px]' : 'lg:ml-[280px]'} ml-0 lg:ml-[80px]`}>
+        <header className="h-20 px-4 lg:px-20 w-full sticky top-0 bg-parchment/80 backdrop-blur-xl border-b border-outline-variant/20 shadow-sm z-40 flex justify-between items-center">
+          <div className="flex items-center gap-4 lg:gap-8">
+            <Tooltip content="Open Menu" position="right">
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="p-2 rounded-lg hover:bg-surface-container text-secondary transition-colors lg:hidden"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+            </Tooltip>
+            <span className="font-serif text-headline-sm font-bold tracking-tight text-primary hidden md:block">Elite Orchestrator</span>
             <nav className="hidden lg:flex gap-8 items-center h-full">
               {['Calendar', 'Staffing', 'Arrivals', 'Analytics'].map((item, i) => (
                 <button
@@ -100,11 +113,11 @@ export default function ServiceProviderDashboard() {
               ))}
             </nav>
           </div>
-          <div className="flex items-center gap-6">
-            <div className="relative hidden lg:block">
+          <div className="flex items-center gap-2 md:gap-6">
+            <div className="relative hidden md:block">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-outline w-4 h-4" />
               <input
-                className="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full text-sm focus:ring-1 focus:ring-primary w-64 focus:outline-none"
+                className="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full text-sm focus:ring-1 focus:ring-primary w-48 lg:w-64 focus:outline-none"
                 placeholder="Search staff or assets..."
                 type="text"
                 value={searchQuery}
@@ -118,7 +131,7 @@ export default function ServiceProviderDashboard() {
               </button>
             </Tooltip>
             <Tooltip content="Settings" description="Configure preferences">
-              <button className="p-2 text-secondary hover:text-primary cursor-pointer transition-colors">
+              <button className="p-2 text-secondary hover:text-primary cursor-pointer transition-colors hidden md:block">
                 <Settings className="w-5 h-5" />
               </button>
             </Tooltip>
@@ -130,7 +143,7 @@ export default function ServiceProviderDashboard() {
 
         <div className="pt-8 pb-16 px-20 max-w-[1440px]">
           <AnimatePresence mode="wait">
-            {activeSection === 'overview' && (
+            {(activeSection === 'overview' || activeSection === 'service-dashboard') && (
               <motion.div
                 key="overview"
                 initial={{ opacity: 0, y: 8 }}
@@ -411,6 +424,206 @@ export default function ServiceProviderDashboard() {
                     </motion.button>
                   </div>
                 </section>
+              </motion.div>
+            )}
+
+            {(activeSection === 'schedule' || activeSection === 'calendar') && (
+              <motion.div
+                key="schedule"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+              >
+                <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                  <div>
+                    <span className="font-label-caps text-primary mb-2 block">SCHEDULE MANAGEMENT</span>
+                    <h1 className="font-serif text-headline-lg text-on-surface">Calendar & Bookings</h1>
+                  </div>
+                  <div className="flex gap-3">
+                    <Tooltip content="Download Schedule" description="Export as PDF or CSV">
+                      <button className="px-5 py-2.5 bg-surface-container-lowest border border-outline-variant/30 rounded-lg text-body-md font-semibold text-on-surface hover:bg-surface-container-low transition-colors flex items-center gap-2">
+                        <Download className="w-4 h-4" />
+                        Export
+                      </button>
+                    </Tooltip>
+                    <Tooltip content="New Booking" description="Create a manual booking">
+                      <button className="px-5 py-2.5 bg-primary text-on-primary rounded-lg text-body-md font-bold hover:opacity-90 transition-opacity flex items-center gap-2">
+                        <Plus className="w-4 h-4" />
+                        New Booking
+                      </button>
+                    </Tooltip>
+                  </div>
+                </header>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                  {[
+                    { label: "Today's Bookings", value: '6', icon: Calendar, color: 'text-primary' },
+                    { label: 'This Week', value: '23', icon: CalendarDays, color: 'text-green-600' },
+                    { label: 'Pending Confirmation', value: '4', icon: Clock, color: 'text-error' },
+                    { label: 'Completion Rate', value: '94%', icon: CheckCircle, color: 'text-primary' },
+                  ].map((stat, i) => (
+                    <motion.div
+                      key={stat.label}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      className="glass-card p-5 rounded-2xl border border-outline-variant/10 luxury-shadow"
+                    >
+                      <stat.icon className={`w-5 h-5 ${stat.color} mb-3`} />
+                      <p className="text-[10px] font-bold tracking-widest text-secondary uppercase">{stat.label}</p>
+                      <p className="text-xl font-serif font-bold text-on-surface mt-1">{stat.value}</p>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-3xl overflow-hidden luxury-shadow">
+                  <div className="px-6 py-4 border-b border-outline-variant/10 flex justify-between items-center">
+                    <h3 className="font-serif text-headline-sm text-on-surface">Upcoming Bookings</h3>
+                    <Tooltip content="Filter bookings" description="By date, status, or service">
+                      <button className="p-2 text-secondary hover:text-primary hover:bg-surface-container rounded-lg transition-colors">
+                        <Filter className="w-4 h-4" />
+                      </button>
+                    </Tooltip>
+                  </div>
+                  <div className="divide-y divide-outline-variant/10">
+                    {activeBookings.slice(0, 5).map((booking: any, idx: number) => (
+                      <div key={booking.id || idx} className="p-5 hover:bg-surface-container-low/50 transition-colors flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                            <Calendar className="w-6 h-6 text-primary" />
+                          </div>
+                          <div>
+                            <p className="font-bold text-on-surface">{booking.guestName || 'Guest'}</p>
+                            <p className="text-xs text-secondary">{booking.listingTitle || 'Property'} • {booking.checkIn || 'TBD'}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full ${
+                            booking.status === 'confirmed' || booking.status === 'Confirmed'
+                              ? 'bg-green-100 text-green-700'
+                              : 'bg-amber-100 text-amber-700'
+                          }`}>
+                            {booking.status}
+                          </span>
+                          <Tooltip content="View Details" description="See full booking info">
+                            <button className="p-2 text-secondary hover:text-primary hover:bg-surface-container rounded-lg transition-colors">
+                              <Eye className="w-4 h-4" />
+                            </button>
+                          </Tooltip>
+                        </div>
+                      </div>
+                    ))}
+                    {activeBookings.length === 0 && (
+                      <div className="p-12 text-center text-secondary italic text-sm">
+                        No upcoming bookings.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {activeSection === 'payouts' && (
+              <motion.div
+                key="payouts"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+              >
+                <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                  <div>
+                    <span className="font-label-caps text-primary mb-2 block">FINANCIAL OVERVIEW</span>
+                    <h1 className="font-serif text-headline-lg text-on-surface">Earnings & Payouts</h1>
+                  </div>
+                  <div className="flex gap-3">
+                    <Tooltip content="Download Statement" description="Export financial records">
+                      <button className="px-5 py-2.5 bg-surface-container-lowest border border-outline-variant/30 rounded-lg text-body-md font-semibold text-on-surface hover:bg-surface-container-low transition-colors flex items-center gap-2">
+                        <Download className="w-4 h-4" />
+                        Statement
+                      </button>
+                    </Tooltip>
+                    <Tooltip content="Request Payout" description="Transfer funds to your account">
+                      <button className="px-5 py-2.5 bg-primary text-on-primary rounded-lg text-body-md font-bold hover:opacity-90 transition-opacity flex items-center gap-2">
+                        <DollarSign className="w-4 h-4" />
+                        Request Payout
+                      </button>
+                    </Tooltip>
+                  </div>
+                </header>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                  {[
+                    { label: 'Total Earnings', value: `₦${(totalEarnings / 1000000).toFixed(1)}M`, icon: DollarSign, color: 'text-green-600' },
+                    { label: 'Pending Payout', value: '₦450K', icon: Clock, color: 'text-primary' },
+                    { label: 'This Month', value: '₦1.2M', icon: TrendingUp, color: 'text-primary' },
+                    { label: 'Avg. Per Booking', value: '₦85K', icon: Star, color: 'text-primary' },
+                  ].map((stat, i) => (
+                    <motion.div
+                      key={stat.label}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      className="glass-card p-5 rounded-2xl border border-outline-variant/10 luxury-shadow"
+                    >
+                      <stat.icon className={`w-5 h-5 ${stat.color} mb-3`} />
+                      <p className="text-[10px] font-bold tracking-widest text-secondary uppercase">{stat.label}</p>
+                      <p className="text-xl font-serif font-bold text-on-surface mt-1">{stat.value}</p>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-3xl overflow-hidden luxury-shadow">
+                  <div className="px-6 py-4 border-b border-outline-variant/10">
+                    <h3 className="font-serif text-headline-sm text-on-surface">Recent Transactions</h3>
+                  </div>
+                  <div className="divide-y divide-outline-variant/10">
+                    {(transactions as any[]).slice(0, 10).map((tx: any, idx: number) => (
+                      <div key={tx.id || idx} className="p-5 hover:bg-surface-container-low/50 transition-colors flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
+                            <TrendingUp className="w-5 h-5 text-green-600" />
+                          </div>
+                          <div>
+                            <p className="font-bold text-on-surface">{tx.description || tx.type || 'Payment'}</p>
+                            <p className="text-xs text-secondary">{tx.createdAt ? new Date(tx.createdAt).toLocaleDateString() : 'Recent'}</p>
+                          </div>
+                        </div>
+                        <span className="font-bold text-green-600">+₦{(tx.amount || 0).toLocaleString()}</span>
+                      </div>
+                    ))}
+                    {(transactions as any[]).length === 0 && (
+                      <div className="p-12 text-center text-secondary italic text-sm">
+                        No transactions yet.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {activeSection === 'concierge' && (
+              <motion.div
+                key="concierge"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+              >
+                <div className="mb-8">
+                  <h2 className="font-serif text-headline-lg text-on-surface">Concierge Requests</h2>
+                  <p className="text-body-lg text-secondary mt-2">Manage guest service requests and assignments</p>
+                </div>
+                <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-3xl p-12 luxury-shadow flex flex-col items-center justify-center text-center">
+                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                    <ConciergeBell className="w-8 h-8 text-primary" />
+                  </div>
+                  <h3 className="font-serif text-headline-sm text-on-surface mb-2">Concierge Module</h3>
+                  <p className="text-body-md text-secondary max-w-md">
+                    This section is being enhanced with advanced concierge request management features. Check back soon.
+                  </p>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

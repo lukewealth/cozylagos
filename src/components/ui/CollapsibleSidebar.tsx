@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronLeft, ChevronRight, LayoutDashboard, Users, Settings, BarChart3, Shield, Database, Globe, Key, Lock, Bell, LogOut, HelpCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutDashboard, Users, Settings, BarChart3, Shield, Database, Globe, Key, Lock, Bell, LogOut, HelpCircle, X } from 'lucide-react';
 
 interface SidebarProps {
   activeTab: string;
@@ -8,6 +8,9 @@ interface SidebarProps {
   userRole: 'admin' | 'super_admin' | 'service_provider';
   onLogout?: () => void;
   onHelp?: () => void;
+  onCollapse?: (collapsed: boolean) => void;
+  isMobileOpen?: boolean;
+  onMobileClose?: () => void;
 }
 
 interface NavItem {
@@ -20,6 +23,7 @@ interface NavItem {
 const ADMIN_NAV: NavItem[] = [
   { id: 'admin-dashboard', label: 'Dashboard', icon: LayoutDashboard, description: 'Overview & analytics' },
   { id: 'listings', label: 'Properties', icon: Globe, description: 'Manage all listings' },
+  { id: 'bookings', label: 'Bookings', icon: Bell, description: 'Booking requests' },
   { id: 'overview', label: 'Analytics', icon: BarChart3, description: 'Platform metrics' },
 ];
 
@@ -36,9 +40,15 @@ const PROVIDER_NAV: NavItem[] = [
   { id: 'payouts', label: 'Earnings', icon: Key, description: 'Financial reports' },
 ];
 
-export default function CollapsibleSidebar({ activeTab, setActiveTab, userRole, onLogout, onHelp }: SidebarProps) {
+export default function CollapsibleSidebar({ activeTab, setActiveTab, userRole, onLogout, onHelp, onCollapse, isMobileOpen = false, onMobileClose }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+
+  const handleToggleCollapse = () => {
+    const newState = !isCollapsed;
+    setIsCollapsed(newState);
+    onCollapse?.(newState);
+  };
 
   const navItems = userRole === 'super_admin' ? SUPER_ADMIN_NAV : userRole === 'admin' ? ADMIN_NAV : PROVIDER_NAV;
 
@@ -63,12 +73,22 @@ export default function CollapsibleSidebar({ activeTab, setActiveTab, userRole, 
   };
 
   return (
-    <motion.aside
-      initial={false}
-      animate={{ width: isCollapsed ? 80 : 280 }}
-      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-      className="h-screen fixed left-0 top-0 bg-surface-container-lowest border-r border-outline-variant/20 z-50 flex flex-col overflow-hidden"
-    >
+    <>
+      {isMobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[90] lg:hidden"
+          onClick={onMobileClose}
+        />
+      )}
+      <motion.aside
+        initial={false}
+        animate={{
+          width: isMobileOpen ? 280 : isCollapsed ? 80 : 280,
+          x: typeof window !== 'undefined' && window.innerWidth < 1024 && !isMobileOpen ? -280 : 0
+        }}
+        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+        className="h-screen fixed left-0 top-0 bg-surface-container-lowest border-r border-outline-variant/20 z-[100] lg:z-50 flex flex-col overflow-hidden"
+      >
       {/* Header */}
       <div className="px-6 py-8 flex items-center justify-between">
         <AnimatePresence mode="wait">
@@ -88,13 +108,24 @@ export default function CollapsibleSidebar({ activeTab, setActiveTab, userRole, 
             </motion.div>
           )}
         </AnimatePresence>
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-2 rounded-lg hover:bg-surface-container-high transition-colors text-secondary hover:text-primary"
-          aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
-        </button>
+        <div className="flex items-center gap-1">
+          {isMobileOpen && onMobileClose && (
+            <button
+              onClick={onMobileClose}
+              className="p-2 rounded-lg hover:bg-surface-container-high transition-colors text-secondary hover:text-primary lg:hidden"
+              aria-label="Close menu"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
+          <button
+            onClick={handleToggleCollapse}
+            className="p-2 rounded-lg hover:bg-surface-container-high transition-colors text-secondary hover:text-primary hidden lg:block"
+            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
+          </button>
+        </div>
       </div>
 
       {/* Navigation */}
@@ -106,7 +137,10 @@ export default function CollapsibleSidebar({ activeTab, setActiveTab, userRole, 
           return (
             <div key={item.id} className="relative">
               <button
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => {
+                  setActiveTab(item.id);
+                  if (isMobileOpen && onMobileClose) onMobileClose();
+                }}
                 onMouseEnter={() => setHoveredItem(item.id)}
                 onMouseLeave={() => setHoveredItem(null)}
                 className={`w-full flex items-center gap-4 px-4 py-3 rounded-lg transition-all relative ${
@@ -240,5 +274,6 @@ export default function CollapsibleSidebar({ activeTab, setActiveTab, userRole, 
         </div>
       </div>
     </motion.aside>
+    </>
   );
 }

@@ -37,7 +37,7 @@ interface BookingRequest {
   services?: string[];
 }
 
-type AdminSection = 'dashboard' | 'requests' | 'guests' | 'services' | 'reports' | 'listings' | 'bookings' | 'analytics';
+type AdminSection = 'dashboard' | 'admin-dashboard' | 'requests' | 'guests' | 'services' | 'reports' | 'listings' | 'bookings' | 'analytics' | 'overview';
 
 const MOCK_ARRIVALS = [
   { id: 'arr-1', guestName: 'Adewale Johnson', initials: 'AJ', tier: 'vip' as const, listingTitle: 'The Ikoyi Penthouse', unitCode: 'UNIT 402', status: 'en_route' as const, eta: '8 mins away' },
@@ -62,6 +62,9 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
   const [rejectReason, setRejectReason] = useState('');
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const { data: bookings, addRecord: updateBooking } = useDatabase('bookings');
 
@@ -90,19 +93,23 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
   };
 
   const handleConfirmBooking = async (booking: BookingRequest) => {
+    setIsProcessing(true);
     try { await api.bookings.confirm(booking.id); } catch { /* local fallback */ }
     updateBooking({ ...booking, status: 'confirmed', updatedAt: new Date().toISOString() } as any);
     setShowConfirmModal(false);
     setConfirmNotes('');
     setSelectedBooking(null);
+    setIsProcessing(false);
   };
 
   const handleRejectBooking = async (booking: BookingRequest) => {
+    setIsProcessing(true);
     try { await api.bookings.updateStatus(booking.id, 'cancelled'); } catch { /* local fallback */ }
     updateBooking({ ...booking, status: 'cancelled', updatedAt: new Date().toISOString() } as any);
     setShowRejectModal(false);
     setRejectReason('');
     setSelectedBooking(null);
+    setIsProcessing(false);
   };
 
   const handleWhatsAppNotify = (booking: BookingRequest) => {
@@ -119,15 +126,26 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
         setActiveTab={setActiveSection as any}
         userRole="admin"
         onLogout={handleLogout}
+        onCollapse={setIsSidebarCollapsed}
+        isMobileOpen={isMobileMenuOpen}
+        onMobileClose={() => setIsMobileMenuOpen(false)}
       />
 
-      <main className="flex-1 ml-[280px] transition-all duration-300">
-        <header className="h-20 px-20 w-full sticky top-0 bg-surface/80 backdrop-blur-md border-b border-outline-variant/10 z-40 flex justify-between items-center">
+      <main className={`flex-1 transition-all duration-300 ${isSidebarCollapsed ? 'lg:ml-[80px]' : 'lg:ml-[280px]'} ml-0 lg:ml-[80px]`}>
+        <header className="h-20 px-4 lg:px-20 w-full sticky top-0 bg-surface/80 backdrop-blur-md border-b border-outline-variant/10 z-40 flex justify-between items-center">
           <div className="flex items-center gap-4">
+            <Tooltip content="Open Menu" position="right">
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="p-2 rounded-lg hover:bg-surface-container text-secondary transition-colors lg:hidden"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+            </Tooltip>
             <div className="relative focus-within:ring-1 focus-within:ring-primary rounded-lg transition-all">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-outline w-4 h-4" />
               <input
-                className="bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 w-72 text-body-md focus:ring-0 focus:outline-none"
+                className="bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 w-48 md:w-72 text-body-md focus:ring-0 focus:outline-none"
                 placeholder="Search arrivals..."
                 type="text"
                 value={searchQuery}
@@ -135,8 +153,8 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
               />
             </div>
           </div>
-          <div className="flex items-center gap-6">
-            <div className="flex gap-4 items-center">
+          <div className="flex items-center gap-2 md:gap-6">
+            <div className="flex gap-2 md:gap-4 items-center">
               <Tooltip content="Notifications" description="View alerts and updates">
                 <button className="p-2 rounded-full hover:bg-surface-container text-secondary transition-colors relative">
                   <Bell className="w-5 h-5" />
@@ -152,9 +170,9 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                 </button>
               </Tooltip>
             </div>
-            <div className="h-10 w-px bg-outline-variant/30" />
+            <div className="h-10 w-px bg-outline-variant/30 hidden md:block" />
             <div className="flex items-center gap-3">
-              <div className="text-right">
+              <div className="text-right hidden md:block">
                 <p className="text-body-md font-bold text-on-surface leading-none">{currentUser?.name || 'Admin'}</p>
                 <p className="text-label-caps text-secondary uppercase mt-1">Concierge Elite</p>
               </div>
@@ -167,7 +185,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
 
         <div className="px-20 pt-12 pb-20">
           <AnimatePresence mode="wait">
-            {activeSection === 'dashboard' && (
+            {(activeSection === 'dashboard' || activeSection === 'admin-dashboard') && (
               <motion.div
                 key="dashboard"
                 initial={{ opacity: 0, y: 8 }}
@@ -402,9 +420,318 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                 </div>
               </motion.div>
             )}
+
+            {activeSection === 'bookings' && (
+              <motion.div
+                key="bookings"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+              >
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+                  <div>
+                    <h2 className="font-serif text-headline-lg text-on-surface">Booking Requests</h2>
+                    <p className="text-body-lg text-secondary mt-2">Manage and confirm guest reservations</p>
+                  </div>
+                </div>
+
+                {pendingBookings.length > 0 && (
+                  <div className="bg-primary-container/10 border border-primary/20 rounded-2xl p-4 flex items-center gap-3 mb-6">
+                    <AlertCircle className="w-5 h-5 text-primary shrink-0" />
+                    <p className="text-sm text-on-surface">
+                      <strong>{pendingBookings.length}</strong> booking{pendingBookings.length !== 1 ? 's' : ''} awaiting your confirmation
+                    </p>
+                  </div>
+                )}
+
+                <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-3xl overflow-hidden luxury-shadow">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="text-label-caps text-secondary bg-surface-container-low border-b border-outline-variant/10">
+                          <th className="px-6 py-4 font-bold">Guest</th>
+                          <th className="px-6 py-4 font-bold">Property</th>
+                          <th className="px-6 py-4 font-bold">Dates</th>
+                          <th className="px-6 py-4 font-bold">Amount</th>
+                          <th className="px-6 py-4 font-bold">Status</th>
+                          <th className="px-6 py-4 font-bold text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-sm divide-y divide-outline-variant/10">
+                        {(bookings as any[]).slice(0, 20).map((booking: any) => (
+                          <tr key={booking.id} className="hover:bg-surface-container-low/50 transition-colors">
+                            <td className="px-6 py-4">
+                              <div>
+                                <p className="font-bold text-on-surface">{booking.guestName}</p>
+                                <p className="text-[10px] text-secondary">{booking.guestEmail}</p>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 text-on-surface-variant">{booking.listingTitle}</td>
+                            <td className="px-6 py-4">
+                              <div className="text-xs">
+                                <p className="text-on-surface-variant">{booking.checkIn}</p>
+                                <p className="text-secondary text-[10px]">to {booking.checkOut}</p>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="font-bold text-primary">₦{(booking.totalAmount || 0).toLocaleString()}</span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full ${
+                                booking.status === 'confirmed' || booking.status === 'Confirmed'
+                                  ? 'bg-green-100 text-green-700'
+                                  : booking.status === 'cancelled' || booking.status === 'Cancelled'
+                                  ? 'bg-red-100 text-red-700'
+                                  : 'bg-amber-100 text-amber-700'
+                              }`}>
+                                {booking.status}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <div className="flex items-center justify-end gap-1">
+                                {(booking.status === 'pending' || booking.status === 'Pending') && (
+                                  <>
+                                    <Tooltip content="Confirm Booking" description="Approve this reservation">
+                                      <button
+                                        onClick={() => { setSelectedBooking(booking); setShowConfirmModal(true); }}
+                                        className="p-1.5 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                      >
+                                        <CheckCircle className="w-4 h-4" />
+                                      </button>
+                                    </Tooltip>
+                                    <Tooltip content="Reject Booking" description="Decline this reservation">
+                                      <button
+                                        onClick={() => { setSelectedBooking(booking); setShowRejectModal(true); }}
+                                        className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                      >
+                                        <XCircle className="w-4 h-4" />
+                                      </button>
+                                    </Tooltip>
+                                    <Tooltip content="WhatsApp Guest" description="Send confirmation via WhatsApp">
+                                      <button
+                                        onClick={() => handleWhatsAppNotify(booking)}
+                                        className="p-1.5 text-[#25D366] hover:bg-green-50 rounded-lg transition-colors"
+                                      >
+                                        <MessageCircle className="w-4 h-4" />
+                                      </button>
+                                    </Tooltip>
+                                  </>
+                                )}
+                                <Tooltip content="View Details" description="See full booking info">
+                                  <button className="p-1.5 text-secondary hover:bg-surface-container rounded-lg transition-colors">
+                                    <Eye className="w-4 h-4" />
+                                  </button>
+                                </Tooltip>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                        {(bookings as any[]).length === 0 && (
+                          <tr>
+                            <td colSpan={6} className="px-6 py-12 text-center text-secondary italic text-sm">
+                              No booking requests yet.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {(activeSection === 'analytics' || activeSection === 'overview') && (
+              <motion.div
+                key="analytics"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+              >
+                <div className="mb-8">
+                  <h2 className="font-serif text-headline-lg text-on-surface">Platform Analytics</h2>
+                  <p className="text-body-lg text-secondary mt-2">Revenue and performance insights</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 luxury-shadow">
+                    <TrendingUp className="w-6 h-6 text-green-600 mb-4" />
+                    <p className="text-label-caps text-secondary uppercase">Monthly Revenue</p>
+                    <p className="text-headline-md font-serif font-bold text-on-surface mt-1">₦{(totalRevenue / 1000000).toFixed(1)}M</p>
+                    <p className="text-xs text-green-600 mt-1">+12% from last month</p>
+                  </div>
+                  <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 luxury-shadow">
+                    <Calendar className="w-6 h-6 text-primary mb-4" />
+                    <p className="text-label-caps text-secondary uppercase">Bookings This Month</p>
+                    <p className="text-headline-md font-serif font-bold text-on-surface mt-1">{confirmedBookings.length}</p>
+                    <p className="text-xs text-secondary mt-1">{pendingBookings.length} pending</p>
+                  </div>
+                  <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 luxury-shadow">
+                    <Users className="w-6 h-6 text-blue-600 mb-4" />
+                    <p className="text-label-caps text-secondary uppercase">Active Guests</p>
+                    <p className="text-headline-md font-serif font-bold text-on-surface mt-1">48</p>
+                    <p className="text-xs text-blue-600 mt-1">+8 new this week</p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {(activeSection === 'guests' || activeSection === 'services' || activeSection === 'reports') && (
+              <motion.div
+                key={activeSection}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+              >
+                <div className="mb-8">
+                  <h2 className="font-serif text-headline-lg text-on-surface capitalize">{activeSection}</h2>
+                  <p className="text-body-lg text-secondary mt-2">
+                    {activeSection === 'guests' && 'Manage guest profiles and preferences'}
+                    {activeSection === 'services' && 'Oversee concierge services and assignments'}
+                    {activeSection === 'reports' && 'Generate and download operational reports'}
+                  </p>
+                </div>
+                <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-3xl p-12 luxury-shadow flex flex-col items-center justify-center text-center">
+                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                    <Sparkles className="w-8 h-8 text-primary" />
+                  </div>
+                  <h3 className="font-serif text-headline-sm text-on-surface mb-2 capitalize">{activeSection} Module</h3>
+                  <p className="text-body-md text-secondary max-w-md">
+                    This section is being enhanced with advanced features. Check back soon for a comprehensive {activeSection} management experience.
+                  </p>
+                </div>
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
       </main>
+
+      <AnimatePresence>
+        {showConfirmModal && selectedBooking && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-charcoal/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-parchment rounded-2xl p-6 max-w-md w-full shadow-2xl"
+            >
+              <h3 className="font-serif text-xl font-bold text-charcoal mb-4">Confirm Booking</h3>
+              <div className="bg-white rounded-xl p-4 mb-4 space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-charcoal/60">Guest</span>
+                  <span className="font-bold">{selectedBooking.guestName}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-charcoal/60">Property</span>
+                  <span className="font-bold">{selectedBooking.listingTitle}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-charcoal/60">Amount</span>
+                  <span className="font-bold text-primary">₦{selectedBooking.totalAmount.toLocaleString()}</span>
+                </div>
+              </div>
+              <textarea
+                placeholder="Add confirmation notes (optional)..."
+                value={confirmNotes}
+                onChange={(e) => setConfirmNotes(e.target.value)}
+                className="w-full p-3 bg-white border border-charcoal/10 rounded-xl text-sm mb-4 focus:outline-none focus:ring-1 focus:ring-primary"
+                rows={3}
+                disabled={isProcessing}
+              />
+              <div className="flex gap-3">
+                <button
+                  onClick={() => { setShowConfirmModal(false); setConfirmNotes(''); }}
+                  disabled={isProcessing}
+                  className="flex-1 py-3 text-charcoal/60 font-bold text-xs uppercase tracking-widest hover:text-charcoal transition-colors disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleConfirmBooking(selectedBooking)}
+                  disabled={isProcessing}
+                  className="flex-[2] py-3 bg-green-600 text-white font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-green-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {isProcessing ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    'Confirm Booking'
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showRejectModal && selectedBooking && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-charcoal/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-parchment rounded-2xl p-6 max-w-md w-full shadow-2xl"
+            >
+              <h3 className="font-serif text-xl font-bold text-charcoal mb-4">Reject Booking</h3>
+              <div className="bg-white rounded-xl p-4 mb-4 space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-charcoal/60">Guest</span>
+                  <span className="font-bold">{selectedBooking.guestName}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-charcoal/60">Property</span>
+                  <span className="font-bold">{selectedBooking.listingTitle}</span>
+                </div>
+              </div>
+              <textarea
+                placeholder="Reason for rejection (required)..."
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
+                className="w-full p-3 bg-white border border-charcoal/10 rounded-xl text-sm mb-4 focus:outline-none focus:ring-1 focus:ring-error"
+                rows={3}
+                disabled={isProcessing}
+              />
+              <div className="flex gap-3">
+                <button
+                  onClick={() => { setShowRejectModal(false); setRejectReason(''); }}
+                  disabled={isProcessing}
+                  className="flex-1 py-3 text-charcoal/60 font-bold text-xs uppercase tracking-widest hover:text-charcoal transition-colors disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleRejectBooking(selectedBooking)}
+                  disabled={isProcessing || !rejectReason.trim()}
+                  className="flex-[2] py-3 bg-red-600 text-white font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-red-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {isProcessing ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    'Reject Booking'
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
