@@ -148,12 +148,12 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                   {activeTab === 'home' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
                 <button 
-                  onClick={() => setActiveTab('explore-hub')} 
-                  className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'explore-hub' || activeTab === 'explore-lagos' || activeTab === 'vip-services' || activeTab === 'business-lagos' || activeTab === 'events' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
+                  onClick={() => setActiveTab('explorer')} 
+                  className={`group py-2 px-1 relative transition-all duration-300 flex items-center gap-2 ${activeTab === 'explorer' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}
                 >
-                  <MapIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'explore-hub' || activeTab === 'explore-lagos' || activeTab === 'vip-services' || activeTab === 'business-lagos' || activeTab === 'events' ? 'text-gold-dark' : ''}`} />
-                  <span>Explore</span>
-                  {(activeTab === 'explore-hub' || activeTab === 'explore-lagos' || activeTab === 'vip-services' || activeTab === 'business-lagos' || activeTab === 'events') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                  <MapIcon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-125 ${activeTab === 'explorer' ? 'text-gold-dark' : ''}`} />
+                  <span>Stay</span>
+                  {activeTab === 'explorer' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
                 <button 
                   onClick={() => setActiveTab('bundles')} 
@@ -246,7 +246,7 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
               <div className="p-3 space-y-1">
                 {(!isAuthenticated || currentUser?.role === 'user' ? [
                   { tab: 'home', label: 'Gems', icon: HomeIcon },
-                  { tab: 'explore-hub', label: 'Explore', icon: MapIcon },
+                  { tab: 'explorer', label: 'Stay', icon: MapIcon },
                   { tab: 'bundles', label: 'Bundles', icon: CubeIcon },
                   { tab: 'events', label: 'Events', icon: CalendarIcon },
                   ...(isAuthenticated ? [{ tab: 'user-dashboard', label: 'My Dashboard', icon: User }] : []),
