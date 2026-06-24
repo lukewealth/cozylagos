@@ -41,7 +41,7 @@ function AppContent() {
   const { addToast } = useToast();
 
   const [activeTab, setActiveTab] = useState<
-    'home' | 'explorer' | 'explore-lagos' | 'bundles' | 'vip-services' | 'business-lagos' | 'events' | 'favorites' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations' | 'listing-detail'
+    'home' | 'explorer' | 'explore-lagos' | 'bundles' | 'signature-experiences' | 'vip-services' | 'business-lagos' | 'events' | 'favorites' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations' | 'listing-detail'
   >('home');
   
   const [searchDestination, setSearchDestination] = useState<string>('');
@@ -246,7 +246,8 @@ function AppContent() {
               {activeTab === 'explore-lagos' && (
                 <ExploreLagosView onNavigateBundles={() => setActiveTab('bundles')} />
               )}
-              {activeTab === 'bundles' && <SignatureExperiencesView />}
+              {activeTab === 'bundles' && <ServiceBundlesView />}
+              {activeTab === 'signature-experiences' && <SignatureExperiencesView />}
               {activeTab === 'vip-services' && <VIPServicesView />}
               {activeTab === 'business-lagos' && <BusinessLagosView />}
               {activeTab === 'events' && <EventsView />}

@@ -148,7 +148,10 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                   🤝 Assist{activeTab === 'vip-services' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
                 <button onClick={() => setActiveTab('bundles')} className={`py-2 px-1 relative transition-colors ${activeTab === 'bundles' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
-                  ✨ Experiences{activeTab === 'bundles' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                  📦 Bundles{activeTab === 'bundles' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
+                </button>
+                <button onClick={() => setActiveTab('signature-experiences')} className={`py-2 px-1 relative transition-colors ${activeTab === 'signature-experiences' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
+                  ✨ Experiences{activeTab === 'signature-experiences' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
                 </button>
                 <button onClick={() => setActiveTab('business-lagos')} className={`py-2 px-1 relative transition-colors ${activeTab === 'business-lagos' ? 'text-charcoal' : 'text-charcoal-light hover:text-charcoal'}`}>
                   💼 Business{activeTab === 'business-lagos' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
@@ -238,7 +241,8 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                   { tab: 'home', label: '🏡 Lagos Gems' },
                   { tab: 'explore-lagos', label: '🌴 Explore Lagos' },
                   { tab: 'vip-services', label: '🤝 Lagos Assist' },
-                  { tab: 'bundles', label: '✨ Signature Experiences' },
+                  { tab: 'bundles', label: '📦 Bundles' },
+                  { tab: 'signature-experiences', label: '✨ Signature Experiences' },
                   { tab: 'business-lagos', label: '💼 Business Lagos' },
                   { tab: 'events', label: '📅 Events' },
                   ...(isAuthenticated ? [{ tab: 'favorites', label: '❤️ Favorites' }] : []),
