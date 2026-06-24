@@ -15,7 +15,7 @@ import { useDatabase } from '../hooks/useDatabase';
 import CollapsibleSidebar from '../components/ui/CollapsibleSidebar';
 import Tooltip from '../components/ui/Tooltip';
 
-type ProviderSection = 'overview' | 'service-dashboard' | 'my-services' | 'schedule' | 'calendar' | 'earnings' | 'inventory' | 'booking-requests';
+type ProviderSection = 'overview' | 'service-dashboard' | 'listings' | 'my-services' | 'schedule' | 'calendar' | 'earnings' | 'inventory' | 'booking-requests';
 
 const MOCK_STAFF = [
   { id: 's1', name: 'Captain Chidi Okoro', role: 'driver', status: 'on_duty', initials: 'CO', certifications: ['MCA MASTER 3000GT', 'VIP PROTOCOL'], specializations: ['Maritime', 'VIP Transport'], rating: 4.8, availabilityFrom: '22:00', currentAssignment: 'Yacht Leila', tenureYears: 6 },
@@ -43,6 +43,7 @@ export default function ServiceProviderDashboard() {
 
   const { data: bookings } = useDatabase('bookings');
   const { data: transactions } = useDatabase('transactions');
+  const { data: listings, removeRecord: removeListing, addRecord: updateListing } = useDatabase('listings');
 
   const totalEarnings = (transactions as any[]).reduce((sum: number, t: any) => sum + (t.amount || 0), 0);
   const activeBookings = (bookings as any[]).filter((b: any) => b.status === 'confirmed' || b.status === 'Confirmed' || b.status === 'Pending');
@@ -117,7 +118,6 @@ export default function ServiceProviderDashboard() {
                 <Menu className="w-5 h-5" />
               </button>
             </Tooltip>
-            <span className="font-serif text-headline-sm font-bold tracking-tight text-primary hidden md:block">My Dashboard</span>
           </div>
           <div className="flex items-center gap-2 md:gap-6">
             <Tooltip content="Notifications" description="View alerts and updates">
@@ -298,6 +298,114 @@ export default function ServiceProviderDashboard() {
                       })}
                     </div>
                   </section>
+                </div>
+              </motion.div>
+            )}
+
+            {activeSection === 'listings' && (
+              <motion.div key="listings" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
+                <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                  <div>
+                    <h1 className="font-serif text-headline-lg text-on-surface">My Properties</h1>
+                    <p className="text-secondary font-body-lg mt-2">Manage your listed properties and availability</p>
+                  </div>
+                </header>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  {[
+                    { label: 'Total Properties', value: (listings as any[]).length, icon: Globe, color: 'text-primary' },
+                    { label: 'Active Listings', value: (listings as any[]).filter((l: any) => l.isActive).length, icon: CheckCircle, color: 'text-green-600' },
+                    { label: 'Inactive', value: (listings as any[]).filter((l: any) => !l.isActive).length, icon: XCircle, color: 'text-amber-600' },
+                  ].map((stat, i) => (
+                    <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
+                      className="glass-card p-5 rounded-2xl border border-outline-variant/10 luxury-shadow">
+                      <stat.icon className={`w-5 h-5 ${stat.color} mb-3`} />
+                      <p className="text-[10px] font-bold tracking-widest text-secondary uppercase">{stat.label}</p>
+                      <p className="text-xl font-serif font-bold text-on-surface mt-1">{stat.value}</p>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-3xl overflow-hidden luxury-shadow">
+                  <div className="px-6 py-4 border-b border-outline-variant/10">
+                    <h3 className="font-serif text-headline-sm text-on-surface">Property Listings</h3>
+                  </div>
+                  <div className="divide-y divide-outline-variant/10">
+                    {(listings as any[]).length === 0 ? (
+                      <div className="p-12 text-center">
+                        <Globe className="w-12 h-12 text-primary/30 mx-auto mb-3" />
+                        <p className="text-sm text-secondary">No properties listed yet.</p>
+                        <p className="text-xs text-secondary mt-1">Start by adding your first property listing.</p>
+                      </div>
+                    ) : (
+                      (listings as any[]).map((listing: any) => (
+                        <div key={listing.id} className="p-5 hover:bg-surface-container-low/50 transition-colors">
+                          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div className="flex items-start gap-4">
+                              <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 overflow-hidden">
+                                {listing.image ? (
+                                  <img src={listing.image} alt={listing.title} className="w-full h-full object-cover" />
+                                ) : (
+                                  <Globe className="w-8 h-8 text-primary" />
+                                )}
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="font-bold text-on-surface text-lg">{listing.title}</h4>
+                                <div className="flex items-center gap-2 mt-1 text-xs text-secondary">
+                                  <MapPin className="w-3 h-3" />
+                                  <span>{listing.location}</span>
+                                  <span>•</span>
+                                  <span>{listing.bedrooms} bed</span>
+                                  <span>•</span>
+                                  <span>{listing.bathrooms} bath</span>
+                                </div>
+                                <div className="flex items-center gap-3 mt-2">
+                                  <span className="font-bold text-primary">₦{listing.nightlyRate?.toLocaleString()}/night</span>
+                                  <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
+                                    listing.isActive ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                                  }`}>
+                                    {listing.isActive ? 'Active' : 'Inactive'}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => {
+                                  updateListing({ ...listing, isActive: !listing.isActive } as any);
+                                }}
+                                className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1 ${
+                                  listing.isActive
+                                    ? 'bg-amber-100 text-amber-700 hover:bg-amber-200'
+                                    : 'bg-green-100 text-green-700 hover:bg-green-200'
+                                }`}
+                              >
+                                {listing.isActive ? (
+                                  <>
+                                    <XCircle className="w-3.5 h-3.5" /> Deactivate
+                                  </>
+                                ) : (
+                                  <>
+                                    <CheckCircle className="w-3.5 h-3.5" /> Activate
+                                  </>
+                                )}
+                              </button>
+                              <button
+                                onClick={() => {
+                                  if (confirm('Are you sure you want to delete this property?')) {
+                                    removeListing(listing.id);
+                                  }
+                                }}
+                                className="px-4 py-2 bg-red-100 text-red-700 rounded-lg text-xs font-bold hover:bg-red-200 transition-colors flex items-center gap-1"
+                              >
+                                <XCircle className="w-3.5 h-3.5" /> Delete
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
               </motion.div>
             )}

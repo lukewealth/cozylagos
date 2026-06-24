@@ -443,6 +443,31 @@ function AppContent() {
                   <ServiceProviderDashboard />
                 </Suspense>
               )}
+              {activeTab === 'listings' && currentUser?.role === 'service_provider' && (
+                <Suspense fallback={<DashboardSkeleton />}>
+                  <ServiceProviderDashboard />
+                </Suspense>
+              )}
+              {activeTab === 'my-services' && currentUser?.role === 'service_provider' && (
+                <Suspense fallback={<DashboardSkeleton />}>
+                  <ServiceProviderDashboard />
+                </Suspense>
+              )}
+              {activeTab === 'booking-requests' && currentUser?.role === 'service_provider' && (
+                <Suspense fallback={<DashboardSkeleton />}>
+                  <ServiceProviderDashboard />
+                </Suspense>
+              )}
+              {activeTab === 'inventory' && currentUser?.role === 'service_provider' && (
+                <Suspense fallback={<DashboardSkeleton />}>
+                  <ServiceProviderDashboard />
+                </Suspense>
+              )}
+              {activeTab === 'earnings' && currentUser?.role === 'service_provider' && (
+                <Suspense fallback={<DashboardSkeleton />}>
+                  <ServiceProviderDashboard />
+                </Suspense>
+              )}
               {activeTab === 'admin-dashboard' && (
                 <Suspense fallback={<DashboardSkeleton />}>
                   <AdminDashboard listings={listings} onToggleStatus={handleToggleStatus} onDeleteListing={handleDeleteListing} />

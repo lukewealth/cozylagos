@@ -40,7 +40,7 @@ const PROVIDER_NAV: NavItem[] = [
   { id: 'booking-requests', label: 'Bookings', icon: Bell, description: 'Booking requests' },
   { id: 'calendar', label: 'Schedule', icon: BarChart3, description: 'Calendar & bookings' },
   { id: 'inventory', label: 'Inventory & Staff', icon: Database, description: 'Assets & assignments' },
-  { id: 'payouts', label: 'Earnings', icon: Key, description: 'Financial reports' },
+  { id: 'earnings', label: 'Earnings', icon: Key, description: 'Financial reports' },
 ];
 
 export default function CollapsibleSidebar({ activeTab, setActiveTab, userRole, onLogout, onHelp, onCollapse, isMobileOpen = false, onMobileClose }: SidebarProps) {
