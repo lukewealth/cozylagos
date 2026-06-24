@@ -38,13 +38,9 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
 
   return (
     <div className="flex-grow flex flex-col animate-fade-in">
-      {/* 1. HERO SECTION WITH SEARCH */}
-      <Hero>
-        <SmartSearchBar
-          listings={allListings}
-          onResultsChange={handleSearchResults}
-        />
-        <div className="mt-6 flex items-center justify-center gap-1 sm:gap-2">
+      {/* Tab Navigation - Always visible */}
+      <div className="bg-charcoal py-4 px-4 sm:px-6">
+        <div className="max-w-[1440px] mx-auto flex items-center justify-center gap-2 sm:gap-4">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = homeTab === tab.id;
@@ -64,7 +60,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
             );
           })}
         </div>
-      </Hero>
+      </div>
 
       <AnimatePresence mode="wait">
         {homeTab === 'gems' && (
@@ -75,6 +71,13 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
           >
+            {/* Hero Section with Search - Only for Gems tab */}
+            <Hero>
+              <SmartSearchBar
+                listings={allListings}
+                onResultsChange={handleSearchResults}
+              />
+            </Hero>
             {/* 2. LAGOS GEMS - HOT DEALS */}
             <section className="py-10 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
               <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10 md:mb-12 gap-4">
@@ -298,7 +301,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
           >
-            <ExploreLagosView onNavigateBundles={() => setActiveTab('bundles')} />
+            <ExploreLagosView onNavigateBundles={() => setActiveTab('bundles')} showHero={false} />
           </motion.div>
         )}
 
@@ -310,7 +313,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
           >
-            <VIPServicesView />
+            <VIPServicesView showHero={false} />
           </motion.div>
         )}
       </AnimatePresence>

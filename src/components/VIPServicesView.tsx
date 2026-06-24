@@ -302,7 +302,7 @@ function ServiceDetailPanel({ service, onClose }: { service: VIPService; onClose
   );
 }
 
-export default function VIPServicesView() {
+export default function VIPServicesView({ showHero = true }: { showHero?: boolean }) {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedService, setSelectedService] = useState<VIPService | null>(null);
@@ -321,51 +321,70 @@ export default function VIPServicesView() {
 
   return (
     <div className="flex-grow bg-parchment text-left">
-      <section className="relative overflow-hidden bg-charcoal">
-        <div className="absolute inset-0 bg-gradient-to-br from-charcoal via-charcoal/95 to-gold/20" />
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
+      {/* Hero Section - Conditional */}
+      {showHero && (
+        <section className="relative overflow-hidden bg-charcoal">
+          <div className="absolute inset-0 bg-gradient-to-br from-charcoal via-charcoal/95 to-gold/20" />
+          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
 
-        <div className="relative max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 pt-16 sm:pt-24 md:pt-32 pb-16 sm:pb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-3xl"
-          >
-            <div className="flex items-center gap-2 mb-5">
-              <div className="w-8 h-[1px] bg-gold" />
-              <span className="text-gold font-bold text-[10px] tracking-[0.25em] uppercase">
-                Private VIP Guest Services
-              </span>
+          <div className="relative max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 pt-16 sm:pt-24 md:pt-32 pb-16 sm:pb-20">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="max-w-3xl"
+            >
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-8 h-[1px] bg-gold" />
+                <span className="text-gold font-bold text-[10px] tracking-[0.25em] uppercase">
+                  Private VIP Guest Services
+                </span>
+              </div>
+              <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white font-bold leading-[1.05] tracking-tight">
+                VIP{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-dark">
+                  Services
+                </span>
+              </h1>
+              <p className="font-sans text-sm sm:text-base md:text-lg text-white/60 font-light max-w-xl mt-5 leading-relaxed">
+                Curated premium services for the distinguished guest. From spa treatments to personal chefs, experience Lagos in ultimate luxury.
+              </p>
+              <div className="flex flex-wrap items-center gap-4 mt-8">
+                <div className="flex items-center gap-2 text-white/40">
+                  <Crown className="w-4 h-4" />
+                  <span className="text-xs font-medium">Verified Providers</span>
+                </div>
+                <div className="w-1 h-1 rounded-full bg-white/20" />
+                <div className="flex items-center gap-2 text-white/40">
+                  <Award className="w-4 h-4" />
+                  <span className="text-xs font-medium">Premium Quality</span>
+                </div>
+                <div className="w-1 h-1 rounded-full bg-white/20" />
+                <div className="flex items-center gap-2 text-white/40">
+                  <Sparkles className="w-4 h-4" />
+                  <span className="text-xs font-medium">8 Categories</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
+      {/* Compact header when no hero */}
+      {!showHero && (
+        <section className="py-8 px-4 sm:px-6 md:px-12 xl:px-20 max-w-[1440px] mx-auto">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="font-serif text-3xl sm:text-4xl text-charcoal">
+                Cozy <span className="italic font-light text-gold-dark">Assist</span>
+              </h2>
+              <p className="text-sm text-charcoal/60 mt-2">
+                Premium concierge services for the distinguished guest.
+              </p>
             </div>
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white font-bold leading-[1.05] tracking-tight">
-              VIP{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-dark">
-                Services
-              </span>
-            </h1>
-            <p className="font-sans text-sm sm:text-base md:text-lg text-white/60 font-light max-w-xl mt-5 leading-relaxed">
-              Curated premium services for the distinguished guest. From spa treatments to personal chefs, experience Lagos in ultimate luxury.
-            </p>
-            <div className="flex flex-wrap items-center gap-4 mt-8">
-              <div className="flex items-center gap-2 text-white/40">
-                <Crown className="w-4 h-4" />
-                <span className="text-xs font-medium">Verified Providers</span>
-              </div>
-              <div className="w-1 h-1 rounded-full bg-white/20" />
-              <div className="flex items-center gap-2 text-white/40">
-                <Award className="w-4 h-4" />
-                <span className="text-xs font-medium">Premium Quality</span>
-              </div>
-              <div className="w-1 h-1 rounded-full bg-white/20" />
-              <div className="flex items-center gap-2 text-white/40">
-                <Sparkles className="w-4 h-4" />
-                <span className="text-xs font-medium">8 Categories</span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       <div className="sticky top-20 z-40 bg-parchment/90 backdrop-blur-xl border-b border-charcoal/5">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20">

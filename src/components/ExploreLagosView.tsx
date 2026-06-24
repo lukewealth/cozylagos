@@ -102,7 +102,7 @@ const categories: Category[] = [
   },
 ];
 
-export default function ExploreLagosView({ onNavigateBundles }: { onNavigateBundles: () => void }) {
+export default function ExploreLagosView({ onNavigateBundles, showHero = true }: { onNavigateBundles: () => void; showHero?: boolean }) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState<ExploreItem | null>(null);
@@ -125,81 +125,109 @@ export default function ExploreLagosView({ onNavigateBundles }: { onNavigateBund
 
   return (
     <div className="flex-grow flex flex-col animate-fade-in-up">
-      {/* Hero Section */}
-      <section className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0 bg-charcoal">
-          <motion.img
-            initial={{ scale: 1.1 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 10, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full h-full object-cover opacity-35 select-none pointer-events-none"
-            src="/assets/images/horizontal/CozyLagos.jpeg"
-            alt="Explore Lagos"
-            onError={(e) => { (e.target as HTMLImageElement).src = '/assets/bundles/bundles-hero-background.jpeg'; }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-charcoal/50 via-charcoal/20 to-charcoal/80" />
-        </div>
+      {/* Hero Section - Conditional */}
+      {showHero && (
+        <section className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden">
+          <div className="absolute inset-0 z-0 bg-charcoal">
+            <motion.img
+              initial={{ scale: 1.1 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 10, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full h-full object-cover opacity-35 select-none pointer-events-none"
+              src="/assets/images/horizontal/CozyLagos.jpeg"
+              alt="Explore Lagos"
+              onError={(e) => { (e.target as HTMLImageElement).src = '/assets/bundles/bundles-hero-background.jpeg'; }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-charcoal/50 via-charcoal/20 to-charcoal/80" />
+          </div>
 
-        <div className="relative z-10 w-full max-w-[1440px] px-4 sm:px-6 md:px-12 xl:px-20 mx-auto flex flex-col items-center text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex items-center gap-3 mb-5"
-          >
-            <div className="w-10 h-[1px] bg-gold/40" />
-            <span className="text-gold-light text-[10px] font-bold tracking-[0.4em] uppercase">
-              Discover Lagos
-            </span>
-            <div className="w-10 h-[1px] bg-gold/40" />
-          </motion.div>
+          <div className="relative z-10 w-full max-w-[1440px] px-4 sm:px-6 md:px-12 xl:px-20 mx-auto flex flex-col items-center text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="flex items-center gap-3 mb-5"
+            >
+              <div className="w-10 h-[1px] bg-gold/40" />
+              <span className="text-gold-light text-[10px] font-bold tracking-[0.4em] uppercase">
+                Discover Lagos
+              </span>
+              <div className="w-10 h-[1px] bg-gold/40" />
+            </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.35 }}
-            className="font-serif text-4xl sm:text-5xl md:text-6xl xl:text-7xl text-parchment leading-tight tracking-tight max-w-4xl mb-4"
-          >
-            Explore <span className="italic font-light text-gold-light">Lagos</span>
-          </motion.h1>
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.35 }}
+              className="font-serif text-4xl sm:text-5xl md:text-6xl xl:text-7xl text-parchment leading-tight tracking-tight max-w-4xl mb-4"
+            >
+              Explore <span className="italic font-light text-gold-light">Lagos</span>
+            </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="font-sans text-sm sm:text-base md:text-lg text-parchment/70 max-w-2xl font-light leading-relaxed px-4"
-          >
-            From pristine beaches to vibrant nightlife, world-class dining to cultural landmarks — experience the best of Lagos.
-          </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="font-sans text-sm sm:text-base md:text-lg text-parchment/70 max-w-2xl font-light leading-relaxed px-4"
+            >
+              From pristine beaches to vibrant nightlife, world-class dining to cultural landmarks — experience the best of Lagos.
+            </motion.p>
 
-          {/* Search Bar */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            className="mt-8 w-full max-w-xl"
-          >
-            <div className="relative">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal/40" />
+            {/* Search Bar */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="mt-8 w-full max-w-xl"
+            >
+              <div className="relative">
+                <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal/40" />
+                <input
+                  type="text"
+                  placeholder="Search beaches, restaurants, attractions..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-14 pr-12 py-4 bg-white/95 backdrop-blur-xl rounded-full text-sm sm:text-base text-charcoal placeholder:text-charcoal/40 focus:outline-none focus:ring-2 focus:ring-gold/50 shadow-2xl"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-charcoal/5 rounded-full transition-colors"
+                  >
+                    <X className="w-4 h-4 text-charcoal/40" />
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
+      {/* Compact header when no hero */}
+      {!showHero && (
+        <section className="py-8 px-4 sm:px-6 md:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="font-serif text-3xl sm:text-4xl text-charcoal">
+                Explore <span className="italic font-light text-gold-dark">Lagos</span>
+              </h2>
+              <p className="text-sm text-charcoal/60 mt-2">
+                Discover the best of Lagos — beaches, culture, food, and more.
+              </p>
+            </div>
+            <div className="relative max-w-md">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/40" />
               <input
                 type="text"
-                placeholder="Search beaches, restaurants, attractions..."
+                placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-14 pr-12 py-4 bg-white/95 backdrop-blur-xl rounded-full text-sm sm:text-base text-charcoal placeholder:text-charcoal/40 focus:outline-none focus:ring-2 focus:ring-gold/50 shadow-2xl"
+                className="pl-10 pr-4 py-2.5 bg-white border border-charcoal/10 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-gold/30"
               />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-charcoal/5 rounded-full transition-colors"
-                >
-                  <X className="w-4 h-4 text-charcoal/40" />
-                </button>
-              )}
             </div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       {/* Category Navigation */}
       <section className="sticky top-20 z-30 bg-parchment/95 backdrop-blur-xl border-b border-charcoal/5 shadow-sm">
