@@ -11,70 +11,18 @@ import { useAuth } from '../auth';
 import Tooltip from '../components/ui/Tooltip';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import CollapsibleSidebar from '../components/ui/CollapsibleSidebar';
+import { getAllUsers, DEMO_CREDENTIALS } from '../utils/credentials';
 
-interface UserCredential {
+interface UserDisplay {
   id: string;
   role: string;
   email: string;
-  password: string;
   name: string;
   status: 'active' | 'inactive' | 'pending';
   lastLogin?: string;
   loyaltyPoints?: number;
+  phone?: string;
 }
-
-const DEMO_CREDENTIALS: UserCredential[] = [
-  {
-    id: 'user-001',
-    role: 'user',
-    email: 'lukeokagha@gmail.com',
-    password: 'cozy_guest_2024',
-    name: 'Luke Okagha',
-    status: 'active',
-    lastLogin: '2024-01-15T10:00:00Z',
-    loyaltyPoints: 12450
-  },
-  {
-    id: 'admin-001',
-    role: 'admin',
-    email: 'contact@tricode.pro',
-    password: 'cozy_admin_2024',
-    name: 'Tricode Admin',
-    status: 'active',
-    lastLogin: '2024-01-15T10:00:00Z',
-    loyaltyPoints: 25000
-  },
-  {
-    id: 'superadmin-001',
-    role: 'super_admin',
-    email: 'luke.o@tricode.pro',
-    password: 'cozy_super_2024',
-    name: 'Luke O.',
-    status: 'active',
-    lastLogin: '2024-01-15T10:00:00Z',
-    loyaltyPoints: 99999
-  },
-  {
-    id: 'guest-001',
-    role: 'guest',
-    email: 'guest@cozylagos.ng',
-    password: 'cozy_visitor_2024',
-    name: 'Alexander Sterling',
-    status: 'active',
-    lastLogin: '2024-01-15T10:00:00Z',
-    loyaltyPoints: 12450
-  },
-  {
-    id: 'provider-001',
-    role: 'service_provider',
-    email: 'chef@cozylagos.ng',
-    password: 'cozy_host_2024',
-    name: 'Chef Adaeze',
-    status: 'active',
-    lastLogin: '2024-01-15T10:00:00Z',
-    loyaltyPoints: 5600
-  }
-];
 
 export default function SuperAdminDashboard() {
   const { currentUser } = useAuth();
@@ -82,9 +30,7 @@ export default function SuperAdminDashboard() {
   
   const [activeSection, setActiveSection] = useState<'overview' | 'users' | 'infrastructure'>('overview');
   const [isLoading, setIsLoading] = useState(true);
-  const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
   const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
-  const [copiedPassword, setCopiedPassword] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRole, setSelectedRole] = useState<string>('all');
 
@@ -93,22 +39,19 @@ export default function SuperAdminDashboard() {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleCopy = (text: string, type: 'email' | 'password', id: string) => {
-    navigator.clipboard.writeText(text);
-    if (type === 'email') {
-      setCopiedEmail(id);
-      setTimeout(() => setCopiedEmail(null), 2000);
-    } else {
-      setCopiedPassword(id);
-      setTimeout(() => setCopiedPassword(null), 2000);
-    }
+  // Get users without passwords
+  const users: UserDisplay[] = getAllUsers().map(u => ({
+    ...u,
+    status: 'active' as const
+  }));
+
+  const handleCopyEmail = (email: string, id: string) => {
+    navigator.clipboard.writeText(email);
+    setCopiedEmail(id);
+    setTimeout(() => setCopiedEmail(null), 2000);
   };
 
-  const togglePasswordVisibility = (id: string) => {
-    setShowPasswords(prev => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const filteredUsers = DEMO_CREDENTIALS.filter(user => {
+  const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          user.email.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesRole = selectedRole === 'all' || user.role === selectedRole;
@@ -253,7 +196,6 @@ export default function SuperAdminDashboard() {
                     <th className="text-left py-4 px-4 text-[10px] font-bold tracking-widest text-charcoal/40 uppercase">User</th>
                     <th className="text-left py-4 px-4 text-[10px] font-bold tracking-widest text-charcoal/40 uppercase">Role</th>
                     <th className="text-left py-4 px-4 text-[10px] font-bold tracking-widest text-charcoal/40 uppercase">Email</th>
-                    <th className="text-left py-4 px-4 text-[10px] font-bold tracking-widest text-charcoal/40 uppercase">Password</th>
                     <th className="text-left py-4 px-4 text-[10px] font-bold tracking-widest text-charcoal/40 uppercase">Status</th>
                     <th className="text-left py-4 px-4 text-[10px] font-bold tracking-widest text-charcoal/40 uppercase">Last Login</th>
                     <th className="text-right py-4 px-4 text-[10px] font-bold tracking-widest text-charcoal/40 uppercase">Actions</th>
@@ -293,41 +235,10 @@ export default function SuperAdminDashboard() {
                             <span className="text-sm text-charcoal font-mono">{user.email}</span>
                             <Tooltip content={copiedEmail === user.id ? 'Copied!' : 'Copy Email'}>
                               <button
-                                onClick={() => handleCopy(user.email, 'email', user.id)}
+                                onClick={() => handleCopyEmail(user.email, user.id)}
                                 className="p-1 hover:bg-charcoal/5 rounded transition-colors"
                               >
                                 {copiedEmail === user.id ? (
-                                  <Check className="w-3.5 h-3.5 text-green-600" />
-                                ) : (
-                                  <Copy className="w-3.5 h-3.5 text-charcoal/40" />
-                                )}
-                              </button>
-                            </Tooltip>
-                          </div>
-                        </td>
-                        <td className="py-4 px-4">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm text-charcoal font-mono">
-                              {showPasswords[user.id] ? user.password : '••••••••'}
-                            </span>
-                            <Tooltip content={showPasswords[user.id] ? 'Hide' : 'Show Password'}>
-                              <button
-                                onClick={() => togglePasswordVisibility(user.id)}
-                                className="p-1 hover:bg-charcoal/5 rounded transition-colors"
-                              >
-                                {showPasswords[user.id] ? (
-                                  <EyeOff className="w-3.5 h-3.5 text-charcoal/40" />
-                                ) : (
-                                  <Eye className="w-3.5 h-3.5 text-charcoal/40" />
-                                )}
-                              </button>
-                            </Tooltip>
-                            <Tooltip content={copiedPassword === user.id ? 'Copied!' : 'Copy Password'}>
-                              <button
-                                onClick={() => handleCopy(user.password, 'password', user.id)}
-                                className="p-1 hover:bg-charcoal/5 rounded transition-colors"
-                              >
-                                {copiedPassword === user.id ? (
                                   <Check className="w-3.5 h-3.5 text-green-600" />
                                 ) : (
                                   <Copy className="w-3.5 h-3.5 text-charcoal/40" />

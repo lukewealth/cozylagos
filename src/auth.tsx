@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { UserRecord, dbGet, dbPut, dbGetByIndex, generateId, cacheSet, cacheGet, syncToLocalStorage } from './db';
+import { DEMO_CREDENTIALS, verifyPassword, getUserByEmail } from './utils/credentials';
 
 export type UserRole = 'guest' | 'user' | 'admin' | 'service_provider' | 'super_admin';
 
@@ -16,77 +17,19 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-interface DemoUser extends UserRecord {
-  password: string;
-}
-
-const DEMO_USERS: DemoUser[] = [
-  {
-    id: 'user-001',
-    email: 'lukeokagha@gmail.com',
-    name: 'Luke Okagha',
-    role: 'user',
-    password: 'cozy_guest_2024',
-    avatar: 'https://ui-avatars.com/api/?name=Luke+Okagha&background=random',
-    phone: '+234 801 234 5678',
-    verified: true,
-    createdAt: '2024-01-15T10:00:00Z',
-    lastLogin: new Date().toISOString(),
-    loyaltyPoints: 12450
-  },
-  {
-    id: 'admin-001',
-    email: 'contact@tricode.pro',
-    name: 'Tricode Admin',
-    role: 'admin',
-    password: 'cozy_admin_2024',
-    avatar: 'https://ui-avatars.com/api/?name=Tricode+Admin&background=random',
-    phone: '+234 803 456 7890',
-    verified: true,
-    createdAt: '2023-12-01T09:00:00Z',
-    lastLogin: new Date().toISOString(),
-    loyaltyPoints: 25000
-  },
-  {
-    id: 'superadmin-001',
-    email: 'luke.o@tricode.pro',
-    name: 'Luke O.',
-    role: 'super_admin',
-    password: 'cozy_super_2024',
-    avatar: 'https://ui-avatars.com/api/?name=Luke+O&background=random',
-    phone: '+234 800 000 0000',
-    verified: true,
-    createdAt: '2023-01-01T00:00:00Z',
-    lastLogin: new Date().toISOString(),
-    loyaltyPoints: 99999
-  },
-  {
-    id: 'guest-001',
-    email: 'guest@cozylagos.ng',
-    name: 'Alexander Sterling',
-    role: 'guest',
-    password: 'cozy_visitor_2024',
-    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDx15JuvuMcDijKEA4B_8Byjpib6fMI0fFxbYNjGPlhYAmDWvMdQMnX_byTMGQod-bhOYO4sugMfBPzJcWxb18Bmql8ORNoXufqWmoeBxtHTbACjeGG_PLhXiHkFL2osEeAHCx3O-SMpXLi_x1k6m7U63tChmAPXFuSi8NBKZZRkEVk2H9wgx0RHOtyObOSAqG24z8-V2mImw29UWFWmSYElo66Yb3acIv983sY8rqYphNg18jA9VNHTqWG9_nxNvLH1FbtnxRmPijH',
-    phone: '+234 801 234 5678',
-    verified: true,
-    createdAt: '2024-01-15T10:00:00Z',
-    lastLogin: new Date().toISOString(),
-    loyaltyPoints: 12450
-  },
-  {
-    id: 'provider-001',
-    email: 'chef@cozylagos.ng',
-    name: 'Chef Adaeze',
-    role: 'service_provider',
-    password: 'cozy_host_2024',
-    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC9lTotMd2RIFjd-3xeK4mO_pmn_YYNyDArzN4tfbFqP4RQklnVe0rYjO7FozZUN0q1OWa3DeOu-ssQ3pyzcns_p3HivAPKLD29383WGDgK7lr1wXrwFiOhXyQL0XWXIpa6C-M3iqJWUVSZG7u5maEXPdRpMTZz4hyhjRB2ciQ2NIYsmPTdywDAsBFkZ7-a_KkFgu73NjCA6ligR5O66nIl54t-AJSB4ttjEwiRBH9ARqWh0YB7Af1tO_9g0HQ3eJmKCryEixQ-8-PF',
-    phone: '+234 804 567 8901',
-    verified: true,
-    createdAt: '2024-03-10T11:15:00Z',
-    lastLogin: new Date().toISOString(),
-    loyaltyPoints: 5600
-  }
-];
+// Convert demo credentials to user records (without passwords)
+const getDemoUserRecord = (credential: typeof DEMO_CREDENTIALS[0]): UserRecord => ({
+  id: credential.id,
+  email: credential.email,
+  name: credential.name,
+  role: credential.role,
+  avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(credential.name)}&background=random`,
+  phone: credential.phone,
+  verified: true,
+  createdAt: '2024-01-15T10:00:00Z',
+  lastLogin: new Date().toISOString(),
+  loyaltyPoints: credential.loyaltyPoints || 0
+});
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<UserRecord | null>(null);
@@ -107,13 +50,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let user = (await dbGetByIndex('users', 'email', email))[0];
     
     if (!user) {
-      const demoUser = DEMO_USERS.find(u => u.email === email);
-      if (demoUser) {
-        if (demoUser.password !== password) {
-          return false;
-        }
-        const { password: _, ...userWithoutPassword } = demoUser;
-        user = userWithoutPassword as UserRecord;
+      // Use secure password verification
+      const { valid, user: credential } = await verifyPassword(email, password);
+      if (valid && credential) {
+        user = getDemoUserRecord(credential);
         await dbPut('users', user);
       }
     }
@@ -159,11 +99,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const switchRole = useCallback(async (role: UserRole) => {
-    const demoUser = DEMO_USERS.find(u => u.role === role);
-    if (demoUser) {
-      await dbPut('users', demoUser);
-      await cacheSet('current_user', demoUser, 86400000);
-      setCurrentUser(demoUser);
+    const credential = DEMO_CREDENTIALS.find(u => u.role === role);
+    if (credential) {
+      const user = getDemoUserRecord(credential);
+      await dbPut('users', user);
+      await cacheSet('current_user', user, 86400000);
+      setCurrentUser(user);
     }
   }, []);
 

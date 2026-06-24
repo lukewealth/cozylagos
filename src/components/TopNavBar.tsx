@@ -473,14 +473,14 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                   <p className="text-[10px] text-charcoal/50 text-center mb-3">Quick Demo Access:</p>
                   <div className="grid grid-cols-1 gap-2 text-[9px]">
                     {[
-                      { role: 'Guest User', email: 'lukeokagha@gmail.com', password: 'cozy_guest_2024', desc: 'Browse & book stays' },
-                      { role: 'Service Provider', email: 'chef@cozylagos.ng', password: 'cozy_host_2024', desc: 'Manage services & earnings' },
-                      { role: 'Admin', email: 'contact@tricode.pro', password: 'cozy_admin_2024', desc: 'Platform management' },
-                      { role: 'Super Admin', email: 'luke.o@tricode.pro', password: 'cozy_super_2024', desc: 'Full system control' },
-                    ].map(({ role, email, password, desc }) => (
+                      { role: 'Guest User', email: 'lukeokagha@gmail.com', desc: 'Browse & book stays' },
+                      { role: 'Service Provider', email: 'chef@cozylagos.ng', desc: 'Manage services & earnings' },
+                      { role: 'Admin', email: 'contact@tricode.pro', desc: 'Platform management' },
+                      { role: 'Super Admin', email: 'luke.o@tricode.pro', desc: 'Full system control' },
+                    ].map(({ role, email, desc }) => (
                       <button
                         key={email}
-                        onClick={() => { setLoginEmail(email); setLoginPassword(password); }}
+                        onClick={() => { setLoginEmail(email); }}
                         className="p-3 bg-charcoal/5 hover:bg-charcoal/10 rounded-lg text-left transition-colors flex justify-between items-center group"
                       >
                         <div>
@@ -491,11 +491,14 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                           <div className="text-charcoal/60 truncate">{email}</div>
                         </div>
                         <div className="text-[8px] text-charcoal/40 group-hover:text-gold-dark transition-colors">
-                          Click to fill
+                          Click to fill email
                         </div>
                       </button>
                     ))}
                   </div>
+                  <p className="text-[9px] text-charcoal/40 text-center mt-3">
+                    Enter your password after selecting a demo account
+                  </p>
                 </div>
               )}
             </motion.div>

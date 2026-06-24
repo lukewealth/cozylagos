@@ -854,13 +854,17 @@ Infrastructure Health → Critical Controls → Audit Logs
    ```
 
 3. **Demo Credentials**
-   ```
-   Guest User: lukeokagha@gmail.com / cozy_guest_2024
-   Provider: chef@cozylagos.ng / cozy_host_2024
-   Admin: contact@tricode.pro / cozy_admin_2024
-   Super Admin: luke.o@tricode.pro / cozy_super_2024
-   Visitor: guest@cozylagos.ng / cozy_visitor_2024
-   ```
+   
+   Demo accounts are configured in `src/utils/credentials.ts`. For security reasons, passwords are not displayed in documentation. 
+   
+   **Demo Email Addresses:**
+   - Guest User: `lukeokagha@gmail.com`
+   - Service Provider: `chef@cozylagos.ng`
+   - Admin: `contact@tricode.pro`
+   - Super Admin: `luke.o@tricode.pro`
+   - Visitor: `guest@cozylagos.ng`
+   
+   **Note:** Passwords are stored securely and never exposed in client-side code or documentation. Contact the system administrator for demo credentials.
 
 ### Responsive Breakpoints
 
