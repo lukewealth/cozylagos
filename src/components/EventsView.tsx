@@ -209,7 +209,17 @@ export default function EventsView() {
   return (
     <div className="flex-grow flex flex-col animate-fade-in-up">
       <section className="relative w-full h-[250px] sm:h-[350px] flex items-center justify-center overflow-hidden bg-rose-900">
-        <div className="absolute inset-0 bg-gradient-to-br from-rose-900 via-pink-800 to-purple-900" />
+        <div className="absolute inset-0">
+          <motion.img
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 10, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full h-full object-cover opacity-40"
+            src="/assets/bundles/eventherobackground.png"
+            alt="Lagos Events"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-rose-900/80 via-rose-900/50 to-rose-900/90" />
+        </div>
         <div className="relative z-10 w-full max-w-[1440px] px-4 sm:px-6 md:px-12 xl:px-20 mx-auto flex flex-col items-center text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
