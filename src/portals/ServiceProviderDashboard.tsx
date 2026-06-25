@@ -8,13 +8,20 @@ import {
   UserCheck, CalendarDays, Download,
   Sparkles, Briefcase, Award, UserCircle, ChevronDown, X, Menu,
   Clock, Star, MapPin, ArrowRight, Filter, DollarSign as DollarIcon,
-  BarChart3, PieChart, Activity, ChevronRight, Plus, Globe
+  BarChart3, PieChart, Activity, ChevronRight, Plus, Globe, Wifi, WifiOff
 } from 'lucide-react';
 import { useAuth } from '../auth';
 import { useDatabase } from '../hooks/useDatabase';
+import { useBackendHealth } from '../hooks/useBackendHealth';
 import CollapsibleSidebar from '../components/ui/CollapsibleSidebar';
 import Tooltip from '../components/ui/Tooltip';
 import ListingWizardView from '../components/ListingWizardView';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
+import EditModal, { EditField } from '../components/ui/EditModal';
+import StaffAssignModal from '../components/ui/StaffAssignModal';
+import AssetCreateModal from '../components/ui/AssetCreateModal';
+import { ToastContainer, showToast } from '../components/ui/Toast';
+import api from '../services/api';
 import { Listing } from '../types';
 
 type ProviderSection = 'overview' | 'service-dashboard' | 'listings' | 'my-services' | 'schedule' | 'calendar' | 'earnings' | 'inventory' | 'booking-requests' | 'wizard';
@@ -42,6 +49,17 @@ export default function ServiceProviderDashboard() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState<string | null>(null);
   const [calendarMonth] = useState(new Date());
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [showAssetModal, setShowAssetModal] = useState(false);
+  const [showBookingConfirm, setShowBookingConfirm] = useState<string | null>(null);
+  const [showBookingReject, setShowBookingReject] = useState<string | null>(null);
+  const [selectedListing, setSelectedListing] = useState<any>(null);
+  const [selectedBookingForAction, setSelectedBookingForAction] = useState<any>(null);
+  const [assets, setAssets] = useState<any[]>([]);
+
+  const backendHealth = useBackendHealth();
 
   const { data: bookings } = useDatabase('bookings');
   const { data: transactions } = useDatabase('transactions');
@@ -82,8 +100,93 @@ export default function ServiceProviderDashboard() {
 
   const handlePublishListing = (newListing: Listing) => {
     updateListing(newListing as any);
+    api.listings.create(newListing).catch(() => {});
+    showToast({ type: 'success', title: 'Property Published', message: `${newListing.title} is now live` });
     setActiveSection('listings');
   };
+
+  const handleDeleteListing = async () => {
+    if (!selectedListing) return;
+    try {
+      await api.listings.delete(selectedListing.id).catch(() => {});
+    } catch {}
+    removeListing(selectedListing.id);
+    showToast({ type: 'success', title: 'Property Deleted', message: `${selectedListing.title} has been removed` });
+    setShowDeleteConfirm(false);
+    setSelectedListing(null);
+  };
+
+  const handleEditListing = async (data: any) => {
+    if (!selectedListing) return;
+    const updated = { ...selectedListing, ...data, updatedAt: new Date().toISOString() };
+    try {
+      await api.listings.update(updated).catch(() => {});
+    } catch {}
+    updateListing(updated as any);
+    showToast({ type: 'success', title: 'Property Updated', message: `${updated.title} has been saved` });
+    setShowEditModal(false);
+    setSelectedListing(null);
+  };
+
+  const handleToggleListingStatus = async (listing: any) => {
+    const updated = { ...listing, isActive: !listing.isActive, updatedAt: new Date().toISOString() };
+    try {
+      await api.listings.update(updated).catch(() => {});
+    } catch {}
+    updateListing(updated as any);
+    showToast({ type: 'info', title: listing.isActive ? 'Property Deactivated' : 'Property Activated', message: updated.title });
+  };
+
+  const handleConfirmBooking = async (booking: any) => {
+    try {
+      await api.bookings.confirm(booking.id).catch(() => {});
+    } catch {}
+    const { addRecord: updateBooking } = useDatabase('bookings');
+    updateBooking({ ...booking, status: 'confirmed', updatedAt: new Date().toISOString() } as any);
+    showToast({ type: 'success', title: 'Booking Confirmed', message: `${booking.guestName}'s booking has been confirmed` });
+    setShowBookingConfirm(null);
+  };
+
+  const handleRejectBooking = async (booking: any) => {
+    try {
+      await api.bookings.cancel(booking.id).catch(() => {});
+    } catch {}
+    const { addRecord: updateBooking } = useDatabase('bookings');
+    updateBooking({ ...booking, status: 'cancelled', updatedAt: new Date().toISOString() } as any);
+    showToast({ type: 'warning', title: 'Booking Rejected', message: `${booking.guestName}'s booking has been declined` });
+    setShowBookingReject(null);
+  };
+
+  const handleAssignStaffToBooking = async (staffId: string) => {
+    const staff = MOCK_STAFF.find(s => s.id === staffId);
+    if (!staff || !selectedBookingForAction) return;
+    try {
+      await api.staff.patch({ id: staffId, currentAssignment: selectedBookingForAction.listingTitle }).catch(() => {});
+    } catch {}
+    showToast({ type: 'success', title: 'Staff Assigned', message: `${staff.name} assigned to ${selectedBookingForAction.listingTitle}` });
+    setShowAssignModal(false);
+    setSelectedBookingForAction(null);
+  };
+
+  const handleCreateAsset = async (asset: any) => {
+    setAssets(prev => [...prev, asset]);
+    try {
+      await api.assets.create(asset).catch(() => {});
+    } catch {}
+    showToast({ type: 'success', title: 'Asset Created', message: `${asset.name} has been added to inventory` });
+    setShowAssetModal(false);
+  };
+
+  const listingEditFields: EditField[] = [
+    { name: 'title', label: 'Property Title', type: 'text', required: true },
+    { name: 'description', label: 'Description', type: 'textarea' },
+    { name: 'nightlyRate', label: 'Nightly Rate (₦)', type: 'number', min: 0 },
+    { name: 'securityDeposit', label: 'Security Deposit (₦)', type: 'number', min: 0 },
+    { name: 'bedrooms', label: 'Bedrooms', type: 'number', min: 0 },
+    { name: 'bathrooms', label: 'Bathrooms', type: 'number', min: 0, step: 0.5 },
+    { name: 'maxGuests', label: 'Max Guests', type: 'number', min: 1 },
+    { name: 'isActive', label: 'Active Listing', type: 'toggle' },
+  ];
 
   const calendarDays = useMemo(() => {
     const year = calendarMonth.getFullYear();
@@ -127,6 +230,16 @@ export default function ServiceProviderDashboard() {
             </Tooltip>
           </div>
           <div className="flex items-center gap-2 md:gap-6">
+            <Tooltip content={`Backend: ${backendHealth.status}`} description={backendHealth.message}>
+              <div className={`hidden md:flex items-center gap-1.5 px-2 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest ${
+                backendHealth.status === 'connected' ? 'bg-green-100 text-green-700' :
+                backendHealth.status === 'fallback' ? 'bg-amber-100 text-amber-700' :
+                'bg-red-100 text-red-700'
+              }`}>
+                {backendHealth.status === 'connected' ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
+                {backendHealth.status === 'connected' ? 'Cloud' : backendHealth.status === 'fallback' ? 'Local' : 'Offline'}
+              </div>
+            </Tooltip>
             <Tooltip content="Notifications" description="View alerts and updates">
               <button className="p-2 text-secondary hover:text-primary cursor-pointer transition-colors relative">
                 <Bell className="w-5 h-5" />
@@ -207,13 +320,22 @@ export default function ServiceProviderDashboard() {
                             <span>{booking.guestsCount} guests</span>
                             {booking.services && <span>• {booking.services.length} services</span>}
                           </div>
-                          <Tooltip content="Assign Staff" description="Assign a service provider">
-                            <button
-                              onClick={() => setSelectedStaff(booking.id)}
-                              className="text-primary font-bold text-xs flex items-center gap-1 hover:gap-2 transition-all">
-                              ASSIGN <ArrowRight className="w-3 h-3" />
-                            </button>
-                          </Tooltip>
+                          <div className="flex items-center gap-2">
+                            <Tooltip content="Confirm" description="Approve this booking">
+                              <button
+                                onClick={() => { setSelectedBookingForAction(booking); setShowBookingConfirm(booking.id); }}
+                                className="text-green-600 font-bold text-xs flex items-center gap-1 hover:gap-2 transition-all">
+                                <CheckCircle className="w-3.5 h-3.5" />
+                              </button>
+                            </Tooltip>
+                            <Tooltip content="Assign Staff" description="Assign a service provider">
+                              <button
+                                onClick={() => { setSelectedBookingForAction(booking); setShowAssignModal(true); }}
+                                className="text-primary font-bold text-xs flex items-center gap-1 hover:gap-2 transition-all">
+                                ASSIGN <ArrowRight className="w-3 h-3" />
+                              </button>
+                            </Tooltip>
+                          </div>
                         </div>
 
                         <AnimatePresence>
@@ -392,9 +514,7 @@ export default function ServiceProviderDashboard() {
                             </div>
                             <div className="flex gap-2">
                               <button
-                                onClick={() => {
-                                  updateListing({ ...listing, isActive: !listing.isActive } as any);
-                                }}
+                                onClick={() => handleToggleListingStatus(listing)}
                                 className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1 ${
                                   listing.isActive
                                     ? 'bg-amber-100 text-amber-700 hover:bg-amber-200'
@@ -412,11 +532,13 @@ export default function ServiceProviderDashboard() {
                                 )}
                               </button>
                               <button
-                                onClick={() => {
-                                  if (confirm('Are you sure you want to delete this property?')) {
-                                    removeListing(listing.id);
-                                  }
-                                }}
+                                onClick={() => { setSelectedListing(listing); setShowEditModal(true); }}
+                                className="px-4 py-2 bg-primary/10 text-primary rounded-lg text-xs font-bold hover:bg-primary/20 transition-colors flex items-center gap-1"
+                              >
+                                <Edit3 className="w-3.5 h-3.5" /> Edit
+                              </button>
+                              <button
+                                onClick={() => { setSelectedListing(listing); setShowDeleteConfirm(true); }}
                                 className="px-4 py-2 bg-red-100 text-red-700 rounded-lg text-xs font-bold hover:bg-red-200 transition-colors flex items-center gap-1"
                               >
                                 <XCircle className="w-3.5 h-3.5" /> Delete
@@ -744,7 +866,7 @@ export default function ServiceProviderDashboard() {
                     <h1 className="font-serif text-headline-lg text-on-surface">Inventory & Staff</h1>
                     <p className="text-secondary font-body-lg mt-2">Manage equipment, assets, and staff assignments</p>
                   </div>
-                  <button className="px-5 py-2.5 bg-primary text-on-primary rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors flex items-center gap-2">
+                  <button onClick={() => setShowAssetModal(true)} className="px-5 py-2.5 bg-primary text-on-primary rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors flex items-center gap-2">
                     <Package className="w-4 h-4" /> Add Asset
                   </button>
                 </header>
@@ -836,6 +958,64 @@ export default function ServiceProviderDashboard() {
           </AnimatePresence>
         </div>
       </main>
+
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={() => { setShowDeleteConfirm(false); setSelectedListing(null); }}
+        onConfirm={handleDeleteListing}
+        title="Delete Property"
+        message={`Are you sure you want to permanently delete "${selectedListing?.title}"? This action cannot be undone.`}
+        confirmLabel="Delete Property"
+        variant="danger"
+      />
+
+      <EditModal
+        isOpen={showEditModal}
+        onClose={() => { setShowEditModal(false); setSelectedListing(null); }}
+        onSave={handleEditListing}
+        title="Edit Property"
+        fields={listingEditFields}
+        initialData={selectedListing ? {
+          title: selectedListing.title || '',
+          description: selectedListing.description || '',
+          nightlyRate: selectedListing.nightlyRate || 0,
+          securityDeposit: selectedListing.securityDeposit || 0,
+          bedrooms: selectedListing.bedrooms || 0,
+          bathrooms: selectedListing.bathrooms || 0,
+          maxGuests: selectedListing.maxGuests || 0,
+          isActive: selectedListing.isActive ?? true,
+        } : {}}
+      />
+
+      <StaffAssignModal
+        isOpen={showAssignModal}
+        onClose={() => { setShowAssignModal(false); setSelectedBookingForAction(null); }}
+        onAssign={handleAssignStaffToBooking}
+        staff={MOCK_STAFF}
+        bookingInfo={selectedBookingForAction ? {
+          title: selectedBookingForAction.listingTitle || 'Booking',
+          guestName: selectedBookingForAction.guestName || 'Guest',
+          date: selectedBookingForAction.checkIn || 'TBD',
+        } : undefined}
+      />
+
+      <AssetCreateModal
+        isOpen={showAssetModal}
+        onClose={() => setShowAssetModal(false)}
+        onCreate={handleCreateAsset}
+      />
+
+      <ConfirmDialog
+        isOpen={!!showBookingConfirm}
+        onClose={() => { setShowBookingConfirm(null); setSelectedBookingForAction(null); }}
+        onConfirm={() => selectedBookingForAction && handleConfirmBooking(selectedBookingForAction)}
+        title="Confirm Booking"
+        message={`Confirm booking for ${selectedBookingForAction?.guestName || 'guest'} - ${selectedBookingForAction?.listingTitle || 'property'}?`}
+        confirmLabel="Confirm Booking"
+        variant="success"
+      />
+
+      <ToastContainer />
     </div>
   );
 }

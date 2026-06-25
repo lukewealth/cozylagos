@@ -925,6 +925,182 @@ xl: 1280px;  /* Desktops */
    - TTL-based cache invalidation
    - Service Worker for assets (future)
 
+## Full-Stack Backend API (Vercel Serverless)
+
+### API Routes
+
+All API routes are deployed as Vercel Serverless Functions in the `/api/` directory.
+
+| Route | Methods | Description |
+|-------|---------|-------------|
+| `/api/health` | GET | MongoDB connection health check |
+| `/api/users` | GET, POST, PUT, DELETE | User CRUD operations |
+| `/api/listings` | GET, POST, PUT, DELETE | Property listing CRUD |
+| `/api/bookings` | GET, POST, PATCH, DELETE | Booking management with payment ledger |
+| `/api/transactions` | GET, POST, PATCH, DELETE | Transaction tracking and payouts |
+| `/api/services` | GET, POST, PUT, DELETE | Service provider offerings |
+| `/api/assets` | GET, POST, PUT, PATCH, DELETE | Equipment and fleet inventory |
+| `/api/staff` | GET, POST, PUT, PATCH, DELETE | Staff management and assignments |
+
+### API Request/Response Format
+
+```typescript
+// Standard response
+{ success: boolean; data?: any; message?: string; error?: string }
+
+// Authentication
+// All requests include Bearer token: Authorization: Bearer <token>
+```
+
+### Backend Fallback Architecture
+
+The application implements a multi-layer fallback strategy:
+
+```
+1. Cloud MongoDB (via Vercel Serverless) → Primary data source
+2. IndexedDB (Client-side) → Offline fallback
+3. LocalStorage → Cross-tab sync backup
+4. Static fallback data → Last resort
+```
+
+The `useBackendHealth` hook monitors connection status and displays a real-time indicator:
+- **Cloud** (green) - Connected to MongoDB Atlas
+- **Local** (amber) - Using IndexedDB fallback
+- **Offline** (red) - No database available
+
+## Micro-Component Library
+
+### Shared UI Components (`src/components/ui/`)
+
+| Component | Purpose |
+|-----------|---------|
+| `ConfirmDialog` | Confirmation alerts with danger/warning/success/info variants |
+| `EditModal` | Dynamic form modal with configurable fields (text, number, select, toggle, textarea) |
+| `StaffAssignModal` | Staff assignment with availability filtering and booking context |
+| `AssetCreateModal` | Asset/inventory creation with category selection |
+| `ToastContainer` / `showToast()` | Global toast notification system |
+| `CollapsibleSidebar` | Role-based navigation sidebar |
+| `Tooltip` | Position-aware animated tooltips |
+| `LoadingSpinner` | Configurable loading indicator |
+| `DashboardSkeleton` | Loading skeleton for dashboards |
+
+### Toast Notification API
+
+```typescript
+import { showToast } from '../components/ui/Toast';
+
+showToast({ type: 'success', title: 'Booking Confirmed', message: 'Guest reservation approved' });
+showToast({ type: 'error', title: 'Failed', message: 'Could not save changes' });
+showToast({ type: 'warning', title: 'Booking Rejected', message: 'Guest notified' });
+showToast({ type: 'info', title: 'Property Deactivated', message: 'Listing is now hidden' });
+```
+
+## SP Dashboard Features
+
+### Implemented Micro-Interactions
+
+1. **Property CRUD**
+   - Create: Listing Wizard (4-step onboarding)
+   - Read: Property listings table with status badges
+   - Update: EditModal with dynamic fields
+   - Delete: ConfirmDialog with danger variant
+
+2. **Booking Management**
+   - Confirmation alerts for approve/reject
+   - Staff assignment via StaffAssignModal
+   - Real-time status badges
+
+3. **Asset Management**
+   - Create assets via AssetCreateModal
+   - Track inventory status (available/in_use/maintenance)
+   - Category-based organization
+
+4. **Staff Orchestration**
+   - Personnel command center
+   - Status tracking (on_duty/available/off_duty)
+   - Assignment to bookings with confirmation
+
+5. **Backend Health Indicator**
+   - Real-time connection status in header
+   - Automatic fallback detection
+
+## Admin Dashboard Features
+
+### Implemented Micro-Interactions
+
+1. **Booking Operations**
+   - Confirm/Reject with modal dialogs
+   - WhatsApp guest notification
+   - Payment ledger with platform/provider split
+
+2. **Listing Management**
+   - Edit listings via EditModal
+   - Delete with confirmation alert
+   - Toggle active/inactive status
+   - Staff assignment integration
+
+3. **Transaction Ledger**
+   - Full billing metadata
+   - Platform cut (15%) / Provider cut (85%) calculation
+   - Payment status tracking
+
+4. **Arrival Operations Center**
+   - Live arrival stream
+   - Security logs timeline
+   - VIP clearance tracking
+
+## Database Schema Extensions
+
+### Assets Collection
+```typescript
+interface AssetRecord {
+  id: string;
+  name: string;
+  category: 'fleet' | 'culinary' | 'comms_security' | 'tech' | 'access';
+  status: 'available' | 'in_use' | 'service_required' | 'maintenance' | 'decommissioned';
+  assetCode: string;
+  assignedTo?: string;
+  tags: string[];
+  notes?: string;
+}
+```
+
+### Staff Collection
+```typescript
+interface StaffRecord {
+  id: string;
+  name: string;
+  role: StaffRole;
+  status: StaffStatus;
+  certifications: string[];
+  specializations: string[];
+  rating: number;
+  currentAssignment?: string;
+  tenureYears: number;
+}
+```
+
+## Testing
+
+### Test Coverage
+- **Total Tests**: 108 (all passing)
+- **Test Files**: 13
+- **Coverage Areas**:
+  - API service (health, users, listings, bookings, assets, staff, services, transactions)
+  - Micro-components (ConfirmDialog, EditModal, StaffAssignModal, AssetCreateModal)
+  - Backend health hook
+  - MongoDB connection
+  - Authentication credentials
+  - Checkout flow
+  - Payment ledger calculations
+
+### Running Tests
+```bash
+npm run test          # Watch mode
+npm run test:run      # Single run
+npm run test:coverage # With coverage report
+```
+
 ## Support & Contact
 
 - **Email**: contact@tricode.pro
@@ -933,6 +1109,6 @@ xl: 1280px;  /* Desktops */
 
 ---
 
-**Last Updated**: June 23, 2026
-**Version**: 1.0.0
-**Status**: Production Ready
+**Last Updated**: June 25, 2026
+**Version**: 2.0.0
+**Status**: Production Ready - Full-Stack with Micro-Components

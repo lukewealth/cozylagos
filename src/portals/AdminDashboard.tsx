@@ -7,14 +7,19 @@ import {
   MessageCircle, Phone, Mail, RefreshCw, Plane, Lock, Timer, Shield,
   Key, Car, Sparkles, Activity, Download, Radio, Cloud, Moon, Sun,
   LayoutDashboard, ClipboardList, UserCheck, ConciergeBell, BarChart3,
-  ChevronRight, Plus, ArrowUpRight, Wifi, Zap, UserCircle, Menu, X
+  ChevronRight, Plus, ArrowUpRight, Wifi, Zap, UserCircle, Menu, X, WifiOff
 } from 'lucide-react';
 import { Listing } from '../types';
 import { useDatabase } from '../hooks/useDatabase';
+import { useBackendHealth } from '../hooks/useBackendHealth';
 import { useAuth } from '../auth';
 import api from '../services/api';
 import CollapsibleSidebar from '../components/ui/CollapsibleSidebar';
 import Tooltip from '../components/ui/Tooltip';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
+import EditModal, { EditField } from '../components/ui/EditModal';
+import StaffAssignModal from '../components/ui/StaffAssignModal';
+import { ToastContainer, showToast } from '../components/ui/Toast';
 
 interface AdminDashboardProps {
   listings: Listing[];
@@ -65,6 +70,13 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showDeleteListingConfirm, setShowDeleteListingConfirm] = useState(false);
+  const [showEditListingModal, setShowEditListingModal] = useState(false);
+  const [showAssignStaffModal, setShowAssignStaffModal] = useState(false);
+  const [selectedListingForAction, setSelectedListingForAction] = useState<Listing | null>(null);
+  const [selectedBookingForAssign, setSelectedBookingForAssign] = useState<any>(null);
+
+  const backendHealth = useBackendHealth();
 
   const { data: bookings, addRecord: updateBooking } = useDatabase('bookings');
 
@@ -96,6 +108,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
     setIsProcessing(true);
     try { await api.bookings.confirm(booking.id); } catch { /* local fallback */ }
     updateBooking({ ...booking, status: 'confirmed', updatedAt: new Date().toISOString() } as any);
+    showToast({ type: 'success', title: 'Booking Confirmed', message: `${booking.guestName}'s reservation has been confirmed` });
     setShowConfirmModal(false);
     setConfirmNotes('');
     setSelectedBooking(null);
@@ -106,6 +119,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
     setIsProcessing(true);
     try { await api.bookings.updateStatus(booking.id, 'cancelled'); } catch { /* local fallback */ }
     updateBooking({ ...booking, status: 'cancelled', updatedAt: new Date().toISOString() } as any);
+    showToast({ type: 'warning', title: 'Booking Rejected', message: `${booking.guestName}'s reservation has been declined` });
     setShowRejectModal(false);
     setRejectReason('');
     setSelectedBooking(null);
@@ -116,6 +130,67 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
     const message = `Hi ${booking.guestName}, your booking for ${booking.listingTitle} (${booking.checkIn} to ${booking.checkOut}) has been confirmed! Total: ₦${booking.totalAmount.toLocaleString()}. Welcome to Cozy Lagos!`;
     window.open(`https://wa.me/2348064305782?text=${encodeURIComponent(message)}`, '_blank');
   };
+
+  const handleDeleteListing = async () => {
+    if (!selectedListingForAction) return;
+    try {
+      await api.listings.delete(selectedListingForAction.id).catch(() => {});
+    } catch {}
+    onDeleteListing(selectedListingForAction.id);
+    showToast({ type: 'success', title: 'Listing Deleted', message: `${selectedListingForAction.title} has been removed` });
+    setShowDeleteListingConfirm(false);
+    setSelectedListingForAction(null);
+  };
+
+  const handleEditListing = async (data: any) => {
+    if (!selectedListingForAction) return;
+    const updated = { ...selectedListingForAction, ...data, updatedAt: new Date().toISOString() };
+    try {
+      await api.listings.update(updated).catch(() => {});
+    } catch {}
+    onToggleStatus(selectedListingForAction.id);
+    showToast({ type: 'success', title: 'Listing Updated', message: `${updated.title} has been saved` });
+    setShowEditListingModal(false);
+    setSelectedListingForAction(null);
+  };
+
+  const handleAssignStaffToBooking = async (staffId: string) => {
+    if (!selectedBookingForAssign) return;
+    try {
+      await api.staff.patch({ id: staffId, currentAssignment: selectedBookingForAssign.listingTitle }).catch(() => {});
+      await api.bookings.updateStatus(selectedBookingForAssign.id, 'confirmed').catch(() => {});
+    } catch {}
+    updateBooking({ ...selectedBookingForAssign, status: 'confirmed', providerAssignmentStatus: 'assigned', updatedAt: new Date().toISOString() } as any);
+    showToast({ type: 'success', title: 'Staff Assigned & Booking Confirmed', message: `Booking for ${selectedBookingForAssign.guestName} confirmed` });
+    setShowAssignStaffModal(false);
+    setSelectedBookingForAssign(null);
+  };
+
+  const listingEditFields: EditField[] = [
+    { name: 'title', label: 'Property Title', type: 'text', required: true },
+    { name: 'description', label: 'Description', type: 'textarea' },
+    { name: 'nightlyRate', label: 'Nightly Rate (₦)', type: 'number', min: 0 },
+    { name: 'category', label: 'Category', type: 'select', options: [
+      { value: 'Penthouse', label: 'Penthouse' },
+      { value: 'Luxury Villa', label: 'Luxury Villa' },
+      { value: 'Executive Studio', label: 'Executive Studio' },
+      { value: 'Serviced Apartment', label: 'Serviced Apartment' },
+    ]},
+    { name: 'location', label: 'Location', type: 'select', options: [
+      { value: 'Ikoyi', label: 'Ikoyi' },
+      { value: 'Victoria Island', label: 'Victoria Island' },
+      { value: 'Banana Island', label: 'Banana Island' },
+      { value: 'Lekki Phase 1', label: 'Lekki Phase 1' },
+    ]},
+    { name: 'isActive', label: 'Active Listing', type: 'toggle' },
+  ];
+
+  const MOCK_ADMIN_STAFF = [
+    { id: 's1', name: 'Captain Chidi Okoro', role: 'driver', status: 'on_duty', initials: 'CO', certifications: ['MCA MASTER 3000GT'], specializations: ['Maritime', 'VIP Transport'], rating: 4.8, availabilityFrom: '22:00', currentAssignment: 'Yacht Leila', tenureYears: 6 },
+    { id: 's2', name: 'Chef Tunde Balogun', role: 'chef', status: 'available', initials: 'TB', certifications: ['Culinary Arts'], specializations: ['Afro-Fusion'], rating: 4.9, availabilityFrom: 'Now', currentAssignment: undefined, tenureYears: 8 },
+    { id: 's3', name: 'Amara Nwosu', role: 'concierge', status: 'available', initials: 'AN', certifications: ['Hospitality Mgmt'], specializations: ['Multilingual'], rating: 4.7, availabilityFrom: 'Now', currentAssignment: undefined, tenureYears: 8 },
+    { id: 's4', name: 'Adebayo Security', role: 'security', status: 'on_duty', initials: 'AS', certifications: ['Armed Escort'], specializations: ['VIP Protection'], rating: 4.6, availabilityFrom: 'Now', currentAssignment: 'Banana Island Villa', tenureYears: 4 },
+  ];
 
   const todayStr = currentTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
@@ -155,6 +230,16 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
           </div>
           <div className="flex items-center gap-2 md:gap-6">
             <div className="flex gap-2 md:gap-4 items-center">
+              <Tooltip content={`Backend: ${backendHealth.status}`} description={backendHealth.message}>
+                <div className={`hidden md:flex items-center gap-1.5 px-2 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest ${
+                  backendHealth.status === 'connected' ? 'bg-green-100 text-green-700' :
+                  backendHealth.status === 'fallback' ? 'bg-amber-100 text-amber-700' :
+                  'bg-red-100 text-red-700'
+                }`}>
+                  {backendHealth.status === 'connected' ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
+                  {backendHealth.status === 'connected' ? 'Cloud' : backendHealth.status === 'fallback' ? 'Local' : 'Offline'}
+                </div>
+              </Tooltip>
               <Tooltip content="Notifications" description="View alerts and updates">
                 <button className="p-2 rounded-full hover:bg-surface-container text-secondary transition-colors relative">
                   <Bell className="w-5 h-5" />
@@ -402,13 +487,28 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                             <td className="px-6 py-4 text-right">
                               <div className="flex items-center justify-end gap-1">
                                 <Tooltip content="Edit Listing" description="Modify property details">
-                                  <button className="p-1.5 text-secondary hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"><Edit3 className="w-4 h-4" /></button>
+                                  <button
+                                    onClick={() => { setSelectedListingForAction(listing); setShowEditListingModal(true); }}
+                                    className="p-1.5 text-secondary hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                                  >
+                                    <Edit3 className="w-4 h-4" />
+                                  </button>
                                 </Tooltip>
                                 <Tooltip content="Delete Listing" description="Remove property permanently">
-                                  <button className="p-1.5 text-secondary hover:text-error hover:bg-red-50 rounded-lg transition-colors"><Trash2 className="w-4 h-4" /></button>
+                                  <button
+                                    onClick={() => { setSelectedListingForAction(listing); setShowDeleteListingConfirm(true); }}
+                                    className="p-1.5 text-secondary hover:text-error hover:bg-red-50 rounded-lg transition-colors"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
                                 </Tooltip>
-                                <Tooltip content="More Options" description="Additional actions">
-                                  <button className="p-1.5 text-secondary hover:bg-surface-container rounded-lg transition-colors"><MoreVertical className="w-4 h-4" /></button>
+                                <Tooltip content="Assign Staff" description="Assign staff to this booking">
+                                  <button
+                                    onClick={() => { setSelectedBookingForAssign({ listingTitle: listing.title, guestName: 'Guest', id: listing.id }); setShowAssignStaffModal(true); }}
+                                    className="p-1.5 text-secondary hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                                  >
+                                    <UserCheck className="w-4 h-4" />
+                                  </button>
                                 </Tooltip>
                               </div>
                             </td>
@@ -841,6 +941,46 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
           </motion.div>
         )}
       </AnimatePresence>
+
+      <ConfirmDialog
+        isOpen={showDeleteListingConfirm}
+        onClose={() => { setShowDeleteListingConfirm(false); setSelectedListingForAction(null); }}
+        onConfirm={handleDeleteListing}
+        title="Delete Listing"
+        message={`Are you sure you want to permanently delete "${selectedListingForAction?.title}"? This action cannot be undone and will remove all associated data.`}
+        confirmLabel="Delete Listing"
+        variant="danger"
+      />
+
+      <EditModal
+        isOpen={showEditListingModal}
+        onClose={() => { setShowEditListingModal(false); setSelectedListingForAction(null); }}
+        onSave={handleEditListing}
+        title="Edit Listing"
+        fields={listingEditFields}
+        initialData={selectedListingForAction ? {
+          title: selectedListingForAction.title || '',
+          description: selectedListingForAction.description || '',
+          nightlyRate: selectedListingForAction.nightlyRate || 0,
+          category: selectedListingForAction.category || 'Penthouse',
+          location: selectedListingForAction.location || 'Ikoyi',
+          isActive: selectedListingForAction.isActive ?? true,
+        } : {}}
+      />
+
+      <StaffAssignModal
+        isOpen={showAssignStaffModal}
+        onClose={() => { setShowAssignStaffModal(false); setSelectedBookingForAssign(null); }}
+        onAssign={handleAssignStaffToBooking}
+        staff={MOCK_ADMIN_STAFF}
+        bookingInfo={selectedBookingForAssign ? {
+          title: selectedBookingForAssign.listingTitle || 'Property',
+          guestName: selectedBookingForAssign.guestName || 'Guest',
+          date: selectedBookingForAssign.checkIn || 'TBD',
+        } : undefined}
+      />
+
+      <ToastContainer />
     </div>
   );
 }

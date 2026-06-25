@@ -251,6 +251,68 @@ export const api = {
     getTransactions: () => request<any[]>('/transactions'),
   },
 
+  assets: {
+    getAll: (params?: Record<string, string>) => {
+      const query = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/assets${query}`);
+    },
+
+    create: (data: any) =>
+      request<any>('/assets', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+
+    update: (data: { id: string; [key: string]: any }) =>
+      request<any>('/assets', {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }),
+
+    patch: (data: { id: string; [key: string]: any }) =>
+      request<any>('/assets', {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+      }),
+
+    delete: (id: string) =>
+      request<any>('/assets', {
+        method: 'DELETE',
+        body: JSON.stringify({ id }),
+      }),
+  },
+
+  staff: {
+    getAll: (params?: Record<string, string>) => {
+      const query = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/staff${query}`);
+    },
+
+    create: (data: any) =>
+      request<any>('/staff', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+
+    update: (data: { id: string; [key: string]: any }) =>
+      request<any>('/staff', {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }),
+
+    patch: (data: { id: string; [key: string]: any }) =>
+      request<any>('/staff', {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+      }),
+
+    delete: (id: string) =>
+      request<any>('/staff', {
+        method: 'DELETE',
+        body: JSON.stringify({ id }),
+      }),
+  },
+
   whatsapp: {
     sendBookingConfirmation: (bookingData: any) =>
       request<any>('/whatsapp/booking-confirmation', {
