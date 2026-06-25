@@ -108,6 +108,7 @@ export interface BusinessService {
   title: string;
   description: string;
   icon: string;
+  image: string;
   features: string[];
   startingPrice: number;
 }
@@ -117,7 +118,8 @@ export const BUSINESS_SERVICES: BusinessService[] = [
     id: 'corporate-housing',
     title: 'Corporate Housing',
     description: 'Fully furnished executive apartments with workspaces, high-speed internet, and concierge services.',
-    icon: '🏢',
+    icon: '',
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80',
     features: ['Executive furniture', 'Dedicated workspace', 'High-speed WiFi', 'Housekeeping', '24/7 support'],
     startingPrice: 200000
   },
@@ -125,7 +127,8 @@ export const BUSINESS_SERVICES: BusinessService[] = [
     id: 'executive-transport',
     title: 'Executive Transportation',
     description: 'Professional chauffeur services with luxury vehicles for business meetings, airport transfers, and city navigation.',
-    icon: '🚗',
+    icon: '',
+    image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80',
     features: ['Luxury vehicles', 'Professional drivers', 'Airport transfers', 'Hourly/daily rates', 'Multi-city'],
     startingPrice: 150000
   },
@@ -134,6 +137,7 @@ export const BUSINESS_SERVICES: BusinessService[] = [
     title: 'Business Concierge',
     description: 'Dedicated concierge for business travelers — meeting scheduling, restaurant reservations, and local assistance.',
     icon: '🤵',
+    image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&q=80',
     features: ['Meeting coordination', 'Restaurant bookings', 'Local assistance', 'Translation services', '24/7 availability'],
     startingPrice: 50000
   },
@@ -142,6 +146,7 @@ export const BUSINESS_SERVICES: BusinessService[] = [
     title: 'Meeting Spaces',
     description: 'Premium meeting rooms and event spaces with AV equipment, catering, and professional support.',
     icon: '📊',
+    image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&q=80',
     features: ['AV equipment', 'Catering options', 'High-speed internet', 'Professional setup', 'Flexible hours'],
     startingPrice: 75000
   },
@@ -150,6 +155,7 @@ export const BUSINESS_SERVICES: BusinessService[] = [
     title: 'Relocation Services',
     description: 'Complete relocation support for executives and families moving to Lagos — housing, schools, and settling in.',
     icon: '📦',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80',
     features: ['Housing search', 'School placement', 'Settling assistance', 'Local orientation', 'Ongoing support'],
     startingPrice: 500000
   },
@@ -158,6 +164,7 @@ export const BUSINESS_SERVICES: BusinessService[] = [
     title: 'Team Accommodation',
     description: 'Group housing solutions for corporate teams — multiple units, coordinated services, and team facilities.',
     icon: '👥',
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80',
     features: ['Multiple units', 'Coordinated services', 'Team facilities', 'Group dining', 'Activity coordination'],
     startingPrice: 150000
   }

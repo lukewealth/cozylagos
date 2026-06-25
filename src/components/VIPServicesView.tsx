@@ -58,10 +58,21 @@ function ServiceCard({ service, onSelect, viewMode }: { service: VIPService; onS
         className="group cursor-pointer"
       >
         <div className="bg-white rounded-xl overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-lg transition-shadow duration-300 flex">
-          <div className={`w-32 sm:w-40 bg-gradient-to-br ${gradient} flex items-center justify-center shrink-0`}>
-            <div className="text-white/90 group-hover:scale-110 transition-transform duration-300">
-              {iconMap[service.category] || <Sparkles className="w-8 h-8" />}
-            </div>
+          <div className="w-32 sm:w-40 overflow-hidden shrink-0">
+            {service.image ? (
+              <img
+                src={service.image}
+                alt={service.title}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                loading="lazy"
+              />
+            ) : (
+              <div className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
+                <div className="text-white/90 group-hover:scale-110 transition-transform duration-300">
+                  {iconMap[service.category] || <Sparkles className="w-8 h-8" />}
+                </div>
+              </div>
+            )}
           </div>
           <div className="flex-1 p-4 sm:p-5">
             <div className="flex items-start justify-between mb-2">
@@ -120,11 +131,22 @@ function ServiceCard({ service, onSelect, viewMode }: { service: VIPService; onS
       className="group cursor-pointer"
     >
       <div className="bg-white rounded-2xl overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-xl transition-shadow duration-500">
-        <div className={`relative h-44 sm:h-48 bg-gradient-to-br ${gradient} flex items-center justify-center overflow-hidden`}>
-          <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-500" />
-          <div className="text-white/90 group-hover:scale-110 transition-transform duration-500">
-            {iconMap[service.category] || <Sparkles className="w-10 h-10" />}
-          </div>
+        <div className="relative h-44 sm:h-48 overflow-hidden">
+          {service.image ? (
+            <img
+              src={service.image}
+              alt={service.title}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              loading="lazy"
+            />
+          ) : (
+            <div className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
+              <div className="text-white/90 group-hover:scale-110 transition-transform duration-500">
+                {iconMap[service.category] || <Sparkles className="w-10 h-10" />}
+              </div>
+            </div>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
           <div className="absolute top-3 right-3">
             <span className="px-2.5 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold text-white tracking-wide">
               ₦{service.price.toLocaleString()}

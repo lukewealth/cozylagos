@@ -13,9 +13,12 @@ export default function NewHomeView({ onSelectListing, setActiveTab }: NewHomeVi
       {/* 1. HERO SECTION */}
       <section className="relative w-full h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img 
-            className="w-full h-full object-cover scale-105" 
-            src="home HQ 1.jpg" 
+          <motion.img
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 10, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full h-full object-cover"
+            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=80"
             alt="Luxury Resort"
           />
           <div className="absolute inset-0 bg-black/40"></div>

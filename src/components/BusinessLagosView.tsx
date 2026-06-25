@@ -7,7 +7,17 @@ export default function BusinessLagosView() {
   return (
     <div className="flex-grow flex flex-col animate-fade-in-up">
       <section className="relative w-full h-[250px] sm:h-[350px] flex items-center justify-center overflow-hidden bg-slate-900">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-charcoal" />
+        <div className="absolute inset-0">
+          <motion.img
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 10, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full h-full object-cover opacity-40"
+            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&q=80"
+            alt="Business Lagos"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/50 to-slate-900/90" />
+        </div>
         <div className="relative z-10 w-full max-w-[1440px] px-4 sm:px-6 md:px-12 xl:px-20 mx-auto flex flex-col items-center text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -57,30 +67,38 @@ export default function BusinessLagosView() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white border border-charcoal/5 rounded-2xl p-6 hover:shadow-xl transition-all duration-300 group"
+              className="bg-white border border-charcoal/5 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 group"
             >
-              <div className="w-14 h-14 rounded-xl bg-slate-100 flex items-center justify-center mb-4 group-hover:bg-gold/10 transition-colors">
-                <span className="text-2xl">{service.icon}</span>
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src={service.image}
+                  alt={service.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               </div>
-              <h3 className="font-serif text-xl font-bold text-charcoal mb-2">{service.title}</h3>
-              <p className="text-sm text-charcoal/60 mb-4 leading-relaxed">{service.description}</p>
-              <ul className="space-y-2 mb-6">
-                {service.features.slice(0, 4).map((feature, i) => (
-                  <li key={i} className="flex items-center gap-2 text-xs text-charcoal/70">
-                    <CheckCircle className="w-3.5 h-3.5 text-gold-dark shrink-0" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="flex items-center justify-between pt-4 border-t border-charcoal/5">
-                <div>
-                  <span className="text-[9px] font-bold text-charcoal/40 uppercase tracking-widest block">Starting from</span>
-                  <span className="font-serif text-lg font-bold text-gold-dark">₦{service.startingPrice.toLocaleString()}</span>
+              <div className="p-6">
+                <h3 className="font-serif text-xl font-bold text-charcoal mb-2">{service.title}</h3>
+                <p className="text-sm text-charcoal/60 mb-4 leading-relaxed">{service.description}</p>
+                <ul className="space-y-2 mb-6">
+                  {service.features.slice(0, 4).map((feature, i) => (
+                    <li key={i} className="flex items-center gap-2 text-xs text-charcoal/70">
+                      <CheckCircle className="w-3.5 h-3.5 text-gold-dark shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex items-center justify-between pt-4 border-t border-charcoal/5">
+                  <div>
+                    <span className="text-[9px] font-bold text-charcoal/40 uppercase tracking-widest block">Starting from</span>
+                    <span className="font-serif text-lg font-bold text-gold-dark">₦{service.startingPrice.toLocaleString()}</span>
+                  </div>
+                  <button className="flex items-center gap-1 px-4 py-2 bg-charcoal text-parchment hover:bg-gold-dark font-bold text-[10px] tracking-widest uppercase rounded-lg transition-all">
+                    <span>Inquire</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </button>
                 </div>
-                <button className="flex items-center gap-1 px-4 py-2 bg-charcoal text-parchment hover:bg-gold-dark font-bold text-[10px] tracking-widest uppercase rounded-lg transition-all">
-                  <span>Inquire</span>
-                  <ArrowRight className="w-3 h-3" />
-                </button>
               </div>
             </motion.div>
           ))}

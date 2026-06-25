@@ -210,19 +210,27 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5 }}
-                    className="bg-parchment/5 backdrop-blur-md border border-parchment/10 rounded-2xl p-6 hover:bg-parchment/10 transition-all group cursor-pointer"
+                    className="relative rounded-2xl overflow-hidden h-80 group cursor-pointer"
                     onClick={() => setActiveTab('yacht-experience')}
                   >
-                    <div className="w-12 h-12 bg-gold/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      <Anchor className="w-6 h-6 text-gold-light" />
-                    </div>
-                    <h3 className="font-serif text-xl font-bold text-parchment mb-2">Private Yacht Charter</h3>
-                    <p className="text-sm text-parchment/60 leading-relaxed mb-4">
-                      65ft luxury executive boat for custom lagoon cruising with multi-course dining and premium champagnes.
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gold-light font-serif font-bold text-lg">₦2,500,000</span>
-                      <span className="text-[10px] text-parchment/40 uppercase tracking-widest">From / 6hrs</span>
+                    <img
+                      src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=800&q=80"
+                      alt="Private Yacht Charter"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-6">
+                      <div className="w-12 h-12 bg-gold/20 backdrop-blur-md rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <Anchor className="w-6 h-6 text-gold-light" />
+                      </div>
+                      <h3 className="font-serif text-xl font-bold text-parchment mb-2">Private Yacht Charter</h3>
+                      <p className="text-sm text-parchment/70 leading-relaxed mb-3">
+                        65ft luxury executive boat for custom lagoon cruising with multi-course dining and premium champagnes.
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-gold-light font-serif font-bold text-lg">₦2,500,000</span>
+                        <span className="text-[10px] text-parchment/50 uppercase tracking-widest">From / 6hrs</span>
+                      </div>
                     </div>
                   </motion.div>
 
@@ -231,19 +239,27 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: 0.1 }}
-                    className="bg-parchment/5 backdrop-blur-md border border-gold/20 rounded-2xl p-6 hover:bg-parchment/10 transition-all group cursor-pointer"
+                    className="relative rounded-2xl overflow-hidden h-80 group cursor-pointer"
                     onClick={() => setActiveTab('bundles')}
                   >
-                    <div className="w-12 h-12 bg-gold/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      <Waves className="w-6 h-6 text-gold-light" />
-                    </div>
-                    <h3 className="font-serif text-xl font-bold text-parchment mb-2">Service Bundles</h3>
-                    <p className="text-sm text-parchment/60 leading-relaxed mb-4">
-                      7 premium bundles from ₦750K to ₦88M. Business, Diaspora, Tourist, Executive Elite, and more.
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gold-light font-serif font-bold text-lg">₦750,000</span>
-                      <span className="text-[10px] text-parchment/40 uppercase tracking-widest">From / 3 days</span>
+                    <img
+                      src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80"
+                      alt="Service Bundles"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-6">
+                      <div className="w-12 h-12 bg-gold/20 backdrop-blur-md rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <Waves className="w-6 h-6 text-gold-light" />
+                      </div>
+                      <h3 className="font-serif text-xl font-bold text-parchment mb-2">Service Bundles</h3>
+                      <p className="text-sm text-parchment/70 leading-relaxed mb-3">
+                        7 premium bundles from ₦750K to ₦88M. Business, Diaspora, Tourist, Executive Elite, and more.
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-gold-light font-serif font-bold text-lg">₦750,000</span>
+                        <span className="text-[10px] text-parchment/50 uppercase tracking-widest">From / 3 days</span>
+                      </div>
                     </div>
                   </motion.div>
 
@@ -252,19 +268,27 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: 0.2 }}
-                    className="bg-parchment/5 backdrop-blur-md border border-parchment/10 rounded-2xl p-6 hover:bg-parchment/10 transition-all group cursor-pointer"
+                    className="relative rounded-2xl overflow-hidden h-80 group cursor-pointer"
                     onClick={() => setActiveTab('vip-services')}
                   >
-                    <div className="w-12 h-12 bg-gold/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      <Shield className="w-6 h-6 text-gold-light" />
-                    </div>
-                    <h3 className="font-serif text-xl font-bold text-parchment mb-2">Lagos Assist</h3>
-                    <p className="text-sm text-parchment/60 leading-relaxed mb-4">
-                      Premium concierge services, transportation, wellness, and personalized assistance for your stay.
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gold-light font-serif font-bold text-lg">Premium</span>
-                      <span className="text-[10px] text-parchment/40 uppercase tracking-widest">For all guests</span>
+                    <img
+                      src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80"
+                      alt="Lagos Assist"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-6">
+                      <div className="w-12 h-12 bg-gold/20 backdrop-blur-md rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <Shield className="w-6 h-6 text-gold-light" />
+                      </div>
+                      <h3 className="font-serif text-xl font-bold text-parchment mb-2">Lagos Assist</h3>
+                      <p className="text-sm text-parchment/70 leading-relaxed mb-3">
+                        Premium concierge services, transportation, wellness, and personalized assistance for your stay.
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-gold-light font-serif font-bold text-lg">Premium</span>
+                        <span className="text-[10px] text-parchment/50 uppercase tracking-widest">For all guests</span>
+                      </div>
                     </div>
                   </motion.div>
                 </div>
