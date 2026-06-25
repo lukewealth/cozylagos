@@ -59,7 +59,7 @@ const SmartRecommendationsView: React.FC = () => {
               <img 
                 alt="Secret Dining" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" 
-                src="https://images.unsplash.com/photo-1550966842-28aa1299074b?q=80&w=1000&auto=format&fit=crop"
+                src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1000&auto=format&fit=crop"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
               <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5">

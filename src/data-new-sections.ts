@@ -268,7 +268,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: 'Last Thursday monthly',
     location: 'Co-Creation Hub',
     price: 'Free entry',
-    image: 'https://images.unsplash.com/photo-1559223607-a43c990c6923?w=800&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=600&fit=crop',
     highlights: ['Startup pitches', 'Investor networking', 'Mentorship', 'Prizes']
   }
 ];

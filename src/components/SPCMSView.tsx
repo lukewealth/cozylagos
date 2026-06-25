@@ -481,7 +481,7 @@ function AddStaffModal({ providerId, onClose, onAdd }: { providerId: string; onC
       role: formData.role,
       email: formData.email,
       phone: formData.phone,
-      avatar: formData.avatar || 'https://images.unsplash.com/photo-1472099645785-56584f4e9e94?w=400&q=80',
+      avatar: formData.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
       providerId,
       specialties: formData.specialties.split(',').map(s => s.trim()).filter(Boolean),
       rating: 4.5,

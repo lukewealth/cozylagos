@@ -26,7 +26,7 @@ const JOURNEY_STEPS: JourneyStep[] = [
     icon: <Plane className="w-8 h-8" />,
     duration: '1 hour',
     highlights: ['Meet & greet service', 'Luxury sedan', 'Fast-track immigration', 'Cold water & refreshments', 'Luggage assistance'],
-    image: 'https://images.unsplash.com/photo-1436491865332-7a61a109db05?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=800&q=80',
     time: 'Arrival Day'
   },
   {
