@@ -8,7 +8,7 @@ import {
   UserCheck, CalendarDays, Download,
   Sparkles, Briefcase, Award, UserCircle, ChevronDown, X, Menu,
   Clock, Star, MapPin, ArrowRight, Filter, DollarSign as DollarIcon,
-  BarChart3, PieChart, Activity, ChevronRight, Plus
+  BarChart3, PieChart, Activity, ChevronRight, Plus, Globe
 } from 'lucide-react';
 import { useAuth } from '../auth';
 import { useDatabase } from '../hooks/useDatabase';
