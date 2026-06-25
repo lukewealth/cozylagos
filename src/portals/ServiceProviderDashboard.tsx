@@ -8,14 +8,16 @@ import {
   UserCheck, CalendarDays, Download,
   Sparkles, Briefcase, Award, UserCircle, ChevronDown, X, Menu,
   Clock, Star, MapPin, ArrowRight, Filter, DollarSign as DollarIcon,
-  BarChart3, PieChart, Activity, ChevronRight
+  BarChart3, PieChart, Activity, ChevronRight, Plus
 } from 'lucide-react';
 import { useAuth } from '../auth';
 import { useDatabase } from '../hooks/useDatabase';
 import CollapsibleSidebar from '../components/ui/CollapsibleSidebar';
 import Tooltip from '../components/ui/Tooltip';
+import ListingWizardView from '../components/ListingWizardView';
+import { Listing } from '../types';
 
-type ProviderSection = 'overview' | 'service-dashboard' | 'listings' | 'my-services' | 'schedule' | 'calendar' | 'earnings' | 'inventory' | 'booking-requests';
+type ProviderSection = 'overview' | 'service-dashboard' | 'listings' | 'my-services' | 'schedule' | 'calendar' | 'earnings' | 'inventory' | 'booking-requests' | 'wizard';
 
 const MOCK_STAFF = [
   { id: 's1', name: 'Captain Chidi Okoro', role: 'driver', status: 'on_duty', initials: 'CO', certifications: ['MCA MASTER 3000GT', 'VIP PROTOCOL'], specializations: ['Maritime', 'VIP Transport'], rating: 4.8, availabilityFrom: '22:00', currentAssignment: 'Yacht Leila', tenureYears: 6 },
@@ -76,6 +78,11 @@ export default function ServiceProviderDashboard() {
     if (staff) {
       setSelectedStaff(null);
     }
+  };
+
+  const handlePublishListing = (newListing: Listing) => {
+    updateListing(newListing as any);
+    setActiveSection('listings');
   };
 
   const calendarDays = useMemo(() => {
@@ -309,6 +316,13 @@ export default function ServiceProviderDashboard() {
                     <h1 className="font-serif text-headline-lg text-on-surface">My Properties</h1>
                     <p className="text-secondary font-body-lg mt-2">Manage your listed properties and availability</p>
                   </div>
+                  <button
+                    onClick={() => setActiveSection('wizard')}
+                    className="px-5 py-2.5 bg-primary text-white font-bold text-sm rounded-xl hover:bg-primary-dark transition-colors flex items-center gap-2 shadow-lg"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Property
+                  </button>
                 </header>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -335,7 +349,14 @@ export default function ServiceProviderDashboard() {
                       <div className="p-12 text-center">
                         <Globe className="w-12 h-12 text-primary/30 mx-auto mb-3" />
                         <p className="text-sm text-secondary">No properties listed yet.</p>
-                        <p className="text-xs text-secondary mt-1">Start by adding your first property listing.</p>
+                        <p className="text-xs text-secondary mt-1 mb-4">Start by adding your first property listing.</p>
+                        <button
+                          onClick={() => setActiveSection('wizard')}
+                          className="px-5 py-2.5 bg-primary text-white font-bold text-sm rounded-xl hover:bg-primary-dark transition-colors inline-flex items-center gap-2"
+                        >
+                          <Plus className="w-4 h-4" />
+                          Add Your First Property
+                        </button>
                       </div>
                     ) : (
                       (listings as any[]).map((listing: any) => (
@@ -407,6 +428,15 @@ export default function ServiceProviderDashboard() {
                     )}
                   </div>
                 </div>
+              </motion.div>
+            )}
+
+            {activeSection === 'wizard' && (
+              <motion.div key="wizard" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
+                <ListingWizardView
+                  onPublishListing={handlePublishListing}
+                  onCancel={() => setActiveSection('listings')}
+                />
               </motion.div>
             )}
 
