@@ -25,6 +25,8 @@ export interface DBSchema {
   experiences: ExperienceRecord;
   chatMessages: ChatRecord;
   cache: CacheRecord;
+  notifications: NotificationRecord;
+  staff: StaffRecord;
 }
 
 export interface UserRecord {
@@ -146,6 +148,33 @@ export interface CacheRecord {
   value: any;
   expiresAt: number;
   updatedAt: number;
+}
+
+export interface NotificationRecord {
+  id: string;
+  title: string;
+  message: string;
+  type: 'info' | 'warning' | 'success' | 'error' | 'booking' | 'support';
+  targetRole: 'all' | 'user' | 'service_provider' | 'admin';
+  read: boolean;
+  sentBy: string;
+  sentAt: string;
+  createdAt: string;
+}
+
+export interface StaffRecord {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  role: string;
+  status: 'active' | 'inactive' | 'on_leave';
+  specialties: string[];
+  rating: number;
+  bookingsCount: number;
+  providerId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 let dbInstance: IDBDatabase | null = null;

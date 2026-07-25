@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronLeft, ChevronRight, LayoutDashboard, Users, Settings, BarChart3, Shield, Database, Globe, Key, Lock, Bell, LogOut, HelpCircle, X, Calendar, CheckSquare, Activity } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutDashboard, Users, Settings, BarChart3, Shield, Database, Globe, Key, Lock, Bell, LogOut, HelpCircle, X, Calendar, CheckSquare, Activity, FileText, Send, UserCheck } from 'lucide-react';
 
 interface SidebarProps {
   activeTab: string;
@@ -26,12 +26,17 @@ const ADMIN_NAV: NavItem[] = [
   { id: 'bookings', label: 'Bookings', icon: Bell, description: 'Booking requests' },
   { id: 'events', label: 'Events', icon: Calendar, description: 'Manage events & tickets' },
   { id: 'tasks', label: 'Tasks', icon: CheckSquare, description: 'Staff task management' },
+  { id: 'staff', label: 'Staff', icon: UserCheck, description: 'Manage staff members' },
+  { id: 'notifications', label: 'Notifications', icon: Send, description: 'Send & manage notifications' },
+  { id: 'transactions', label: 'Transactions', icon: FileText, description: 'Download & audit transactions' },
+  { id: 'users', label: 'Users', icon: Users, description: 'Manage all users' },
   { id: 'overview', label: 'Analytics', icon: BarChart3, description: 'Platform metrics' },
 ];
 
 const SUPER_ADMIN_NAV: NavItem[] = [
   { id: 'super-admin-dashboard', label: 'System Control', icon: Shield, description: 'Root access panel' },
-  { id: 'admin-dashboard', label: 'User Management', icon: Users, description: 'Manage all users' },
+  { id: 'users', label: 'User Management', icon: Users, description: 'Manage all users' },
+  { id: 'admin-dashboard', label: 'Admin Panel', icon: LayoutDashboard, description: 'Admin operations' },
   { id: 'health', label: 'Platform Health', icon: Activity, description: 'DevOps monitoring' },
   { id: 'overview', label: 'Infrastructure', icon: Database, description: 'System health & stats' },
 ];
@@ -42,6 +47,8 @@ const PROVIDER_NAV: NavItem[] = [
   { id: 'my-services', label: 'My Services', icon: Users, description: 'Manage offerings' },
   { id: 'booking-requests', label: 'Bookings', icon: Bell, description: 'Booking requests' },
   { id: 'tasks', label: 'Tasks', icon: CheckSquare, description: 'Staff task management' },
+  { id: 'staff', label: 'Staff', icon: UserCheck, description: 'Manage staff members' },
+  { id: 'transactions', label: 'Transactions', icon: FileText, description: 'Download reports' },
   { id: 'calendar', label: 'Schedule', icon: BarChart3, description: 'Calendar & bookings' },
   { id: 'inventory', label: 'Inventory & Staff', icon: Database, description: 'Assets & assignments' },
   { id: 'earnings', label: 'Earnings', icon: Key, description: 'Financial reports' },

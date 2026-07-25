@@ -13,6 +13,7 @@ import LoadingSpinner from '../components/ui/LoadingSpinner';
 import CollapsibleSidebar from '../components/ui/CollapsibleSidebar';
 import { getAllUsers, DEMO_CREDENTIALS } from '../utils/credentials';
 import PlatformHealthMonitor from '../components/PlatformHealthMonitor';
+import UserManagement from '../components/UserManagement';
 
 interface UserDisplay {
   id: string;
@@ -29,7 +30,7 @@ export default function SuperAdminDashboard() {
   const { currentUser } = useAuth();
   const { data: dbUsers } = useDatabase('users');
   
-  const [activeSection, setActiveSection] = useState<'overview' | 'users' | 'infrastructure' | 'health'>('overview');
+  const [activeSection, setActiveSection] = useState<'overview' | 'users' | 'infrastructure' | 'health' | 'admin-dashboard'>('overview');
   const [isLoading, setIsLoading] = useState(true);
   const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -361,6 +362,10 @@ export default function SuperAdminDashboard() {
 
           {activeSection === 'health' && (
             <PlatformHealthMonitor />
+          )}
+
+          {activeSection === 'users' && (
+            <UserManagement />
           )}
         </div>
       </main>

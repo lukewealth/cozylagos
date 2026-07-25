@@ -28,11 +28,13 @@ import ServiceCreateModal from '../components/ui/ServiceCreateModal';
 import HelpSupportModal from '../components/ui/HelpSupportModal';
 import { ToastContainer, showToast } from '../components/ui/Toast';
 import api from '../services/api';
+import StaffManagement from '../components/StaffManagement';
+import TransactionDownload from '../components/TransactionDownload';
 import { Listing } from '../types';
 import SPTaskManagement from '../components/SPTaskManagement';
 import { generateId } from '../db';
 
-type ProviderSection = 'overview' | 'service-dashboard' | 'listings' | 'my-services' | 'schedule' | 'calendar' | 'earnings' | 'inventory' | 'booking-requests' | 'wizard' | 'tasks';
+type ProviderSection = 'overview' | 'service-dashboard' | 'listings' | 'my-services' | 'schedule' | 'calendar' | 'earnings' | 'inventory' | 'booking-requests' | 'wizard' | 'tasks' | 'staff' | 'transactions';
 
 interface StaffMember {
   id: string;
@@ -1195,6 +1197,18 @@ export default function ServiceProviderDashboard() {
             {activeSection === 'tasks' && (
               <motion.div key="tasks" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
                 <SPTaskManagement providerId={currentUser?.id || 'sp-default'} />
+              </motion.div>
+            )}
+
+            {activeSection === 'staff' && (
+              <motion.div key="staff" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
+                <StaffManagement />
+              </motion.div>
+            )}
+
+            {activeSection === 'transactions' && (
+              <motion.div key="transactions" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
+                <TransactionDownload />
               </motion.div>
             )}
           </AnimatePresence>
