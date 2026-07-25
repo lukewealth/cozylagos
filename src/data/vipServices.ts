@@ -419,11 +419,11 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'All Lagos',
         rating: 4.6,
         reviewsCount: 234,
-        image: 'https://images.pexels.com/photos/36960650/pexels-photo-36960650.jpeg?auto=compress&cs=tinysrgb&w=800',
+        image: 'https://images.pexels.com/photos/15451731/pexels-photo-15451731.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
-          'https://images.pexels.com/photos/36960650/pexels-photo-36960650.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/1043920/pexels-photo-1043920.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/1043921/pexels-photo-1043921.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/15451731/pexels-photo-15451731.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/15827356/pexels-photo-15827356.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/16105578/pexels-photo-16105578.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Same-Day Service', 'Pickup & Delivery', 'Up to 10kg', 'Eco-Friendly'],
         providerName: 'Lagos Laundry Mate',
@@ -441,11 +441,11 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'All Lagos',
         rating: 4.8,
         reviewsCount: 167,
-        image: 'https://images.pexels.com/photos/30699431/pexels-photo-30699431.jpeg?auto=compress&cs=tinysrgb&w=800',
+        image: 'https://images.pexels.com/photos/15827357/pexels-photo-15827357.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
-          'https://images.pexels.com/photos/30699431/pexels-photo-30699431.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/1043922/pexels-photo-1043922.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/1043923/pexels-photo-1043923.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/15827357/pexels-photo-15827357.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/16105579/pexels-photo-16105579.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/15451732/pexels-photo-15451732.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Professional Cleaning', '48-Hour Turnaround', 'Pickup & Delivery', 'Garment Care'],
         providerName: 'Elite Dry Cleaners',
@@ -463,11 +463,11 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'All Lagos',
         rating: 4.5,
         reviewsCount: 89,
-        image: 'https://images.pexels.com/photos/33418521/pexels-photo-33418521.jpeg?auto=compress&cs=tinysrgb&w=800',
+        image: 'https://images.pexels.com/photos/16105580/pexels-photo-16105580.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
-          'https://images.pexels.com/photos/33418521/pexels-photo-33418521.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/1043924/pexels-photo-1043924.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/1043925/pexels-photo-1043925.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/16105580/pexels-photo-16105580.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/15451733/pexels-photo-15451733.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/15827358/pexels-photo-15827358.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Mobile Service', 'Steam Press', 'Garment Steaming', 'Quick Turnaround'],
         providerName: 'Mobile Valet Service',
