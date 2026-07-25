@@ -123,7 +123,7 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         images: [
           'https://images.pexels.com/photos/30699431/pexels-photo-30699431.jpeg?auto=compress&cs=tinysrgb&w=800',
           'https://images.pexels.com/photos/1043902/pexels-photo-1043902.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/1043903/pexels-photo-1043903.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043904/pexels-photo-1043904.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Hot Towel', 'Beard Trim', 'Styling', 'Complimentary Drink'],
         providerName: 'The Gentlemen\'s Quarter',
@@ -542,7 +542,7 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         images: [
           'https://images.pexels.com/photos/37624176/pexels-photo-37624176.jpeg?auto=compress&cs=tinysrgb&w=800',
           'https://images.pexels.com/photos/1043930/pexels-photo-1043930.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/1043931/pexels-photo-1043931.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043929/pexels-photo-1043929.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Fresh Preparation', 'Continental or Local', 'Up to 6 Guests', 'Coffee & Tea'],
         providerName: 'Morning Glory Chef',
@@ -572,7 +572,7 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/31951217/pexels-photo-31951217.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/31951217/pexels-photo-31951217.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/1043932/pexels-photo-1043932.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043934/pexels-photo-1043934.jpeg?auto=compress&cs=tinysrgb&w=800',
           'https://images.pexels.com/photos/1043933/pexels-photo-1043933.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Professional Photographer', '50 Edited Images', 'Location Scouting', 'Digital Delivery'],
@@ -595,7 +595,7 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         images: [
           'https://images.pexels.com/photos/16114743/pexels-photo-16114743.jpeg?auto=compress&cs=tinysrgb&w=800',
           'https://images.pexels.com/photos/1043934/pexels-photo-1043934.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/1043935/pexels-photo-1043935.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043933/pexels-photo-1043933.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['4K Video', 'Highlight Reel', 'Full Footage', 'Drone Shots'],
         providerName: 'Cinematic Lagos',
@@ -616,7 +616,7 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/30402282/pexels-photo-30402282.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/30402282/pexels-photo-30402282.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/1043936/pexels-photo-1043936.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043930/pexels-photo-1043930.jpeg?auto=compress&cs=tinysrgb&w=800',
           'https://images.pexels.com/photos/1043937/pexels-photo-1043937.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['20 Photos', '5 Reels', 'Social Media Ready', 'Quick Turnaround'],

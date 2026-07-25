@@ -4,6 +4,7 @@ import { Listing } from '../types';
 import ImageGallery from './ui/ImageGallery';
 import BookingFlow from './BookingFlow';
 import { motion, AnimatePresence } from 'motion/react';
+import { isFavorite, addFavorite, removeFavorite } from '../data-new-sections';
 
 interface ListingDetailViewProps {
   listing: Listing;
@@ -59,6 +60,27 @@ export default function ListingDetailView({ listing, onBack, onConfirmBooking, o
 
   const [bookingSuccess, setBookingSuccess] = useState<boolean>(false);
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsFavorited(isFavorite('listing', listing.id));
+  }, [listing.id]);
+
+  const handleToggleFavorite = () => {
+    if (isFavorited) {
+      removeFavorite('listing', listing.id);
+      setIsFavorited(false);
+    } else {
+      addFavorite({
+        id: `fav-${listing.id}-${Date.now()}`,
+        type: 'listing',
+        itemId: listing.id,
+        title: listing.title,
+        subtitle: `${listing.bedrooms} bed • ${listing.location}`,
+        image: listing.image,
+      });
+      setIsFavorited(true);
+    }
+  };
 
   // Calculate nights length
   const totalNights = useMemo(() => {
@@ -225,7 +247,7 @@ export default function ListingDetailView({ listing, onBack, onConfirmBooking, o
         <div className="absolute top-6 right-6 md:right-12 z-20 flex gap-3">
           <motion.button
             whileTap={{ scale: 0.9 }}
-            onClick={() => setIsFavorited(!isFavorited)}
+            onClick={handleToggleFavorite}
             className="w-11 h-11 bg-white/90 backdrop-blur-md rounded-full shadow-lg flex items-center justify-center text-charcoal hover:text-red-600 transition-colors"
           >
             <Heart className={`w-4 h-4 ${isFavorited ? 'fill-current text-red-600' : ''}`} />

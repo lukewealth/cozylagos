@@ -1,9 +1,43 @@
 import React, { useState, useMemo } from 'react';
-import { motion } from 'motion/react';
-import { Calendar, MapPin, Clock, Ticket, Filter, ChevronRight, Star, Users, Music, Theater, Briefcase, Utensils, Baby, Trophy, Waves } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Calendar, MapPin, Clock, Ticket, Filter, ChevronRight, Star, Users, Music, Theater, Briefcase, Utensils, Baby, Trophy, Waves, X, Check, CreditCard } from 'lucide-react';
 import { CalendarIcon, MusicalNoteIcon, FireIcon, PaintBrushIcon, BriefcaseIcon, MoonIcon, ArrowPathIcon, ClockIcon, SparklesIcon, FlagIcon } from '@heroicons/react/24/outline';
 import { LAGOS_EVENTS, LagosEvent } from '../data-new-sections';
 import TrendingEventsSlider from './TrendingEventsSlider';
+
+interface PurchasedTicket {
+  id: string;
+  eventId: string;
+  eventTitle: string;
+  eventDate: string;
+  eventLocation: string;
+  ticketCount: number;
+  totalPrice: number;
+  purchaseDate: string;
+  attendeeName: string;
+  attendeeEmail: string;
+}
+
+const STORAGE_KEY = 'cozy_lagos_event_tickets';
+
+function getPurchasedTickets(): PurchasedTicket[] {
+  try {
+    const tickets = localStorage.getItem(STORAGE_KEY);
+    return tickets ? JSON.parse(tickets) : [];
+  } catch {
+    return [];
+  }
+}
+
+function savePurchasedTicket(ticket: PurchasedTicket): void {
+  try {
+    const tickets = getPurchasedTickets();
+    tickets.unshift(ticket);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tickets));
+  } catch {
+    // Silent fail
+  }
+}
 
 const CATEGORY_FILTERS = [
   { id: 'all', label: 'All Events', icon: CalendarIcon },
@@ -79,7 +113,7 @@ function isAnnual(date: Date): boolean {
   return !isToday(date) && !isThisWeek(date);
 }
 
-function EventCard({ event, index }: { event: LagosEvent; index: number }) {
+function EventCard({ event, index, onPurchaseTicket }: { event: LagosEvent; index: number; onPurchaseTicket: (event: LagosEvent) => void }) {
   const categoryColors: Record<string, string> = {
     concert: 'bg-purple-100 text-purple-700',
     festival: 'bg-orange-100 text-orange-700',
@@ -160,7 +194,10 @@ function EventCard({ event, index }: { event: LagosEvent; index: number }) {
             </span>
           ))}
         </div>
-        <button className="w-full py-2.5 bg-charcoal text-parchment hover:bg-gold-dark font-bold text-[10px] tracking-widest uppercase rounded-lg transition-all">
+        <button 
+          onClick={() => onPurchaseTicket(event)}
+          className="w-full py-2.5 bg-charcoal text-parchment hover:bg-gold-dark font-bold text-[10px] tracking-widest uppercase rounded-lg transition-all"
+        >
           Get Tickets
         </button>
       </div>
@@ -168,9 +205,204 @@ function EventCard({ event, index }: { event: LagosEvent; index: number }) {
   );
 }
 
+function TicketPurchaseModal({ event, onClose }: { event: LagosEvent; onClose: () => void }) {
+  const [ticketCount, setTicketCount] = useState(1);
+  const [attendeeName, setAttendeeName] = useState('');
+  const [attendeeEmail, setAttendeeEmail] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [purchaseComplete, setPurchaseComplete] = useState(false);
+
+  const pricePerTicket = 25000; // Default price
+  const totalPrice = pricePerTicket * ticketCount;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsProcessing(true);
+
+    setTimeout(() => {
+      const ticket: PurchasedTicket = {
+        id: `ticket-${Date.now()}`,
+        eventId: event.id,
+        eventTitle: event.title,
+        eventDate: event.date,
+        eventLocation: event.location,
+        ticketCount,
+        totalPrice,
+        purchaseDate: new Date().toISOString(),
+        attendeeName,
+        attendeeEmail,
+      };
+
+      savePurchasedTicket(ticket);
+      setIsProcessing(false);
+      setPurchaseComplete(true);
+
+      setTimeout(() => {
+        onClose();
+      }, 2000);
+    }, 1500);
+  };
+
+  if (purchaseComplete) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+        onClick={onClose}
+      >
+        <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.9, opacity: 0 }}
+          onClick={(e) => e.stopPropagation()}
+          className="relative w-full max-w-md bg-parchment rounded-3xl overflow-hidden shadow-2xl p-8 text-center"
+        >
+          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Check className="w-10 h-10 text-green-600" />
+          </div>
+          <h2 className="font-serif text-2xl font-bold text-charcoal mb-2">Purchase Complete!</h2>
+          <p className="text-sm text-charcoal/60 mb-4">
+            Your tickets for {event.title} have been confirmed.
+          </p>
+          <p className="text-xs text-charcoal/50">
+            {ticketCount} {ticketCount === 1 ? 'ticket' : 'tickets'} • ₦{totalPrice.toLocaleString()}
+          </p>
+        </motion.div>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-lg bg-parchment rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
+      >
+        <div className="sticky top-0 bg-parchment border-b border-charcoal/10 px-6 py-4 flex items-center justify-between">
+          <h2 className="font-serif text-xl font-bold text-charcoal">Purchase Tickets</h2>
+          <button onClick={onClose} className="p-2 hover:bg-charcoal/5 rounded-lg transition-colors">
+            <X className="w-5 h-5 text-charcoal/60" />
+          </button>
+        </div>
+
+        <div className="p-6">
+          <div className="mb-6 p-4 bg-charcoal/5 rounded-xl">
+            <h3 className="font-serif text-lg font-bold text-charcoal mb-1">{event.title}</h3>
+            <div className="space-y-1 text-xs text-charcoal/60">
+              <div className="flex items-center gap-2">
+                <Calendar className="w-3.5 h-3.5" />
+                <span>{event.date}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-3.5 h-3.5" />
+                <span>{event.location}</span>
+              </div>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Full Name</label>
+              <input
+                type="text"
+                value={attendeeName}
+                onChange={(e) => setAttendeeName(e.target.value)}
+                className="w-full px-3 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/30"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Email</label>
+              <input
+                type="email"
+                value={attendeeEmail}
+                onChange={(e) => setAttendeeEmail(e.target.value)}
+                className="w-full px-3 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/30"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Number of Tickets</label>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setTicketCount(Math.max(1, ticketCount - 1))}
+                  className="w-10 h-10 bg-charcoal/5 rounded-lg flex items-center justify-center hover:bg-charcoal/10 transition-colors"
+                >
+                  -
+                </button>
+                <span className="text-lg font-bold text-charcoal w-12 text-center">{ticketCount}</span>
+                <button
+                  type="button"
+                  onClick={() => setTicketCount(Math.min(10, ticketCount + 1))}
+                  className="w-10 h-10 bg-charcoal/5 rounded-lg flex items-center justify-center hover:bg-charcoal/10 transition-colors"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-charcoal/10">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-sm text-charcoal/60">Total Price</span>
+                <span className="text-2xl font-bold text-gold-dark">₦{totalPrice.toLocaleString()}</span>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <button type="button" onClick={onClose} className="flex-1 py-3 bg-charcoal/5 text-charcoal font-bold text-sm rounded-xl hover:bg-charcoal/10 transition-colors">
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isProcessing}
+                  className="flex-1 py-3 bg-gold text-charcoal font-bold text-sm rounded-xl hover:bg-gold-dark hover:text-parchment transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {isProcessing ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-charcoal/30 border-t-charcoal rounded-full animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard className="w-4 h-4" />
+                      Purchase
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export default function EventsView() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedTime, setSelectedTime] = useState('all');
+  const [showTicketModal, setShowTicketModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<LagosEvent | null>(null);
+
+  const handlePurchaseTicket = (event: LagosEvent) => {
+    setSelectedEvent(event);
+    setShowTicketModal(true);
+  };
 
   const filteredEvents = useMemo(() => {
     let events = LAGOS_EVENTS;
@@ -379,7 +611,7 @@ export default function EventsView() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredEvents.map((event, index) => (
             <React.Fragment key={event.id}>
-              <EventCard event={event} index={index} />
+              <EventCard event={event} index={index} onPurchaseTicket={handlePurchaseTicket} />
             </React.Fragment>
           ))}
         </div>
@@ -394,6 +626,18 @@ export default function EventsView() {
           </div>
         )}
       </section>
+
+      <AnimatePresence>
+        {showTicketModal && selectedEvent && (
+          <TicketPurchaseModal
+            event={selectedEvent}
+            onClose={() => {
+              setShowTicketModal(false);
+              setSelectedEvent(null);
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

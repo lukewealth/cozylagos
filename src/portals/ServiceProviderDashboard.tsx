@@ -23,8 +23,9 @@ import AssetCreateModal from '../components/ui/AssetCreateModal';
 import { ToastContainer, showToast } from '../components/ui/Toast';
 import api from '../services/api';
 import { Listing } from '../types';
+import SPTaskManagement from '../components/SPTaskManagement';
 
-type ProviderSection = 'overview' | 'service-dashboard' | 'listings' | 'my-services' | 'schedule' | 'calendar' | 'earnings' | 'inventory' | 'booking-requests' | 'wizard';
+type ProviderSection = 'overview' | 'service-dashboard' | 'listings' | 'my-services' | 'schedule' | 'calendar' | 'earnings' | 'inventory' | 'booking-requests' | 'wizard' | 'tasks';
 
 const MOCK_STAFF = [
   { id: 's1', name: 'Captain Chidi Okoro', role: 'driver', status: 'on_duty', initials: 'CO', certifications: ['MCA MASTER 3000GT', 'VIP PROTOCOL'], specializations: ['Maritime', 'VIP Transport'], rating: 4.8, availabilityFrom: '22:00', currentAssignment: 'Yacht Leila', tenureYears: 6 },
@@ -962,6 +963,12 @@ export default function ServiceProviderDashboard() {
                     </div>
                   </div>
                 </div>
+              </motion.div>
+            )}
+
+            {activeSection === 'tasks' && (
+              <motion.div key="tasks" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
+                <SPTaskManagement providerId={currentUser?.id || 'sp-default'} />
               </motion.div>
             )}
           </AnimatePresence>

@@ -498,9 +498,6 @@ function AppContent() {
               {activeTab === 'account-settings' && (
                 <AccountSettingsView />
               )}
-              {activeTab === 'notifications' && (
-                <NotificationsView />
-              )}
               {activeTab === 'property-listing' && (
                 <PropertyListingView listings={listings} onSelectListing={(listing) => { setSelectedListing(listing); setActiveTab('listing-detail'); }} />
               )}

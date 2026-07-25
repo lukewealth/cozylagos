@@ -97,17 +97,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const result = await firebaseAuth.loginWithGoogle();
       if (result.success && result.user) {
-        const userRecord: UserRecord = {
-          id: result.user.uid,
-          email: result.user.email || '',
-          name: result.user.displayName || '',
-          role: 'user',
-          avatar: result.user.photoURL || '',
-          verified: true,
-          createdAt: new Date().toISOString(),
-          lastLogin: new Date().toISOString(),
-          loyaltyPoints: 0
-        };
+        const email = result.user.email || '';
+        const existing = email ? await dbGetByIndex('users', 'email', email) : [];
+
+        const userRecord: UserRecord = existing.length > 0
+          ? { ...existing[0], id: existing[0].id, lastLogin: new Date().toISOString() }
+          : {
+              id: result.user.uid,
+              email,
+              name: result.user.displayName || '',
+              role: 'user',
+              avatar: result.user.photoURL || '',
+              verified: true,
+              createdAt: new Date().toISOString(),
+              lastLogin: new Date().toISOString(),
+              loyaltyPoints: 0
+            };
 
         await dbPut('users', userRecord);
         await cacheSet('current_user', userRecord, 86400000);
@@ -126,17 +131,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const result = await firebaseAuth.loginWithApple();
       if (result.success && result.user) {
-        const userRecord: UserRecord = {
-          id: result.user.uid,
-          email: result.user.email || '',
-          name: result.user.displayName || '',
-          role: 'user',
-          avatar: result.user.photoURL || '',
-          verified: true,
-          createdAt: new Date().toISOString(),
-          lastLogin: new Date().toISOString(),
-          loyaltyPoints: 0
-        };
+        const email = result.user.email || '';
+        const existing = email ? await dbGetByIndex('users', 'email', email) : [];
+
+        const userRecord: UserRecord = existing.length > 0
+          ? { ...existing[0], id: existing[0].id, lastLogin: new Date().toISOString() }
+          : {
+              id: result.user.uid,
+              email,
+              name: result.user.displayName || '',
+              role: 'user',
+              avatar: result.user.photoURL || '',
+              verified: true,
+              createdAt: new Date().toISOString(),
+              lastLogin: new Date().toISOString(),
+              loyaltyPoints: 0
+            };
 
         await dbPut('users', userRecord);
         await cacheSet('current_user', userRecord, 86400000);

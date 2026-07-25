@@ -12,6 +12,7 @@ import Tooltip from '../components/ui/Tooltip';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import CollapsibleSidebar from '../components/ui/CollapsibleSidebar';
 import { getAllUsers, DEMO_CREDENTIALS } from '../utils/credentials';
+import PlatformHealthMonitor from '../components/PlatformHealthMonitor';
 
 interface UserDisplay {
   id: string;
@@ -28,7 +29,7 @@ export default function SuperAdminDashboard() {
   const { currentUser } = useAuth();
   const { data: dbUsers } = useDatabase('users');
   
-  const [activeSection, setActiveSection] = useState<'overview' | 'users' | 'infrastructure'>('overview');
+  const [activeSection, setActiveSection] = useState<'overview' | 'users' | 'infrastructure' | 'health'>('overview');
   const [isLoading, setIsLoading] = useState(true);
   const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -357,6 +358,10 @@ export default function SuperAdminDashboard() {
               </div>
             </section>
           </div>
+
+          {activeSection === 'health' && (
+            <PlatformHealthMonitor />
+          )}
         </div>
       </main>
     </div>

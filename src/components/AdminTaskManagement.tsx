@@ -1,0 +1,612 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import {
+  CheckSquare, Square, Plus, Users, Calendar, Clock, AlertCircle, Check,
+  X, Edit2, Trash2, Filter, Search, ChevronDown, User, Tag
+} from 'lucide-react';
+import { useDatabase } from '../hooks/useDatabase';
+
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  assignedTo: string;
+  assignedToName: string;
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
+  checklist: ChecklistItem[];
+  dueDate: string;
+  tags: string[];
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface ChecklistItem {
+  id: string;
+  text: string;
+  completed: boolean;
+}
+
+const STORAGE_KEY = 'cozy_lagos_admin_tasks';
+
+function getTasks(): Task[] {
+  try {
+    const tasks = localStorage.getItem(STORAGE_KEY);
+    return tasks ? JSON.parse(tasks) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveTasks(tasks: Task[]): void {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+  } catch {
+    // Silent fail
+  }
+}
+
+export default function AdminTaskManagement() {
+  const { data: allUsers } = useDatabase('users');
+  const staff = allUsers.filter(u => u.role === 'admin' || u.role === 'service_provider' || u.role === 'super_admin');
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [priorityFilter, setPriorityFilter] = useState<string>('all');
+
+  useEffect(() => {
+    setTasks(getTasks());
+  }, []);
+
+  const handleCreateTask = (taskData: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>) => {
+    const newTask: Task = {
+      ...taskData,
+      id: `task-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    const updatedTasks = [newTask, ...tasks];
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
+    setShowCreateModal(false);
+  };
+
+  const handleUpdateTask = (taskId: string, updates: Partial<Task>) => {
+    const updatedTasks = tasks.map(t =>
+      t.id === taskId ? { ...t, ...updates, updatedAt: new Date().toISOString() } : t
+    );
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
+    setEditingTask(null);
+  };
+
+  const handleDeleteTask = (taskId: string) => {
+    const updatedTasks = tasks.filter(t => t.id !== taskId);
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
+  };
+
+  const handleToggleChecklistItem = (taskId: string, itemId: string) => {
+    const updatedTasks = tasks.map(t => {
+      if (t.id === taskId) {
+        const updatedChecklist = t.checklist.map(item =>
+          item.id === itemId ? { ...item, completed: !item.completed } : item
+        );
+        const completedCount = updatedChecklist.filter(i => i.completed).length;
+        const newStatus = completedCount === updatedChecklist.length && updatedChecklist.length > 0
+          ? 'completed'
+          : completedCount > 0 ? 'in_progress' : 'pending';
+        return { ...t, checklist: updatedChecklist, status: newStatus, updatedAt: new Date().toISOString() };
+      }
+      return t;
+    });
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
+  };
+
+  const filteredTasks = tasks.filter(task => {
+    const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         task.assignedToName.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || task.status === statusFilter;
+    const matchesPriority = priorityFilter === 'all' || task.priority === priorityFilter;
+    return matchesSearch && matchesStatus && matchesPriority;
+  });
+
+  const stats = {
+    total: tasks.length,
+    pending: tasks.filter(t => t.status === 'pending').length,
+    inProgress: tasks.filter(t => t.status === 'in_progress').length,
+    completed: tasks.filter(t => t.status === 'completed').length,
+    urgent: tasks.filter(t => t.priority === 'urgent' && t.status !== 'completed').length,
+  };
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-serif font-bold text-charcoal">Task Management</h2>
+          <p className="text-sm text-charcoal/60 mt-1">Assign and track staff tasks</p>
+        </div>
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-gold text-charcoal font-bold text-xs tracking-wider uppercase rounded-lg hover:bg-gold-dark transition-all"
+        >
+          <Plus className="w-4 h-4" />
+          Create Task
+        </button>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
+          <p className="text-xs text-charcoal/60 uppercase tracking-wider">Total</p>
+          <p className="text-2xl font-bold text-charcoal mt-1">{stats.total}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
+          <p className="text-xs text-charcoal/60 uppercase tracking-wider">Pending</p>
+          <p className="text-2xl font-bold text-orange-600 mt-1">{stats.pending}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
+          <p className="text-xs text-charcoal/60 uppercase tracking-wider">In Progress</p>
+          <p className="text-2xl font-bold text-blue-600 mt-1">{stats.inProgress}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
+          <p className="text-xs text-charcoal/60 uppercase tracking-wider">Completed</p>
+          <p className="text-2xl font-bold text-green-600 mt-1">{stats.completed}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
+          <p className="text-xs text-charcoal/60 uppercase tracking-wider">Urgent</p>
+          <p className="text-2xl font-bold text-red-600 mt-1">{stats.urgent}</p>
+        </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/40" />
+          <input
+            type="text"
+            placeholder="Search tasks..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+          />
+        </div>
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+        >
+          <option value="all">All Status</option>
+          <option value="pending">Pending</option>
+          <option value="in_progress">In Progress</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <select
+          value={priorityFilter}
+          onChange={(e) => setPriorityFilter(e.target.value)}
+          className="px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+        >
+          <option value="all">All Priority</option>
+          <option value="urgent">Urgent</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+
+      <div className="space-y-4">
+        {filteredTasks.map(task => (
+          <TaskCard
+            key={task.id}
+            task={task}
+            onToggleChecklist={handleToggleChecklistItem}
+            onEdit={() => setEditingTask(task)}
+            onDelete={() => handleDeleteTask(task.id)}
+          />
+        ))}
+      </div>
+
+      {filteredTasks.length === 0 && (
+        <div className="text-center py-16">
+          <CheckSquare className="w-16 h-16 text-charcoal/20 mx-auto mb-4" />
+          <p className="text-lg font-semibold text-charcoal mb-2">No tasks found</p>
+          <p className="text-sm text-charcoal/50">Create a task to get started</p>
+        </div>
+      )}
+
+      <AnimatePresence>
+        {showCreateModal && (
+          <TaskFormModal
+            staff={staff}
+            onClose={() => setShowCreateModal(false)}
+            onSubmit={handleCreateTask}
+          />
+        )}
+        {editingTask && (
+          <TaskFormModal
+            staff={staff}
+            task={editingTask}
+            onClose={() => setEditingTask(null)}
+            onSubmit={(data) => handleUpdateTask(editingTask.id, data)}
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function TaskCard({ task, onToggleChecklist, onEdit, onDelete }: React.PropsWithChildren<{
+  key?: React.Key;
+  task: Task;
+  onToggleChecklist: (taskId: string, itemId: string) => void;
+  onEdit: () => void;
+  onDelete: () => void;
+}>) {
+  const priorityColors = {
+    low: 'bg-slate-100 text-slate-700',
+    medium: 'bg-blue-100 text-blue-700',
+    high: 'bg-orange-100 text-orange-700',
+    urgent: 'bg-red-100 text-red-700',
+  };
+
+  const statusColors = {
+    pending: 'bg-slate-100 text-slate-700',
+    in_progress: 'bg-blue-100 text-blue-700',
+    completed: 'bg-green-100 text-green-700',
+    cancelled: 'bg-slate-100 text-slate-500',
+  };
+
+  const completedCount = task.checklist.filter(i => i.completed).length;
+  const progress = task.checklist.length > 0 ? (completedCount / task.checklist.length) * 100 : 0;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-white border border-charcoal/5 rounded-xl p-5 hover:shadow-lg transition-all"
+    >
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-2">
+            <h3 className="font-serif text-lg font-bold text-charcoal">{task.title}</h3>
+            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${priorityColors[task.priority]}`}>
+              {task.priority}
+            </span>
+            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${statusColors[task.status]}`}>
+              {task.status.replace('_', ' ')}
+            </span>
+          </div>
+          <p className="text-sm text-charcoal/60 mb-2">{task.description}</p>
+          <div className="flex items-center gap-4 text-xs text-charcoal/50">
+            <div className="flex items-center gap-1">
+              <User className="w-3.5 h-3.5" />
+              <span>{task.assignedToName}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5" />
+              <span>{new Date(task.dueDate).toLocaleDateString()}</span>
+            </div>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={onEdit} className="p-2 text-charcoal/40 hover:text-gold-dark transition-colors">
+            <Edit2 className="w-4 h-4" />
+          </button>
+          <button onClick={onDelete} className="p-2 text-charcoal/40 hover:text-red-500 transition-colors">
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      {task.checklist.length > 0 && (
+        <div className="mt-4 pt-4 border-t border-charcoal/5">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-bold text-charcoal/60 uppercase tracking-wider">
+              Checklist ({completedCount}/{task.checklist.length})
+            </span>
+            <span className="text-xs text-charcoal/50">{Math.round(progress)}%</span>
+          </div>
+          <div className="w-full bg-charcoal/5 rounded-full h-1.5 mb-3">
+            <div
+              className="bg-gold h-1.5 rounded-full transition-all"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <div className="space-y-2">
+            {task.checklist.map(item => (
+              <label key={item.id} className="flex items-center gap-2 cursor-pointer group">
+                <button
+                  onClick={() => onToggleChecklist(task.id, item.id)}
+                  className="flex-shrink-0"
+                >
+                  {item.completed ? (
+                    <CheckSquare className="w-4 h-4 text-gold-dark" />
+                  ) : (
+                    <Square className="w-4 h-4 text-charcoal/30 group-hover:text-charcoal/50" />
+                  )}
+                </button>
+                <span className={`text-sm ${item.completed ? 'line-through text-charcoal/40' : 'text-charcoal'}`}>
+                  {item.text}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {task.tags.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mt-3">
+          {task.tags.map((tag, i) => (
+            <span key={i} className="text-[9px] font-medium text-charcoal/50 bg-charcoal/5 px-2 py-0.5 rounded-full">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </motion.div>
+  );
+}
+
+function TaskFormModal({ staff, task, onClose, onSubmit }: {
+  staff: any[];
+  task?: Task;
+  onClose: () => void;
+  onSubmit: (data: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>) => void;
+}) {
+  const [formData, setFormData] = useState({
+    title: task?.title || '',
+    description: task?.description || '',
+    assignedTo: task?.assignedTo || '',
+    assignedToName: task?.assignedToName || '',
+    priority: task?.priority || 'medium' as const,
+    status: task?.status || 'pending' as const,
+    checklist: task?.checklist || [],
+    dueDate: task?.dueDate || new Date().toISOString().split('T')[0],
+    tags: task?.tags || [],
+    createdBy: task?.createdBy || 'admin',
+  });
+
+  const [newChecklistItem, setNewChecklistItem] = useState('');
+  const [newTag, setNewTag] = useState('');
+
+  const handleAddChecklistItem = () => {
+    if (newChecklistItem.trim()) {
+      setFormData({
+        ...formData,
+        checklist: [...formData.checklist, { id: `item-${Date.now()}`, text: newChecklistItem, completed: false }],
+      });
+      setNewChecklistItem('');
+    }
+  };
+
+  const handleRemoveChecklistItem = (itemId: string) => {
+    setFormData({
+      ...formData,
+      checklist: formData.checklist.filter(item => item.id !== itemId),
+    });
+  };
+
+  const handleAddTag = () => {
+    if (newTag.trim() && !formData.tags.includes(newTag)) {
+      setFormData({
+        ...formData,
+        tags: [...formData.tags, newTag],
+      });
+      setNewTag('');
+    }
+  };
+
+  const handleRemoveTag = (tag: string) => {
+    setFormData({
+      ...formData,
+      tags: formData.tags.filter(t => t !== tag),
+    });
+  };
+
+  const handleStaffSelect = (staffId: string) => {
+    const staffMember = staff.find(s => s.id === staffId);
+    if (staffMember) {
+      setFormData({
+        ...formData,
+        assignedTo: staffId,
+        assignedToName: staffMember.name,
+      });
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-charcoal/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        className="bg-white rounded-xl p-6 max-w-2xl w-full my-8"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="font-serif text-xl font-bold text-charcoal">
+            {task ? 'Edit Task' : 'Create New Task'}
+          </h3>
+          <button onClick={onClose} className="p-2 text-charcoal/40 hover:text-charcoal transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Title</label>
+            <input
+              type="text"
+              required
+              value={formData.title}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              className="w-full px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Description</label>
+            <textarea
+              required
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              rows={3}
+              className="w-full px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Assign To</label>
+              <select
+                value={formData.assignedTo}
+                onChange={(e) => handleStaffSelect(e.target.value)}
+                className="w-full px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                required
+              >
+                <option value="">Select staff member</option>
+                {staff.map(s => (
+                  <option key={s.id} value={s.id}>{s.name} ({s.role})</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Due Date</label>
+              <input
+                type="date"
+                required
+                value={formData.dueDate}
+                onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+                className="w-full px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Priority</label>
+              <select
+                value={formData.priority}
+                onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
+                className="w-full px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+              >
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="urgent">Urgent</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Status</label>
+              <select
+                value={formData.status}
+                onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                className="w-full px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+              >
+                <option value="pending">Pending</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Checklist</label>
+            <div className="space-y-2 mb-2">
+              {formData.checklist.map(item => (
+                <div key={item.id} className="flex items-center gap-2">
+                  <span className="flex-1 text-sm text-charcoal">{item.text}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveChecklistItem(item.id)}
+                    className="p-1 text-charcoal/40 hover:text-red-500 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newChecklistItem}
+                onChange={(e) => setNewChecklistItem(e.target.value)}
+                placeholder="Add checklist item..."
+                className="flex-1 px-3 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+              />
+              <button
+                type="button"
+                onClick={handleAddChecklistItem}
+                className="px-4 py-2 bg-charcoal/5 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/10 transition-colors"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Tags</label>
+            <div className="flex flex-wrap gap-1.5 mb-2">
+              {formData.tags.map((tag, i) => (
+                <span key={i} className="flex items-center gap-1 text-[10px] font-medium text-charcoal/50 bg-charcoal/5 px-2 py-1 rounded-full">
+                  {tag}
+                  <button type="button" onClick={() => handleRemoveTag(tag)} className="hover:text-red-500">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newTag}
+                onChange={(e) => setNewTag(e.target.value)}
+                placeholder="Add tag..."
+                className="flex-1 px-3 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+              />
+              <button
+                type="button"
+                onClick={handleAddTag}
+                className="px-4 py-2 bg-charcoal/5 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/10 transition-colors"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+
+          <div className="flex gap-3 pt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 px-4 py-2 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex-1 px-4 py-2 bg-gold text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-gold-dark transition-all"
+            >
+              {task ? 'Update Task' : 'Create Task'}
+            </button>
+          </div>
+        </form>
+      </motion.div>
+    </motion.div>
+  );
+}
