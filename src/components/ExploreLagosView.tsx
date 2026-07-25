@@ -83,7 +83,7 @@ const categories: Category[] = [
       {
         id: 'm2', title: 'Kalakuta Republic Museum', description: 'The legendary former home of Fela Kuti — celebrating Africa\'s rebel icon.', location: 'Ikeja', rating: 4.4, price: '₦1,500', icon: <Drum className="w-6 h-6" />, duration: '1-2 hours', highlights: ['Music history', 'Memorabilia', 'Cultural significance'],
         image: '/assets/images/explore/kalakuta-republic-museum.jpg',
-        images: ['/assets/images/explore/kalakuta-republic-museum.jpg', '/assets/images/secondary/kalakuta-museum-2.jpeg', '/assets/images/secondary/kalakuta-museum-3.avif']
+        images: ['/assets/images/explore/kalakuta-republic-museum.jpg', '/assets/images/secondary/kalakuta-museum-2.avif', '/assets/images/secondary/kalakuta-museum-3.jpeg']
       },
       {
         id: 'g1', title: 'Nike Art Gallery', description: 'West Africa\'s largest art gallery with over 7,000 works.', location: 'Lekki Phase 1', rating: 4.8, price: 'Free', icon: <Palette className="w-6 h-6" />, duration: '2-3 hours', highlights: ['7,000+ artworks', 'Guided tours', 'Art workshops'],
@@ -97,8 +97,8 @@ const categories: Category[] = [
       },
       {
         id: 'g2', title: 'Yemisi Shyllon Museum', description: 'One of Nigeria\'s most important modern art museums.', location: 'Pan-Atlantic University', rating: 4.7, price: 'Free', icon: <Gem className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Modern art', 'Private collection', 'Educational'],
-        image: '/assets/images/explore/yemisi-shyllon-museum.png',
-        images: ['/assets/images/explore/yemisi-shyllon-museum.png', '/assets/images/secondary/yemisi-shyllon-2.png', '/assets/images/secondary/yemisi-shyllon-3.jpeg']
+        image: '/assets/images/secondary/yemisi-shyllon-2.png',
+        images: ['/assets/images/secondary/yemisi-shyllon-2.png', '/assets/images/secondary/yemisi-shyllon-3.jpeg', '/assets/images/secondary/yemisi-shyllon-4.jpeg']
       },
     ]
   },
