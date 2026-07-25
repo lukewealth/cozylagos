@@ -28,6 +28,7 @@ import NotificationManagement from '../components/NotificationManagement';
 import TransactionDownload from '../components/TransactionDownload';
 import UserManagement from '../components/UserManagement';
 import PropertyManagement from '../components/PropertyManagement';
+import { AdminStatCard, AdminCard, AdminButton, AdminBadge } from '../components/ui';
 import { purgeDemoData, flushSystem, syncRealData, getSystemStats } from '../utils/databasePurge';
 
 interface AdminDashboardProps {
