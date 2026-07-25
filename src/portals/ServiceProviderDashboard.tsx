@@ -1,45 +1,68 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  LayoutDashboard, Calendar, Users, Package, ConciergeBell,
-  Search, Bell, Settings, Grid3X3,
-  CheckCircle, XCircle, MoreHorizontal, Eye, Edit3, TrendingUp, DollarSign,
-  Utensils, Car, Camera, ShieldCheck, Key, Radio, Zap, AlertTriangle,
+  LayoutDashboard, Calendar, Users, Package, Search, Bell,
+  CheckCircle, XCircle, Eye, Edit3, TrendingUp, DollarSign,
+  Utensils, Car, Camera, ShieldCheck, Key, Radio, Zap,
   UserCheck, CalendarDays, Download,
   Sparkles, Briefcase, Award, UserCircle, ChevronDown, X, Menu,
-  Clock, Star, MapPin, ArrowRight, Filter, DollarSign as DollarIcon,
-  BarChart3, PieChart, Activity, ChevronRight, Plus, Globe, Wifi, WifiOff
+  Clock, Star, MapPin, ArrowRight, Filter,
+  BarChart3, PieChart, Activity, ChevronRight, Plus, Globe, Wifi, WifiOff,
+  RefreshCw, HelpCircle, LogOut, Settings, MoreVertical, Phone, Mail,
+  Check, AlertCircle, Send, FileText, MessageSquare, Grid3X3
 } from 'lucide-react';
 import { useAuth } from '../auth';
 import { useDatabase } from '../hooks/useDatabase';
 import { useBackendHealth } from '../hooks/useBackendHealth';
+import { useSyncIndicator } from '../hooks/useSyncIndicator';
+import { syncCreate, syncUpdate, syncDelete } from '../lib/syncEngine';
 import CollapsibleSidebar from '../components/ui/CollapsibleSidebar';
 import Tooltip from '../components/ui/Tooltip';
+import SyncIndicator from '../components/ui/SyncIndicator';
 import ListingWizardView from '../components/ListingWizardView';
 import ConfirmDialog from '../components/ui/ConfirmDialog';
 import EditModal, { EditField } from '../components/ui/EditModal';
 import StaffAssignModal from '../components/ui/StaffAssignModal';
 import AssetCreateModal from '../components/ui/AssetCreateModal';
+import ServiceCreateModal from '../components/ui/ServiceCreateModal';
+import HelpSupportModal from '../components/ui/HelpSupportModal';
 import { ToastContainer, showToast } from '../components/ui/Toast';
 import api from '../services/api';
 import { Listing } from '../types';
 import SPTaskManagement from '../components/SPTaskManagement';
+import { generateId } from '../db';
 
 type ProviderSection = 'overview' | 'service-dashboard' | 'listings' | 'my-services' | 'schedule' | 'calendar' | 'earnings' | 'inventory' | 'booking-requests' | 'wizard' | 'tasks';
 
-const MOCK_STAFF = [
-  { id: 's1', name: 'Captain Chidi Okoro', role: 'driver', status: 'on_duty', initials: 'CO', certifications: ['MCA MASTER 3000GT', 'VIP PROTOCOL'], specializations: ['Maritime', 'VIP Transport'], rating: 4.8, availabilityFrom: '22:00', currentAssignment: 'Yacht Leila', tenureYears: 6 },
-  { id: 's2', name: 'Chef Tunde Balogun', role: 'chef', status: 'available', initials: 'TB', certifications: ['Culinary Arts', 'Food Safety'], specializations: ['Afro-Fusion', 'Michelin Strategy'], rating: 4.9, availabilityFrom: 'Now', currentAssignment: undefined, tenureYears: 8 },
-  { id: 's3', name: 'Amara Nwosu', role: 'concierge', status: 'off_duty', initials: 'AN', certifications: ['Hospitality Mgmt'], specializations: ['Multilingual', 'Event Planning'], rating: 4.7, availabilityFrom: 'Tomorrow', currentAssignment: undefined, tenureYears: 8 },
-  { id: 's4', name: 'Adebayo Security', role: 'security', status: 'on_duty', initials: 'AS', certifications: ['Armed Escort', 'CCTV Ops'], specializations: ['VIP Protection', 'Asset Security'], rating: 4.6, availabilityFrom: 'Now', currentAssignment: 'Banana Island Villa', tenureYears: 4 },
-];
+interface StaffMember {
+  id: string;
+  name: string;
+  role: string;
+  status: 'on_duty' | 'available' | 'off_duty';
+  initials: string;
+  certifications: string[];
+  specializations: string[];
+  rating: number;
+  availabilityFrom: string;
+  currentAssignment?: string;
+  tenureYears: number;
+}
 
-const MOCK_MY_SERVICES = [
-  { id: 'ms1', title: 'VIP Airport Pickup', category: 'Transport', bookings: 24, rating: 4.9, revenue: 4320000, status: 'active', icon: Car },
-  { id: 'ms2', title: 'Private Chef Experience', category: 'Culinary', bookings: 18, rating: 4.8, revenue: 2700000, status: 'active', icon: Utensils },
-  { id: 'ms3', title: 'Security Escort', category: 'Security', bookings: 12, rating: 4.7, revenue: 1800000, status: 'active', icon: ShieldCheck },
-  { id: 'ms4', title: 'Photography Session', category: 'Media', bookings: 8, rating: 4.9, revenue: 960000, status: 'paused', icon: Camera },
-];
+interface ServiceItem {
+  id: string;
+  title: string;
+  category: string;
+  bookings: number;
+  rating: number;
+  revenue: number;
+  status: 'active' | 'paused' | 'draft';
+  icon: React.ElementType;
+  description?: string;
+  price?: number;
+  priceUnit?: string;
+  image?: string;
+  providerId?: string;
+}
 
 export default function ServiceProviderDashboard() {
   const { currentUser, logout } = useAuth();
@@ -54,32 +77,115 @@ export default function ServiceProviderDashboard() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showAssetModal, setShowAssetModal] = useState(false);
+  const [showServiceModal, setShowServiceModal] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
   const [showBookingConfirm, setShowBookingConfirm] = useState<string | null>(null);
   const [showBookingReject, setShowBookingReject] = useState<string | null>(null);
   const [selectedListing, setSelectedListing] = useState<any>(null);
   const [selectedBookingForAction, setSelectedBookingForAction] = useState<any>(null);
+  const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
+  const [editingService, setEditingService] = useState<ServiceItem | null>(null);
+  const [staff, setStaff] = useState<StaffMember[]>([]);
+  const [myServices, setMyServices] = useState<ServiceItem[]>([]);
   const [assets, setAssets] = useState<any[]>([]);
+  const [isLoadingServices, setIsLoadingServices] = useState(false);
+  const [isLoadingStaff, setIsLoadingStaff] = useState(false);
 
   const backendHealth = useBackendHealth();
+  const syncState = useSyncIndicator();
 
   const { data: bookings, addRecord: updateBooking } = useDatabase('bookings');
   const { data: transactions } = useDatabase('transactions');
   const { data: listings, removeRecord: removeListing, addRecord: updateListing } = useDatabase('listings');
+  const { data: servicesData } = useDatabase('services');
 
   const totalEarnings = (transactions as any[]).reduce((sum: number, t: any) => sum + (t.amount || 0), 0);
   const activeBookings = (bookings as any[]).filter((b: any) => b.status === 'confirmed' || b.status === 'Confirmed' || b.status === 'Pending');
   const pendingBookings = (bookings as any[]).filter((b: any) => b.status === 'Pending' || b.status === 'pending');
   const unassignedBookings = (bookings as any[]).filter((b: any) => !b.providerId || b.providerAssignmentStatus === 'unassigned');
 
+  useEffect(() => {
+    fetchStaff();
+    fetchServices();
+  }, [currentUser?.id]);
+
+  const fetchStaff = async () => {
+    setIsLoadingStaff(true);
+    try {
+      const result = await api.provider.getStaff({ providerId: currentUser?.id });
+      if (result.success && result.data) {
+        setStaff(result.data.map((s: any) => ({
+          id: s._id || s.id,
+          name: s.name,
+          role: s.role || 'staff',
+          status: s.status || 'available',
+          initials: s.name?.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'ST',
+          certifications: s.certifications || [],
+          specializations: s.specializations || [],
+          rating: s.rating || 0,
+          availabilityFrom: s.availabilityFrom || 'Now',
+          currentAssignment: s.currentAssignment,
+          tenureYears: s.tenureYears || 0,
+        })));
+      }
+    } catch (error) {
+      console.error('Failed to fetch staff:', error);
+    } finally {
+      setIsLoadingStaff(false);
+    }
+  };
+
+  const fetchServices = async () => {
+    setIsLoadingServices(true);
+    try {
+      const result = await api.provider.getServices({ providerId: currentUser?.id });
+      if (result.success && result.data) {
+        setMyServices(result.data.map((s: any) => ({
+          id: s._id || s.id,
+          title: s.title,
+          category: s.category,
+          bookings: s.bookings || 0,
+          rating: s.rating || 0,
+          revenue: s.revenue || 0,
+          status: s.available ? 'active' : 'paused',
+          icon: getCategoryIcon(s.category),
+          description: s.description,
+          price: s.price,
+          priceUnit: s.priceUnit,
+          image: s.image,
+          providerId: s.providerId,
+        })));
+      }
+    } catch (error) {
+      console.error('Failed to fetch services:', error);
+    } finally {
+      setIsLoadingServices(false);
+    }
+  };
+
+  const getCategoryIcon = (category: string): React.ElementType => {
+    switch (category?.toLowerCase()) {
+      case 'transport': return Car;
+      case 'culinary': return Utensils;
+      case 'security': return ShieldCheck;
+      case 'media': case 'photography': return Camera;
+      case 'wellness': return Sparkles;
+      case 'concierge': return Key;
+      case 'marine': case 'yacht': return Radio;
+      case 'aviation': return Zap;
+      default: return Briefcase;
+    }
+  };
+
   const filteredStaff = useMemo(() => {
-    if (!searchQuery) return MOCK_STAFF;
-    return MOCK_STAFF.filter(s =>
+    if (!searchQuery) return staff;
+    return staff.filter(s =>
       s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       s.role.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [searchQuery]);
+  }, [searchQuery, staff]);
 
-  const onDutyCount = MOCK_STAFF.filter(s => s.status === 'on_duty').length;
+  const onDutyCount = staff.filter(s => s.status === 'on_duty').length;
 
   const handleLogout = () => logout();
 
@@ -97,24 +203,34 @@ export default function ServiceProviderDashboard() {
     }
   };
 
-  const handleAssignStaff = (bookingId: string, staffId: string) => {
-    const staff = MOCK_STAFF.find(s => s.id === staffId);
-    if (staff) {
-      setSelectedStaff(null);
+  const handleAssignStaff = async (bookingId: string, staffId: string) => {
+    const staffMember = staff.find(s => s.id === staffId);
+    if (staffMember) {
+      try {
+        await api.staff.patch({ id: staffId, currentAssignment: bookingId });
+        showToast({ type: 'success', title: 'Staff Assigned', message: `${staffMember.name} has been assigned` });
+        setSelectedStaff(null);
+        fetchStaff();
+      } catch (error) {
+        showToast({ type: 'error', title: 'Error', message: 'Failed to assign staff' });
+      }
     }
   };
 
-  const handlePublishListing = (newListing: Listing) => {
-    updateListing(newListing as any);
-    api.listings.create(newListing).catch(() => {});
+  const handlePublishListing = async (newListing: Listing) => {
+    await syncCreate('listings', newListing);
+    try {
+      await api.listings.create(newListing);
+    } catch {}
     showToast({ type: 'success', title: 'Property Published', message: `${newListing.title} is now live` });
     handleSectionChange('listings');
   };
 
   const handleDeleteListing = async () => {
     if (!selectedListing) return;
+    await syncDelete('listings', selectedListing.id);
     try {
-      await api.listings.delete(selectedListing.id).catch(() => {});
+      await api.listings.delete(selectedListing.id);
     } catch {}
     removeListing(selectedListing.id);
     showToast({ type: 'success', title: 'Property Deleted', message: `${selectedListing.title} has been removed` });
@@ -125,8 +241,9 @@ export default function ServiceProviderDashboard() {
   const handleEditListing = async (data: any) => {
     if (!selectedListing) return;
     const updated = { ...selectedListing, ...data, updatedAt: new Date().toISOString() };
+    await syncUpdate('listings', updated);
     try {
-      await api.listings.update(updated).catch(() => {});
+      await api.listings.update(updated);
     } catch {}
     updateListing(updated as any);
     showToast({ type: 'success', title: 'Property Updated', message: `${updated.title} has been saved` });
@@ -136,16 +253,18 @@ export default function ServiceProviderDashboard() {
 
   const handleToggleListingStatus = async (listing: any) => {
     const updated = { ...listing, isActive: !listing.isActive, updatedAt: new Date().toISOString() };
+    await syncUpdate('listings', updated);
     try {
-      await api.listings.update(updated).catch(() => {});
+      await api.listings.update(updated);
     } catch {}
     updateListing(updated as any);
     showToast({ type: 'info', title: listing.isActive ? 'Property Deactivated' : 'Property Activated', message: updated.title });
   };
 
   const handleConfirmBooking = async (booking: any) => {
+    await syncUpdate('bookings', { ...booking, status: 'confirmed', updatedAt: new Date().toISOString() });
     try {
-      await api.bookings.confirm(booking.id).catch(() => {});
+      await api.bookings.confirm(booking.id);
     } catch {}
     updateBooking({ ...booking, status: 'confirmed', updatedAt: new Date().toISOString() } as any);
     showToast({ type: 'success', title: 'Booking Confirmed', message: `${booking.guestName}'s booking has been confirmed` });
@@ -153,8 +272,9 @@ export default function ServiceProviderDashboard() {
   };
 
   const handleRejectBooking = async (booking: any) => {
+    await syncUpdate('bookings', { ...booking, status: 'cancelled', updatedAt: new Date().toISOString() });
     try {
-      await api.bookings.cancel(booking.id).catch(() => {});
+      await api.bookings.cancel(booking.id);
     } catch {}
     updateBooking({ ...booking, status: 'cancelled', updatedAt: new Date().toISOString() } as any);
     showToast({ type: 'warning', title: 'Booking Rejected', message: `${booking.guestName}'s booking has been declined` });
@@ -162,23 +282,84 @@ export default function ServiceProviderDashboard() {
   };
 
   const handleAssignStaffToBooking = async (staffId: string) => {
-    const staff = MOCK_STAFF.find(s => s.id === staffId);
-    if (!staff || !selectedBookingForAction) return;
+    const staffMember = staff.find(s => s.id === staffId);
+    if (!staffMember || !selectedBookingForAction) return;
     try {
-      await api.staff.patch({ id: staffId, currentAssignment: selectedBookingForAction.listingTitle }).catch(() => {});
-    } catch {}
-    showToast({ type: 'success', title: 'Staff Assigned', message: `${staff.name} assigned to ${selectedBookingForAction.listingTitle}` });
-    setShowAssignModal(false);
-    setSelectedBookingForAction(null);
+      await api.staff.patch({ id: staffId, currentAssignment: selectedBookingForAction.listingTitle });
+      showToast({ type: 'success', title: 'Staff Assigned', message: `${staffMember.name} assigned to ${selectedBookingForAction.listingTitle}` });
+      setShowAssignModal(false);
+      setSelectedBookingForAction(null);
+      fetchStaff();
+    } catch (error) {
+      showToast({ type: 'error', title: 'Error', message: 'Failed to assign staff' });
+    }
   };
 
   const handleCreateAsset = async (asset: any) => {
     setAssets(prev => [...prev, asset]);
     try {
-      await api.assets.create(asset).catch(() => {});
+      await api.provider.createAsset(asset);
     } catch {}
     showToast({ type: 'success', title: 'Asset Created', message: `${asset.name} has been added to inventory` });
     setShowAssetModal(false);
+  };
+
+  const handleCreateService = async (serviceData: any) => {
+    try {
+      const result = await api.provider.createService({
+        ...serviceData,
+        providerId: currentUser?.id,
+        providerName: currentUser?.name,
+      });
+      if (result.success) {
+        showToast({ type: 'success', title: 'Service Created', message: `${serviceData.title} has been published` });
+        setShowServiceModal(false);
+        fetchServices();
+      }
+    } catch (error) {
+      showToast({ type: 'error', title: 'Error', message: 'Failed to create service' });
+    }
+  };
+
+  const handleUpdateService = async (serviceData: any) => {
+    try {
+      const result = await api.provider.updateService(serviceData);
+      if (result.success) {
+        showToast({ type: 'success', title: 'Service Updated', message: `${serviceData.title} has been updated` });
+        setShowServiceModal(false);
+        setEditingService(null);
+        fetchServices();
+      }
+    } catch (error) {
+      showToast({ type: 'error', title: 'Error', message: 'Failed to update service' });
+    }
+  };
+
+  const handleDeleteService = async (service: ServiceItem) => {
+    try {
+      await api.provider.deleteService(service.id);
+      showToast({ type: 'success', title: 'Service Deleted', message: `${service.title} has been removed` });
+      fetchServices();
+    } catch (error) {
+      showToast({ type: 'error', title: 'Error', message: 'Failed to delete service' });
+    }
+  };
+
+  const handleToggleServiceStatus = async (service: ServiceItem) => {
+    try {
+      await api.provider.updateService({
+        id: service.id,
+        available: service.status !== 'active',
+      });
+      showToast({
+        type: 'info',
+        title: service.status === 'active' ? 'Service Paused' : 'Service Activated',
+        message: service.title,
+      });
+      fetchServices();
+    } catch (error) {
+      showToast({ type: 'error', title: 'Error', message: 'Failed to update service' });
+    }
   };
 
   const listingEditFields: EditField[] = [
@@ -219,6 +400,7 @@ export default function ServiceProviderDashboard() {
         setActiveTab={handleSectionChange as any}
         userRole="service_provider"
         onLogout={handleLogout}
+        onHelp={() => setShowHelpModal(true)}
         onCollapse={setIsSidebarCollapsed}
         isMobileOpen={isMobileMenuOpen}
         onMobileClose={() => setIsMobileMenuOpen(false)}
@@ -233,7 +415,8 @@ export default function ServiceProviderDashboard() {
               </button>
             </Tooltip>
           </div>
-          <div className="flex items-center gap-2 md:gap-6">
+          <div className="flex items-center gap-2 md:gap-4">
+            <SyncIndicator />
             <Tooltip content={`Backend: ${backendHealth.status}`} description={backendHealth.message}>
               <div className={`hidden md:flex items-center gap-1.5 px-2 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest ${
                 backendHealth.status === 'connected' ? 'bg-green-100 text-green-700' :
@@ -247,7 +430,12 @@ export default function ServiceProviderDashboard() {
             <Tooltip content="Notifications" description="View alerts and updates">
               <button className="p-2 text-secondary hover:text-primary cursor-pointer transition-colors relative">
                 <Bell className="w-5 h-5" />
-                {pendingBookings.length > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-error rounded-full" />}
+                {pendingBookings.length > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-error rounded-full animate-pulse" />}
+              </button>
+            </Tooltip>
+            <Tooltip content="Help & Support">
+              <button onClick={() => setShowHelpModal(true)} className="p-2 text-secondary hover:text-primary cursor-pointer transition-colors">
+                <HelpCircle className="w-5 h-5" />
               </button>
             </Tooltip>
             <div className="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/30 bg-primary-container/20 flex items-center justify-center">
@@ -263,12 +451,12 @@ export default function ServiceProviderDashboard() {
                 <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
                   <div>
                     <h1 className="font-serif text-headline-lg text-on-surface mb-2">Dashboard Overview</h1>
-                    <p className="text-secondary font-body-lg max-w-2xl">Manage your services, bookings, and staff.</p>
+                    <p className="text-secondary font-body-lg">Manage your services, bookings, and staff.</p>
                   </div>
                   <div className="glass-card px-6 py-3 rounded-xl flex items-center gap-4">
                     <div className="text-right border-r border-outline-variant/30 pr-4">
                       <div className="text-[10px] text-outline font-label-caps">ON-DUTY</div>
-                      <div className="text-xl font-bold text-primary">{onDutyCount}/{MOCK_STAFF.length}</div>
+                      <div className="text-xl font-bold text-primary">{onDutyCount}/{staff.length}</div>
                     </div>
                     <div className="text-right">
                       <div className="text-[10px] text-outline font-label-caps">PENDING</div>
@@ -281,7 +469,7 @@ export default function ServiceProviderDashboard() {
                   {[
                     { label: 'Total Earnings', value: `₦${(totalEarnings / 1000000).toFixed(1)}M`, icon: DollarSign, color: 'text-green-600' },
                     { label: 'Active Bookings', value: activeBookings.length.toString(), icon: Clock, color: 'text-primary' },
-                    { label: 'Service Rating', value: '4.9', icon: Star, color: 'text-primary' },
+                    { label: 'My Services', value: myServices.filter(s => s.status === 'active').length.toString(), icon: Briefcase, color: 'text-primary' },
                     { label: 'Pending Requests', value: pendingBookings.length.toString(), icon: Package, color: 'text-error' },
                   ].map((stat, i) => (
                     <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
@@ -297,7 +485,7 @@ export default function ServiceProviderDashboard() {
                   <section className="lg:col-span-5 space-y-4">
                     <div className="flex items-center justify-between px-2 mb-2">
                       <h2 className="font-serif text-xl text-on-surface">Booking Requests</h2>
-                      {unassignedBookings.length > 0 && <span className="bg-error/10 text-error px-2 py-0.5 rounded text-[10px] font-bold">NEED ASSIGNMENT</span>}
+                      {unassignedBookings.length > 0 && <span className="bg-error/10 text-error px-2 py-0.5 rounded text-[10px] font-bold animate-pulse">NEED ASSIGNMENT</span>}
                     </div>
                     {unassignedBookings.length === 0 && (
                       <div className="glass-card p-8 rounded-2xl text-center">
@@ -322,17 +510,16 @@ export default function ServiceProviderDashboard() {
                           <div className="flex items-center gap-2 text-xs text-secondary">
                             <Users className="w-3 h-3" />
                             <span>{booking.guestsCount} guests</span>
-                            {booking.services && <span>• {booking.services.length} services</span>}
                           </div>
                           <div className="flex items-center gap-2">
-                            <Tooltip content="Confirm" description="Approve this booking">
+                            <Tooltip content="Confirm">
                               <button
                                 onClick={() => { setSelectedBookingForAction(booking); setShowBookingConfirm(booking.id); }}
                                 className="text-green-600 font-bold text-xs flex items-center gap-1 hover:gap-2 transition-all">
                                 <CheckCircle className="w-3.5 h-3.5" />
                               </button>
                             </Tooltip>
-                            <Tooltip content="Assign Staff" description="Assign a service provider">
+                            <Tooltip content="Assign Staff">
                               <button
                                 onClick={() => { setSelectedBookingForAction(booking); setShowAssignModal(true); }}
                                 className="text-primary font-bold text-xs flex items-center gap-1 hover:gap-2 transition-all">
@@ -341,30 +528,6 @@ export default function ServiceProviderDashboard() {
                             </Tooltip>
                           </div>
                         </div>
-
-                        <AnimatePresence>
-                          {selectedStaff === booking.id && (
-                            <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                              className="mt-3 pt-3 border-t border-outline-variant/10 space-y-2">
-                              <p className="text-[10px] font-bold text-secondary uppercase tracking-widest">Select Staff</p>
-                              {MOCK_STAFF.filter(s => s.status !== 'off_duty').map(staff => (
-                                <button key={staff.id} onClick={() => handleAssignStaff(booking.id, staff.id)}
-                                  className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container transition-colors text-left">
-                                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
-                                    {staff.initials}
-                                  </div>
-                                  <div className="flex-1">
-                                    <p className="text-xs font-bold text-on-surface">{staff.name}</p>
-                                    <p className="text-[9px] text-secondary capitalize">{staff.role}</p>
-                                  </div>
-                                  <span className={`text-[8px] font-bold px-2 py-0.5 rounded-full ${getStatusBadge(staff.status).bg} ${getStatusBadge(staff.status).text}`}>
-                                    {getStatusBadge(staff.status).label}
-                                  </span>
-                                </button>
-                              ))}
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
                       </motion.div>
                     ))}
                   </section>
@@ -381,57 +544,201 @@ export default function ServiceProviderDashboard() {
                         </button>
                       </div>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {filteredStaff.map((staff) => {
-                        const statusBadge = getStatusBadge(staff.status);
-                        return (
-                          <motion.div key={staff.id} whileHover={{ y: -4 }}
-                            className="glass-card rounded-3xl overflow-hidden flex flex-col group luxury-shadow">
-                            <div className="relative h-40 bg-gradient-to-br from-primary/20 via-surface-container to-surface-container-high overflow-hidden flex items-center justify-center">
-                              <div className="w-16 h-16 rounded-full bg-primary-container/30 flex items-center justify-center">
-                                <span className="text-xl font-serif font-bold text-primary">{staff.initials}</span>
-                              </div>
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                              <div className="absolute bottom-3 left-4">
-                                <h3 className="text-white font-serif text-lg">{staff.name}</h3>
-                                <div className="flex items-center gap-2">
-                                  <span className={`w-2 h-2 rounded-full ${staff.status === 'on_duty' ? 'bg-primary animate-pulse' : staff.status === 'available' ? 'bg-green-400' : 'bg-secondary'}`} />
-                                  <span className="text-primary-container text-[10px] font-bold uppercase tracking-widest">
-                                    {staff.currentAssignment ? `ON-DUTY: ${staff.currentAssignment}` : statusBadge.label}
-                                  </span>
+                    {isLoadingStaff ? (
+                      <div className="flex items-center justify-center py-12">
+                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>
+                          <RefreshCw className="w-6 h-6 text-primary" />
+                        </motion.div>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {filteredStaff.map((staffMember) => {
+                          const statusBadge = getStatusBadge(staffMember.status);
+                          return (
+                            <motion.div key={staffMember.id} whileHover={{ y: -4 }}
+                              className="glass-card rounded-3xl overflow-hidden flex flex-col group luxury-shadow">
+                              <div className="relative h-40 bg-gradient-to-br from-primary/20 via-surface-container to-surface-container-high overflow-hidden flex items-center justify-center">
+                                <div className="w-16 h-16 rounded-full bg-primary-container/30 flex items-center justify-center">
+                                  <span className="text-xl font-serif font-bold text-primary">{staffMember.initials}</span>
                                 </div>
-                              </div>
-                            </div>
-                            <div className="p-5">
-                              <div className="grid grid-cols-2 gap-3 mb-4">
-                                <div>
-                                  <p className="text-[10px] text-outline font-label-caps mb-1">CERTIFICATIONS</p>
-                                  <div className="flex flex-wrap gap-1">
-                                    {staff.certifications.slice(0, 2).map(cert => (
-                                      <span key={cert} className="bg-surface-container-high px-2 py-0.5 rounded text-[9px] font-bold">{cert}</span>
-                                    ))}
-                                  </div>
-                                </div>
-                                <div>
-                                  <p className="text-[10px] text-outline font-label-caps mb-1">RATING</p>
-                                  <div className="flex items-center gap-1 text-primary">
-                                    <Star className="w-3.5 h-3.5 fill-current" />
-                                    <span className="text-xs font-bold">{staff.rating} / 5.0</span>
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                                <div className="absolute bottom-3 left-4">
+                                  <h3 className="text-white font-serif text-lg">{staffMember.name}</h3>
+                                  <div className="flex items-center gap-2">
+                                    <span className={`w-2 h-2 rounded-full ${staffMember.status === 'on_duty' ? 'bg-primary animate-pulse' : staffMember.status === 'available' ? 'bg-green-400' : 'bg-secondary'}`} />
+                                    <span className="text-primary-container text-[10px] font-bold uppercase tracking-widest">
+                                      {staffMember.currentAssignment ? `ON-DUTY: ${staffMember.currentAssignment}` : statusBadge.label}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
-                              <button className={`w-full py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${
-                                staff.status === 'available' ? 'bg-on-surface text-white hover:bg-primary' : 'border border-primary text-primary hover:bg-primary hover:text-on-primary'
-                              }`}>
-                                {staff.status === 'available' ? 'Assign to Task' : 'Reassign'}
-                              </button>
-                            </div>
-                          </motion.div>
-                        );
-                      })}
-                    </div>
+                              <div className="p-5">
+                                <div className="grid grid-cols-2 gap-3 mb-4">
+                                  <div>
+                                    <p className="text-[10px] text-outline font-label-caps mb-1">CERTIFICATIONS</p>
+                                    <div className="flex flex-wrap gap-1">
+                                      {staffMember.certifications.slice(0, 2).map(cert => (
+                                        <span key={cert} className="bg-surface-container-high px-2 py-0.5 rounded text-[9px] font-bold">{cert}</span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <p className="text-[10px] text-outline font-label-caps mb-1">RATING</p>
+                                    <div className="flex items-center gap-1 text-primary">
+                                      <Star className="w-3.5 h-3.5 fill-current" />
+                                      <span className="text-xs font-bold">{staffMember.rating} / 5.0</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <button
+                                  onClick={() => { setSelectedStaff(staffMember.id); }}
+                                  className={`w-full py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${
+                                    staffMember.status === 'available' ? 'bg-on-surface text-white hover:bg-primary' : 'border border-primary text-primary hover:bg-primary hover:text-on-primary'
+                                  }`}>
+                                  {staffMember.status === 'available' ? 'Assign to Task' : 'Reassign'}
+                                </button>
+                              </div>
+                            </motion.div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </section>
                 </div>
+              </motion.div>
+            )}
+
+            {activeSection === 'my-services' && (
+              <motion.div key="my-services" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
+                <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                  <div>
+                    <h1 className="font-serif text-headline-lg text-on-surface">My Services</h1>
+                    <p className="text-secondary font-body-lg mt-2">Manage your service offerings and track performance</p>
+                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => { setEditingService(null); setShowServiceModal(true); }}
+                    className="px-5 py-2.5 bg-primary text-white font-bold text-sm rounded-xl hover:bg-primary-dark transition-colors flex items-center gap-2 shadow-lg"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Create Service
+                  </motion.button>
+                </header>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                  {[
+                    { label: 'Active Services', value: myServices.filter(s => s.status === 'active').length, icon: Briefcase, color: 'text-primary' },
+                    { label: 'Total Bookings', value: myServices.reduce((s, ms) => s + ms.bookings, 0), icon: Calendar, color: 'text-green-600' },
+                    { label: 'Avg Rating', value: myServices.length > 0 ? (myServices.reduce((s, ms) => s + ms.rating, 0) / myServices.length).toFixed(1) : '0.0', icon: Star, color: 'text-primary' },
+                    { label: 'Total Revenue', value: `₦${(myServices.reduce((s, ms) => s + ms.revenue, 0) / 1000000).toFixed(1)}M`, icon: DollarSign, color: 'text-green-600' },
+                  ].map((stat, i) => (
+                    <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
+                      className="glass-card p-5 rounded-2xl border border-outline-variant/10 luxury-shadow">
+                      <stat.icon className={`w-5 h-5 ${stat.color} mb-3`} />
+                      <p className="text-[10px] font-bold tracking-widest text-secondary uppercase">{stat.label}</p>
+                      <p className="text-xl font-serif font-bold text-on-surface mt-1">{stat.value}</p>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {isLoadingServices ? (
+                  <div className="flex items-center justify-center py-12">
+                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>
+                      <RefreshCw className="w-6 h-6 text-primary" />
+                    </motion.div>
+                  </div>
+                ) : myServices.length === 0 ? (
+                  <div className="glass-card p-12 rounded-2xl text-center">
+                    <Briefcase className="w-12 h-12 text-secondary/30 mx-auto mb-3" />
+                    <p className="text-lg font-semibold text-on-surface mb-2">No services yet</p>
+                    <p className="text-sm text-secondary mb-4">Create your first service to start accepting bookings</p>
+                    <button
+                      onClick={() => setShowServiceModal(true)}
+                      className="px-5 py-2.5 bg-primary text-white font-bold text-sm rounded-xl hover:bg-primary-dark transition-colors inline-flex items-center gap-2"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Create Your First Service
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {myServices.map((service) => (
+                      <motion.div key={service.id} whileHover={{ y: -2 }}
+                        className="glass-card p-6 rounded-2xl border border-outline-variant/10 luxury-shadow">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                              <service.icon className="w-6 h-6 text-primary" />
+                            </div>
+                            <div>
+                              <h3 className="font-bold text-on-surface">{service.title}</h3>
+                              <p className="text-xs text-secondary capitalize">{service.category}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className={`text-[9px] font-bold px-2 py-1 rounded-full ${service.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
+                              {service.status.toUpperCase()}
+                            </span>
+                            <button
+                              onClick={() => {
+                                const dropdown = document.getElementById(`service-menu-${service.id}`);
+                                if (dropdown) dropdown.classList.toggle('hidden');
+                              }}
+                              className="p-1 rounded hover:bg-surface-container transition-colors"
+                            >
+                              <MoreVertical className="w-4 h-4 text-secondary" />
+                            </button>
+                            <div id={`service-menu-${service.id}`} className="hidden absolute right-6 top-12 bg-white border border-outline-variant/20 rounded-lg shadow-lg py-1 z-10">
+                              <button
+                                onClick={() => { setEditingService(service); setShowServiceModal(true); }}
+                                className="w-full px-4 py-2 text-left text-sm hover:bg-surface-container flex items-center gap-2"
+                              >
+                                <Edit3 className="w-4 h-4" /> Edit
+                              </button>
+                              <button
+                                onClick={() => handleToggleServiceStatus(service)}
+                                className="w-full px-4 py-2 text-left text-sm hover:bg-surface-container flex items-center gap-2"
+                              >
+                                {service.status === 'active' ? <XCircle className="w-4 h-4" /> : <CheckCircle className="w-4 h-4" />}
+                                {service.status === 'active' ? 'Pause' : 'Activate'}
+                              </button>
+                              <button
+                                onClick={() => handleDeleteService(service)}
+                                className="w-full px-4 py-2 text-left text-sm text-error hover:bg-error/5 flex items-center gap-2"
+                              >
+                                <XCircle className="w-4 h-4" /> Delete
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4 pt-4 border-t border-outline-variant/10">
+                          <div>
+                            <p className="text-[10px] text-secondary uppercase">Bookings</p>
+                            <p className="text-lg font-bold text-on-surface">{service.bookings}</p>
+                          </div>
+                          <div>
+                            <p className="text-[10px] text-secondary uppercase">Rating</p>
+                            <div className="flex items-center gap-1">
+                              <Star className="w-3 h-3 text-primary fill-current" />
+                              <span className="text-lg font-bold text-on-surface">{service.rating || '—'}</span>
+                            </div>
+                          </div>
+                          <div>
+                            <p className="text-[10px] text-secondary uppercase">Revenue</p>
+                            <p className="text-lg font-bold text-green-600">₦{(service.revenue / 1000).toFixed(0)}K</p>
+                          </div>
+                        </div>
+                        {service.price && (
+                          <div className="mt-4 pt-4 border-t border-outline-variant/10 flex items-center justify-between">
+                            <span className="text-xs text-secondary">Price</span>
+                            <span className="font-bold text-primary">₦{service.price.toLocaleString()} / {service.priceUnit || 'session'}</span>
+                          </div>
+                        )}
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
               </motion.div>
             )}
 
@@ -475,10 +782,9 @@ export default function ServiceProviderDashboard() {
                       <div className="p-12 text-center">
                         <Globe className="w-12 h-12 text-primary/30 mx-auto mb-3" />
                         <p className="text-sm text-secondary">No properties listed yet.</p>
-                        <p className="text-xs text-secondary mt-1 mb-4">Start by adding your first property listing.</p>
                         <button
                           onClick={() => handleSectionChange('wizard')}
-                          className="px-5 py-2.5 bg-primary text-white font-bold text-sm rounded-xl hover:bg-primary-dark transition-colors inline-flex items-center gap-2"
+                          className="mt-4 px-5 py-2.5 bg-primary text-white font-bold text-sm rounded-xl hover:bg-primary-dark transition-colors inline-flex items-center gap-2"
                         >
                           <Plus className="w-4 h-4" />
                           Add Your First Property
@@ -525,15 +831,7 @@ export default function ServiceProviderDashboard() {
                                     : 'bg-green-100 text-green-700 hover:bg-green-200'
                                 }`}
                               >
-                                {listing.isActive ? (
-                                  <>
-                                    <XCircle className="w-3.5 h-3.5" /> Deactivate
-                                  </>
-                                ) : (
-                                  <>
-                                    <CheckCircle className="w-3.5 h-3.5" /> Activate
-                                  </>
-                                )}
+                                {listing.isActive ? <><XCircle className="w-3.5 h-3.5" /> Deactivate</> : <><CheckCircle className="w-3.5 h-3.5" /> Activate</>}
                               </button>
                               <button
                                 onClick={() => { setSelectedListing(listing); setShowEditModal(true); }}
@@ -563,68 +861,6 @@ export default function ServiceProviderDashboard() {
                   onPublishListing={handlePublishListing}
                   onCancel={() => handleSectionChange('listings')}
                 />
-              </motion.div>
-            )}
-
-            {activeSection === 'my-services' && (
-              <motion.div key="my-services" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
-                <header className="mb-8">
-                  <h1 className="font-serif text-headline-lg text-on-surface">My Services</h1>
-                  <p className="text-secondary font-body-lg mt-2">Manage your service offerings and track performance</p>
-                </header>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                  {[
-                    { label: 'Active Services', value: MOCK_MY_SERVICES.filter(s => s.status === 'active').length, icon: Briefcase, color: 'text-primary' },
-                    { label: 'Total Bookings', value: MOCK_MY_SERVICES.reduce((s, ms) => s + ms.bookings, 0), icon: Calendar, color: 'text-green-600' },
-                    { label: 'Avg Rating', value: (MOCK_MY_SERVICES.reduce((s, ms) => s + ms.rating, 0) / MOCK_MY_SERVICES.length).toFixed(1), icon: Star, color: 'text-primary' },
-                    { label: 'Total Revenue', value: `₦${(MOCK_MY_SERVICES.reduce((s, ms) => s + ms.revenue, 0) / 1000000).toFixed(1)}M`, icon: DollarSign, color: 'text-green-600' },
-                  ].map((stat, i) => (
-                    <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
-                      className="glass-card p-5 rounded-2xl border border-outline-variant/10 luxury-shadow">
-                      <stat.icon className={`w-5 h-5 ${stat.color} mb-3`} />
-                      <p className="text-[10px] font-bold tracking-widest text-secondary uppercase">{stat.label}</p>
-                      <p className="text-xl font-serif font-bold text-on-surface mt-1">{stat.value}</p>
-                    </motion.div>
-                  ))}
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {MOCK_MY_SERVICES.map((service) => (
-                    <motion.div key={service.id} whileHover={{ y: -2 }}
-                      className="glass-card p-6 rounded-2xl border border-outline-variant/10 luxury-shadow">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                            <service.icon className="w-6 h-6 text-primary" />
-                          </div>
-                          <div>
-                            <h3 className="font-bold text-on-surface">{service.title}</h3>
-                            <p className="text-xs text-secondary">{service.category}</p>
-                          </div>
-                        </div>
-                        <span className={`text-[9px] font-bold px-2 py-1 rounded-full ${service.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
-                          {service.status.toUpperCase()}
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-3 gap-4 pt-4 border-t border-outline-variant/10">
-                        <div>
-                          <p className="text-[10px] text-secondary uppercase">Bookings</p>
-                          <p className="text-lg font-bold text-on-surface">{service.bookings}</p>
-                        </div>
-                        <div>
-                          <p className="text-[10px] text-secondary uppercase">Rating</p>
-                          <div className="flex items-center gap-1">
-                            <Star className="w-3 h-3 text-primary fill-current" />
-                            <span className="text-lg font-bold text-on-surface">{service.rating}</span>
-                          </div>
-                        </div>
-                        <div>
-                          <p className="text-[10px] text-secondary uppercase">Revenue</p>
-                          <p className="text-lg font-bold text-green-600">₦{(service.revenue / 1000).toFixed(0)}K</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
               </motion.div>
             )}
 
@@ -707,9 +943,6 @@ export default function ServiceProviderDashboard() {
                           <div>
                             <p className="font-bold text-on-surface">{booking.guestName || 'Guest'}</p>
                             <p className="text-xs text-secondary">{booking.listingTitle || 'Property'} • {booking.checkIn || 'TBD'} → {booking.checkOut}</p>
-                            {booking.services && booking.services.length > 0 && (
-                              <p className="text-[9px] text-primary mt-1">Services: {booking.services.join(', ')}</p>
-                            )}
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
@@ -777,13 +1010,6 @@ export default function ServiceProviderDashboard() {
                                   <span>•</span>
                                   <span>{booking.guestsCount} guests</span>
                                 </div>
-                                {booking.services && booking.services.length > 0 && (
-                                  <div className="flex flex-wrap gap-1 mt-2">
-                                    {booking.services.map((s: string, i: number) => (
-                                      <span key={i} className="bg-primary/10 text-primary px-2 py-0.5 rounded text-[9px] font-bold">{s}</span>
-                                    ))}
-                                  </div>
-                                )}
                               </div>
                             </div>
                             <div className="flex flex-col items-end gap-2">
@@ -935,27 +1161,27 @@ export default function ServiceProviderDashboard() {
                       <h3 className="font-serif text-headline-sm text-on-surface">Staff Assignments</h3>
                     </div>
                     <div className="divide-y divide-outline-variant/10">
-                      {MOCK_STAFF.map((staff) => {
-                        const badge = getStatusBadge(staff.status);
+                      {staff.map((staffMember) => {
+                        const badge = getStatusBadge(staffMember.status);
                         return (
-                          <div key={staff.id} className="p-5 hover:bg-surface-container-low/50 transition-colors">
+                          <div key={staffMember.id} className="p-5 hover:bg-surface-container-low/50 transition-colors">
                             <div className="flex items-center justify-between mb-3">
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-sm">{staff.initials}</div>
+                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-sm">{staffMember.initials}</div>
                                 <div>
-                                  <p className="font-bold text-on-surface text-sm">{staff.name}</p>
-                                  <p className="text-[10px] text-secondary capitalize">{staff.role}</p>
+                                  <p className="font-bold text-on-surface text-sm">{staffMember.name}</p>
+                                  <p className="text-[10px] text-secondary capitalize">{staffMember.role}</p>
                                 </div>
                               </div>
                               <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full ${badge.bg} ${badge.text}`}>{badge.label}</span>
                             </div>
-                            {staff.currentAssignment && (
+                            {staffMember.currentAssignment && (
                               <div className="ml-13 pl-13 border-l-2 border-primary/20">
-                                <p className="text-xs text-secondary">Currently assigned to: <span className="font-semibold text-primary">{staff.currentAssignment}</span></p>
+                                <p className="text-xs text-secondary">Currently assigned to: <span className="font-semibold text-primary">{staffMember.currentAssignment}</span></p>
                               </div>
                             )}
                             <button className="mt-3 w-full px-3 py-1.5 border border-primary text-primary rounded-lg text-[10px] font-bold uppercase hover:bg-primary hover:text-on-primary transition-all">
-                              {staff.currentAssignment ? 'Reassign' : 'Assign Task'}
+                              {staffMember.currentAssignment ? 'Reassign' : 'Assign Task'}
                             </button>
                           </div>
                         );
@@ -1007,7 +1233,7 @@ export default function ServiceProviderDashboard() {
         isOpen={showAssignModal}
         onClose={() => { setShowAssignModal(false); setSelectedBookingForAction(null); }}
         onAssign={handleAssignStaffToBooking}
-        staff={MOCK_STAFF}
+        staff={staff}
         bookingInfo={selectedBookingForAction ? {
           title: selectedBookingForAction.listingTitle || 'Booking',
           guestName: selectedBookingForAction.guestName || 'Guest',
@@ -1019,6 +1245,19 @@ export default function ServiceProviderDashboard() {
         isOpen={showAssetModal}
         onClose={() => setShowAssetModal(false)}
         onCreate={handleCreateAsset}
+      />
+
+      <ServiceCreateModal
+        isOpen={showServiceModal}
+        onClose={() => { setShowServiceModal(false); setEditingService(null); }}
+        onSubmit={editingService ? handleUpdateService : handleCreateService}
+        initialData={editingService || undefined}
+        mode={editingService ? 'edit' : 'create'}
+      />
+
+      <HelpSupportModal
+        isOpen={showHelpModal}
+        onClose={() => setShowHelpModal(false)}
       />
 
       <ConfirmDialog
