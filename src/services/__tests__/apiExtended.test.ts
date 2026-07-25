@@ -30,7 +30,7 @@ describe('API Service - Extended Endpoints', () => {
       const result = await api.assets.create(newAsset);
       expect(result.success).toBe(true);
       expect(global.fetch).toHaveBeenCalledWith(
-        '/api/assets',
+        '/api/admin/assets',
         expect.objectContaining({ method: 'POST' })
       );
     });
@@ -44,7 +44,7 @@ describe('API Service - Extended Endpoints', () => {
       const result = await api.assets.update({ id: '1', name: 'Updated' });
       expect(result.success).toBe(true);
       expect(global.fetch).toHaveBeenCalledWith(
-        '/api/assets',
+        '/api/admin/assets',
         expect.objectContaining({ method: 'PUT' })
       );
     });
@@ -58,7 +58,7 @@ describe('API Service - Extended Endpoints', () => {
       const result = await api.assets.patch({ id: '1', status: 'in_use' });
       expect(result.success).toBe(true);
       expect(global.fetch).toHaveBeenCalledWith(
-        '/api/assets',
+        '/api/admin/assets',
         expect.objectContaining({ method: 'PATCH' })
       );
     });
@@ -72,7 +72,7 @@ describe('API Service - Extended Endpoints', () => {
       const result = await api.assets.delete('1');
       expect(result.success).toBe(true);
       expect(global.fetch).toHaveBeenCalledWith(
-        '/api/assets',
+        '/api/admin/assets',
         expect.objectContaining({ method: 'DELETE' })
       );
     });

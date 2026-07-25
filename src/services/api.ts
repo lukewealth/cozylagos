@@ -196,16 +196,16 @@ export const api = {
   assets: {
     getAll: (params?: Record<string, string>) => {
       const qs = params ? '?' + new URLSearchParams(params).toString() : '';
-      return request<any[]>(`/assets${qs}`);
+      return request<any[]>(`/admin/assets${qs}`);
     },
     create: (data: any) =>
-      request<any>('/assets', { method: 'POST', body: JSON.stringify(data) }),
+      request<any>('/admin/assets', { method: 'POST', body: JSON.stringify(data) }),
     update: (data: any) =>
-      request<any>('/assets', { method: 'PUT', body: JSON.stringify(data) }),
+      request<any>('/admin/assets', { method: 'PUT', body: JSON.stringify(data) }),
     patch: (data: any) =>
-      request<any>('/assets', { method: 'PATCH', body: JSON.stringify(data) }),
+      request<any>('/admin/assets', { method: 'PATCH', body: JSON.stringify(data) }),
     delete: (id: string) =>
-      request<any>('/assets', { method: 'DELETE', body: JSON.stringify({ id }) }),
+      request<any>('/admin/assets', { method: 'DELETE', body: JSON.stringify({ id }) }),
   },
 
   admin: {

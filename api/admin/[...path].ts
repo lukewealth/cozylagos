@@ -3,6 +3,8 @@ import { authenticateRequest, authorizeRole, validateRequestBody, addSecurityHea
 import { sanitizeInput, generateReference } from '../../src/lib/security';
 import { ObjectId } from 'mongodb';
 
+const ASSET_ALLOWED_FIELDS = ['name', 'category', 'status', 'assetCode', 'image', 'assignedTo', 'lastServiceDate', 'tags', 'notes'];
+
 export default async function handler(req: any, res: any) {
   addSecurityHeaders(res);
   const { method } = req;
@@ -18,6 +20,7 @@ export default async function handler(req: any, res: any) {
     const transactionsCollection = db.collection('transactions');
     const usersCollection = db.collection('users');
     const listingsCollection = db.collection('listings');
+    const assetsCollection = db.collection('assets');
 
     switch (method) {
       case 'GET': {
@@ -135,6 +138,27 @@ export default async function handler(req: any, res: any) {
           return res.status(200).json({ success: true, data: { auditData, summary } });
         }
 
+        if (path.includes('/assets')) {
+          if (!authorizeRole('admin', auth.user.role)) {
+            return res.status(403).json({ success: false, message: 'Admin access required' });
+          }
+
+          const { category, status, assignedTo, search } = req.query;
+          let filter: any = {};
+          if (category) filter.category = category;
+          if (status) filter.status = status;
+          if (assignedTo) filter.assignedTo = assignedTo;
+          if (search) {
+            filter.$or = [
+              { name: { $regex: search, $options: 'i' } },
+              { assetCode: { $regex: search, $options: 'i' } },
+            ];
+          }
+
+          const assets = await assetsCollection.find(filter).sort({ createdAt: -1 }).toArray();
+          return res.status(200).json({ success: true, data: assets, count: assets.length });
+        }
+
         return res.status(404).json({ success: false, message: 'Admin endpoint not found' });
       }
 
@@ -189,6 +213,92 @@ export default async function handler(req: any, res: any) {
           logAudit('PAYOUT_PROCESSED', auth.user.userId, { bookingId, amount });
 
           return res.status(201).json({ success: true, data: payoutTx });
+        }
+
+        if (path.includes('/assets')) {
+          if (!authorizeRole('admin', auth.user.role)) {
+            return res.status(403).json({ success: false, message: 'Admin access required' });
+          }
+
+          const { method: assetMethod } = req;
+
+          if (req.method === 'PUT' || req.method === 'PATCH') {
+            const { id, ...updateData } = req.body;
+            if (!id) {
+              return res.status(400).json({ success: false, message: 'Asset ID is required' });
+            }
+
+            const sanitized: any = { updatedAt: new Date().toISOString() };
+
+            if (req.method === 'PUT') {
+              for (const field of ASSET_ALLOWED_FIELDS) {
+                if (updateData[field] !== undefined) {
+                  sanitized[field] = typeof updateData[field] === 'string' ? sanitizeInput(updateData[field]) : updateData[field];
+                }
+              }
+            } else {
+              if (updateData.status) sanitized.status = updateData.status;
+              if (updateData.assignedTo !== undefined) sanitized.assignedTo = updateData.assignedTo;
+            }
+
+            const updateResult = await assetsCollection.updateOne(
+              { _id: new ObjectId(id) },
+              { $set: sanitized }
+            );
+
+            if (updateResult.matchedCount === 0) {
+              return res.status(404).json({ success: false, message: 'Asset not found' });
+            }
+
+            logAudit('ASSET_UPDATED', auth.user.userId, { assetId: id });
+            return res.status(200).json({ success: true, message: 'Asset updated successfully' });
+          }
+
+          if (req.method === 'DELETE') {
+            const { id: deleteId } = req.body;
+            if (!deleteId) {
+              return res.status(400).json({ success: false, message: 'Asset ID is required' });
+            }
+
+            const deleteResult = await assetsCollection.deleteOne({ _id: new ObjectId(deleteId) });
+            if (deleteResult.deletedCount === 0) {
+              return res.status(404).json({ success: false, message: 'Asset not found' });
+            }
+
+            logAudit('ASSET_DELETED', auth.user.userId, { assetId: deleteId });
+            return res.status(200).json({ success: true, message: 'Asset deleted successfully' });
+          }
+
+          const validation = validateRequestBody(req.body, {
+            name: { type: 'string', required: true, min: 2, max: 200 },
+            assetCode: { type: 'string', required: true, min: 2 },
+          });
+          if (!validation.valid) {
+            return res.status(400).json({ success: false, message: validation.errors.join(', ') });
+          }
+
+          const assetData = req.body;
+          const sanitizedCode = sanitizeInput(assetData.assetCode);
+
+          const existing = await assetsCollection.findOne({ assetCode: sanitizedCode });
+          if (existing) {
+            return res.status(409).json({ success: false, message: 'Asset with this code already exists' });
+          }
+
+          const newAsset = {
+            ...assetData,
+            name: sanitizeInput(assetData.name),
+            assetCode: sanitizedCode,
+            status: assetData.status || 'available',
+            tags: assetData.tags || [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
+
+          const result = await assetsCollection.insertOne(newAsset);
+          logAudit('ASSET_CREATED', auth.user.userId, { assetId: result.insertedId.toString(), assetCode: sanitizedCode });
+
+          return res.status(201).json({ success: true, data: { ...newAsset, _id: result.insertedId } });
         }
 
         return res.status(404).json({ success: false, message: 'Admin endpoint not found' });
