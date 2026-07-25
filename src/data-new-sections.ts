@@ -191,7 +191,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: '2026-07-15',
     location: 'Eko Convention Centre',
     price: '₦25,000 - ₦150,000',
-    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&h=600&fit=crop',
+    image: '/assets/images/explore/elegushi-royal-beach.avif',
     highlights: ['Top artists', '3-day event', 'Food vendors', 'VIP areas']
   },
   {
@@ -202,7 +202,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: '2026-08-20',
     location: 'Federal Palace Hotel',
     price: '₦50,000 - ₦250,000',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop',
+    image: '/assets/images/explore/nigerian-designers.png',
     highlights: ['Runway shows', 'Designer showcases', 'Networking', 'After-parties']
   },
   {
@@ -213,7 +213,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: '2026-09-10',
     location: 'Landmark Centre',
     price: '₦75,000 - ₦300,000',
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop',
+    image: '/assets/images/explore/landmark-beach.jpg',
     highlights: ['Keynote speakers', 'Workshops', 'Exhibition hall', 'Networking']
   },
   {
@@ -224,7 +224,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: 'Every Saturday',
     location: 'Elegushi Beach',
     price: '₦5,000 - ₦20,000',
-    image: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&h=600&fit=crop',
+    image: '/assets/images/explore/elegushi-royal-beach.avif',
     highlights: ['Live DJs', 'Beach setting', 'Food & drinks', 'Night swimming']
   },
   {
@@ -235,7 +235,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: '2026-06-01 to 2026-06-30',
     location: 'Nike Art Gallery',
     price: 'Free entry',
-    image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&h=600&fit=crop',
+    image: '/assets/images/explore/nike-art-gallery.jpg',
     highlights: ['Local artists', 'Guided tours', 'Art workshops', 'Gift shop']
   },
   {
@@ -246,7 +246,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: '2026-10-05',
     location: 'Freedom Park',
     price: '₦10,000 - ₦50,000',
-    image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=600&fit=crop',
+    image: '/assets/images/explore/freedom-park.jpeg',
     highlights: ['Food stalls', 'Cooking demos', 'Cultural shows', 'Family-friendly']
   },
   {
@@ -257,7 +257,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: 'Every Friday',
     location: 'The RSVP, VI',
     price: '₦15,000',
-    image: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800&h=600&fit=crop',
+    image: '/assets/images/explore/rsvp-restaurant.jpg',
     highlights: ['Live jazz', 'Fine dining', 'Intimate setting', 'Cocktail bar']
   },
   {
@@ -268,7 +268,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: 'Last Thursday monthly',
     location: 'Co-Creation Hub',
     price: 'Free entry',
-    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=600&fit=crop',
+    image: '/assets/images/horizontal/Research.jpg',
     highlights: ['Startup pitches', 'Investor networking', 'Mentorship', 'Prizes']
   }
 ];

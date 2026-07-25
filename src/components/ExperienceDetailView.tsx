@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Calendar, Users, Utensils, Anchor, Ship, CircleCheck, Star, Share2, Heart, Award, ArrowRight, Briefcase, Globe, Map, Crown, GraduationCap, Sparkles } from 'lucide-react';
 import { SERVICE_BUNDLES } from '../data';
-import { isFavorite, addFavorite, removeFavorite } from '../data-new-sections';
+import FavoriteButton from './ui/FavoriteButton';
 
 interface ExperienceDetailViewProps {
   onBackToHome: () => void;
@@ -15,29 +15,7 @@ export default function ExperienceDetailView({ onBackToHome }: ExperienceDetailV
   const [photoAddon, setPhotoAddon] = useState<boolean>(false);
   const [jetskiAddon, setJetskiAddon] = useState<boolean>(true);
   
-  const [isFavorited, setIsFavorited] = useState<boolean>(false);
   const [bookingRequested, setBookingRequested] = useState<boolean>(false);
-
-  useEffect(() => {
-    setIsFavorited(isFavorite('experience', 'yacht-cruise'));
-  }, []);
-
-  const handleToggleFavorite = () => {
-    if (isFavorited) {
-      removeFavorite('experience', 'yacht-cruise');
-      setIsFavorited(false);
-    } else {
-      addFavorite({
-        id: `fav-yacht-cruise-${Date.now()}`,
-        type: 'experience',
-        itemId: 'yacht-cruise',
-        title: 'Luxury Yacht Cruise',
-        subtitle: 'Private yacht experience',
-        image: 'https://images.unsplash.com/photo-1540946485063-a40da25017e2?w=800',
-      });
-      setIsFavorited(true);
-    }
-  };
 
   // Yacht base packages mapping (in NGN)
   const baseCost = 2500000; // ₦2.5M Base Pack
@@ -101,13 +79,14 @@ export default function ExperienceDetailView({ onBackToHome }: ExperienceDetailV
           </div>
 
           <div className="flex gap-3">
-            <button 
-              onClick={handleToggleFavorite}
-              className="w-11 h-11 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 hover:bg-white/20 text-white transition-colors"
-              title="Save to favorites"
-            >
-              <Heart className={`w-4 h-4 ${isFavorited ? 'fill-gold text-gold' : ''}`} />
-            </button>
+            <FavoriteButton
+              type="experience"
+              itemId="yacht-cruise"
+              title="Luxury Yacht Cruise"
+              subtitle="Private yacht experience"
+              image="https://images.unsplash.com/photo-1540946485063-a40da25017e2?w=800"
+              size="md"
+            />
             <button 
               className="w-11 h-11 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 hover:bg-white/20 text-white transition-colors"
               title="Share experience"

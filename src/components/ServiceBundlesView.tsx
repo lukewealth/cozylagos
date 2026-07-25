@@ -9,6 +9,7 @@ import {
   GlassWater, PartyPopper, GraduationCap as SchoolIcon, Activity
 } from 'lucide-react';
 import { SERVICE_BUNDLES, ServiceBundle, BundleTier, BundleActivity } from '../data';
+import BundleBookingModal from './BundleBookingModal';
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   briefcase: <Briefcase className="w-5 h-5" />,
@@ -112,6 +113,7 @@ function ActivityItem({ activity, index }: { activity: BundleActivity; index: nu
 function BundleDetailPanel({ bundle, onClose }: { bundle: ServiceBundle; onClose: () => void }) {
   const [selectedTier, setSelectedTier] = useState<number>(1);
   const [activeTab, setActiveTab] = useState<'overview' | 'activities' | 'breakdown'>('overview');
+  const [showBookingModal, setShowBookingModal] = useState(false);
   const tier = bundle.tiers[selectedTier];
 
   return (
@@ -297,12 +299,26 @@ function BundleDetailPanel({ bundle, onClose }: { bundle: ServiceBundle; onClose
 
         {/* Footer CTA */}
         <div className="p-4 sm:p-6 border-t border-charcoal/5 bg-white/50 shrink-0">
-          <button className="w-full py-3.5 sm:py-4 bg-charcoal text-parchment hover:bg-gold-dark font-bold text-xs tracking-widest uppercase rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2">
+          <button 
+            onClick={() => setShowBookingModal(true)}
+            className="w-full py-3.5 sm:py-4 bg-charcoal text-parchment hover:bg-gold-dark font-bold text-xs tracking-widest uppercase rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2"
+          >
             <span>Book This Package</span>
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </motion.div>
+
+      <AnimatePresence>
+        {showBookingModal && (
+          <BundleBookingModal
+            bundle={bundle}
+            selectedTier={tier}
+            tierIndex={selectedTier}
+            onClose={() => setShowBookingModal(false)}
+          />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
