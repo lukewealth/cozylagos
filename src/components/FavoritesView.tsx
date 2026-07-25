@@ -76,7 +76,7 @@ export default function FavoritesView({ onNavigate }: { onNavigate: (tab: string
         </div>
       ) : (
         <div className="space-y-10">
-          {Object.entries(groupedFavorites).map(([type, items]) => (
+          {(Object.entries(groupedFavorites) as [string, Favorite[]][]).map(([type, items]) => (
             <div key={type}>
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-xl">{typeLabels[type]?.icon || '📌'}</span>

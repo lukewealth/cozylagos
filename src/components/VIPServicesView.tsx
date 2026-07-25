@@ -598,7 +598,9 @@ export default function VIPServicesView({ showHero = true }: { showHero?: boolea
               }
             >
               {filteredServices.map((service, i) => (
-                <ServiceCard key={service.id} service={service} onSelect={setSelectedService} viewMode={viewMode} />
+                <React.Fragment key={service.id}>
+                  <ServiceCard service={service} onSelect={setSelectedService} viewMode={viewMode} />
+                </React.Fragment>
               ))}
             </motion.div>
             {filteredServices.length === 0 && (
@@ -641,7 +643,9 @@ export default function VIPServicesView({ showHero = true }: { showHero?: boolea
                 }
               >
                 {category.services.map((service, i) => (
-                  <ServiceCard key={service.id} service={service} onSelect={setSelectedService} viewMode={viewMode} />
+                  <React.Fragment key={service.id}>
+                    <ServiceCard service={service} onSelect={setSelectedService} viewMode={viewMode} />
+                  </React.Fragment>
                 ))}
               </motion.div>
             </motion.section>
@@ -678,7 +682,9 @@ export default function VIPServicesView({ showHero = true }: { showHero?: boolea
                     }
                   >
                     {category.services.map((service, i) => (
-                      <ServiceCard key={service.id} service={service} onSelect={setSelectedService} viewMode={viewMode} />
+                      <React.Fragment key={service.id}>
+                        <ServiceCard service={service} onSelect={setSelectedService} viewMode={viewMode} />
+                      </React.Fragment>
                     ))}
                   </motion.div>
                 </>

@@ -373,7 +373,9 @@ export default function EventsView() {
         {/* Events Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredEvents.map((event, index) => (
-            <EventCard key={event.id} event={event} index={index} />
+            <React.Fragment key={event.id}>
+              <EventCard event={event} index={index} />
+            </React.Fragment>
           ))}
         </div>
 

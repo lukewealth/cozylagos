@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { Booking, PaymentLedgerEntry, PaymentLineItem } from '../types';
+import { Booking, PaymentLedgerEntry, PaymentLineItem } from '../../types';
 
 describe('PaymentLedger Types', () => {
   it('should create a valid PaymentLedgerEntry', () => {

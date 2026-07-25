@@ -48,12 +48,13 @@ export const firebaseAuth = {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-      
-      if (result.additionalUserInfo?.isNewUser && user.email && user.displayName) {
+      const additionalInfo = (result as any).additionalUserInfo;
+
+      if (additionalInfo?.isNewUser && user.email && user.displayName) {
         await emailService.sendWelcomeEmail(user.email, user.displayName, 'user');
       }
-      
-      return { success: true, user, isNewUser: result.additionalUserInfo?.isNewUser };
+
+      return { success: true, user, isNewUser: additionalInfo?.isNewUser };
     } catch (error: any) {
       return { success: false, error: error.message };
     }
@@ -63,12 +64,13 @@ export const firebaseAuth = {
     try {
       const result = await signInWithPopup(auth, appleProvider);
       const user = result.user;
-      
-      if (result.additionalUserInfo?.isNewUser && user.email && user.displayName) {
+      const additionalInfo = (result as any).additionalUserInfo;
+
+      if (additionalInfo?.isNewUser && user.email && user.displayName) {
         await emailService.sendWelcomeEmail(user.email, user.displayName, 'user');
       }
-      
-      return { success: true, user, isNewUser: result.additionalUserInfo?.isNewUser };
+
+      return { success: true, user, isNewUser: additionalInfo?.isNewUser };
     } catch (error: any) {
       return { success: false, error: error.message };
     }

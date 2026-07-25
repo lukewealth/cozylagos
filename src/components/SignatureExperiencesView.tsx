@@ -222,12 +222,13 @@ export default function SignatureExperiencesView() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           {SIGNATURE_EXPERIENCES.map((experience, index) => (
-            <ExperienceCard
-              key={experience.id}
-              experience={experience}
-              index={index}
-              onSelect={() => setSelectedExperience(experience)}
-            />
+            <React.Fragment key={experience.id}>
+              <ExperienceCard
+                experience={experience}
+                index={index}
+                onSelect={() => setSelectedExperience(experience)}
+              />
+            </React.Fragment>
           ))}
         </div>
       </section>

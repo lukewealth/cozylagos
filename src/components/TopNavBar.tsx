@@ -21,7 +21,7 @@ const ROLE_OPTIONS = [
 ];
 
 export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCart }: TopNavBarProps) {
-  const { currentUser, login, register, logout, isAuthenticated } = useAuth();
+  const { currentUser, login, register, loginWithGoogle, loginWithApple, logout, isAuthenticated } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
@@ -93,6 +93,42 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
   const handleLogout = () => {
     logout();
     setActiveTab('home');
+  };
+
+  const handleGoogleLogin = async () => {
+    setLoginError('');
+    setIsLoading(true);
+    try {
+      const success = await loginWithGoogle();
+      if (success) {
+        setShowLoginModal(false);
+        setLoginError('');
+        setPrivacyAccepted(false);
+      } else {
+        setLoginError('Google login failed. Please try again.');
+      }
+    } catch (error) {
+      setLoginError('Google login failed. Please try again.');
+    }
+    setIsLoading(false);
+  };
+
+  const handleAppleLogin = async () => {
+    setLoginError('');
+    setIsLoading(true);
+    try {
+      const success = await loginWithApple();
+      if (success) {
+        setShowLoginModal(false);
+        setLoginError('');
+        setPrivacyAccepted(false);
+      } else {
+        setLoginError('Apple login failed. Please try again.');
+      }
+    } catch (error) {
+      setLoginError('Apple login failed. Please try again.');
+    }
+    setIsLoading(false);
   };
 
   const openLoginModal = () => {

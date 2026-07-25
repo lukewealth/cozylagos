@@ -203,13 +203,14 @@ export default function SPCMSView({ providerId = 'sp-default' }: { providerId?: 
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredServices.map((service) => (
-                <ServiceCard
-                  key={service.id}
-                  service={service}
-                  onEdit={() => setEditingService(service)}
-                  onDelete={() => handleDeleteService(service.id)}
-                  onToggle={() => handleUpdateService({ ...service, available: !service.available, updatedAt: new Date().toISOString() })}
-                />
+                <React.Fragment key={service.id}>
+                  <ServiceCard
+                    service={service}
+                    onEdit={() => setEditingService(service)}
+                    onDelete={() => handleDeleteService(service.id)}
+                    onToggle={() => handleUpdateService({ ...service, available: !service.available, updatedAt: new Date().toISOString() })}
+                  />
+                </React.Fragment>
               ))}
             </div>
 
@@ -227,13 +228,14 @@ export default function SPCMSView({ providerId = 'sp-default' }: { providerId?: 
           <div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {myStaff.map((member) => (
-                <StaffCard
-                  key={member.id}
-                  member={member}
-                  onEdit={() => setEditingStaff(member)}
-                  onDelete={() => handleDeleteStaff(member.id)}
-                  onToggle={() => handleUpdateStaff({ ...member, available: !member.available })}
-                />
+                <React.Fragment key={member.id}>
+                  <StaffCard
+                    member={member}
+                    onEdit={() => setEditingStaff(member)}
+                    onDelete={() => handleDeleteStaff(member.id)}
+                    onToggle={() => handleUpdateStaff({ ...member, available: !member.available })}
+                  />
+                </React.Fragment>
               ))}
             </div>
 

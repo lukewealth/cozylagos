@@ -25,6 +25,7 @@ export interface TrendingGem {
 
 export interface VIPService {
   id: string;
+  _id?: string;
   title: string;
   description: string;
   category: string;
@@ -34,6 +35,7 @@ export interface VIPService {
   rating: number;
   reviewsCount: number;
   image: string;
+  images?: string[];
   amenities: string[];
   providerName: string;
   providerId: string;
@@ -47,6 +49,7 @@ export interface VIPService {
 
 export interface StaffMember {
   id: string;
+  _id?: string;
   name: string;
   role: string;
   email: string;

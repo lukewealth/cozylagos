@@ -193,7 +193,7 @@ describe('API Service - Extended Endpoints', () => {
         json: () => Promise.resolve({ success: true, message: 'Updated' }),
       });
 
-      const result = await api.services.update('1', { title: 'Updated Service' });
+      const result = await api.services.update({ id: '1', title: 'Updated Service' });
       expect(result.success).toBe(true);
     });
 

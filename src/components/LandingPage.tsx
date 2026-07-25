@@ -106,12 +106,13 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
               {filteredListings.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
                   {filteredListings.slice(0, 8).map((listing, index) => (
-                    <GemCard
-                      key={listing.id}
-                      listing={listing}
-                      index={index}
-                      onClick={() => onSelectListing(listing)}
-                    />
+                    <React.Fragment key={listing.id}>
+                      <GemCard
+                        listing={listing}
+                        index={index}
+                        onClick={() => onSelectListing(listing)}
+                      />
+                    </React.Fragment>
                   ))}
                 </div>
               ) : (

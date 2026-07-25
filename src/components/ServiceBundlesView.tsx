@@ -163,12 +163,13 @@ function BundleDetailPanel({ bundle, onClose }: { bundle: ServiceBundle; onClose
           <div className="p-4 sm:p-6 border-b border-charcoal/5">
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
               {bundle.tiers.map((t, i) => (
-                <TierSelector
-                  key={i}
-                  tier={t}
-                  isSelected={selectedTier === i}
-                  onClick={() => setSelectedTier(i)}
-                />
+                <React.Fragment key={i}>
+                  <TierSelector
+                    tier={t}
+                    isSelected={selectedTier === i}
+                    onClick={() => setSelectedTier(i)}
+                  />
+                </React.Fragment>
               ))}
             </div>
           </div>
@@ -246,7 +247,9 @@ function BundleDetailPanel({ bundle, onClose }: { bundle: ServiceBundle; onClose
                   </div>
                   <div className="space-y-2">
                     {bundle.activities.map((activity, i) => (
-                      <ActivityItem key={i} activity={activity} index={i} />
+                      <React.Fragment key={i}>
+                        <ActivityItem activity={activity} index={i} />
+                      </React.Fragment>
                     ))}
                   </div>
                 </motion.div>
@@ -369,12 +372,13 @@ function BundleCard({ bundle, index, onSelect }: { bundle: ServiceBundle; index:
         {/* Tier Selector */}
         <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-4">
           {bundle.tiers.map((t, i) => (
-            <TierSelector
-              key={i}
-              tier={t}
-              isSelected={selectedTier === i}
-              onClick={() => setSelectedTier(i)}
-            />
+            <React.Fragment key={i}>
+              <TierSelector
+                tier={t}
+                isSelected={selectedTier === i}
+                onClick={() => setSelectedTier(i)}
+              />
+            </React.Fragment>
           ))}
         </div>
 
@@ -518,12 +522,13 @@ export default function ServiceBundlesView() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           {SERVICE_BUNDLES.map((bundle, index) => (
-            <BundleCard
-              key={bundle.id}
-              bundle={bundle}
-              index={index}
-              onSelect={() => setSelectedBundle(bundle)}
-            />
+            <React.Fragment key={bundle.id}>
+              <BundleCard
+                bundle={bundle}
+                index={index}
+                onSelect={() => setSelectedBundle(bundle)}
+              />
+            </React.Fragment>
           ))}
         </div>
 

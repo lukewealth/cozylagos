@@ -6,7 +6,7 @@ import {
   Sparkles, Crown, Award, Users, Package, Settings, Save, Upload, Layers
 } from 'lucide-react';
 import { useCMSStore } from '../stores/cmsStore';
-import { TrendingGem } from '../db/indexedDb';
+import { TrendingGem, Announcement } from '../db/indexedDb';
 import { SERVICE_BUNDLES } from '../data';
 
 export default function AdminCMSView() {
@@ -85,13 +85,14 @@ export default function AdminCMSView() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredGems.map((gem) => (
-                <GemCard
-                  key={gem.id}
-                  gem={gem}
-                  onEdit={() => setEditingGem(gem)}
-                  onDelete={() => deleteTrendingGem(gem.id)}
-                  onToggleTrending={() => toggleTrending(gem.id)}
-                />
+                <React.Fragment key={gem.id}>
+                  <GemCard
+                    gem={gem}
+                    onEdit={() => setEditingGem(gem)}
+                    onDelete={() => deleteTrendingGem(gem.id)}
+                    onToggleTrending={() => toggleTrending(gem.id)}
+                  />
+                </React.Fragment>
               ))}
             </div>
 

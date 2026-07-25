@@ -4,7 +4,7 @@ import {
   Calendar, MapPin, CreditCard, Bell, Send, Star, Clock, CheckCircle,
   XCircle, Heart, Eye, MessageCircle, Filter, ChevronRight, Sparkles,
   Gift, ShieldCheck, Utensils, Car, Camera, Anchor, TrendingUp, AlertCircle,
-  Trash2, ExternalLink, X
+  Trash2, ExternalLink, X, Home
 } from 'lucide-react';
 import { useDatabase } from '../hooks/useDatabase';
 import { useAuth } from '../auth';

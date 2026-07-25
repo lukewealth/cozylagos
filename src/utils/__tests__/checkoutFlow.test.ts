@@ -248,19 +248,19 @@ describe('Admin-Only Listing Restriction', () => {
 
   it('should allow super_admin to create listings', () => {
     const user = { id: 'u1', role: 'super_admin' as const, name: 'Super Admin', email: 'super@test.com' };
-    const canCreateListing = user.role === 'admin' || user.role === 'super_admin';
+    const canCreateListing = (user.role as string) === 'admin' || (user.role as string) === 'super_admin';
     expect(canCreateListing).toBe(true);
   });
 
   it('should block regular user from creating listings', () => {
     const user = { id: 'u1', role: 'guest' as const, name: 'Guest', email: 'guest@test.com' };
-    const canCreateListing = user.role === 'admin' || user.role === 'super_admin';
+    const canCreateListing = (user.role as string) === 'admin' || (user.role as string) === 'super_admin';
     expect(canCreateListing).toBe(false);
   });
 
   it('should block service_provider from creating listings', () => {
     const user = { id: 'u1', role: 'service_provider' as const, name: 'Provider', email: 'provider@test.com' };
-    const canCreateListing = user.role === 'admin' || user.role === 'super_admin';
+    const canCreateListing = (user.role as string) === 'admin' || (user.role as string) === 'super_admin';
     expect(canCreateListing).toBe(false);
   });
 });

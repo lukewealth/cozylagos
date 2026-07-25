@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   MessageSquare, Plus, Search, Filter, Clock, CheckCircle, XCircle, AlertCircle,
-  User, Building, Calendar, DollarSign, Eye, Send, X, Tag, PriorityHigh
+  User, Building, Calendar, DollarSign, Eye, Send, X, Tag, AlertTriangle
 } from 'lucide-react';
 import { useAuth } from '../auth';
 import { useDatabase } from '../hooks/useDatabase';

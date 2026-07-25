@@ -218,12 +218,13 @@ export default function PropertyListingView({ listings, onSelectListing }: Prope
         ) : viewMode === 'grid' ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredListings.map((listing, index) => (
-              <GemCard
-                key={listing.id}
-                listing={listing}
-                index={index}
-                onClick={() => onSelectListing(listing)}
-              />
+              <React.Fragment key={listing.id}>
+                <GemCard
+                  listing={listing}
+                  index={index}
+                  onClick={() => onSelectListing(listing)}
+                />
+              </React.Fragment>
             ))}
           </div>
         ) : (

@@ -25,6 +25,48 @@ home HQ.jpg
 moib.jpg
 property search .jpg
 
+# Root-level explore/venue images (canonical copies in public/assets/images/)
+3ac059b5bfa80bcd19f1f2bb355b98f1.jpg
+Alara Lagos*.webp
+Alara Lagos*.jpeg
+Balogun Market*
+Cilantro Lagos*
+Cubana Bar*
+Elegushi*
+Freedom Park*
+Ikeja City Mall.jpg
+Kalakuta Republic Museum*
+Lagos Food Tour*
+Lagos Island Heritage Walk*
+Landmark Beach*
+Lekki Arts & Crafts Market*
+Lekki Conservation Centre*
+Lekki Lagoon Sunset Cruise*
+National Museum Lagos*
+New Afrika Shrine*
+Nigerian Designers*
+Nike Art Gallery.jpg
+nike-art-centre.jpg
+Quilox Nightclub*
+RSVP*
+RSVP-Lagos-Restaurant.jpg
+Tarkwa Bay Beach*
+Yemisi Shyllon Museum*
+cilantro_lagos.jpg
+corporate-lagos-experience.png
+Corporate Lagos Experience.png
+eventherobackground.png
+Food Tour*
+images.jpeg
+Izanagi*
+Naija-food-tour*
+the-new-africa-shrine*
+Cozy_Lagos_*.pdf
+
 # Admin/Service Provider HTML exports
 Admin and service Provider/
 .vercel
+cozy-lagos/
+cozy-lagos.zip
+cozy_payout/
+scripts/

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { UserRecord, dbGet, dbPut, dbGetByIndex, generateId, cacheSet, cacheGet, syncToLocalStorage } from './db';
 import { DEMO_CREDENTIALS, verifyPassword, getUserByEmail } from './utils/credentials';
+import { firebaseAuth } from './lib/firebaseAuth';
 
 export type UserRole = 'guest' | 'user' | 'admin' | 'service_provider' | 'super_admin';
 
@@ -9,6 +10,8 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   register: (email: string, name: string, password: string, role: UserRole) => Promise<boolean>;
+  loginWithGoogle: () => Promise<boolean>;
+  loginWithApple: () => Promise<boolean>;
   logout: () => void;
   switchRole: (role: UserRole) => void;
   updateUser: (updates: Partial<UserRecord>) => Promise<void>;
@@ -17,7 +20,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Convert demo credentials to user records (without passwords)
 const getDemoUserRecord = (credential: typeof DEMO_CREDENTIALS[0]): UserRecord => ({
   id: credential.id,
   email: credential.email,
@@ -50,7 +52,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let user = (await dbGetByIndex('users', 'email', email))[0];
     
     if (!user) {
-      // Use secure password verification
       const { valid, user: credential } = await verifyPassword(email, password);
       if (valid && credential) {
         user = getDemoUserRecord(credential);
@@ -92,10 +93,69 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return true;
   }, []);
 
+  const loginWithGoogle = useCallback(async (): Promise<boolean> => {
+    try {
+      const result = await firebaseAuth.loginWithGoogle();
+      if (result.success && result.user) {
+        const userRecord: UserRecord = {
+          id: result.user.uid,
+          email: result.user.email || '',
+          name: result.user.displayName || '',
+          role: 'user',
+          avatar: result.user.photoURL || '',
+          verified: true,
+          createdAt: new Date().toISOString(),
+          lastLogin: new Date().toISOString(),
+          loyaltyPoints: 0
+        };
+
+        await dbPut('users', userRecord);
+        await cacheSet('current_user', userRecord, 86400000);
+        setCurrentUser(userRecord);
+        await syncToLocalStorage();
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Google login error:', error);
+      return false;
+    }
+  }, []);
+
+  const loginWithApple = useCallback(async (): Promise<boolean> => {
+    try {
+      const result = await firebaseAuth.loginWithApple();
+      if (result.success && result.user) {
+        const userRecord: UserRecord = {
+          id: result.user.uid,
+          email: result.user.email || '',
+          name: result.user.displayName || '',
+          role: 'user',
+          avatar: result.user.photoURL || '',
+          verified: true,
+          createdAt: new Date().toISOString(),
+          lastLogin: new Date().toISOString(),
+          loyaltyPoints: 0
+        };
+
+        await dbPut('users', userRecord);
+        await cacheSet('current_user', userRecord, 86400000);
+        setCurrentUser(userRecord);
+        await syncToLocalStorage();
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Apple login error:', error);
+      return false;
+    }
+  }, []);
+
   const logout = useCallback(() => {
     setCurrentUser(null);
     cacheSet('current_user', null, 0);
     localStorage.removeItem('cozy_lagos_current_user');
+    firebaseAuth.logout();
   }, []);
 
   const switchRole = useCallback(async (role: UserRole) => {
@@ -122,6 +182,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isLoading,
       login,
       register,
+      loginWithGoogle,
+      loginWithApple,
       logout,
       switchRole,
       updateUser,
