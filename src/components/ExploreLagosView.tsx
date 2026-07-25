@@ -10,61 +10,6 @@ import { useCart } from '../context/CartContext';
 import { useToast } from './Toast';
 import { resolveExploreImage, preloadExploreImages } from '../lib/imageManager';
 
-const BEACH_IMAGES = [
-  'https://images.pexels.com/photos/1450354/pexels-photo-1450354.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/1510595/pexels-photo-1510595.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/2121726/pexels-photo-2121726.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/1172064/pexels-photo-1172064.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/976628/pexels-photo-976628.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/30676043/pexels-photo-30676043.jpeg?auto=compress&cs=tinysrgb&w=800',
-];
-const NATURE_IMAGES = [
-  'https://images.pexels.com/photos/4016180/pexels-photo-4016180.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/3574458/pexels-photo-3574458.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/1602511/pexels-photo-1602511.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/1008164/pexels-photo-1008164.jpeg?auto=compress&cs=tinysrgb&w=800',
-];
-const MUSEUM_IMAGES = [
-  'https://images.pexels.com/photos/1441624/pexels-photo-1441624.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/2625512/pexels-photo-2625512.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/37405043/pexels-photo-37405043.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/10974696/pexels-photo-10974696.jpeg?auto=compress&cs=tinysrgb&w=800',
-];
-const ART_IMAGES = [
-  'https://images.pexels.com/photos/19997409/pexels-photo-19997409.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/1252861/pexels-photo-1252861.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/3736043/pexels-photo-3736043.jpeg?auto=compress&cs=tinysrgb&w=800',
-];
-const FOOD_IMAGES = [
-  'https://images.pexels.com/photos/2629615/pexels-photo-2629615.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/54122/pexels-photo-54122.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/2474661/pexels-photo-2474661.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/696218/pexels-photo-696218.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/3236836/pexels-photo-3236836.jpeg?auto=compress&cs=tinysrgb&w=800',
-];
-const NIGHTLIFE_IMAGES = [
-  'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/1762227/pexels-photo-1762227.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/2150443/pexels-photo-2150443.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/1190745/pexels-photo-1190745.jpeg?auto=compress&cs=tinysrgb&w=800',
-];
-const SHOPPING_IMAGES = [
-  'https://images.pexels.com/photos/1007426/pexels-photo-1007426.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/1598606/pexels-photo-1598606.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/936722/pexels-photo-936722.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/1070983/pexels-photo-1070983.jpeg?auto=compress&cs=tinysrgb&w=800',
-];
-const TOUR_IMAGES = [
-  'https://images.pexels.com/photos/2101187/pexels-photo-2101187.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/30669992/pexels-photo-30669992.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/848618/pexels-photo-848618.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/2101187/pexels-photo-2101187.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/2832061/pexels-photo-2832061.jpeg?auto=compress&cs=tinysrgb&w=800',
-];
-
 interface ExploreItem {
   id: string;
   title: string;
@@ -98,28 +43,28 @@ const categories: Category[] = [
     items: [
       {
         id: 'b1', title: 'Tarkwa Bay Beach', description: 'Secluded beach accessible only by boat — golden sands and clear waters.', location: 'Tarkwa Bay', rating: 4.6, price: '₦5,000', icon: <Waves className="w-6 h-6" />, duration: 'Full day', highlights: ['Boat access', 'Water sports', 'Swimming'],
-        image: BEACH_IMAGES[0],
-        images: [BEACH_IMAGES[0], BEACH_IMAGES[1], BEACH_IMAGES[2]]
+        image: '/assets/images/explore/tarkwa-bay-beach.jpeg',
+        images: ['/assets/images/explore/tarkwa-bay-beach.jpeg', '/assets/images/secondary/tarkwa-bay-2.jpeg', '/assets/images/secondary/tarkwa-bay-3.jpg']
       },
       {
         id: 'b2', title: 'Elegushi Royal Beach', description: 'The quintessential Lagos beach with live music and VIP areas.', location: 'Lekki Phase 1', rating: 4.5, price: '₦10,000', icon: <Sun className="w-6 h-6" />, duration: 'Full day', highlights: ['Live music', 'VIP sections', 'Food vendors'],
         image: '/assets/images/explore/elegushi-royal-beach.avif',
-        images: ['/assets/images/explore/elegushi-royal-beach.avif', BEACH_IMAGES[3], BEACH_IMAGES[4]]
+        images: ['/assets/images/explore/elegushi-royal-beach.avif', '/assets/images/secondary/elegushi-beach-2.webp']
       },
       {
         id: 'b3', title: 'Landmark Beach', description: 'Premium beach club with luxury amenities and restaurants.', location: 'Victoria Island', rating: 4.7, price: '₦15,000', icon: <Crown className="w-6 h-6" />, duration: 'Full day', highlights: ['Luxury amenities', 'Restaurants', 'Beach club'],
-        image: BEACH_IMAGES[5],
-        images: [BEACH_IMAGES[5], BEACH_IMAGES[6], BEACH_IMAGES[0]]
+        image: '/assets/images/explore/landmark-beach.jpg',
+        images: ['/assets/images/explore/landmark-beach.jpg', '/assets/images/secondary/landmark-beach-2.jpg', '/assets/images/secondary/landmark-beach-3.jpg']
       },
       {
         id: 'p1', title: 'Lekki Conservation Centre', description: 'Famous canopy walkway and nature trails through Lagos biodiversity.', location: 'Lekki', rating: 4.7, price: '₦5,000', icon: <TreePine className="w-6 h-6" />, duration: '3-4 hours', highlights: ['Canopy walkway', 'Nature trails', 'Wildlife'],
-        image: NATURE_IMAGES[0],
-        images: [NATURE_IMAGES[0], NATURE_IMAGES[1], NATURE_IMAGES[2]]
+        image: '/assets/images/explore/lekki-conservation-centre.jpeg',
+        images: ['/assets/images/explore/lekki-conservation-centre.jpeg', '/assets/images/secondary/lekki-conservation-2.jpg', '/assets/images/secondary/lekki-conservation-3.jpeg']
       },
       {
-        id: 'p2', title: 'LUFASI Nature Park', description: 'Serene nature reserve with hiking trails and peaceful picnic spots.', location: 'Lekki-Epe Expressway', rating: 4.5, price: '₦3,000', icon: <TreePine className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Hiking trails', 'Wildlife', 'Picnics'],
-        image: NATURE_IMAGES[3],
-        images: [NATURE_IMAGES[3], NATURE_IMAGES[1], NATURE_IMAGES[2]]
+        id: 'p2', title: 'LUFASI Nature Park', description: 'Serene nature reserve with hiking trails and peaceful picnic spots.', location: 'Lekki-Epe Expressway', rating: 4.5, price: '3,000', icon: <TreePine className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Hiking trails', 'Wildlife', 'Picnics'],
+        image: '/assets/images/secondary/lekki-conservation-2.jpg',
+        images: ['/assets/images/secondary/lekki-conservation-2.jpg', '/assets/images/secondary/lekki-conservation-3.jpeg', '/assets/images/explore/lekki-conservation-centre.jpeg']
       },
     ]
   },
@@ -133,27 +78,27 @@ const categories: Category[] = [
       {
         id: 'm1', title: 'National Museum Lagos', description: 'Nigeria\'s premier museum with ancient Nok terracottas and Benin bronzes.', location: 'Onikan, Lagos Island', rating: 4.3, price: '₦2,000', icon: <Building2 className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Historical artifacts', 'Cultural exhibits', 'Guided tours'],
         image: '/assets/images/explore/national-museum-lagos.jpg',
-        images: ['/assets/images/explore/national-museum-lagos.jpg', MUSEUM_IMAGES[0], MUSEUM_IMAGES[1]]
+        images: ['/assets/images/explore/national-museum-lagos.jpg', '/assets/images/secondary/national-museum-2.jpg', '/assets/images/secondary/national-museum-3.jpg']
       },
       {
         id: 'm2', title: 'Kalakuta Republic Museum', description: 'The legendary former home of Fela Kuti — celebrating Africa\'s rebel icon.', location: 'Ikeja', rating: 4.4, price: '₦1,500', icon: <Drum className="w-6 h-6" />, duration: '1-2 hours', highlights: ['Music history', 'Memorabilia', 'Cultural significance'],
         image: '/assets/images/explore/kalakuta-republic-museum.jpg',
-        images: ['/assets/images/explore/kalakuta-republic-museum.jpg', MUSEUM_IMAGES[2], MUSEUM_IMAGES[3]]
+        images: ['/assets/images/explore/kalakuta-republic-museum.jpg', '/assets/images/secondary/kalakuta-museum-2.jpeg', '/assets/images/secondary/kalakuta-museum-3.avif']
       },
       {
         id: 'g1', title: 'Nike Art Gallery', description: 'West Africa\'s largest art gallery with over 7,000 works.', location: 'Lekki Phase 1', rating: 4.8, price: 'Free', icon: <Palette className="w-6 h-6" />, duration: '2-3 hours', highlights: ['7,000+ artworks', 'Guided tours', 'Art workshops'],
         image: '/assets/images/explore/nike-art-gallery.jpg',
-        images: ['/assets/images/explore/nike-art-gallery.jpg', ART_IMAGES[0], ART_IMAGES[1]]
+        images: ['/assets/images/explore/nike-art-gallery.jpg', '/assets/images/secondary/nike-art-2.jpg']
       },
       {
         id: 'h1', title: 'Freedom Park', description: 'Former colonial prison transformed into a vibrant cultural hub.', location: 'Lagos Island', rating: 4.6, price: '₦3,000', icon: <Landmark className="w-6 h-6" />, duration: '2-4 hours', highlights: ['Historical tours', 'Live performances', 'Art exhibitions'],
-        image: MUSEUM_IMAGES[0],
-        images: [MUSEUM_IMAGES[0], ART_IMAGES[2], '/assets/images/explore/national-museum-lagos.jpg']
+        image: '/assets/images/explore/freedom-park.jpeg',
+        images: ['/assets/images/explore/freedom-park.jpeg', '/assets/images/secondary/freedom-park-2.jpeg', '/assets/images/secondary/freedom-park-3.jpeg']
       },
       {
         id: 'g2', title: 'Yemisi Shyllon Museum', description: 'One of Nigeria\'s most important modern art museums.', location: 'Pan-Atlantic University', rating: 4.7, price: 'Free', icon: <Gem className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Modern art', 'Private collection', 'Educational'],
-        image: ART_IMAGES[2],
-        images: [ART_IMAGES[2], MUSEUM_IMAGES[3], ART_IMAGES[0]]
+        image: '/assets/images/explore/yemisi-shyllon-museum.png',
+        images: ['/assets/images/explore/yemisi-shyllon-museum.png', '/assets/images/secondary/yemisi-shyllon-2.png', '/assets/images/secondary/yemisi-shyllon-3.jpeg']
       },
     ]
   },
@@ -165,34 +110,34 @@ const categories: Category[] = [
     gradient: 'from-rose-500 via-pink-500 to-fuchsia-500',
     items: [
       {
-        id: 'f1', title: 'RSVP Restaurant', description: 'Multi-level fine dining with panoramic Lagos skyline views.', location: 'Victoria Island', rating: 4.9, price: '₦₦₦', icon: <Wine className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Skyline views', 'Wine pairing', 'Rooftop'],
+        id: 'f1', title: 'RSVP Restaurant', description: 'Multi-level fine dining with panoramic Lagos skyline views.', location: 'Victoria Island', rating: 4.9, price: '₦₦', icon: <Wine className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Skyline views', 'Wine pairing', 'Rooftop'],
         image: '/assets/images/explore/rsvp-restaurant.jpg',
-        images: ['/assets/images/explore/rsvp-restaurant.jpg', FOOD_IMAGES[0], FOOD_IMAGES[1]]
+        images: ['/assets/images/explore/rsvp-restaurant.jpg', '/assets/images/secondary/rsvp-restaurant-2.avif']
       },
       {
         id: 'f2', title: 'Cilantro Lagos', description: 'Award-winning contemporary African cuisine with modern flair.', location: 'Victoria Island', rating: 4.9, price: '₦₦₦₦', icon: <ChefHat className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Award-winning', 'Contemporary African', 'Fine dining'],
         image: '/assets/images/explore/cilantro-lagos.png',
-        images: ['/assets/images/explore/cilantro-lagos.png', FOOD_IMAGES[2], FOOD_IMAGES[3]]
+        images: ['/assets/images/explore/cilantro-lagos.png', '/assets/images/secondary/cilantro-lagos-2.jpg', '/assets/images/secondary/cilantro-lagos-3.jpg']
       },
       {
         id: 'f3', title: 'Izanagi Restaurant', description: 'Premium Japanese dining with authentic sushi and teppanyaki.', location: 'Victoria Island', rating: 4.8, price: '₦₦₦', icon: <UtensilsCrossed className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Japanese cuisine', 'Sushi bar', 'Teppanyaki'],
         image: '/assets/images/explore/izanagi-restaurant.webp',
-        images: ['/assets/images/explore/izanagi-restaurant.webp', FOOD_IMAGES[4], FOOD_IMAGES[5]]
+        images: ['/assets/images/explore/izanagi-restaurant.webp', '/assets/images/explore/rsvp-restaurant.jpg']
       },
       {
         id: 'n1', title: 'Quilox Nightclub', description: 'Lagos\'s most exclusive nightclub with world-class DJs.', location: 'Victoria Island', rating: 4.7, price: '₦₦', icon: <Music className="w-6 h-6" />, duration: '4-6 hours', highlights: ['VIP tables', 'World-class DJs', 'Exclusive'],
-        image: NIGHTLIFE_IMAGES[0],
-        images: [NIGHTLIFE_IMAGES[0], NIGHTLIFE_IMAGES[1], NIGHTLIFE_IMAGES[2]]
+        image: '/assets/images/explore/quilox-nightclub.jpeg',
+        images: ['/assets/images/explore/quilox-nightclub.jpeg', '/assets/images/secondary/quilox-2.jpeg', '/assets/images/secondary/quilox-3.jpeg']
       },
       {
         id: 'n2', title: 'Cubana Bar', description: 'Open-air luxury lounge with infinity pool and Afrobeats DJs.', location: 'Lekki Phase 1', rating: 4.8, price: '₦₦₦', icon: <Wine className="w-6 h-6" />, duration: '3-5 hours', highlights: ['Infinity pool', 'Afrobeats', 'Luxury lounge'],
-        image: NIGHTLIFE_IMAGES[3],
-        images: [NIGHTLIFE_IMAGES[3], NIGHTLIFE_IMAGES[1], NIGHTLIFE_IMAGES[0]]
+        image: '/assets/images/explore/cubana-bar.jpeg',
+        images: ['/assets/images/explore/cubana-bar.jpeg', '/assets/images/secondary/cubana-bar-2.jpg', '/assets/images/secondary/cubana-bar-3.jpeg']
       },
       {
-        id: 'n3', title: 'New Afrika Shrine', description: 'The spiritual home of Afrobeat culture and Fela\'s legacy.', location: 'Ikeja', rating: 4.6, price: '₦₦', icon: <Drum className="w-6 h-6" />, duration: '3-4 hours', highlights: ['Live Afrobeat', 'Cultural venue', 'Historic'],
-        image: NIGHTLIFE_IMAGES[2],
-        images: [NIGHTLIFE_IMAGES[2], NIGHTLIFE_IMAGES[0], NIGHTLIFE_IMAGES[3]]
+        id: 'n3', title: 'New Afrika Shrine', description: 'The spiritual home of Afrobeat culture and Fela\'s legacy.', location: 'Ikeja', rating: 4.6, price: '₦', icon: <Drum className="w-6 h-6" />, duration: '3-4 hours', highlights: ['Live Afrobeat', 'Cultural venue', 'Historic'],
+        image: '/assets/images/explore/new-afrika-shrine.jpeg',
+        images: ['/assets/images/explore/new-afrika-shrine.jpeg', '/assets/images/secondary/new-afrika-shrine-2.jpg', '/assets/images/secondary/new-afrika-shrine-3.webp']
       },
     ]
   },
@@ -204,29 +149,29 @@ const categories: Category[] = [
     gradient: 'from-violet-500 via-purple-500 to-indigo-500',
     items: [
       {
-        id: 's1', title: 'Alara Lagos', description: 'Curated luxury concept store with African and international designers.', location: 'Victoria Island', rating: 4.8, price: '₦₦', icon: <Gem className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Luxury fashion', 'African designers', 'Premium brands'],
+        id: 's1', title: 'Alara Lagos', description: 'Curated luxury concept store with African and international designers.', location: 'Victoria Island', rating: 4.8, price: '₦₦₦', icon: <Gem className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Luxury fashion', 'African designers', 'Premium brands'],
         image: '/assets/images/explore/alara-lagos.webp',
-        images: ['/assets/images/explore/alara-lagos.webp', SHOPPING_IMAGES[0], SHOPPING_IMAGES[1]]
+        images: ['/assets/images/explore/alara-lagos.webp', '/assets/images/secondary/alara-lagos-2.jpeg', '/assets/images/secondary/alara-lagos-3.webp']
       },
       {
         id: 's2', title: 'Ikeja City Mall', description: 'Lagos\'s largest mall with 150+ stores, cinema, and international brands.', location: 'Ikeja', rating: 4.5, price: 'Free Entry', icon: <ShoppingBag className="w-6 h-6" />, duration: '3-5 hours', highlights: ['150+ stores', 'Cinema', 'International brands'],
         image: '/assets/images/explore/ikeja-city-mall.jpg',
-        images: ['/assets/images/explore/ikeja-city-mall.jpg', SHOPPING_IMAGES[2], SHOPPING_IMAGES[3]]
+        images: ['/assets/images/explore/ikeja-city-mall.jpg', '/assets/images/explore/alara-lagos.webp']
       },
       {
-        id: 's3', title: 'Balogun Market', description: 'Lagos\'s largest market — fabrics, fashion, and authentic bargaining.', location: 'Lagos Island', rating: 4.3, price: '₦', icon: <ShoppingBag className="w-6 h-6" />, duration: '2-4 hours', highlights: ['Local market', 'Fabrics', 'Authentic experience'],
+        id: 's3', title: 'Balogun Market', description: 'Lagos\'s largest market — fabrics, fashion, and authentic bargaining.', location: 'Lagos Island', rating: 4.3, price: '', icon: <ShoppingBag className="w-6 h-6" />, duration: '2-4 hours', highlights: ['Local market', 'Fabrics', 'Authentic experience'],
         image: '/assets/images/explore/balogun-market.jpg',
-        images: ['/assets/images/explore/balogun-market.jpg', SHOPPING_IMAGES[4], SHOPPING_IMAGES[0]]
+        images: ['/assets/images/explore/balogun-market.jpg', '/assets/images/secondary/balogun-market-2.jpeg', '/assets/images/secondary/balogun-market-3.jpg']
       },
       {
         id: 's4', title: 'Lekki Arts & Crafts Market', description: 'Handcrafted souvenirs and bespoke jewelry from local artisans.', location: 'Lekki Phase 1', rating: 4.4, price: '₦', icon: <Gift className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Handcrafted', 'Souvenirs', 'Local artisans'],
-        image: SHOPPING_IMAGES[1],
-        images: [SHOPPING_IMAGES[1], SHOPPING_IMAGES[3], SHOPPING_IMAGES[4]]
+        image: '/assets/images/explore/lekki-arts-crafts-market.jpg',
+        images: ['/assets/images/explore/lekki-arts-crafts-market.jpg', '/assets/images/secondary/lekki-arts-2.jpeg', '/assets/images/secondary/lekki-arts-3.avif']
       },
       {
-        id: 's5', title: 'Nigerian Designers', description: 'Shop from top designers — Lisa Folawiyo, Deola Sagoe, Mai Atafo.', location: 'Various Boutiques', rating: 4.7, price: '₦₦', icon: <Crown className="w-6 h-6" />, duration: '2-4 hours', highlights: ['Top designers', 'Bespoke', 'Custom tailoring'],
-        image: SHOPPING_IMAGES[3],
-        images: [SHOPPING_IMAGES[3], SHOPPING_IMAGES[2], SHOPPING_IMAGES[4]]
+        id: 's5', title: 'Nigerian Designers', description: 'Shop from top designers — Lisa Folawiyo, Deola Sagoe, Mai Atafo.', location: 'Various Boutiques', rating: 4.7, price: '₦₦₦', icon: <Crown className="w-6 h-6" />, duration: '2-4 hours', highlights: ['Top designers', 'Bespoke', 'Custom tailoring'],
+        image: '/assets/images/explore/nigerian-designers.png',
+        images: ['/assets/images/explore/nigerian-designers.png', '/assets/images/secondary/nigerian-designers-2.webp']
       },
     ]
   },
@@ -239,28 +184,28 @@ const categories: Category[] = [
     items: [
       {
         id: 't1', title: 'Lagos Island Heritage Walk', description: 'Guided walking tour through the historical heart of Lagos.', location: 'Lagos Island', rating: 4.8, price: '₦15,000', icon: <Compass className="w-6 h-6" />, duration: '3 hours', highlights: ['Expert guides', 'Historical sites', 'Cultural insights'],
-        image: '/assets/images/explore/lagos-island-heritage-walk.jpg',
-        images: ['/assets/images/explore/lagos-island-heritage-walk.jpg', TOUR_IMAGES[0], TOUR_IMAGES[1]]
+        image: '/assets/images/explore/lagos-island-heritage-walk.jpeg',
+        images: ['/assets/images/explore/lagos-island-heritage-walk.jpeg', '/assets/images/secondary/heritage-walk-2.jpeg']
       },
       {
         id: 't2', title: 'Lekki Lagoon Sunset Cruise', description: 'Sunset cruise with champagne, canapés, and skyline views.', location: 'Lekki', rating: 4.9, price: '₦85,000', icon: <Sailboat className="w-6 h-6" />, duration: '3 hours', highlights: ['Sunset cruise', 'Champagne', 'Skyline views'],
         image: '/assets/images/explore/lekki-lagoon-sunset-cruise.avif',
-        images: ['/assets/images/explore/lekki-lagoon-sunset-cruise.avif', TOUR_IMAGES[2], TOUR_IMAGES[3]]
+        images: ['/assets/images/explore/lekki-lagoon-sunset-cruise.avif', '/assets/images/secondary/lekki-cruise-2.jpg']
       },
       {
         id: 't3', title: 'Private Yacht Experience', description: 'Luxury yacht charter with crew, catering, and waterway exploration.', location: 'Victoria Island', rating: 4.9, price: '₦500,000', icon: <Sailboat className="w-6 h-6" />, duration: '4-6 hours', highlights: ['Private yacht', 'Crew service', 'Catering'],
-        image: TOUR_IMAGES[4],
-        images: [TOUR_IMAGES[4], TOUR_IMAGES[0], '/assets/images/explore/lekki-lagoon-sunset-cruise.avif']
+        image: 'https://images.pexels.com/photos/37405043/pexels-photo-37405043.jpeg?auto=compress&cs=tinysrgb&w=800',
+        images: ['https://images.pexels.com/photos/37405043/pexels-photo-37405043.jpeg?auto=compress&cs=tinysrgb&w=800', '/assets/images/explore/lekki-lagoon-sunset-cruise.avif']
       },
       {
-        id: 't4', title: 'Lagos Food Tour', description: 'Gastronomic adventure — taste 10+ local dishes with a foodie guide.', location: 'Surulere & Yaba', rating: 4.7, price: '25,000', icon: <ChefHat className="w-6 h-6" />, duration: '4 hours', highlights: ['10+ dishes', 'Local guide', 'Food adventure'],
-        image: FOOD_IMAGES[5],
-        images: [FOOD_IMAGES[5], FOOD_IMAGES[3], '/assets/images/explore/cilantro-lagos.png']
+        id: 't4', title: 'Lagos Food Tour', description: 'Gastronomic adventure — taste 10+ local dishes with a foodie guide.', location: 'Surulere & Yaba', rating: 4.7, price: '₦25,000', icon: <ChefHat className="w-6 h-6" />, duration: '4 hours', highlights: ['10+ dishes', 'Local guide', 'Food adventure'],
+        image: '/assets/images/explore/lagos-food-tour.jpg',
+        images: ['/assets/images/explore/lagos-food-tour.jpg', '/assets/images/secondary/lagos-food-tour-2.jpeg', '/assets/images/secondary/lagos-food-tour-3.webp']
       },
       {
-        id: 't5', title: 'Corporate Lagos Experience', description: 'Tailored tour for business visitors — innovation hubs and networking.', location: 'VI & Ikoyi', rating: 4.7, price: '₦50,000', icon: <Car className="w-6 h-6" />, duration: '4 hours', highlights: ['Business districts', 'Innovation hubs', 'Networking'],
-        image: TOUR_IMAGES[1],
-        images: [TOUR_IMAGES[1], TOUR_IMAGES[4], '/assets/images/explore/alara-lagos.webp']
+        id: 't5', title: 'Corporate Lagos Experience', description: 'Tailored tour for business visitors — innovation hubs and networking.', location: 'VI & Ikoyi', rating: 4.7, price: '50,000', icon: <Car className="w-6 h-6" />, duration: '4 hours', highlights: ['Business districts', 'Innovation hubs', 'Networking'],
+        image: '/assets/images/explore/corporate-lagos-experience.png',
+        images: ['/assets/images/explore/corporate-lagos-experience.png', '/assets/images/explore/alara-lagos.webp']
       },
     ]
   },

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Tooltip from '../ui/Tooltip';
 
 describe('Tooltip Component', () => {
@@ -12,9 +12,9 @@ describe('Tooltip Component', () => {
     expect(screen.getByText('Hover me')).toBeTruthy();
   });
 
-  it('should show tooltip on hover', () => {
+  it('should show tooltip on hover', async () => {
     render(
-      <Tooltip content="Test tooltip">
+      <Tooltip content="Test tooltip" delay={0}>
         <button>Hover me</button>
       </Tooltip>
     );
@@ -22,27 +22,31 @@ describe('Tooltip Component', () => {
     const trigger = screen.getByText('Hover me');
     fireEvent.mouseEnter(trigger);
     
-    expect(screen.getByText('Test tooltip')).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText('Test tooltip')).toBeTruthy();
+    });
   });
 
-  it('should hide tooltip on mouse leave', () => {
+  it('should hide tooltip on mouse leave', async () => {
     render(
-      <Tooltip content="Test tooltip">
+      <Tooltip content="Test tooltip" delay={0}>
         <button>Hover me</button>
       </Tooltip>
     );
     
     const trigger = screen.getByText('Hover me');
     fireEvent.mouseEnter(trigger);
-    expect(screen.getByText('Test tooltip')).toBeTruthy();
+    
+    await waitFor(() => {
+      expect(screen.getByText('Test tooltip')).toBeTruthy();
+    });
     
     fireEvent.mouseLeave(trigger);
-    // Tooltip should be hidden (may still be in DOM but not visible)
   });
 
-  it('should render with description', () => {
+  it('should render with description', async () => {
     render(
-      <Tooltip content="Title" description="Description text">
+      <Tooltip content="Title" description="Description text" delay={0}>
         <button>Hover me</button>
       </Tooltip>
     );
@@ -50,7 +54,9 @@ describe('Tooltip Component', () => {
     const trigger = screen.getByText('Hover me');
     fireEvent.mouseEnter(trigger);
     
-    expect(screen.getByText('Title')).toBeTruthy();
-    expect(screen.getByText('Description text')).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText('Title')).toBeTruthy();
+      expect(screen.getByText('Description text')).toBeTruthy();
+    });
   });
 });
