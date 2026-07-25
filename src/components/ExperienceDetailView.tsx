@@ -84,7 +84,7 @@ export default function ExperienceDetailView({ onBackToHome }: ExperienceDetailV
               itemId="yacht-cruise"
               title="Luxury Yacht Cruise"
               subtitle="Private yacht experience"
-              image="https://images.unsplash.com/photo-1540946485063-a40da25017e2?w=800"
+              image="https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800&q=80"
               size="md"
             />
             <button 

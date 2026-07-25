@@ -18,7 +18,7 @@ export default function NewHomeView({ onSelectListing, setActiveTab }: NewHomeVi
             animate={{ scale: 1 }}
             transition={{ duration: 10, ease: [0.16, 1, 0.3, 1] }}
             className="w-full h-full object-cover"
-            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=80"
+            src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1600&q=80"
             alt="Luxury Resort"
           />
           <div className="absolute inset-0 bg-black/40"></div>

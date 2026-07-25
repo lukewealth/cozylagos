@@ -53,17 +53,24 @@ const EXPLORE_LAGOS_FALLBACKS: Record<string, string> = {
 };
 
 const VIP_SERVICE_IMAGE_MAP: Record<string, string> = {
-  'spa': 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=80',
-  'wellness': 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80',
+  'spa': 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80',
+  'wellness': 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800&q=80',
   'barber': 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=800&q=80',
   'beauty': 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80',
-  'shopping': 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800&q=80',
-  'sports': 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&q=80',
-  'gym': 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80',
+  'shopping': 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80',
+  'sports': 'https://images.unsplash.com/photo-1535139262971-c51845709a48?w=800&q=80',
+  'gym': 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800&q=80',
   'fitness': 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
   'laundry': 'https://images.unsplash.com/photo-1545173168-9f1947eebb8f?w=800&q=80',
-  'chef': 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80',
+  'chef': 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&q=80',
   'photography': 'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80',
+  'transport': 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&q=80',
+  'yacht': 'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=800&q=80',
+  'marine': 'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=800&q=80',
+  'events': 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&q=80',
+  'nightlife': 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=800&q=80',
+  'property': 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800&q=80',
+  'luxury': 'https://images.unsplash.com/photo-1574362848149-11496d93a7c7?w=800&q=80',
 };
 
 const FALLBACK_IMAGE = '/assets/images/horizontal/CozyLagos.jpeg';

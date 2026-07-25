@@ -242,7 +242,7 @@ function AddGemModal({ onClose, onAdd }: { onClose: () => void; onAdd: (gem: Tre
       title: formData.title,
       description: formData.description,
       category: formData.category,
-      image: formData.image || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80',
+      image: formData.image || 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800&q=80',
       price: formData.price,
       location: formData.location,
       rating: formData.rating,

@@ -26,7 +26,7 @@ const JOURNEY_STEPS: JourneyStep[] = [
     icon: <Plane className="w-8 h-8" />,
     duration: '1 hour',
     highlights: ['Meet & greet service', 'Luxury sedan', 'Fast-track immigration', 'Cold water & refreshments', 'Luggage assistance'],
-    image: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800&q=80',
     time: 'Arrival Day'
   },
   {
@@ -36,7 +36,7 @@ const JOURNEY_STEPS: JourneyStep[] = [
     icon: <Hotel className="w-8 h-8" />,
     duration: '30 mins',
     highlights: ['Premium apartment', 'Concierge welcome', 'Apartment orientation', 'Welcome package', '24/7 support'],
-    image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
     time: 'Arrival Day'
   },
   {
@@ -56,7 +56,7 @@ const JOURNEY_STEPS: JourneyStep[] = [
     icon: <Plane className="w-8 h-8" />,
     duration: '30 mins',
     highlights: ['Flexible checkout', 'Airport transfer', 'Luggage assistance', 'Departure coordination', 'Farewell gift'],
-    image: 'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800&q=80',
     time: 'Departure Day'
   }
 ];

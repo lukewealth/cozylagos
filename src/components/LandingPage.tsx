@@ -244,7 +244,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
                     onClick={() => setActiveTab('bundles')}
                   >
                     <img
-                      src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80"
+                      src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800&q=80"
                       alt="Service Bundles"
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />

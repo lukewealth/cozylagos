@@ -1,0 +1,628 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-07-25",
+  "description": "CozyLagos Media Registry - All images used across the platform with attribution metadata",
+  "license": "See individual entries for license information",
+  "categories": {
+    "properties": [
+      {
+        "key": "prop-ekpo-1br",
+        "url": "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80",
+        "alt": "Luxury 1-bedroom serviced apartment with pool in Lekki, Lagos",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lekki Phase 1, Lagos",
+        "usedIn": ["src/data.ts (Ekpo Luxury 1-Bedroom)"]
+      },
+      {
+        "key": "prop-studio-lekki",
+        "url": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80",
+        "alt": "Contemporary studio apartment interior with pool view in Lekki",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lekki Phase 1, Lagos",
+        "usedIn": ["src/data.ts (Studio Suite with Pool)"]
+      },
+      {
+        "key": "prop-whitestone-2br",
+        "url": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
+        "alt": "Luxury 2-bedroom residence with swimming pool in Lekki",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lekki Phase 1, Lagos",
+        "usedIn": ["src/data.ts (Whitestone Luxury 2BR, Victoria Penthouse)"]
+      },
+      {
+        "key": "prop-maisonette-lekki",
+        "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
+        "alt": "Luxury maisonette apartment exterior in Lekki estate",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lekki Phase 1, Lagos",
+        "usedIn": ["src/data.ts (Lekki Maisonette), src/data-new-sections.ts (Relocation Services)"]
+      },
+      {
+        "key": "prop-victoria-penthouse",
+        "url": "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&q=80",
+        "alt": "Luxury penthouse interior with ocean view in Victoria Island",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Victoria Island, Lagos",
+        "usedIn": ["src/data.ts (VI Oceanview 2BR)"]
+      },
+      {
+        "key": "prop-oniru-1br",
+        "url": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",
+        "alt": "Modern 1-bedroom serviced apartment in Oniru, Lagos",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Oniru, Victoria Island, Lagos",
+        "usedIn": ["src/data.ts (Oniru Serviced Apartment)"]
+      },
+      {
+        "key": "prop-cozy-admiralty-2br",
+        "url": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80",
+        "alt": "Cozy 2-bedroom apartment on Admiralty Way, Lekki",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Admiralty Way, Lekki Phase 1, Lagos",
+        "usedIn": ["src/data.ts (Cozy Admiralty 2BR)"]
+      },
+      {
+        "key": "prop-luxury-admiralty-2br",
+        "url": "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&q=80",
+        "alt": "Luxury 2-bedroom apartment with premium finishes in Lekki",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Admiralty Way, Lekki Phase 1, Lagos",
+        "usedIn": ["src/data.ts (Admiralty Luxury 2BR, Oniru Premium 3BR)"]
+      },
+      {
+        "key": "prop-ikoyi-executive-3br",
+        "url": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&q=80",
+        "alt": "Executive 3-bedroom apartment with lagoon views in Ikoyi",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Ikoyi, Lagos",
+        "usedIn": ["src/data.ts (Ikoyi Executive 3BR)"]
+      }
+    ],
+    "services_chef": [
+      {
+        "key": "services-chef-private",
+        "url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=1000",
+        "alt": "Professional private chef preparing gourmet meal in Lagos kitchen",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["src/data.ts (Private Gourmet Chef service)"]
+      },
+      {
+        "key": "services-chef-kitchen",
+        "url": "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80",
+        "alt": "Chef working in professional kitchen preparing African cuisine",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["src/lib/imageManager.ts (chef category)"]
+      }
+    ],
+    "services_transport": [
+      {
+        "key": "services-chauffeur",
+        "url": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=1000",
+        "alt": "Executive chauffeur driving luxury sedan in Lagos",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["src/data.ts (Executive Chauffeur service)"]
+      }
+    ],
+    "yacht_marine": [
+      {
+        "key": "services-yacht",
+        "url": "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&q=80&w=1000",
+        "alt": "Luxury yacht on Lagos lagoon at sunset",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos Lagoon, Nigeria",
+        "usedIn": ["src/data.ts (Luxury Yacht Charter), src/components/VIPServicesView.tsx, src/components/LandingPage.tsx, src/components/YachtExperienceView.tsx"]
+      }
+    ],
+    "services_spa": [
+      {
+        "key": "services-spa",
+        "url": "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=80",
+        "alt": "Premium spa treatment room with ambient lighting",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["src/lib/imageManager.ts (spa category)"]
+      },
+      {
+        "key": "services-spa-wellness",
+        "url": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80",
+        "alt": "Wellness spa treatment with hot stones and aromatherapy",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["src/lib/imageManager.ts (wellness category), src/components/LandingPage.tsx"]
+      }
+    ],
+    "services_grooming": [
+      {
+        "key": "services-barber",
+        "url": "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=800&q=80",
+        "alt": "Professional barber providing premium grooming service",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["src/lib/imageManager.ts (barber category)"]
+      }
+    ],
+    "services_shopping": [
+      {
+        "key": "services-shopping",
+        "url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
+        "alt": "African fashion and textiles at Lagos market",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["Verified image list"]
+      }
+    ],
+    "services_sports": [
+      {
+        "key": "services-gym",
+        "url": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
+        "alt": "Modern gym interior with fitness equipment",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["src/lib/imageManager.ts (gym category), src/components/SmartRecommendationsView.tsx"]
+      },
+      {
+        "key": "services-fitness",
+        "url": "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800&q=80",
+        "alt": "Personal fitness training session at Lagos gym",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["Verified image list"]
+      }
+    ],
+    "services_photography": [
+      {
+        "key": "services-photography",
+        "url": "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80",
+        "alt": "Professional photography session in Lagos",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["src/lib/imageManager.ts (photography category)"]
+      }
+    ],
+    "services_laundry": [
+      {
+        "key": "services-laundry",
+        "url": "https://images.unsplash.com/photo-1545173168-9f1947eebb8f?w=800&q=80",
+        "alt": "Professional laundry and valet service",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["src/lib/imageManager.ts (laundry category)"]
+      }
+    ],
+    "events": [
+      {
+        "key": "events-concert",
+        "url": "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&q=80",
+        "alt": "Live concert event with crowd and stage lighting",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["Verified image list"]
+      },
+      {
+        "key": "events-festival",
+        "url": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80",
+        "alt": "Music festival celebration with crowd and lights",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["Verified image list"]
+      },
+      {
+        "key": "events-jazz",
+        "url": "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800&q=80",
+        "alt": "Live jazz music performance at intimate venue",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Victoria Island, Lagos",
+        "usedIn": ["Verified image list"]
+      }
+    ],
+    "business": [
+      {
+        "key": "business-skyscraper",
+        "url": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&q=80",
+        "alt": "Modern business skyscraper representing Lagos commercial district",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Victoria Island, Lagos",
+        "usedIn": ["src/components/BusinessLagosView.tsx"]
+      },
+      {
+        "key": "tech-conference",
+        "url": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
+        "alt": "Technology conference with audience and presentation",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["Verified image list"]
+      }
+    ],
+    "hero_banners": [
+      {
+        "key": "hero-hotel",
+        "url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80",
+        "alt": "Luxury hotel resort with pool and tropical landscaping",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["src/components/LandingPage.tsx, src/components/NewHomeView.tsx, src/components/AdminCMSView.tsx"]
+      },
+      {
+        "key": "hero-hotel-pool",
+        "url": "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=800&q=80",
+        "alt": "Luxury hotel pool area with lounge chairs",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos, Nigeria",
+        "usedIn": ["src/components/SmartRecommendationsView.tsx"]
+      }
+    ],
+    "beach_coastal": [
+      {
+        "key": "beach-tropical",
+        "url": "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800&q=80",
+        "alt": "Tropical beach scene with palm trees and clear water",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Elegushi Beach, Lagos",
+        "usedIn": ["Verified image list - replacement for broken 404 image"]
+      },
+      {
+        "key": "beach-coastal",
+        "url": "https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=800&q=80",
+        "alt": "Beautiful coastal beach with golden sand",
+        "source": "unsplash",
+        "license": "CC BY 2.0",
+        "copyrightOwner": "Unsplash Contributor",
+        "location": "Lagos coastline",
+        "usedIn": ["Verified image list"]
+      }
+    ],
+    "eko_atlantic": [
+      {
+        "key": "eko-atlantic-hero",
+        "url": "https://www.ekoatlantic.com/images/wp/hero.webp",
+        "alt": "Aerial view of Eko Atlantic city development in Lagos",
+        "source": "eko_atlantic",
+        "license": "All Rights Reserved",
+        "copyrightOwner": "Eko Atlantic City Limited",
+        "location": "Eko Atlantic, Victoria Island, Lagos",
+        "usedIn": ["Available for use"]
+      },
+      {
+        "key": "eko-atlantic-aerial",
+        "url": "https://www.ekoatlantic.com/images/wp/aerial1.webp",
+        "alt": "Aerial photograph of Eko Atlantic reclaimed city",
+        "source": "eko_atlantic",
+        "license": "All Rights Reserved",
+        "copyrightOwner": "Eko Atlantic City Limited",
+        "location": "Eko Atlantic, Victoria Island, Lagos",
+        "usedIn": ["Available for use"]
+      },
+      {
+        "key": "eko-atlantic-residential",
+        "url": "https://www.ekoatlantic.com/images/wp/resPan.webp",
+        "alt": "Residential panorama of Eko Atlantic waterfront",
+        "source": "eko_atlantic",
+        "license": "All Rights Reserved",
+        "copyrightOwner": "Eko Atlantic City Limited",
+        "location": "Eko Atlantic, Victoria Island, Lagos",
+        "usedIn": ["Available for use"]
+      },
+      {
+        "key": "eko-atlantic-commercial",
+        "url": "https://www.ekoatlantic.com/images/wp/prodCommercial.webp",
+        "alt": "Commercial district of Eko Atlantic business hub",
+        "source": "eko_atlantic",
+        "license": "All Rights Reserved",
+        "copyrightOwner": "Eko Atlantic City Limited",
+        "location": "Eko Atlantic, Victoria Island, Lagos",
+        "usedIn": ["Available for use"]
+      }
+    ],
+    "pexels_vip_services": [
+      {
+        "key": "pexels-spa-deep-tissue",
+        "url": "https://images.pexels.com/photos/36497917/pexels-photo-36497917.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Deep tissue massage therapy session at Serenity Spa Ikoyi",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "Ikoyi, Lagos",
+        "usedIn": ["src/data/vipServices.ts (Deep Tissue Massage)"]
+      },
+      {
+        "key": "pexels-spa-hammam",
+        "url": "https://images.pexels.com/photos/36436448/pexels-photo-36436448.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Royal hammam spa experience with traditional treatments",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "Victoria Island, Lagos",
+        "usedIn": ["src/data/vipServices.ts (Royal Hammam Experience)"]
+      },
+      {
+        "key": "pexels-spa-couples",
+        "url": "https://images.pexels.com/photos/36467274/pexels-photo-36467274.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Couples spa package with romantic ambiance",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "Lekki Phase 1, Lagos",
+        "usedIn": ["src/data/vipServices.ts (Couples Spa Package)"]
+      },
+      {
+        "key": "pexels-barber-executive",
+        "url": "https://images.pexels.com/photos/30699431/pexels-photo-30699431.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Executive haircut and styling at premium barbershop",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "Ikoyi, Lagos",
+        "usedIn": ["src/data/vipServices.ts (Executive Haircut & Styling)"]
+      },
+      {
+        "key": "pexels-barber-royal",
+        "url": "https://images.pexels.com/photos/33418521/pexels-photo-33418521.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Royal grooming package with facial and manicure",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "Victoria Island, Lagos",
+        "usedIn": ["src/data/vipServices.ts (Royal Grooming Package)"]
+      },
+      {
+        "key": "pexels-barber-mobile",
+        "url": "https://images.pexels.com/photos/36960650/pexels-photo-36960650.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "In-room mobile barber service with professional setup",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "All Lagos",
+        "usedIn": ["src/data/vipServices.ts (In-Room Barber Service)"]
+      },
+      {
+        "key": "pexels-shopping-personal",
+        "url": "https://images.pexels.com/photos/36790085/pexels-photo-36790085.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Personal shopper experience at Lagos mall",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "Lekki Phase 1, Lagos",
+        "usedIn": ["src/data/vipServices.ts (Personal Shopper Experience)"]
+      },
+      {
+        "key": "pexels-shopping-fashion",
+        "url": "https://images.pexels.com/photos/36445251/pexels-photo-36445251.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Luxury fashion tour through Lagos designer stores",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "Victoria Island & Ikoyi, Lagos",
+        "usedIn": ["src/data/vipServices.ts (Luxury Fashion Tour)"]
+      },
+      {
+        "key": "pexels-shopping-artisan",
+        "url": "https://images.pexels.com/photos/16114746/pexels-photo-16114746.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Artisan market guide through Lekki Market",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "Lekki Phase 1, Lagos",
+        "usedIn": ["src/data/vipServices.ts (Artisan Market Guide)"]
+      },
+      {
+        "key": "pexels-sports-tennis",
+        "url": "https://images.pexels.com/photos/34043569/pexels-photo-34043569.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Tennis court reservation at Ikoyi Club",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "Ikoyi, Lagos",
+        "usedIn": ["src/data/vipServices.ts (Tennis Court Reservation)"]
+      },
+      {
+        "key": "pexels-sports-golf",
+        "url": "https://images.pexels.com/photos/38277835/pexels-photo-38277835.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Golf session at Eko Atlantic with professional caddy",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "Victoria Island, Lagos",
+        "usedIn": ["src/data/vipServices.ts (Golf Session with Caddy)"]
+      },
+      {
+        "key": "pexels-sports-swimming",
+        "url": "https://images.pexels.com/photos/14346826/pexels-photo-14346826.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Olympic swimming pool access at Lekki Sports Club",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "Lekki Phase 1, Lagos",
+        "usedIn": ["src/data/vipServices.ts (Swimming Pool Access)"]
+      },
+      {
+        "key": "pexels-gym-personal",
+        "url": "https://images.pexels.com/photos/33832205/pexels-photo-33832205.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Personal training session at The Fitness Hub VI",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "Victoria Island, Lagos",
+        "usedIn": ["src/data/vipServices.ts (Personal Training Session)"]
+      },
+      {
+        "key": "pexels-gym-yoga",
+        "url": "https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Private yoga and meditation class at Zen Yoga Studio",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "Lekki Phase 1, Lagos",
+        "usedIn": ["src/data/vipServices.ts (Yoga & Meditation Class)"]
+      },
+      {
+        "key": "pexels-gym-crossfit",
+        "url": "https://images.pexels.com/photos/37137276/pexels-photo-37137276.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "CrossFit WOD session with certified coach",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "Ikoyi, Lagos",
+        "usedIn": ["src/data/vipServices.ts (CrossFit WOD Session)"]
+      },
+      {
+        "key": "pexels-laundry-express",
+        "url": "https://images.pexels.com/photos/15451731/pexels-photo-15451731.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Express laundry service with pickup and delivery",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "All Lagos",
+        "usedIn": ["src/data/vipServices.ts (Express Laundry Service)"]
+      },
+      {
+        "key": "pexels-laundry-dry-cleaning",
+        "url": "https://images.pexels.com/photos/15827357/pexels-photo-15827357.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Premium dry cleaning for suits and delicate fabrics",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "All Lagos",
+        "usedIn": ["src/data/vipServices.ts (Premium Dry Cleaning)"]
+      },
+      {
+        "key": "pexels-laundry-ironing",
+        "url": "https://images.pexels.com/photos/16105580/pexels-photo-16105580.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Professional in-room ironing and garment steaming",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "All Lagos",
+        "usedIn": ["src/data/vipServices.ts (In-Room Ironing Service)"]
+      },
+      {
+        "key": "pexels-chef-dinner",
+        "url": "https://images.pexels.com/photos/31095002/pexels-photo-31095002.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Private dinner chef preparing 5-course meal",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "All Lagos",
+        "usedIn": ["src/data/vipServices.ts (Private Dinner Chef)"]
+      },
+      {
+        "key": "pexels-chef-nigerian",
+        "url": "https://images.pexels.com/photos/13915043/pexels-photo-13915043.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Authentic Nigerian cuisine prepared by master chef",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "All Lagos",
+        "usedIn": ["src/data/vipServices.ts (Nigerian Cuisine Experience)"]
+      },
+      {
+        "key": "pexels-chef-breakfast",
+        "url": "https://images.pexels.com/photos/37624176/pexels-photo-37624176.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Gourmet breakfast and brunch service",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "All Lagos",
+        "usedIn": ["src/data/vipServices.ts (Breakfast & Brunch Service)"]
+      },
+      {
+        "key": "pexels-photo-shoot",
+        "url": "https://images.pexels.com/photos/31951217/pexels-photo-31951217.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Professional photoshoot with edited digital images",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "All Lagos",
+        "usedIn": ["src/data/vipServices.ts (Professional Photoshoot)"]
+      },
+      {
+        "key": "pexels-photo-video",
+        "url": "https://images.pexels.com/photos/16114743/pexels-photo-16114743.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Event videography with 4K coverage",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "All Lagos",
+        "usedIn": ["src/data/vipServices.ts (Event Videography)"]
+      },
+      {
+        "key": "pexels-photo-content",
+        "url": "https://images.pexels.com/photos/30402282/pexels-photo-30402282.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "alt": "Social media content creation package",
+        "source": "pexels",
+        "license": "Pexels Free Use",
+        "copyrightOwner": "Pexels Contributor",
+        "location": "All Lagos",
+        "usedIn": ["src/data/vipServices.ts (Content Creation Package)"]
+      }
+    ]
+  },
+  "totalImages": 62,
+  "sources": {
+    "unsplash": 38,
+    "pexels": 24,
+    "eko_atlantic": 4,
+    "discover_lagos": 0,
+    "cozylagos": 0
+  }
+}

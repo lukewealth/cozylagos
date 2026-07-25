@@ -1,0 +1,349 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-07-25",
+  "description": "SEO-optimized image metadata for CozyLagos platform",
+  "images": [
+    {
+      "url": "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=800&q=80",
+      "alt": "Luxury yacht charter on Lagos Lagoon at sunset - CozyLagos premium marine experience Nigeria",
+      "title": "Luxury Yacht Charter Lagos | Private Lagoon Cruise Nigeria | CozyLagos",
+      "keywords": ["luxury yacht lagos", "lagoon cruise nigeria", "private yacht charter", "victoria island yacht", "lagos marine experience", "sunset cruise lagos"],
+      "category": "yacht_marine",
+      "seoScore": 95
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80",
+      "alt": "Luxury hotel resort with pool in Lagos Nigeria - Premium accommodation CozyLagos",
+      "title": "Luxury Hotel Lagos | 5-Star Resort Accommodation Nigeria | CozyLagos",
+      "keywords": ["luxury hotel lagos", "resort nigeria", "5-star accommodation", "hotel with pool lagos", "premium stay nigeria", "victoria island hotel"],
+      "category": "hero_banners",
+      "seoScore": 92
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800&q=80",
+      "alt": "Lagos Nigeria cityscape skyline - Urban luxury accommodation and experiences",
+      "title": "Lagos Nigeria Skyline | City of Luxury Hospitality | CozyLagos",
+      "keywords": ["lagos cityscape", "lagos skyline", "nigeria city", "victoria island skyline", "lagos nigeria", "urban luxury lagos"],
+      "category": "hero_banners",
+      "seoScore": 98
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&q=80",
+      "alt": "Private gourmet chef preparing Nigerian cuisine in Lagos - CozyLagos chef service",
+      "title": "Private Chef Lagos | Gourmet Nigerian Cuisine | CozyLagos Dining",
+      "keywords": ["private chef lagos", "nigerian cuisine", "gourmet cooking lagos", "personal chef nigeria", "jollof rice chef", "lagos dining experience"],
+      "category": "services_chef",
+      "seoScore": 90
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&q=80",
+      "alt": "Executive chauffeur service luxury car Lagos Nigeria - CozyLagos transport",
+      "title": "Executive Chauffeur Lagos | Luxury Car Service Nigeria | CozyLagos",
+      "keywords": ["chauffeur lagos", "luxury car service nigeria", "executive transport", "airport transfer lagos", "private driver lagos", "vip transport nigeria"],
+      "category": "services_transport",
+      "seoScore": 88
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80",
+      "alt": "Premium spa wellness treatment Lagos Nigeria - CozyLagos relaxation experience",
+      "title": "Luxury Spa Lagos | Wellness Treatment Nigeria | CozyLagos",
+      "keywords": ["spa lagos", "wellness nigeria", "massage lagos", "luxury spa treatment", "relaxation lagos", "spa ikoyi", "spa victoria island"],
+      "category": "services_spa",
+      "seoScore": 87
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=800&q=80",
+      "alt": "Premium barber grooming service Lagos Nigeria - CozyLagos men's styling",
+      "title": "Premium Barber Lagos | Men's Grooming Nigeria | CozyLagos",
+      "keywords": ["barber lagos", "men grooming nigeria", "luxury barbershop", "haircut lagos", "beard trim nigeria", "executive grooming"],
+      "category": "services_grooming",
+      "seoScore": 85
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
+      "alt": "African fashion shopping Lagos Nigeria - CozyLagos retail experience",
+      "title": "African Fashion Lagos | Shopping Nigeria | CozyLagos",
+      "keywords": ["african fashion lagos", "shopping nigeria", "nigerian designers", "fashion market lagos", "ankara style", "lagos retail"],
+      "category": "services_shopping",
+      "seoScore": 86
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
+      "alt": "Modern gym fitness center Lagos Nigeria - CozyLagos health and wellness",
+      "title": "Premium Gym Lagos | Fitness Center Nigeria | CozyLagos",
+      "keywords": ["gym lagos", "fitness center nigeria", "personal trainer lagos", "health club nigeria", "gym victoria island", "fitness lekki"],
+      "category": "services_sports",
+      "seoScore": 84
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80",
+      "alt": "Professional photography service Lagos Nigeria - CozyLagos creative studio",
+      "title": "Professional Photography Lagos | Nigeria Photo Service | CozyLagos",
+      "keywords": ["photography lagos", "photoshoot nigeria", "professional photographer lagos", "event photography nigeria", "portrait studio lagos"],
+      "category": "services_photography",
+      "seoScore": 85
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&q=80",
+      "alt": "Lagos business district skyscraper corporate Nigeria - CozyLagos corporate housing",
+      "title": "Business District Lagos | Corporate Accommodation Nigeria | CozyLagos",
+      "keywords": ["business lagos", "corporate housing nigeria", "office space lagos", "victoria island business", "corporate stay lagos", "business travel nigeria"],
+      "category": "business",
+      "seoScore": 88
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
+      "alt": "Technology conference Lagos Nigeria - CozyLagos event spaces",
+      "title": "Tech Conference Lagos | Event Spaces Nigeria | CozyLagos",
+      "keywords": ["tech conference lagos", "event space nigeria", "conference venue lagos", "tech event nigeria", "innovation lagos", "business conference"],
+      "category": "events",
+      "seoScore": 82
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&q=80",
+      "alt": "Live concert music event Lagos Nigeria - CozyLagos nightlife experiences",
+      "title": "Live Concert Lagos | Music Events Nigeria | CozyLagos",
+      "keywords": ["concert lagos", "live music nigeria", "music event lagos", "afrobeats concert", "nightlife lagos", "entertainment nigeria"],
+      "category": "events",
+      "seoScore": 83
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80",
+      "alt": "Music festival celebration Lagos Nigeria - CozyLagos cultural events",
+      "title": "Music Festival Lagos | Cultural Events Nigeria | CozyLagos",
+      "keywords": ["festival lagos", "music festival nigeria", "cultural event lagos", "gidi festival", "afrobeats festival", "lagos celebration"],
+      "category": "events",
+      "seoScore": 83
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800&q=80",
+      "alt": "Live jazz music performance Victoria Island Lagos - CozyLagos nightlife",
+      "title": "Jazz Night Lagos | Live Music Victoria Island | CozyLagos",
+      "keywords": ["jazz lagos", "live jazz nigeria", "jazz night victoria island", "intimate music venue", "jazz club lagos", "rsvp lagos"],
+      "category": "events",
+      "seoScore": 80
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80",
+      "alt": "Luxury 1-bedroom serviced apartment Lekki Lagos with pool - CozyLagos rental",
+      "title": "Luxury Apartment Lekki | Serviced Rental Lagos | CozyLagos",
+      "keywords": ["luxury apartment lekki", "serviced apartment lagos", "1 bedroom rental lagos", "apartment with pool lekki", "short let lagos", "luxury rental nigeria"],
+      "category": "properties",
+      "seoScore": 90
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80",
+      "alt": "Contemporary studio apartment Lekki Lagos with pool view - CozyLagos",
+      "title": "Studio Apartment Lekki | Pool View Rental Lagos | CozyLagos",
+      "keywords": ["studio apartment lekki", "pool view lagos", "contemporary rental", "short let lekki", "budget luxury lagos", "studio rental nigeria"],
+      "category": "properties",
+      "seoScore": 88
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
+      "alt": "Luxury 2-bedroom villa with swimming pool Lekki Lagos - CozyLagos premium stay",
+      "title": "Luxury Villa Lekki | 2BR Pool Residence Lagos | CozyLagos",
+      "keywords": ["luxury villa lekki", "2 bedroom lagos", "swimming pool apartment", "premium residence lagos", "family rental lekki", "villa rental nigeria"],
+      "category": "properties",
+      "seoScore": 90
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
+      "alt": "Luxury maisonette apartment Lekki estate Lagos - CozyLagos premium accommodation",
+      "title": "Maisonette Lekki | Luxury Estate Apartment Lagos | CozyLagos",
+      "keywords": ["maisonette lekki", "estate apartment lagos", "luxury house rental", "2 bedroom lekki", "gated estate lagos", "premium accommodation nigeria"],
+      "category": "properties",
+      "seoScore": 88
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&q=80",
+      "alt": "Luxury penthouse with ocean view Victoria Island Lagos - CozyLagos",
+      "title": "Penthouse Victoria Island | Ocean View Luxury Lagos | CozyLagos",
+      "keywords": ["penthouse victoria island", "ocean view lagos", "luxury penthouse nigeria", "vi apartment rental", "premium penthouse lagos", "waterfront apartment"],
+      "category": "properties",
+      "seoScore": 92
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",
+      "alt": "Modern 1-bedroom serviced apartment Oniru Victoria Island Lagos - CozyLagos",
+      "title": "Serviced Apartment Oniru | 1BR Victoria Island Lagos | CozyLagos",
+      "keywords": ["serviced apartment oniru", "1 bedroom victoria island", "modern apartment lagos", "budget luxury vi", "short let oniru", "furnished apartment nigeria"],
+      "category": "properties",
+      "seoScore": 86
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80",
+      "alt": "Cozy 2-bedroom apartment Admiralty Way Lekki Lagos - CozyLagos",
+      "title": "Apartment Admiralty Lekki | 2BR Cozy Rental Lagos | CozyLagos",
+      "keywords": ["apartment admiralty way", "2 bedroom lekki", "cozy rental lagos", "lekki phase 1 apartment", "family apartment lagos", "short let admiralty"],
+      "category": "properties",
+      "seoScore": 87
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&q=80",
+      "alt": "Luxury 2-bedroom apartment Admiralty Lekki Lagos premium finishes - CozyLagos",
+      "title": "Luxury Apartment Lekki | Premium 2BR Rental Lagos | CozyLagos",
+      "keywords": ["luxury apartment admiralty", "premium rental lekki", "2 bedroom luxury lagos", "high-end apartment nigeria", "designer apartment lagos"],
+      "category": "properties",
+      "seoScore": 88
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&q=80",
+      "alt": "Executive 3-bedroom apartment Ikoyi Lagos with lagoon views - CozyLagos",
+      "title": "Executive Apartment Ikoyi | 3BR Lagoon View Lagos | CozyLagos",
+      "keywords": ["executive apartment ikoyi", "3 bedroom lagos", "lagoon view ikoyi", "luxury rental ikoyi", "panoramic apartment lagos", "premium ikoyi residence"],
+      "category": "properties",
+      "seoScore": 90
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800&q=80",
+      "alt": "Tropical beach Elegushi Lagos Nigeria - CozyLagos coastal experience",
+      "title": "Elegushi Beach Lagos | Tropical Coastal Nigeria | CozyLagos",
+      "keywords": ["elegushi beach", "tropical beach lagos", "lagos coastline", "beach experience nigeria", "coastal lagos", "lekki beach"],
+      "category": "beach_coastal",
+      "seoScore": 90
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=800&q=80",
+      "alt": "Beautiful coastal beach golden sand Lagos Nigeria - CozyLagos",
+      "title": "Lagos Beach | Golden Sand Coastline Nigeria | CozyLagos",
+      "keywords": ["lagos beach", "golden sand nigeria", "coastal beach", "ocean beach lagos", "beach resort nigeria"],
+      "category": "beach_coastal",
+      "seoScore": 85
+    },
+    {
+      "url": "https://www.ekoatlantic.com/images/wp/hero.webp",
+      "alt": "Eko Atlantic City aerial view Lagos Nigeria - Africa's newest city CozyLagos",
+      "title": "Eko Atlantic City | Lagos Luxury Development Nigeria | CozyLagos",
+      "keywords": ["eko atlantic", "eko atlantic city", "lagos development", "new city nigeria", "victoria island extension", "aerial lagos"],
+      "category": "eko_atlantic",
+      "seoScore": 95
+    },
+    {
+      "url": "https://www.ekoatlantic.com/images/wp/aerial1.webp",
+      "alt": "Aerial view Eko Atlantic reclaimed land Lagos ocean - CozyLagos",
+      "title": "Eko Atlantic Aerial | Reclaimed City Lagos Nigeria | CozyLagos",
+      "keywords": ["eko atlantic aerial", "reclaimed land lagos", "ocean city nigeria", "lagos innovation", "coastal development africa"],
+      "category": "eko_atlantic",
+      "seoScore": 93
+    },
+    {
+      "url": "https://www.ekoatlantic.com/images/wp/resPan.webp",
+      "alt": "Eko Atlantic residential waterfront luxury homes Lagos - CozyLagos",
+      "title": "Eko Atlantic Residential | Waterfront Homes Lagos | CozyLagos",
+      "keywords": ["eko atlantic residential", "waterfront homes lagos", "luxury living nigeria", "eko atlantic apartment", "premium residence lagos"],
+      "category": "eko_atlantic",
+      "seoScore": 90
+    },
+    {
+      "url": "https://www.ekoatlantic.com/images/wp/prodCommercial.webp",
+      "alt": "Eko Atlantic commercial business district Lagos Nigeria - CozyLagos",
+      "title": "Eko Atlantic Business District | Commercial Lagos Nigeria | CozyLagos",
+      "keywords": ["eko atlantic commercial", "business district lagos", "corporate nigeria", "office space eko atlantic", "business hub lagos"],
+      "category": "eko_atlantic",
+      "seoScore": 88
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80",
+      "alt": "Professional chef cooking African cuisine Lagos kitchen - CozyLagos",
+      "title": "Professional Chef Lagos | African Cuisine Cooking | CozyLagos",
+      "keywords": ["chef lagos", "african cuisine", "cooking nigeria", "professional kitchen lagos", "gourmet chef nigeria"],
+      "category": "services_chef",
+      "seoScore": 85
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80",
+      "alt": "Gourmet food fine dining restaurant Lagos Nigeria - CozyLagos",
+      "title": "Fine Dining Lagos | Gourmet Food Nigeria | CozyLagos",
+      "keywords": ["fine dining lagos", "gourmet food nigeria", "restaurant lagos", "culinary experience nigeria", "food plating lagos"],
+      "category": "food",
+      "seoScore": 84
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=800&q=80",
+      "alt": "Artfully plated gourmet dish by chef Lagos Nigeria - CozyLagos dining",
+      "title": "Gourmet Plating Lagos | Culinary Art Nigeria | CozyLagos",
+      "keywords": ["gourmet plating", "culinary art lagos", "chef dish nigeria", "food art lagos", "fine dining plate"],
+      "category": "food",
+      "seoScore": 82
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+      "alt": "Luxury interior design premium furnishings Lagos Nigeria - CozyLagos",
+      "title": "Luxury Interior Lagos | Premium Furnishing Nigeria | CozyLagos",
+      "keywords": ["luxury interior lagos", "premium furnishing nigeria", "interior design lagos", "elegant home nigeria", "luxury living lagos"],
+      "category": "luxury_interiors",
+      "seoScore": 80
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&q=80",
+      "alt": "Luxury resort accommodation premium amenities Lagos - CozyLagos",
+      "title": "Luxury Resort Lagos | Premium Accommodation Nigeria | CozyLagos",
+      "keywords": ["luxury resort lagos", "premium accommodation nigeria", "resort stay lagos", "high-end resort nigeria"],
+      "category": "luxury_interiors",
+      "seoScore": 82
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1609920658906-8223bd289001?w=800&q=80",
+      "alt": "Luxury bedroom suite elegant decor Lagos Nigeria - CozyLagos",
+      "title": "Luxury Bedroom Lagos | Elegant Suite Nigeria | CozyLagos",
+      "keywords": ["luxury bedroom lagos", "elegant suite nigeria", "premium bedroom", "hotel suite lagos", "bedroom design nigeria"],
+      "category": "luxury_interiors",
+      "seoScore": 80
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80",
+      "alt": "Modern luxury apartment interior contemporary design Lagos - CozyLagos",
+      "title": "Modern Apartment Lagos | Contemporary Interior Nigeria | CozyLagos",
+      "keywords": ["modern apartment lagos", "contemporary interior nigeria", "luxury flat lagos", "design apartment nigeria"],
+      "category": "luxury_interiors",
+      "seoScore": 80
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800&q=80",
+      "alt": "Personal fitness training gym Lagos Nigeria - CozyLagos wellness",
+      "title": "Personal Training Lagos | Gym Fitness Nigeria | CozyLagos",
+      "keywords": ["personal training lagos", "gym fitness nigeria", "fitness center lagos", "workout nigeria", "gym lekki"],
+      "category": "services_sports",
+      "seoScore": 82
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1574362848149-11496d92ad1ab?w=800&q=80",
+      "alt": "African luxury interior cultural design elements Lagos - CozyLagos",
+      "title": "African Luxury Design | Cultural Interior Lagos | CozyLagos",
+      "keywords": ["african luxury", "cultural design lagos", "african interior", "nigerian design", "afro-luxury"],
+      "category": "luxury_interiors",
+      "seoScore": 83
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1535139262971-c51845709a48?w=800&q=80",
+      "alt": "Luxury swimming pool modern surroundings Lagos Nigeria - CozyLagos",
+      "title": "Luxury Pool Lagos | Swimming Pool Apartment Nigeria | CozyLagos",
+      "keywords": ["luxury pool lagos", "swimming pool apartment nigeria", "pool residence lagos", "private pool lagos"],
+      "category": "luxury_lifestyle",
+      "seoScore": 82
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=800&q=80",
+      "alt": "Luxury hotel pool area lounge chairs Lagos Nigeria - CozyLagos",
+      "title": "Hotel Pool Lagos | Luxury Lounge Nigeria | CozyLagos",
+      "keywords": ["hotel pool lagos", "luxury lounge nigeria", "pool area lagos", "resort pool nigeria"],
+      "category": "hero_banners",
+      "seoScore": 83
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80",
+      "alt": "Group fitness class modern gym Lagos Nigeria - CozyLagos",
+      "title": "Fitness Class Lagos | Group Workout Nigeria | CozyLagos",
+      "keywords": ["fitness class lagos", "group workout nigeria", "gym class lagos", "exercise nigeria"],
+      "category": "services_sports",
+      "seoScore": 78
+    }
+  ],
+  "totalSeoOptimized": 42,
+  "averageSeoScore": 85.6,
+  "topKeywords": [
+    "lagos", "nigeria", "luxury", "cozylagos", "victoria island",
+    "lekki", "ikoyi", "apartment", "premium", "african"
+  ]
+}

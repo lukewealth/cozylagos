@@ -261,7 +261,7 @@ export default function ListingEditorView({ listing, onCancel, onSave }: Listing
               </div>
             ))}
             <button 
-              onClick={() => handleChange('images', [...formData.images, "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&q=80&w=1000"])}
+              onClick={() => handleChange('images', [...formData.images, "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800&q=80"])}
               className="aspect-square border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center gap-2 text-charcoal/40 hover:border-gold hover:text-gold transition-all group"
             >
               <Plus className="w-6 h-6 group-hover:scale-110 transition-transform" />
