@@ -150,8 +150,12 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
               onClick={() => {
                 if (!isAuthenticated) {
                   setActiveTab('home');
+                } else if (currentUser?.role === 'admin' || currentUser?.role === 'super_admin') {
+                  setActiveTab('admin-dashboard');
+                } else if (currentUser?.role === 'service_provider') {
+                  setActiveTab('service-dashboard');
                 } else {
-                  setActiveTab('overview');
+                  setActiveTab('user-dashboard');
                 }
               }}
               className="flex items-center gap-2 cursor-pointer select-none hover:opacity-85 transition-opacity"

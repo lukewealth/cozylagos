@@ -22,7 +22,7 @@ interface NavItem {
 
 const ADMIN_NAV: NavItem[] = [
   { id: 'admin-dashboard', label: 'Dashboard', icon: LayoutDashboard, description: 'Overview & analytics' },
-  { id: 'listings', label: 'Properties', icon: Globe, description: 'Manage all listings' },
+  { id: 'properties', label: 'Properties', icon: Globe, description: 'Manage all properties' },
   { id: 'bookings', label: 'Bookings', icon: Bell, description: 'Booking requests' },
   { id: 'events', label: 'Events', icon: Calendar, description: 'Manage events & tickets' },
   { id: 'tasks', label: 'Tasks', icon: CheckSquare, description: 'Staff task management' },

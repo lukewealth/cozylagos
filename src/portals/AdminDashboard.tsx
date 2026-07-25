@@ -27,6 +27,7 @@ import StaffManagement from '../components/StaffManagement';
 import NotificationManagement from '../components/NotificationManagement';
 import TransactionDownload from '../components/TransactionDownload';
 import UserManagement from '../components/UserManagement';
+import PropertyManagement from '../components/PropertyManagement';
 import { purgeDemoData, flushSystem, syncRealData, getSystemStats } from '../utils/databasePurge';
 
 interface AdminDashboardProps {
@@ -50,7 +51,7 @@ interface BookingRequest {
   services?: string[];
 }
 
-type AdminSection = 'dashboard' | 'admin-dashboard' | 'requests' | 'guests' | 'services' | 'reports' | 'listings' | 'bookings' | 'events' | 'tasks' | 'staff' | 'notifications' | 'transactions' | 'users' | 'analytics' | 'overview' | 'ledger';
+type AdminSection = 'dashboard' | 'admin-dashboard' | 'requests' | 'guests' | 'services' | 'reports' | 'listings' | 'bookings' | 'events' | 'tasks' | 'staff' | 'notifications' | 'transactions' | 'users' | 'properties' | 'analytics' | 'overview' | 'ledger';
 
 const MOCK_ARRIVALS = [
   { id: 'arr-1', guestName: 'Adewale Johnson', initials: 'AJ', tier: 'vip' as const, listingTitle: 'The Ikoyi Penthouse', unitCode: 'UNIT 402', status: 'en_route' as const, eta: '8 mins away' },
@@ -770,6 +771,18 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                 transition={{ duration: 0.25 }}
               >
                 <UserManagement />
+              </motion.div>
+            )}
+
+            {activeSection === 'properties' && (
+              <motion.div
+                key="properties"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+              >
+                <PropertyManagement />
               </motion.div>
             )}
 
