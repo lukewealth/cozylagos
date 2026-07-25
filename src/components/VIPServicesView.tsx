@@ -8,7 +8,6 @@ import {
 } from 'lucide-react';
 import { VIP_SERVICES, VIPService, getAllVIPServices } from '../data/vipServices';
 import { useCart } from '../context/CartContext';
-import Tooltip from './ui/Tooltip';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -121,15 +120,13 @@ function ServiceCard({ service, onSelect, viewMode }: { service: VIPService; onS
               <span className="text-sm font-bold text-gold-dark">
                 ₦{service.price.toLocaleString()} <span className="text-[9px] text-charcoal/40 font-normal">/ {service.priceUnit.replace('per_', '')}</span>
               </span>
-              <Tooltip content="Add to Cart" description={`Add ${service.title} to your cart for ${service.price.toLocaleString()}`}>
-                <button
-                  onClick={(e) => { e.stopPropagation(); addServiceToCart({ id: service.id, title: service.title, category: service.category, price: service.price, providerName: service.providerName, image: service.image }); }}
-                  className="text-xs font-semibold text-gold-dark hover:text-charcoal hover:bg-gold/10 px-2 py-1 rounded-lg transition-all flex items-center gap-1"
-                >
-                  <ShoppingCart className="w-3 h-3" />
-                  Add
-                </button>
-              </Tooltip>
+              <button
+                onClick={(e) => { e.stopPropagation(); addServiceToCart({ id: service.id, title: service.title, category: service.category, price: service.price, providerName: service.providerName, image: service.image }); }}
+                className="text-xs font-semibold text-gold-dark hover:text-charcoal hover:bg-gold/10 px-2 py-1 rounded-lg transition-all flex items-center gap-1"
+              >
+                <ShoppingCart className="w-3 h-3" />
+                Add
+              </button>
             </div>
           </div>
         </div>
@@ -215,15 +212,13 @@ function ServiceCard({ service, onSelect, viewMode }: { service: VIPService; onS
             <span className="text-sm font-bold text-gold-dark">
               ₦{service.price.toLocaleString()}
             </span>
-            <Tooltip content="Add to Cart" description={`Book ${service.title} for ${service.price.toLocaleString()}`}>
-              <button
-                onClick={(e) => { e.stopPropagation(); addServiceToCart({ id: service.id, title: service.title, category: service.category, price: service.price, providerName: service.providerName, image: service.image }); }}
-                className="text-xs font-semibold text-gold-dark hover:text-charcoal hover:bg-gold/10 px-3 py-1.5 rounded-lg transition-all flex items-center gap-1"
-              >
-                <ShoppingCart className="w-3 h-3" />
-                Add to Cart
-              </button>
-            </Tooltip>
+            <button
+              onClick={(e) => { e.stopPropagation(); addServiceToCart({ id: service.id, title: service.title, category: service.category, price: service.price, providerName: service.providerName, image: service.image }); }}
+              className="text-xs font-semibold text-gold-dark hover:text-charcoal hover:bg-gold/10 px-3 py-1.5 rounded-lg transition-all flex items-center gap-1"
+            >
+              <ShoppingCart className="w-3 h-3" />
+              Add to Cart
+            </button>
           </div>
         </div>
       </div>
@@ -362,20 +357,18 @@ function ServiceDetailPanel({ service, onClose }: { service: VIPService; onClose
               </div>
             </div>
 
-            <Tooltip content="Add to Cart" description={`Add ${quantity}x ${service.title} for ₦${(service.price * quantity).toLocaleString()}`}>
-              <button
-                onClick={() => {
-                  for (let i = 0; i < quantity; i++) {
-                    addServiceToCart({ id: service.id, title: service.title, category: service.category, price: service.price, providerName: service.providerName, image: service.image });
-                  }
-                  onClose();
-                }}
-                className="w-full py-3.5 bg-gold text-charcoal font-bold text-sm rounded-xl hover:bg-gold-dark hover:text-parchment hover:shadow-lg transition-all flex items-center justify-center gap-2"
-              >
-                <ShoppingCart className="w-4 h-4" />
-                Add to Cart — ₦{(service.price * quantity).toLocaleString()}
-              </button>
-            </Tooltip>
+            <button
+              onClick={() => {
+                for (let i = 0; i < quantity; i++) {
+                  addServiceToCart({ id: service.id, title: service.title, category: service.category, price: service.price, providerName: service.providerName, image: service.image });
+                }
+                onClose();
+              }}
+              className="w-full py-3.5 bg-gold text-charcoal font-bold text-sm rounded-xl hover:bg-gold-dark hover:text-parchment hover:shadow-lg transition-all flex items-center justify-center gap-2"
+            >
+              <ShoppingCart className="w-4 h-4" />
+              Add to Cart — ₦{(service.price * quantity).toLocaleString()}
+            </button>
           </div>
         </div>
       </motion.div>
@@ -525,67 +518,58 @@ export default function VIPServicesView({ showHero = true }: { showHero?: boolea
       <div className="sticky top-20 z-40 bg-parchment/90 backdrop-blur-xl border-b border-charcoal/5">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20">
           <div className="flex items-center justify-between py-3 sm:py-4 gap-4">
-            <Tooltip content="Search Services" description="Find services by name, description, or location">
-              <div className="relative flex-1 max-w-xs">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-charcoal/40" />
-                <input
-                  type="text"
-                  placeholder="Search services..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 bg-white border border-charcoal/10 rounded-full text-xs focus:outline-none focus:ring-1 focus:ring-gold"
-                />
-              </div>
-            </Tooltip>
+            <div className="relative flex-1 max-w-xs">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-charcoal/40" />
+              <input
+                type="text"
+                placeholder="Search services..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-4 py-2 bg-white border border-charcoal/10 rounded-full text-xs focus:outline-none focus:ring-1 focus:ring-gold"
+              />
+            </div>
             <div className="flex gap-2 overflow-x-auto scrollbar-hide flex-1" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              <Tooltip content="All Services" description="View all available VIP services across all categories">
+              <button
+                onClick={() => { setActiveCategory('all'); setSearchQuery(''); }}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-300 shrink-0 ${
+                  activeCategory === 'all' && !searchQuery
+                    ? 'bg-charcoal text-white shadow-lg shadow-charcoal/20'
+                    : 'bg-white/70 text-charcoal/60 hover:bg-white hover:text-charcoal border border-charcoal/5'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">All Services</span>
+                <span className="sm:hidden">All</span>
+              </button>
+              {VIP_SERVICES.map((cat) => (
                 <button
-                  onClick={() => { setActiveCategory('all'); setSearchQuery(''); }}
+                  key={cat.id}
+                  onClick={() => { setActiveCategory(cat.id); setSearchQuery(''); }}
                   className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-300 shrink-0 ${
-                    activeCategory === 'all' && !searchQuery
+                    activeCategory === cat.id && !searchQuery
                       ? 'bg-charcoal text-white shadow-lg shadow-charcoal/20'
                       : 'bg-white/70 text-charcoal/60 hover:bg-white hover:text-charcoal border border-charcoal/5'
                   }`}
                 >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">All Services</span>
-                  <span className="sm:hidden">All</span>
+                  {iconMap[cat.icon]}
+                  <span className="hidden sm:inline">{cat.title}</span>
+                  <span className="sm:hidden">{cat.title.split(' ')[0]}</span>
                 </button>
-              </Tooltip>
-              {VIP_SERVICES.map((cat) => (
-                <Tooltip key={cat.id} content={cat.title} description={cat.description}>
-                  <button
-                    onClick={() => { setActiveCategory(cat.id); setSearchQuery(''); }}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-300 shrink-0 ${
-                      activeCategory === cat.id && !searchQuery
-                        ? 'bg-charcoal text-white shadow-lg shadow-charcoal/20'
-                        : 'bg-white/70 text-charcoal/60 hover:bg-white hover:text-charcoal border border-charcoal/5'
-                    }`}
-                  >
-                    {iconMap[cat.icon]}
-                    <span className="hidden sm:inline">{cat.title}</span>
-                    <span className="sm:hidden">{cat.title.split(' ')[0]}</span>
-                  </button>
-                </Tooltip>
               ))}
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              <Tooltip content="Grid View" description="Display services in a grid layout">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-charcoal text-white shadow-md' : 'bg-white/70 text-charcoal/60 hover:bg-white hover:text-charcoal'}`}
-                >
-                  <Grid3X3 className="w-4 h-4" />
-                </button>
-              </Tooltip>
-              <Tooltip content="List View" description="Display services in a compact list layout">
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-charcoal text-white shadow-md' : 'bg-white/70 text-charcoal/60 hover:bg-white hover:text-charcoal'}`}
-                >
-                  <List className="w-4 h-4" />
-                </button>
-              </Tooltip>
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-charcoal text-white shadow-md' : 'bg-white/70 text-charcoal/60 hover:bg-white hover:text-charcoal'}`}
+              >
+                <Grid3X3 className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-charcoal text-white shadow-md' : 'bg-white/70 text-charcoal/60 hover:bg-white hover:text-charcoal'}`}
+              >
+                <List className="w-4 h-4" />
+              </button>
             </div>
           </div>
         </div>

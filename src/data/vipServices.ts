@@ -47,8 +47,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/36497917/pexels-photo-36497917.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/36497917/pexels-photo-36497917.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36497918/pexels-photo-36497918.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36467274/pexels-photo-36467274.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/3757943/pexels-photo-3757943.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Hot Stones', 'Aromatherapy', 'Private Room', 'Complimentary Tea'],
         providerName: 'Serenity Spa Ikoyi',
@@ -69,8 +69,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/36436448/pexels-photo-36436448.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/36436448/pexels-photo-36436448.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36497917/pexels-photo-36497917.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36467274/pexels-photo-36467274.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/3757944/pexels-photo-3757944.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/3757945/pexels-photo-3757945.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Steam Room', 'Body Scrub', 'Clay Mask', 'Relaxation Lounge'],
         providerName: 'The Wellness Hub',
@@ -91,8 +91,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/36467274/pexels-photo-36467274.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/36467274/pexels-photo-36467274.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36497917/pexels-photo-36497917.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36436448/pexels-photo-36436448.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/3757946/pexels-photo-3757946.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/3757947/pexels-photo-3757947.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Couples Suite', 'Champagne', 'Strawberries', 'Rose Petals'],
         providerName: 'Glow Beauty Lounge',
@@ -122,8 +122,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/30699431/pexels-photo-30699431.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/30699431/pexels-photo-30699431.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/33418521/pexels-photo-33418521.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36960650/pexels-photo-36960650.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043902/pexels-photo-1043902.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043903/pexels-photo-1043903.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Hot Towel', 'Beard Trim', 'Styling', 'Complimentary Drink'],
         providerName: 'The Gentlemen\'s Quarter',
@@ -144,8 +144,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/33418521/pexels-photo-33418521.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/33418521/pexels-photo-33418521.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/30699431/pexels-photo-30699431.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36960650/pexels-photo-36960650.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043904/pexels-photo-1043904.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043905/pexels-photo-1043905.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Facial', 'Manicure', 'Pedicure', 'Shoulder Massage'],
         providerName: 'Luxe Barbershop VI',
@@ -166,8 +166,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/36960650/pexels-photo-36960650.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/36960650/pexels-photo-36960650.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/30699431/pexels-photo-30699431.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/33418521/pexels-photo-33418521.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043906/pexels-photo-1043906.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043907/pexels-photo-1043907.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Mobile Service', 'Sterilized Equipment', 'Flexible Scheduling'],
         providerName: 'Mobile Grooming Co.',
@@ -197,8 +197,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/36790085/pexels-photo-36790085.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/36790085/pexels-photo-36790085.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36445251/pexels-photo-36445251.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/16114746/pexels-photo-16114746.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/264507/pexels-photo-264507.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/264508/pexels-photo-264508.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Style Consultation', 'Priority Access', 'VIP Lounge', 'Complimentary Parking'],
         providerName: 'Palm Mall Concierge',
@@ -219,8 +219,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/36445251/pexels-photo-36445251.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/36445251/pexels-photo-36445251.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36790085/pexels-photo-36790085.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/16114746/pexels-photo-16114746.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/264509/pexels-photo-264509.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/264510/pexels-photo-264510.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Private Transport', 'Designer Access', 'Fitting Sessions', 'Lunch Included'],
         providerName: 'Lagos Style Tours',
@@ -241,8 +241,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/16114746/pexels-photo-16114746.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/16114746/pexels-photo-16114746.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36790085/pexels-photo-36790085.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36445251/pexels-photo-36445251.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/264511/pexels-photo-264511.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/264512/pexels-photo-264512.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Expert Guide', 'Negotiation Tips', 'Cultural Insights'],
         providerName: 'Lekki Market Tours',
@@ -272,8 +272,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/34043569/pexels-photo-34043569.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/34043569/pexels-photo-34043569.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/34043577/pexels-photo-34043577.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/37137276/pexels-photo-37137276.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043908/pexels-photo-1043908.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043909/pexels-photo-1043909.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Court Reservation', 'Equipment Rental', 'Coaching Available', 'Showers'],
         providerName: 'Ikoyi Club',
@@ -294,8 +294,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/38277835/pexels-photo-38277835.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/38277835/pexels-photo-38277835.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/34043569/pexels-photo-34043569.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/34043577/pexels-photo-34043577.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043910/pexels-photo-1043910.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043911/pexels-photo-1043911.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['18 Holes', 'Professional Caddy', 'Club Rental', 'Cart Included'],
         providerName: 'Eko Atlantic Golf',
@@ -316,8 +316,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/14346826/pexels-photo-14346826.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/14346826/pexels-photo-14346826.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/34043569/pexels-photo-34043569.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/34043577/pexels-photo-34043577.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043912/pexels-photo-1043912.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043913/pexels-photo-1043913.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Olympic Pool', 'Towel Service', 'Locker Room', 'Lifeguard'],
         providerName: 'Lekki Sports Club',
@@ -347,8 +347,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/33832205/pexels-photo-33832205.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/33832205/pexels-photo-33832205.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/34043577/pexels-photo-34043577.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/37137276/pexels-photo-37137276.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043914/pexels-photo-1043914.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043915/pexels-photo-1043915.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Personal Trainer', 'Custom Plan', 'Equipment Access', 'Nutrition Tips'],
         providerName: 'The Fitness Hub VI',
@@ -369,8 +369,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/33832205/pexels-photo-33832205.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/34043577/pexels-photo-34043577.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043916/pexels-photo-1043916.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043917/pexels-photo-1043917.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Private Session', 'All Levels', 'Mats Provided', 'Meditation'],
         providerName: 'Zen Yoga Studio',
@@ -391,8 +391,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/37137276/pexels-photo-37137276.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/37137276/pexels-photo-37137276.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/33832205/pexels-photo-33832205.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/34043577/pexels-photo-34043577.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043918/pexels-photo-1043918.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043919/pexels-photo-1043919.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Certified Coach', 'Group or Private', 'Equipment Provided', 'Showers'],
         providerName: 'CrossFit Lagos',
@@ -422,8 +422,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/36960650/pexels-photo-36960650.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/36960650/pexels-photo-36960650.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/30699431/pexels-photo-30699431.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/33418521/pexels-photo-33418521.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043920/pexels-photo-1043920.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043921/pexels-photo-1043921.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Same-Day Service', 'Pickup & Delivery', 'Up to 10kg', 'Eco-Friendly'],
         providerName: 'Lagos Laundry Mate',
@@ -444,8 +444,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/30699431/pexels-photo-30699431.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/30699431/pexels-photo-30699431.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36960650/pexels-photo-36960650.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/33418521/pexels-photo-33418521.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043922/pexels-photo-1043922.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043923/pexels-photo-1043923.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Professional Cleaning', '48-Hour Turnaround', 'Pickup & Delivery', 'Garment Care'],
         providerName: 'Elite Dry Cleaners',
@@ -466,8 +466,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/33418521/pexels-photo-33418521.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/33418521/pexels-photo-33418521.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/30699431/pexels-photo-30699431.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36960650/pexels-photo-36960650.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043924/pexels-photo-1043924.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043925/pexels-photo-1043925.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Mobile Service', 'Steam Press', 'Garment Steaming', 'Quick Turnaround'],
         providerName: 'Mobile Valet Service',
@@ -497,8 +497,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/31095002/pexels-photo-31095002.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/31095002/pexels-photo-31095002.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/13915043/pexels-photo-13915043.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/37624176/pexels-photo-37624176.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043926/pexels-photo-1043926.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043927/pexels-photo-1043927.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['5-Course Meal', 'Ingredients Included', 'Wine Pairing', 'Clean-Up'],
         providerName: 'Chef Emeka\'s Kitchen',
@@ -519,8 +519,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/13915043/pexels-photo-13915043.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/13915043/pexels-photo-13915043.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/31095002/pexels-photo-31095002.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/37624176/pexels-photo-37624176.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043928/pexels-photo-1043928.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043929/pexels-photo-1043929.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Traditional Cuisine', 'Family Style', 'Desserts Included', 'Cultural Experience'],
         providerName: 'Mama Put Premium',
@@ -541,8 +541,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/37624176/pexels-photo-37624176.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/37624176/pexels-photo-37624176.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/31095002/pexels-photo-31095002.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/13915043/pexels-photo-13915043.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043930/pexels-photo-1043930.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043931/pexels-photo-1043931.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Fresh Preparation', 'Continental or Local', 'Up to 6 Guests', 'Coffee & Tea'],
         providerName: 'Morning Glory Chef',
@@ -572,8 +572,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/31951217/pexels-photo-31951217.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/31951217/pexels-photo-31951217.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36602313/pexels-photo-36602313.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/30402282/pexels-photo-30402282.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043932/pexels-photo-1043932.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043933/pexels-photo-1043933.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['Professional Photographer', '50 Edited Images', 'Location Scouting', 'Digital Delivery'],
         providerName: 'Lagos Lens Studio',
@@ -594,8 +594,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/16114743/pexels-photo-16114743.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/16114743/pexels-photo-16114743.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/31951217/pexels-photo-31951217.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/36602313/pexels-photo-36602313.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043934/pexels-photo-1043934.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043935/pexels-photo-1043935.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['4K Video', 'Highlight Reel', 'Full Footage', 'Drone Shots'],
         providerName: 'Cinematic Lagos',
@@ -616,8 +616,8 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.pexels.com/photos/30402282/pexels-photo-30402282.jpeg?auto=compress&cs=tinysrgb&w=800',
         images: [
           'https://images.pexels.com/photos/30402282/pexels-photo-30402282.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/31951217/pexels-photo-31951217.jpeg?auto=compress&cs=tinysrgb&w=800',
-          'https://images.pexels.com/photos/16114743/pexels-photo-16114743.jpeg?auto=compress&cs=tinysrgb&w=800'
+          'https://images.pexels.com/photos/1043936/pexels-photo-1043936.jpeg?auto=compress&cs=tinysrgb&w=800',
+          'https://images.pexels.com/photos/1043937/pexels-photo-1043937.jpeg?auto=compress&cs=tinysrgb&w=800'
         ],
         amenities: ['20 Photos', '5 Reels', 'Social Media Ready', 'Quick Turnaround'],
         providerName: 'Content House Lagos',
