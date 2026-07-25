@@ -11,7 +11,6 @@ import {
   updateProfile
 } from 'firebase/auth';
 import { auth } from './firebase';
-import { emailService } from './emailService';
 
 const googleProvider = new GoogleAuthProvider();
 const appleProvider = new OAuthProvider('apple.com');
@@ -23,10 +22,6 @@ export const firebaseAuth = {
       
       if (userName && userCredential.user) {
         await updateProfile(userCredential.user, { displayName: userName });
-      }
-
-      if (userName && userRole) {
-        await emailService.sendWelcomeEmail(email, userName, userRole);
       }
 
       return { success: true, user: userCredential.user };
@@ -50,10 +45,6 @@ export const firebaseAuth = {
       const user = result.user;
       const additionalInfo = (result as any).additionalUserInfo;
 
-      if (additionalInfo?.isNewUser && user.email && user.displayName) {
-        await emailService.sendWelcomeEmail(user.email, user.displayName, 'user');
-      }
-
       return { success: true, user, isNewUser: additionalInfo?.isNewUser };
     } catch (error: any) {
       return { success: false, error: error.message };
@@ -65,10 +56,6 @@ export const firebaseAuth = {
       const result = await signInWithPopup(auth, appleProvider);
       const user = result.user;
       const additionalInfo = (result as any).additionalUserInfo;
-
-      if (additionalInfo?.isNewUser && user.email && user.displayName) {
-        await emailService.sendWelcomeEmail(user.email, user.displayName, 'user');
-      }
 
       return { success: true, user, isNewUser: additionalInfo?.isNewUser };
     } catch (error: any) {
@@ -95,7 +82,7 @@ export const firebaseAuth = {
 
   sendOTP: async (email: string, userName?: string, userRole?: string) => {
     try {
-      const response = await fetch('/api/auth/otp/send-otp', {
+      const response = await fetch('/api/auth/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, userName, userRole }),
@@ -110,7 +97,7 @@ export const firebaseAuth = {
 
   verifyOTP: async (email: string, otp: string) => {
     try {
-      const response = await fetch('/api/auth/otp/verify-otp', {
+      const response = await fetch('/api/auth/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp }),
@@ -125,7 +112,7 @@ export const firebaseAuth = {
 
   resendOTP: async (email: string, userName?: string, userRole?: string) => {
     try {
-      const response = await fetch('/api/auth/otp/resend-otp', {
+      const response = await fetch('/api/auth/resend-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, userName, userRole }),
