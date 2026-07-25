@@ -62,9 +62,9 @@ const categories: Category[] = [
         images: ['/assets/images/explore/lekki-conservation-centre.jpeg', '/assets/images/secondary/lekki-conservation-2.jpg', '/assets/images/secondary/lekki-conservation-3.jpeg']
       },
       {
-        id: 'p2', title: 'LUFASI Nature Park', description: 'Serene nature reserve with hiking trails and peaceful picnic spots.', location: 'Lekki-Epe Expressway', rating: 4.5, price: '3,000', icon: <TreePine className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Hiking trails', 'Wildlife', 'Picnics'],
-        image: '/assets/images/secondary/lekki-conservation-2.jpg',
-        images: ['/assets/images/secondary/lekki-conservation-2.jpg', '/assets/images/secondary/lekki-conservation-3.jpeg', '/assets/images/explore/lekki-conservation-centre.jpeg']
+        id: 'p2', title: 'LUFASI Nature Park', description: 'Serene nature reserve with hiking trails and peaceful picnic spots.', location: 'Lekki-Epe Expressway', rating: 4.5, price: '₦3,000', icon: <TreePine className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Hiking trails', 'Wildlife', 'Picnics'],
+        image: '/assets/images/explore/lekki-conservation-centre.jpeg',
+        images: ['/assets/images/explore/lekki-conservation-centre.jpeg']
       },
     ]
   },
@@ -122,7 +122,7 @@ const categories: Category[] = [
       {
         id: 'f3', title: 'Izanagi Restaurant', description: 'Premium Japanese dining with authentic sushi and teppanyaki.', location: 'Victoria Island', rating: 4.8, price: '₦₦₦', icon: <UtensilsCrossed className="w-6 h-6" />, duration: '2-3 hours', highlights: ['Japanese cuisine', 'Sushi bar', 'Teppanyaki'],
         image: '/assets/images/explore/izanagi-restaurant.webp',
-        images: ['/assets/images/explore/izanagi-restaurant.webp', '/assets/images/explore/rsvp-restaurant.jpg']
+        images: ['/assets/images/explore/izanagi-restaurant.webp']
       },
       {
         id: 'n1', title: 'Quilox Nightclub', description: 'Lagos\'s most exclusive nightclub with world-class DJs.', location: 'Victoria Island', rating: 4.7, price: '₦₦', icon: <Music className="w-6 h-6" />, duration: '4-6 hours', highlights: ['VIP tables', 'World-class DJs', 'Exclusive'],
@@ -156,7 +156,7 @@ const categories: Category[] = [
       {
         id: 's2', title: 'Ikeja City Mall', description: 'Lagos\'s largest mall with 150+ stores, cinema, and international brands.', location: 'Ikeja', rating: 4.5, price: 'Free Entry', icon: <ShoppingBag className="w-6 h-6" />, duration: '3-5 hours', highlights: ['150+ stores', 'Cinema', 'International brands'],
         image: '/assets/images/explore/ikeja-city-mall.jpg',
-        images: ['/assets/images/explore/ikeja-city-mall.jpg', '/assets/images/explore/alara-lagos.webp']
+        images: ['/assets/images/explore/ikeja-city-mall.jpg']
       },
       {
         id: 's3', title: 'Balogun Market', description: 'Lagos\'s largest market — fabrics, fashion, and authentic bargaining.', location: 'Lagos Island', rating: 4.3, price: '', icon: <ShoppingBag className="w-6 h-6" />, duration: '2-4 hours', highlights: ['Local market', 'Fabrics', 'Authentic experience'],
@@ -195,7 +195,7 @@ const categories: Category[] = [
       {
         id: 't3', title: 'Private Yacht Experience', description: 'Luxury yacht charter with crew, catering, and waterway exploration.', location: 'Victoria Island', rating: 4.9, price: '₦500,000', icon: <Sailboat className="w-6 h-6" />, duration: '4-6 hours', highlights: ['Private yacht', 'Crew service', 'Catering'],
         image: 'https://images.pexels.com/photos/37405043/pexels-photo-37405043.jpeg?auto=compress&cs=tinysrgb&w=800',
-        images: ['https://images.pexels.com/photos/37405043/pexels-photo-37405043.jpeg?auto=compress&cs=tinysrgb&w=800', '/assets/images/explore/lekki-lagoon-sunset-cruise.avif']
+        images: ['https://images.pexels.com/photos/37405043/pexels-photo-37405043.jpeg?auto=compress&cs=tinysrgb&w=800']
       },
       {
         id: 't4', title: 'Lagos Food Tour', description: 'Gastronomic adventure — taste 10+ local dishes with a foodie guide.', location: 'Surulere & Yaba', rating: 4.7, price: '₦25,000', icon: <ChefHat className="w-6 h-6" />, duration: '4 hours', highlights: ['10+ dishes', 'Local guide', 'Food adventure'],
@@ -203,9 +203,9 @@ const categories: Category[] = [
         images: ['/assets/images/explore/lagos-food-tour.jpg', '/assets/images/secondary/lagos-food-tour-2.jpeg', '/assets/images/secondary/lagos-food-tour-3.webp']
       },
       {
-        id: 't5', title: 'Corporate Lagos Experience', description: 'Tailored tour for business visitors — innovation hubs and networking.', location: 'VI & Ikoyi', rating: 4.7, price: '50,000', icon: <Car className="w-6 h-6" />, duration: '4 hours', highlights: ['Business districts', 'Innovation hubs', 'Networking'],
+        id: 't5', title: 'Corporate Lagos Experience', description: 'Tailored tour for business visitors — innovation hubs and networking.', location: 'VI & Ikoyi', rating: 4.7, price: '₦50,000', icon: <Car className="w-6 h-6" />, duration: '4 hours', highlights: ['Business districts', 'Innovation hubs', 'Networking'],
         image: '/assets/images/explore/corporate-lagos-experience.png',
-        images: ['/assets/images/explore/corporate-lagos-experience.png', '/assets/images/explore/alara-lagos.webp']
+        images: ['/assets/images/explore/corporate-lagos-experience.png']
       },
     ]
   },

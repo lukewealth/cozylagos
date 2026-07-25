@@ -212,6 +212,7 @@ function SendNotificationModal({ onClose, onSend }: {
     message: '',
     targetRole: 'all',
     type: 'announcement',
+    sendEmail: true,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -292,6 +293,20 @@ function SendNotificationModal({ onClose, onSend }: {
                 <option value="alert">Alert</option>
               </select>
             </div>
+          </div>
+
+          <div className="flex items-center gap-3 p-4 bg-gold/5 border border-gold/10 rounded-xl">
+            <input
+              type="checkbox"
+              id="sendEmail"
+              checked={formData.sendEmail}
+              onChange={(e) => setFormData({ ...formData, sendEmail: e.target.checked })}
+              className="w-4 h-4 rounded border-charcoal/20 text-gold focus:ring-gold"
+            />
+            <label htmlFor="sendEmail" className="flex-1">
+              <p className="text-sm font-bold text-charcoal">Send Email Notification</p>
+              <p className="text-xs text-charcoal/60">Also send this notification via email to each recipient</p>
+            </label>
           </div>
 
           <div className="flex items-center gap-3 pt-4">

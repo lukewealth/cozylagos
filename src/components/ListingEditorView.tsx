@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft, Save, Trash2, Plus, Info, DollarSign, MapPin, Image } from 'lucide-react';
 import { Listing } from '../types';
+import api from '../services/api';
 
 interface ListingEditorViewProps {
   listing: Listing;
@@ -21,7 +22,6 @@ export default function ListingEditorView({ listing, onCancel, onSave }: Listing
     setIsSaving(true);
     try {
       try {
-        const api = (await import('../services/api')).default;
         await api.listings.update({
           id: formData.id,
           title: formData.title,

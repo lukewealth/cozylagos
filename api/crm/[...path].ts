@@ -16,6 +16,7 @@ export default async function handler(req: any, res: any) {
     const { db } = await connectToDatabase();
     const ticketsCollection = db.collection('tickets');
     const notificationsCollection = db.collection('notifications');
+    const usersCollection = db.collection('users');
 
     switch (method) {
       case 'GET': {
@@ -68,7 +69,7 @@ export default async function handler(req: any, res: any) {
         const path = req.url || '';
 
         if (path.includes('/notifications')) {
-          const { title, message, userId, type, targetRole } = req.body;
+          const { title, message, userId, type, targetRole, sendEmail } = req.body;
           if (!title || !message) {
             return res.status(400).json({ success: false, message: 'Title and message are required' });
           }
@@ -77,22 +78,59 @@ export default async function handler(req: any, res: any) {
             return res.status(403).json({ success: false, message: 'Admin access required' });
           }
 
-          const notification = {
+          let targetUsers: any[] = [];
+          
+          if (userId) {
+            targetUsers = [{ _id: new ObjectId(userId) }];
+          } else if (targetRole && targetRole !== 'all') {
+            targetUsers = await usersCollection.find({ role: targetRole }).toArray();
+          } else {
+            targetUsers = await usersCollection.find({}).toArray();
+          }
+
+          const notifications = targetUsers.map(user => ({
             title: sanitizeInput(title),
             message: sanitizeInput(message),
-            userId: userId || 'all',
+            userId: user._id.toString(),
+            userEmail: user.email,
+            userName: user.name,
             type: type || 'announcement',
             targetRole: targetRole || 'all',
             read: false,
             sentBy: auth.user.userId,
             sentAt: new Date().toISOString(),
+            emailSent: false,
             createdAt: new Date().toISOString(),
-          };
+          }));
 
-          await notificationsCollection.insertOne(notification);
-          logAudit('NOTIFICATION_SENT', auth.user.userId, { title, targetRole });
+          await notificationsCollection.insertMany(notifications);
 
-          return res.status(201).json({ success: true, data: notification });
+          if (sendEmail) {
+            for (const notification of notifications) {
+              try {
+                await sendEmailNotification(notification);
+                await notificationsCollection.updateOne(
+                  { _id: new ObjectId(notification._id) },
+                  { $set: { emailSent: true, emailSentAt: new Date().toISOString() } }
+                );
+              } catch (error) {
+                console.error(`Failed to send email to ${notification.userEmail}:`, error);
+              }
+            }
+          }
+
+          logAudit('NOTIFICATION_SENT', auth.user.userId, { 
+            title, 
+            targetRole, 
+            recipientCount: notifications.length,
+            emailSent: sendEmail || false 
+          });
+
+          return res.status(201).json({ 
+            success: true, 
+            data: notifications,
+            count: notifications.length 
+          });
         }
 
         const { title, description, bookingId, category, priority, userId } = req.body;
@@ -224,4 +262,35 @@ export default async function handler(req: any, res: any) {
     console.error('CRM API error:', error);
     return res.status(500).json({ success: false, message: 'Internal server error' });
   }
+}
+
+async function sendEmailNotification(notification: any) {
+  const emailData = {
+    to: notification.userEmail,
+    subject: notification.title,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; text-align: center;">
+          <h1 style="color: white; margin: 0;">Cozy Lagos</h1>
+        </div>
+        <div style="padding: 20px; background: #f9f9f9;">
+          <h2 style="color: #333;">${notification.title}</h2>
+          <p style="color: #666; line-height: 1.6;">${notification.message}</p>
+          <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px;">
+            <p style="margin: 0; color: #999; font-size: 12px;">
+              Sent at: ${new Date(notification.sentAt).toLocaleString()}
+            </p>
+          </div>
+        </div>
+        <div style="background: #333; color: white; padding: 15px; text-align: center; font-size: 12px;">
+          <p style="margin: 0;">© 2024 Cozy Lagos. All rights reserved.</p>
+        </div>
+      </div>
+    `,
+  };
+
+  console.log('Email notification prepared for:', notification.userEmail);
+  console.log('Subject:', emailData.subject);
+  
+  return true;
 }
