@@ -88,6 +88,7 @@ function AppContent() {
   const handleTabChange = (tab: any) => {
     setSelectedListing(null);
     setActiveTab(tab);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   
   const handlePublishListing = (newListing: Listing) => {

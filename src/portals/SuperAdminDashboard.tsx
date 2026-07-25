@@ -51,6 +51,11 @@ export default function SuperAdminDashboard() {
     setTimeout(() => setCopiedEmail(null), 2000);
   };
 
+  const handleSectionChange = (section: 'overview' | 'users' | 'infrastructure') => {
+    setActiveSection(section);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          user.email.toLowerCase().includes(searchQuery.toLowerCase());
@@ -77,7 +82,7 @@ export default function SuperAdminDashboard() {
     <div className="flex min-h-screen bg-parchment">
       <CollapsibleSidebar
         activeTab="super-admin-dashboard"
-        setActiveTab={setActiveSection as any}
+        setActiveTab={handleSectionChange as any}
         userRole="super_admin"
       />
 

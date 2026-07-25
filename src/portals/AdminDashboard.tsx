@@ -104,6 +104,11 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
     logout();
   };
 
+  const handleSectionChange = (section: AdminSection) => {
+    setActiveSection(section);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleConfirmBooking = async (booking: BookingRequest) => {
     setIsProcessing(true);
     try { await api.bookings.confirm(booking.id); } catch { /* local fallback */ }
@@ -198,7 +203,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
     <div className="flex min-h-screen bg-parchment">
       <CollapsibleSidebar
         activeTab={activeSection}
-        setActiveTab={setActiveSection as any}
+        setActiveTab={handleSectionChange as any}
         userRole="admin"
         onLogout={handleLogout}
         onCollapse={setIsSidebarCollapsed}

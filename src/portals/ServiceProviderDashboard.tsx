@@ -61,7 +61,7 @@ export default function ServiceProviderDashboard() {
 
   const backendHealth = useBackendHealth();
 
-  const { data: bookings } = useDatabase('bookings');
+  const { data: bookings, addRecord: updateBooking } = useDatabase('bookings');
   const { data: transactions } = useDatabase('transactions');
   const { data: listings, removeRecord: removeListing, addRecord: updateListing } = useDatabase('listings');
 
@@ -81,6 +81,11 @@ export default function ServiceProviderDashboard() {
   const onDutyCount = MOCK_STAFF.filter(s => s.status === 'on_duty').length;
 
   const handleLogout = () => logout();
+
+  const handleSectionChange = (section: ProviderSection) => {
+    setActiveSection(section);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -102,7 +107,7 @@ export default function ServiceProviderDashboard() {
     updateListing(newListing as any);
     api.listings.create(newListing).catch(() => {});
     showToast({ type: 'success', title: 'Property Published', message: `${newListing.title} is now live` });
-    setActiveSection('listings');
+    handleSectionChange('listings');
   };
 
   const handleDeleteListing = async () => {
@@ -141,7 +146,6 @@ export default function ServiceProviderDashboard() {
     try {
       await api.bookings.confirm(booking.id).catch(() => {});
     } catch {}
-    const { addRecord: updateBooking } = useDatabase('bookings');
     updateBooking({ ...booking, status: 'confirmed', updatedAt: new Date().toISOString() } as any);
     showToast({ type: 'success', title: 'Booking Confirmed', message: `${booking.guestName}'s booking has been confirmed` });
     setShowBookingConfirm(null);
@@ -151,7 +155,6 @@ export default function ServiceProviderDashboard() {
     try {
       await api.bookings.cancel(booking.id).catch(() => {});
     } catch {}
-    const { addRecord: updateBooking } = useDatabase('bookings');
     updateBooking({ ...booking, status: 'cancelled', updatedAt: new Date().toISOString() } as any);
     showToast({ type: 'warning', title: 'Booking Rejected', message: `${booking.guestName}'s booking has been declined` });
     setShowBookingReject(null);
@@ -212,7 +215,7 @@ export default function ServiceProviderDashboard() {
     <div className="flex min-h-screen bg-parchment">
       <CollapsibleSidebar
         activeTab={activeSection}
-        setActiveTab={setActiveSection as any}
+        setActiveTab={handleSectionChange as any}
         userRole="service_provider"
         onLogout={handleLogout}
         onCollapse={setIsSidebarCollapsed}
@@ -439,7 +442,7 @@ export default function ServiceProviderDashboard() {
                     <p className="text-secondary font-body-lg mt-2">Manage your listed properties and availability</p>
                   </div>
                   <button
-                    onClick={() => setActiveSection('wizard')}
+                    onClick={() => handleSectionChange('wizard')}
                     className="px-5 py-2.5 bg-primary text-white font-bold text-sm rounded-xl hover:bg-primary-dark transition-colors flex items-center gap-2 shadow-lg"
                   >
                     <Plus className="w-4 h-4" />
@@ -473,7 +476,7 @@ export default function ServiceProviderDashboard() {
                         <p className="text-sm text-secondary">No properties listed yet.</p>
                         <p className="text-xs text-secondary mt-1 mb-4">Start by adding your first property listing.</p>
                         <button
-                          onClick={() => setActiveSection('wizard')}
+                          onClick={() => handleSectionChange('wizard')}
                           className="px-5 py-2.5 bg-primary text-white font-bold text-sm rounded-xl hover:bg-primary-dark transition-colors inline-flex items-center gap-2"
                         >
                           <Plus className="w-4 h-4" />
@@ -557,7 +560,7 @@ export default function ServiceProviderDashboard() {
               <motion.div key="wizard" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
                 <ListingWizardView
                   onPublishListing={handlePublishListing}
-                  onCancel={() => setActiveSection('listings')}
+                  onCancel={() => handleSectionChange('listings')}
                 />
               </motion.div>
             )}
@@ -785,10 +788,16 @@ export default function ServiceProviderDashboard() {
                             <div className="flex flex-col items-end gap-2">
                               <span className="font-bold text-primary text-lg">₦{(booking.totalAmount || 0).toLocaleString()}</span>
                               <div className="flex gap-2">
-                                <button className="px-4 py-2 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 transition-colors flex items-center gap-1">
+                                <button
+                                  onClick={() => { setSelectedBookingForAction(booking); setShowBookingConfirm(booking.id); }}
+                                  className="px-4 py-2 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 transition-colors flex items-center gap-1"
+                                >
                                   <CheckCircle className="w-3.5 h-3.5" /> Approve
                                 </button>
-                                <button className="px-4 py-2 bg-red-600 text-white rounded-lg text-xs font-bold hover:bg-red-700 transition-colors flex items-center gap-1">
+                                <button
+                                  onClick={() => { setSelectedBookingForAction(booking); setShowBookingReject(booking.id); }}
+                                  className="px-4 py-2 bg-red-600 text-white rounded-lg text-xs font-bold hover:bg-red-700 transition-colors flex items-center gap-1"
+                                >
                                   <XCircle className="w-3.5 h-3.5" /> Decline
                                 </button>
                               </div>
@@ -1013,6 +1022,16 @@ export default function ServiceProviderDashboard() {
         message={`Confirm booking for ${selectedBookingForAction?.guestName || 'guest'} - ${selectedBookingForAction?.listingTitle || 'property'}?`}
         confirmLabel="Confirm Booking"
         variant="success"
+      />
+
+      <ConfirmDialog
+        isOpen={!!showBookingReject}
+        onClose={() => { setShowBookingReject(null); setSelectedBookingForAction(null); }}
+        onConfirm={() => selectedBookingForAction && handleRejectBooking(selectedBookingForAction)}
+        title="Decline Booking"
+        message={`Decline booking for ${selectedBookingForAction?.guestName || 'guest'} - ${selectedBookingForAction?.listingTitle || 'property'}?`}
+        confirmLabel="Decline Booking"
+        variant="danger"
       />
 
       <ToastContainer />

@@ -94,6 +94,11 @@ export default function UserDashboard() {
   const pendingCount = userBookings.filter((b: any) => b.status === 'Pending' || b.status === 'pending').length;
   const confirmedCount = userBookings.filter((b: any) => b.status === 'Confirmed' || b.status === 'confirmed').length;
 
+  const handleSectionChange = (section: UserSection) => {
+    setActiveSection(section);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -230,7 +235,7 @@ export default function UserDashboard() {
         ] as const).map(tab => (
           <button
             key={tab.id}
-            onClick={() => setActiveSection(tab.id)}
+            onClick={() => handleSectionChange(tab.id)}
             className={`flex items-center gap-2 px-4 py-3 text-xs font-bold uppercase tracking-widest border-b-2 transition-all ${
               activeSection === tab.id
                 ? 'border-gold-dark text-charcoal'
