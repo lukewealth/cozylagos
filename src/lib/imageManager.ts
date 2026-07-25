@@ -19,6 +19,7 @@ const EXPLORE_LAGOS_IMAGE_MAP: Record<string, string> = {
   'balogun market': '/assets/images/explore/balogun-market.jpg',
   'lagos island heritage walk': '/assets/images/explore/lagos-island-heritage-walk.jpg',
   'lekki lagoon sunset cruise': '/assets/images/explore/lekki-lagoon-sunset-cruise.avif',
+  'private yacht experience': 'https://images.pexels.com/photos/37405043/pexels-photo-37405043.jpeg?auto=compress&cs=tinysrgb&w=800',
 };
 
 const EXPLORE_LAGOS_SECONDARY_MAP: Record<string, string[]> = {
