@@ -11,6 +11,9 @@ import { ToastProvider, useToast } from './components/Toast';
 import { usePageState } from './hooks/usePageState';
 import { useCloudSync } from './hooks/useCloudSync';
 import { useAnalytics } from './hooks/useAnalytics';
+import { useErrorLogger } from './hooks/useErrorLogger';
+import ErrorBoundary from './components/ErrorBoundary';
+import UniversalSidebar from './components/UniversalSidebar';
 import TopNavBar from './components/TopNavBar';
 import LandingPage from './components/LandingPage';
 import CartDrawer from './components/CartDrawer';
@@ -49,11 +52,35 @@ const AdminDashboard = lazy(() => import('./portals/AdminDashboard'));
 const SuperAdminDashboard = lazy(() => import('./portals/SuperAdminDashboard'));
 
 function AppContent() {
-  const { currentUser, isAuthenticated } = useAuth();
+  const { currentUser, isAuthenticated, logout } = useAuth();
   const { addToast } = useToast();
   const { pageState, updatePageState } = usePageState();
+  const { logError, logWarning } = useErrorLogger();
   useCloudSync();
   useAnalytics();
+
+  // Global error handler
+  useEffect(() => {
+    const handleError = (event: ErrorEvent) => {
+      logError('Global', event.message, event.error, {
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno
+      });
+    };
+
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      logError('Promise', 'Unhandled promise rejection', event.reason instanceof Error ? event.reason : new Error(String(event.reason)));
+    };
+
+    window.addEventListener('error', handleError);
+    window.addEventListener('unhandledrejection', handleUnhandledRejection);
+
+    return () => {
+      window.removeEventListener('error', handleError);
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+    };
+  }, [logError]);
 
   const [activeTab, setActiveTab] = useState<
     'home' | 'explorer' | 'explore-lagos' | 'bundles' | 'signature-experiences' | 'yacht-experience' | 'vip-services' | 'business-lagos' | 'events' | 'favorites' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations' | 'listing-detail' | 'account-settings' | 'notifications' | 'property-listing' | 'admin-cms' | 'sp-cms'
@@ -372,18 +399,27 @@ function AppContent() {
   };
   
   return (
-    <div className="min-h-screen bg-parchment text-charcoal flex flex-col selection:bg-charcoal selection:text-parchment">
-      <TopNavBar
-        activeTab={activeTab}
-        setActiveTab={handleTabChange}
-        cartCount={totalCartCount}
-        onOpenCart={() => setIsCartOpen(true)}
-      />
+    <ErrorBoundary>
+      <div className="min-h-screen bg-parchment text-charcoal flex flex-col selection:bg-charcoal selection:text-parchment">
+        <TopNavBar
+          activeTab={activeTab}
+          setActiveTab={handleTabChange}
+          cartCount={totalCartCount}
+          onOpenCart={() => setIsCartOpen(true)}
+        />
   
-      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} onCheckout={() => setIsCheckoutOpen(true)} />
-      <WhatsAppConcierge {...bookingContext} />
+        <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} onCheckout={() => setIsCheckoutOpen(true)} />
+        <WhatsAppConcierge {...bookingContext} />
   
-      <main className="flex-grow flex flex-col relative">
+        <main className="flex-grow flex flex-col relative">
+          {/* Universal Sidebar for authenticated users */}
+          {isAuthenticated && (
+            <UniversalSidebar
+              activeTab={activeTab}
+              setActiveTab={handleTabChange}
+              onLogout={logout}
+            />
+          )}
         <AnimatePresence mode="wait">
           {isCheckoutOpen ? (
             <motion.div
@@ -561,6 +597,7 @@ function AppContent() {
         )}
       </AnimatePresence>
     </div>
+    </ErrorBoundary>
   );
 }
   
