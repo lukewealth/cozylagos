@@ -103,18 +103,19 @@ export default async function handler(req: any, res: any) {
             createdAt: new Date().toISOString(),
           }));
 
-          await notificationsCollection.insertMany(notifications);
+          const insertResult = await notificationsCollection.insertMany(notifications);
+          const insertedIds = Object.values(insertResult.insertedIds);
 
           if (sendEmail) {
-            for (const notification of notifications) {
+            for (let i = 0; i < notifications.length; i++) {
               try {
-                await sendEmailNotification(notification);
+                await sendEmailNotification(notifications[i]);
                 await notificationsCollection.updateOne(
-                  { _id: new ObjectId(notification._id) },
+                  { _id: insertedIds[i] },
                   { $set: { emailSent: true, emailSentAt: new Date().toISOString() } }
                 );
               } catch (error) {
-                console.error(`Failed to send email to ${notification.userEmail}:`, error);
+                console.error(`Failed to send email to ${notifications[i].userEmail}:`, error);
               }
             }
           }
