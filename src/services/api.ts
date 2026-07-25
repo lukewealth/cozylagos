@@ -5,6 +5,8 @@ interface ApiResponse<T> {
   data?: T;
   error?: string;
   message?: string;
+  count?: number;
+  summary?: any;
 }
 
 async function request<T>(
@@ -30,6 +32,11 @@ async function request<T>(
 
     const data = await response.json();
 
+    if (response.status === 401) {
+      localStorage.removeItem('cozy_lagos_auth_token');
+      window.dispatchEvent(new CustomEvent('auth:logout'));
+    }
+
     if (!response.ok) {
       return {
         success: false,
@@ -41,6 +48,8 @@ async function request<T>(
       success: data.success !== false,
       data: data.data || data,
       message: data.message,
+      count: data.count,
+      summary: data.summary,
     };
   } catch (error) {
     return {
@@ -61,270 +70,168 @@ export const api = {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       }),
-
     register: (data: { email: string; name: string; password: string; role: string }) =>
       request<{ token: string; user: any }>('/auth/register', {
         method: 'POST',
         body: JSON.stringify(data),
       }),
-
-    logout: () => request('/auth/logout', { method: 'POST' }),
-
+    logout: () => {
+      localStorage.removeItem('cozy_lagos_auth_token');
+      return request('/auth/logout', { method: 'POST' });
+    },
     me: () => request<any>('/auth/me'),
+    updateProfile: (data: any) =>
+      request<any>('/auth/me', {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }),
+    changePassword: (currentPassword: string, newPassword: string) =>
+      request<any>('/auth/me', {
+        method: 'PATCH',
+        body: JSON.stringify({ currentPassword, newPassword }),
+      }),
   },
 
   users: {
     getAll: (params?: Record<string, string>) => {
-      const query = params ? '?' + new URLSearchParams(params).toString() : '';
-      return request<any[]>(`/users${query}`);
+      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/users${qs}`);
     },
-
-    create: (data: { email: string; name: string; password: string; role: string; phone?: string }) =>
-      request<any>('/users', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
-
-    update: (data: { id: string; [key: string]: any }) =>
-      request<any>('/users', {
-        method: 'PUT',
-        body: JSON.stringify(data),
-      }),
-
+    getById: (id: string) => request<any>(`/users?id=${id}`),
+    create: (data: any) =>
+      request<any>('/users', { method: 'POST', body: JSON.stringify(data) }),
+    update: (data: any) =>
+      request<any>('/users', { method: 'PUT', body: JSON.stringify(data) }),
     delete: (id: string) =>
-      request<any>('/users', {
-        method: 'DELETE',
-        body: JSON.stringify({ id }),
-      }),
+      request<any>('/users', { method: 'DELETE', body: JSON.stringify({ id }) }),
   },
 
   listings: {
     getAll: (params?: Record<string, string>) => {
-      const query = params ? '?' + new URLSearchParams(params).toString() : '';
-      return request<any[]>(`/listings${query}`);
+      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/listings${qs}`);
     },
-
     getById: (id: string) => request<any>(`/listings?id=${id}`),
-
     create: (data: any) =>
-      request<any>('/listings', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
-
-    update: (data: { id: string; [key: string]: any }) =>
-      request<any>('/listings', {
-        method: 'PUT',
-        body: JSON.stringify(data),
-      }),
-
+      request<any>('/listings', { method: 'POST', body: JSON.stringify(data) }),
+    update: (data: any) =>
+      request<any>('/listings', { method: 'PUT', body: JSON.stringify(data) }),
     delete: (id: string) =>
-      request<any>('/listings', {
-        method: 'DELETE',
-        body: JSON.stringify({ id }),
-      }),
+      request<any>('/listings', { method: 'DELETE', body: JSON.stringify({ id }) }),
   },
 
   bookings: {
     getAll: (params?: Record<string, string>) => {
-      const query = params ? '?' + new URLSearchParams(params).toString() : '';
-      return request<any[]>(`/bookings${query}`);
+      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/bookings${qs}`);
     },
-
-    getById: (id: string) => request<any>(`/bookings?id=${id}`),
-
     create: (data: any) =>
-      request<any>('/bookings', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
-
+      request<any>('/bookings', { method: 'POST', body: JSON.stringify(data) }),
     updateStatus: (id: string, status: string) =>
-      request<any>('/bookings', {
-        method: 'PATCH',
-        body: JSON.stringify({ id, status }),
-      }),
-
-    confirm: (id: string) =>
-      request<any>('/bookings', {
-        method: 'PATCH',
-        body: JSON.stringify({ id, status: 'confirmed' }),
-      }),
-
-    cancel: (id: string) =>
-      request<any>('/bookings', {
-        method: 'PATCH',
-        body: JSON.stringify({ id, status: 'cancelled' }),
-      }),
+      request<any>('/bookings', { method: 'PATCH', body: JSON.stringify({ id, status }) }),
+    confirm: (id: string, notes?: string) =>
+      request<any>('/bookings', { method: 'PATCH', body: JSON.stringify({ id, status: 'confirmed', notes }) }),
+    cancel: (id: string, reason?: string) =>
+      request<any>('/bookings', { method: 'PATCH', body: JSON.stringify({ id, status: 'cancelled', reason }) }),
+    delete: (id: string) =>
+      request<any>('/bookings', { method: 'DELETE', body: JSON.stringify({ id }) }),
   },
 
   services: {
     getAll: (params?: Record<string, string>) => {
-      const query = params ? '?' + new URLSearchParams(params).toString() : '';
-      return request<any[]>(`/services${query}`);
+      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/services${qs}`);
     },
-
-    getByCategory: (category: string) =>
-      request<any[]>(`/services?category=${category}`),
-
+    getByCategory: (category: string) => request<any[]>(`/services?category=${category}`),
     getById: (id: string) => request<any>(`/services?id=${id}`),
-
     create: (data: any) =>
-      request<any>('/services', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
-
-    update: (id: string, data: any) =>
-      request<any>(`/services/${id}`, {
-        method: 'PUT',
-        body: JSON.stringify(data),
-      }),
-
+      request<any>('/services', { method: 'POST', body: JSON.stringify(data) }),
+    update: (data: any) =>
+      request<any>('/services', { method: 'PUT', body: JSON.stringify(data) }),
     delete: (id: string) =>
-      request(`/services/${id}`, { method: 'DELETE' }),
+      request<any>('/services', { method: 'DELETE', body: JSON.stringify({ id }) }),
   },
 
   experiences: {
     getAll: (params?: Record<string, string>) => {
-      const query = params ? '?' + new URLSearchParams(params).toString() : '';
-      return request<any[]>(`/experiences${query}`);
+      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/experiences${qs}`);
     },
-
-    getById: (id: string) => request<any>(`/experiences/${id}`),
-
-    book: (data: any) =>
-      request<any>('/experiences/book', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
+    create: (data: any) =>
+      request<any>('/experiences', { method: 'POST', body: JSON.stringify(data) }),
+    update: (data: any) =>
+      request<any>('/experiences', { method: 'PUT', body: JSON.stringify(data) }),
+    delete: (id: string) =>
+      request<any>('/experiences', { method: 'DELETE', body: JSON.stringify({ id }) }),
   },
 
   transactions: {
     getAll: (params?: Record<string, string>) => {
-      const query = params ? '?' + new URLSearchParams(params).toString() : '';
-      return request<any[]>(`/transactions${query}`);
+      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/transactions${qs}`);
     },
-
     create: (data: any) =>
-      request<any>('/transactions', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
-
+      request<any>('/transactions', { method: 'POST', body: JSON.stringify(data) }),
     processPayout: (id: string) =>
-      request<any>('/transactions', {
-        method: 'PATCH',
-        body: JSON.stringify({ id, status: 'processed' }),
+      request<any>('/transactions', { method: 'PATCH', body: JSON.stringify({ id, status: 'processed' }) }),
+    delete: (id: string) =>
+      request<any>('/transactions', { method: 'DELETE', body: JSON.stringify({ id }) }),
+  },
+
+  staff: {
+    getAll: (params?: Record<string, string>) => {
+      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/staff${qs}`);
+    },
+    create: (data: any) =>
+      request<any>('/staff', { method: 'POST', body: JSON.stringify(data) }),
+    update: (data: any) =>
+      request<any>('/staff', { method: 'PUT', body: JSON.stringify(data) }),
+    patch: (data: any) =>
+      request<any>('/staff', { method: 'PATCH', body: JSON.stringify(data) }),
+    delete: (id: string) =>
+      request<any>('/staff', { method: 'DELETE', body: JSON.stringify({ id }) }),
+  },
+
+  assets: {
+    getAll: (params?: Record<string, string>) => {
+      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/assets${qs}`);
+    },
+    create: (data: any) =>
+      request<any>('/assets', { method: 'POST', body: JSON.stringify(data) }),
+    update: (data: any) =>
+      request<any>('/assets', { method: 'PUT', body: JSON.stringify(data) }),
+    patch: (data: any) =>
+      request<any>('/assets', { method: 'PATCH', body: JSON.stringify(data) }),
+    delete: (id: string) =>
+      request<any>('/assets', { method: 'DELETE', body: JSON.stringify({ id }) }),
+  },
+
+  admin: {
+    getStats: () => request<any>('/admin/stats'),
+    getAudit: (params?: Record<string, string>) => {
+      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any>(`/admin/audit${qs}`);
+    },
+    processPayout: (bookingId: string, amount: number, method?: string) =>
+      request<any>('/admin/process-payout', {
+        method: 'POST',
+        body: JSON.stringify({ bookingId, amount, method }),
       }),
   },
 
   cart: {
     sync: (cartData: any) =>
-      request<any>('/cart/sync', {
-        method: 'POST',
-        body: JSON.stringify(cartData),
-      }),
-
+      request<any>('/cart/sync', { method: 'POST', body: JSON.stringify(cartData) }),
     get: () => request<any>('/cart'),
   },
 
-  admin: {
-    getPendingBookings: () => request<any[]>('/bookings?status=pending'),
-
-    confirmBooking: (id: string, notes?: string) =>
-      request<any>(`/bookings`, {
-        method: 'PATCH',
-        body: JSON.stringify({ id, status: 'confirmed', notes }),
-      }),
-
-    rejectBooking: (id: string, reason: string) =>
-      request<any>(`/bookings`, {
-        method: 'PATCH',
-        body: JSON.stringify({ id, status: 'cancelled', reason }),
-      }),
-
-    getStats: () => request<any>('/admin/stats'),
-
-    getUsers: () => request<any[]>('/users'),
-
-    getTransactions: () => request<any[]>('/transactions'),
-  },
-
-  assets: {
-    getAll: (params?: Record<string, string>) => {
-      const query = params ? '?' + new URLSearchParams(params).toString() : '';
-      return request<any[]>(`/assets${query}`);
-    },
-
-    create: (data: any) =>
-      request<any>('/assets', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
-
-    update: (data: { id: string; [key: string]: any }) =>
-      request<any>('/assets', {
-        method: 'PUT',
-        body: JSON.stringify(data),
-      }),
-
-    patch: (data: { id: string; [key: string]: any }) =>
-      request<any>('/assets', {
-        method: 'PATCH',
-        body: JSON.stringify(data),
-      }),
-
-    delete: (id: string) =>
-      request<any>('/assets', {
-        method: 'DELETE',
-        body: JSON.stringify({ id }),
-      }),
-  },
-
-  staff: {
-    getAll: (params?: Record<string, string>) => {
-      const query = params ? '?' + new URLSearchParams(params).toString() : '';
-      return request<any[]>(`/staff${query}`);
-    },
-
-    create: (data: any) =>
-      request<any>('/staff', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
-
-    update: (data: { id: string; [key: string]: any }) =>
-      request<any>('/staff', {
-        method: 'PUT',
-        body: JSON.stringify(data),
-      }),
-
-    patch: (data: { id: string; [key: string]: any }) =>
-      request<any>('/staff', {
-        method: 'PATCH',
-        body: JSON.stringify(data),
-      }),
-
-    delete: (id: string) =>
-      request<any>('/staff', {
-        method: 'DELETE',
-        body: JSON.stringify({ id }),
-      }),
-  },
-
   whatsapp: {
-    sendBookingConfirmation: (bookingData: any) =>
-      request<any>('/whatsapp/booking-confirmation', {
-        method: 'POST',
-        body: JSON.stringify(bookingData),
-      }),
-
-    sendAdminNotification: (message: string) =>
-      request<any>('/whatsapp/admin-notification', {
-        method: 'POST',
-        body: JSON.stringify({ message }),
-      }),
+    sendBookingConfirmation: (data: any) =>
+      request<any>('/whatsapp/booking-confirmation', { method: 'POST', body: JSON.stringify(data) }),
+    sendAdminNotification: (data: any) =>
+      request<any>('/whatsapp/admin-notification', { method: 'POST', body: JSON.stringify(data) }),
   },
 };
 

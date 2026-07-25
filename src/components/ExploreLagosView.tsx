@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   MapPin, Star, Clock, Waves, TreePine, Building2, Palette, Landmark,
@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useToast } from './Toast';
+import { resolveExploreImage, preloadExploreImages } from '../lib/imageManager';
 
 interface ExploreItem {
   id: string;
@@ -111,6 +112,10 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
   const [selectedItem, setSelectedItem] = useState<ExploreItem | null>(null);
   const { addExperienceToCart, experienceCart } = useCart();
   const { addToast } = useToast();
+
+  useEffect(() => {
+    preloadExploreImages();
+  }, []);
 
   const handleAddToCart = (item: ExploreItem) => {
     const priceNum = parseInt(item.price.replace(/[^\d]/g, '')) || 0;
@@ -407,6 +412,7 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
 function ExperienceCard({ item, index, onClick, onAddToCart }: { item: ExploreItem; index: number; onClick: () => void; onAddToCart: (item: ExploreItem) => void; key?: string | number }) {
   const priceNum = parseInt(item.price.replace(/[^\d]/g, '')) || 0;
   const isInCart = false;
+  const resolvedImage = resolveExploreImage(item.title, item.image);
 
   return (
     <motion.div
@@ -418,9 +424,9 @@ function ExperienceCard({ item, index, onClick, onAddToCart }: { item: ExploreIt
     >
       <div className="bg-white rounded-2xl overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
         <div className="relative h-48 overflow-hidden cursor-pointer" onClick={onClick}>
-          {item.image ? (
+          {resolvedImage ? (
             <img
-              src={item.image}
+              src={resolvedImage}
               alt={item.title}
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               loading="lazy"
@@ -492,6 +498,7 @@ function ExperienceCard({ item, index, onClick, onAddToCart }: { item: ExploreIt
 function ItemDetailModal({ item, onClose, onAddToCart, onBookExperience }: { item: ExploreItem; onClose: () => void; onAddToCart: (item: ExploreItem) => void; onBookExperience?: () => void }) {
   const [guests, setGuests] = useState(1);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const resolvedImage = resolveExploreImage(item.title, item.image);
 
   return (
     <motion.div
@@ -511,8 +518,8 @@ function ItemDetailModal({ item, onClose, onAddToCart, onBookExperience }: { ite
         className="relative w-full max-w-lg bg-parchment rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
       >
         <div className="relative h-56 overflow-hidden">
-          {item.image ? (
-            <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+          {resolvedImage ? (
+            <img src={resolvedImage} alt={item.title} className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-charcoal/80 to-charcoal/60 flex items-center justify-center">
               <div className="text-white/40 scale-150">
