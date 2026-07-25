@@ -233,6 +233,62 @@ export const api = {
     sendAdminNotification: (data: any) =>
       request<any>('/whatsapp/admin-notification', { method: 'POST', body: JSON.stringify(data) }),
   },
+
+  crm: {
+    getTickets: (params?: Record<string, string>) => {
+      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/crm/tickets${qs}`);
+    },
+    createTicket: (data: any) =>
+      request<any>('/crm/tickets', { method: 'POST', body: JSON.stringify(data) }),
+    updateTicket: (id: string, updates: any) =>
+      request<any>('/crm/tickets', { method: 'PATCH', body: JSON.stringify({ id, ...updates }) }),
+    deleteTicket: (id: string) =>
+      request<any>('/crm/tickets', { method: 'DELETE', body: JSON.stringify({ id }) }),
+    getNotifications: (params?: Record<string, string>) => {
+      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/crm/notifications${qs}`);
+    },
+    sendNotification: (data: any) =>
+      request<any>('/crm/notifications', { method: 'POST', body: JSON.stringify(data) }),
+    updateNotification: (id: string, updates: any) =>
+      request<any>('/crm/notifications', { method: 'PATCH', body: JSON.stringify({ id, ...updates }) }),
+    deleteNotification: (id: string) =>
+      request<any>('/crm/notifications', { method: 'DELETE', body: JSON.stringify({ id }) }),
+  },
+
+  provider: {
+    getStaff: (params?: Record<string, string>) => {
+      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/provider/staff${qs}`);
+    },
+    createStaff: (data: any) =>
+      request<any>('/provider/staff', { method: 'POST', body: JSON.stringify(data) }),
+    updateStaff: (data: any) =>
+      request<any>('/provider/staff', { method: 'PUT', body: JSON.stringify(data) }),
+    deleteStaff: (id: string) =>
+      request<any>('/provider/staff', { method: 'DELETE', body: JSON.stringify({ id }) }),
+    getAssets: (params?: Record<string, string>) => {
+      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/provider/assets${qs}`);
+    },
+    createAsset: (data: any) =>
+      request<any>('/provider/assets', { method: 'POST', body: JSON.stringify(data) }),
+    updateAsset: (data: any) =>
+      request<any>('/provider/assets', { method: 'PUT', body: JSON.stringify(data) }),
+    deleteAsset: (id: string) =>
+      request<any>('/provider/assets', { method: 'DELETE', body: JSON.stringify({ id }) }),
+    getServices: (params?: Record<string, string>) => {
+      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/provider/services${qs}`);
+    },
+    createService: (data: any) =>
+      request<any>('/provider/services', { method: 'POST', body: JSON.stringify(data) }),
+    updateService: (data: any) =>
+      request<any>('/provider/services', { method: 'PUT', body: JSON.stringify(data) }),
+    deleteService: (id: string) =>
+      request<any>('/provider/services', { method: 'DELETE', body: JSON.stringify({ id }) }),
+  },
 };
 
 export default api;

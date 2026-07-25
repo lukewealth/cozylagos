@@ -36,6 +36,8 @@ import NotificationsView from './components/NotificationsView';
 import PropertyListingView from './components/PropertyListingView';
 import AdminCMSView from './components/AdminCMSView';
 import SPCMSView from './components/SPCMSView';
+import CRMView from './components/CRMView';
+import NotificationCenter from './components/NotificationCenter';
 import { useDatabase } from './hooks/useDatabase';
 import { seedDatabase, getListingsWithFallback, syncToLocalStorage } from './db';
 import DashboardSkeleton from './components/ui/DashboardSkeleton';
@@ -481,6 +483,12 @@ function AppContent() {
               )}
               {activeTab === 'sp-cms' && (
                 <SPCMSView providerId={currentUser?.id || 'sp-default'} />
+              )}
+              {activeTab === 'crm' && (
+                <CRMView />
+              )}
+              {activeTab === 'notifications' && (
+                <NotificationCenter />
               )}
               {activeTab === 'super-admin-dashboard' && (
                 <Suspense fallback={<DashboardSkeleton />}>

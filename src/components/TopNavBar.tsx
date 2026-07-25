@@ -199,67 +199,55 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
           {/* Right Side Actions */}
           <div className="flex items-center gap-4">
             {!isAuthenticated && (
-              <Tooltip content="Shopping Cart" description={`${cartCount} items in cart`}>
-                <button onClick={onOpenCart} className="relative p-2 bg-charcoal/5 hover:bg-gold/10 rounded-full transition-colors">
-                  <ShoppingCart className="w-5 h-5 text-charcoal/70" />
-                  {cartCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-gold text-parchment text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
-                      {cartCount}
-                    </span>
-                  )}
-                </button>
-              </Tooltip>
+              <button onClick={onOpenCart} className="relative p-2 bg-charcoal/5 hover:bg-gold/10 rounded-full transition-colors">
+                <ShoppingCart className="w-5 h-5 text-charcoal/70" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-gold text-parchment text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                    {cartCount}
+                  </span>
+                )}
+              </button>
             )}
 
-            <Tooltip content={showMobileMenu ? "Close Menu" : "Open Menu"}>
-              <button
-                onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className="lg:hidden p-2 bg-charcoal/5 hover:bg-gold/10 rounded-full transition-colors"
-              >
-                {showMobileMenu ? <X className="w-5 h-5 text-charcoal/70" /> : <Menu className="w-5 h-5 text-charcoal/70" />}
-              </button>
-            </Tooltip>
+            <button
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              className="lg:hidden p-2 bg-charcoal/5 hover:bg-gold/10 rounded-full transition-colors"
+            >
+              {showMobileMenu ? <X className="w-5 h-5 text-charcoal/70" /> : <Menu className="w-5 h-5 text-charcoal/70" />}
+            </button>
 
             {!isAuthenticated ? (
-              <Tooltip content="Login" description="Access your account">
-                <button
-                  onClick={openLoginModal}
-                  className="flex items-center gap-2 px-4 py-2 bg-charcoal text-parchment hover:bg-gold-dark rounded-full text-[10px] font-bold tracking-wider uppercase transition-colors"
-                >
-                  <LogIn className="w-3.5 h-3.5" />
-                  <span>Login</span>
-                </button>
-              </Tooltip>
+              <button
+                onClick={openLoginModal}
+                className="flex items-center gap-2 px-4 py-2 bg-charcoal text-parchment hover:bg-gold-dark rounded-full text-[10px] font-bold tracking-wider uppercase transition-colors"
+              >
+                <LogIn className="w-3.5 h-3.5" />
+                <span>Login</span>
+              </button>
             ) : (
               <>
-                <Tooltip content="Notifications" description="View your notifications">
-                  <button
-                    onClick={() => setActiveTab('notifications')}
-                    className="hidden sm:flex items-center justify-center w-9 h-9 rounded-full bg-charcoal/5 hover:bg-gold/15 hover:text-gold-dark transition-colors relative"
-                  >
-                    <Bell className="w-4 h-4 text-charcoal/70" />
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
-                  </button>
-                </Tooltip>
-                <Tooltip content="Account Settings" description="Manage your account">
-                  <button
-                    onClick={() => setActiveTab('account-settings')}
-                    className="hidden sm:flex items-center justify-center w-9 h-9 rounded-full bg-charcoal/5 hover:bg-gold/15 hover:text-gold-dark transition-colors"
-                  >
-                    <Settings className="w-4 h-4 text-charcoal/70" />
-                  </button>
-                </Tooltip>
+                <button
+                  onClick={() => setActiveTab('notifications')}
+                  className="hidden sm:flex items-center justify-center w-9 h-9 rounded-full bg-charcoal/5 hover:bg-gold/15 hover:text-gold-dark transition-colors relative"
+                >
+                  <Bell className="w-4 h-4 text-charcoal/70" />
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+                </button>
+                <button
+                  onClick={() => setActiveTab('account-settings')}
+                  className="hidden sm:flex items-center justify-center w-9 h-9 rounded-full bg-charcoal/5 hover:bg-gold/15 hover:text-gold-dark transition-colors"
+                >
+                  <Settings className="w-4 h-4 text-charcoal/70" />
+                </button>
                 <div className="flex items-center gap-2">
                   <div className="text-right hidden sm:block">
                     <div className="text-[10px] font-bold text-charcoal">{currentUser?.name}</div>
                     <div className="text-[9px] text-charcoal/50 uppercase">{currentUser?.role?.replace('_', ' ')}</div>
                   </div>
-                  <Tooltip content="Logout" description="Sign out of your account">
-                    <button onClick={handleLogout} className="flex items-center gap-2 px-3 py-2 border border-charcoal/50 hover:bg-charcoal hover:text-parchment rounded-full text-[10px] font-bold tracking-wider uppercase transition-all duration-300">
-                      <LogOut className="w-3.5 h-3.5" />
-                      <span className="hidden sm:inline">Logout</span>
-                    </button>
-                  </Tooltip>
+                  <button onClick={handleLogout} className="flex items-center gap-2 px-3 py-2 border border-charcoal/50 hover:bg-charcoal hover:text-parchment rounded-full text-[10px] font-bold tracking-wider uppercase transition-all duration-300">
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">Logout</span>
+                  </button>
                 </div>
               </>
             )}

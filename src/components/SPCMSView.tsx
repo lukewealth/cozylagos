@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   Plus, Edit2, Trash2, Users, Star, MapPin, Clock, Check, X, Search,
   Package, Settings, Save, Upload, Briefcase, Phone, Mail, Award,
-  ToggleLeft, ToggleRight, Calendar, DollarSign
+  ToggleLeft, ToggleRight, Calendar, DollarSign, RefreshCw
 } from 'lucide-react';
 import { useCMSStore } from '../stores/cmsStore';
 import { VIPService, StaffMember } from '../db/indexedDb';
+import api from '../services/api';
 
 export default function SPCMSView({ providerId = 'sp-default' }: { providerId?: string }) {
   const { vipServices, staff, init, addVIPService, updateVIPService, deleteVIPService, addStaff, updateStaff, deleteStaff } = useCMSStore();
@@ -16,10 +17,56 @@ export default function SPCMSView({ providerId = 'sp-default' }: { providerId?: 
   const [editingService, setEditingService] = useState<VIPService | null>(null);
   const [editingStaff, setEditingStaff] = useState<StaffMember | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSyncing, setIsSyncing] = useState(false);
 
   useEffect(() => {
     init();
   }, [init]);
+
+  useEffect(() => {
+    const syncInterval = setInterval(() => {
+      syncWithCloud();
+    }, 30000);
+
+    return () => clearInterval(syncInterval);
+  }, []);
+
+  const syncWithCloud = async () => {
+    setIsSyncing(true);
+    try {
+      const [servicesRes, staffRes] = await Promise.all([
+        api.provider.getServices({ providerId }),
+        api.provider.getStaff({ providerId }),
+      ]);
+
+      if (servicesRes.success && servicesRes.data) {
+        for (const service of servicesRes.data) {
+          const existing = vipServices.find(s => s._id === service._id || s.id === service._id);
+          if (!existing) {
+            await addVIPService({
+              ...service,
+              id: service._id || service.id,
+            });
+          }
+        }
+      }
+
+      if (staffRes.success && staffRes.data) {
+        for (const member of staffRes.data) {
+          const existing = staff.find(s => s._id === member._id || s.id === member._id);
+          if (!existing) {
+            await addStaff({
+              ...member,
+              id: member._id || member.id,
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Sync error:', error);
+    }
+    setIsSyncing(false);
+  };
 
   const myServices = vipServices.filter(s => s.providerId === providerId);
   const myStaff = staff.filter(s => s.providerId === providerId);
@@ -36,6 +83,60 @@ export default function SPCMSView({ providerId = 'sp-default' }: { providerId?: 
     availableStaff: myStaff.filter(s => s.available).length,
   };
 
+  const handleAddService = async (service: VIPService) => {
+    await addVIPService(service);
+    try {
+      await api.provider.createService(service);
+    } catch (error) {
+      console.error('Failed to sync service:', error);
+    }
+  };
+
+  const handleUpdateService = async (service: VIPService) => {
+    await updateVIPService(service);
+    try {
+      await api.provider.updateService({ id: service.id, ...service });
+    } catch (error) {
+      console.error('Failed to sync service:', error);
+    }
+  };
+
+  const handleDeleteService = async (id: string) => {
+    await deleteVIPService(id);
+    try {
+      await api.provider.deleteService(id);
+    } catch (error) {
+      console.error('Failed to sync service:', error);
+    }
+  };
+
+  const handleAddStaff = async (member: StaffMember) => {
+    await addStaff(member);
+    try {
+      await api.provider.createStaff(member);
+    } catch (error) {
+      console.error('Failed to sync staff:', error);
+    }
+  };
+
+  const handleUpdateStaff = async (member: StaffMember) => {
+    await updateStaff(member);
+    try {
+      await api.provider.updateStaff({ id: member.id, ...member });
+    } catch (error) {
+      console.error('Failed to sync staff:', error);
+    }
+  };
+
+  const handleDeleteStaff = async (id: string) => {
+    await deleteStaff(id);
+    try {
+      await api.provider.deleteStaff(id);
+    } catch (error) {
+      console.error('Failed to sync staff:', error);
+    }
+  };
+
   return (
     <div className="flex-grow bg-parchment">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20 py-8">
@@ -47,6 +148,14 @@ export default function SPCMSView({ providerId = 'sp-default' }: { providerId?: 
             <p className="text-sm text-charcoal/60 mt-1">Manage your services and staff</p>
           </div>
           <div className="flex items-center gap-3">
+            <button
+              onClick={syncWithCloud}
+              disabled={isSyncing}
+              className="flex items-center gap-2 px-4 py-2.5 bg-charcoal/5 text-charcoal font-bold text-sm rounded-xl hover:bg-charcoal/10 transition-colors disabled:opacity-50"
+            >
+              <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+              <span>{isSyncing ? 'Syncing...' : 'Sync'}</span>
+            </button>
             <button
               onClick={() => setShowAddStaff(true)}
               className="flex items-center gap-2 px-4 py-2.5 bg-charcoal/5 text-charcoal font-bold text-sm rounded-xl hover:bg-charcoal/10 transition-colors"
@@ -64,7 +173,6 @@ export default function SPCMSView({ providerId = 'sp-default' }: { providerId?: 
           </div>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <StatCard icon={<Package className="w-5 h-5" />} label="Total Services" value={stats.totalServices} color="blue" />
           <StatCard icon={<Check className="w-5 h-5" />} label="Active Services" value={stats.activeServices} color="green" />
@@ -72,14 +180,12 @@ export default function SPCMSView({ providerId = 'sp-default' }: { providerId?: 
           <StatCard icon={<Award className="w-5 h-5" />} label="Available Staff" value={stats.availableStaff} color="gold" />
         </div>
 
-        {/* Tabs */}
         <div className="flex gap-2 mb-6 border-b border-charcoal/10">
           <TabButton active={activeTab === 'services'} onClick={() => setActiveTab('services')} icon={<Briefcase className="w-4 h-4" />}>My Services</TabButton>
           <TabButton active={activeTab === 'staff'} onClick={() => setActiveTab('staff')} icon={<Users className="w-4 h-4" />}>Staff</TabButton>
           <TabButton active={activeTab === 'analytics'} onClick={() => setActiveTab('analytics')} icon={<DollarSign className="w-4 h-4" />}>Analytics</TabButton>
         </div>
 
-        {/* Content */}
         {activeTab === 'services' && (
           <div>
             <div className="flex items-center gap-3 mb-6">
@@ -101,8 +207,8 @@ export default function SPCMSView({ providerId = 'sp-default' }: { providerId?: 
                   key={service.id}
                   service={service}
                   onEdit={() => setEditingService(service)}
-                  onDelete={() => deleteVIPService(service.id)}
-                  onToggle={() => updateVIPService({ ...service, available: !service.available, updatedAt: new Date().toISOString() })}
+                  onDelete={() => handleDeleteService(service.id)}
+                  onToggle={() => handleUpdateService({ ...service, available: !service.available, updatedAt: new Date().toISOString() })}
                 />
               ))}
             </div>
@@ -125,8 +231,8 @@ export default function SPCMSView({ providerId = 'sp-default' }: { providerId?: 
                   key={member.id}
                   member={member}
                   onEdit={() => setEditingStaff(member)}
-                  onDelete={() => deleteStaff(member.id)}
-                  onToggle={() => updateStaff({ ...member, available: !member.available })}
+                  onDelete={() => handleDeleteStaff(member.id)}
+                  onToggle={() => handleUpdateStaff({ ...member, available: !member.available })}
                 />
               ))}
             </div>
@@ -147,19 +253,19 @@ export default function SPCMSView({ providerId = 'sp-default' }: { providerId?: 
       </div>
 
       {showAddService && (
-        <AddServiceModal providerId={providerId} staff={myStaff} onClose={() => setShowAddService(false)} onAdd={addVIPService} />
+        <AddServiceModal providerId={providerId} staff={myStaff} onClose={() => setShowAddService(false)} onAdd={handleAddService} />
       )}
 
       {editingService && (
-        <EditServiceModal service={editingService} staff={myStaff} onClose={() => setEditingService(null)} onUpdate={updateVIPService} />
+        <EditServiceModal service={editingService} staff={myStaff} onClose={() => setEditingService(null)} onUpdate={handleUpdateService} />
       )}
 
       {showAddStaff && (
-        <AddStaffModal providerId={providerId} onClose={() => setShowAddStaff(false)} onAdd={addStaff} />
+        <AddStaffModal providerId={providerId} onClose={() => setShowAddStaff(false)} onAdd={handleAddStaff} />
       )}
 
       {editingStaff && (
-        <EditStaffModal member={editingStaff} onClose={() => setEditingStaff(null)} onUpdate={updateStaff} />
+        <EditStaffModal member={editingStaff} onClose={() => setEditingStaff(null)} onUpdate={handleUpdateStaff} />
       )}
     </div>
   );
@@ -374,7 +480,7 @@ function AddServiceModal({ providerId, staff, onClose, onAdd }: { providerId: st
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Price (₦)</label>
+            <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Price ()</label>
             <input type="number" value={formData.price} onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })} className="w-full px-3 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/30" required />
           </div>
           <FormField label="Price Unit" value={formData.priceUnit} onChange={(v) => setFormData({ ...formData, priceUnit: v })} select options={['per_session', 'per_hour', 'per_day', 'per_item', 'flat']} />
@@ -429,41 +535,11 @@ function EditServiceModal({ service, staff, onClose, onUpdate }: { service: VIPS
     setIsSyncing(true);
     try {
       await onUpdate({ ...formData, updatedAt: new Date().toISOString() });
-      try {
-        const api = (await import('../services/api')).default;
-        await api.services.update({
-          id: service.id,
-          title: formData.title,
-          description: formData.description,
-          category: formData.category,
-          price: formData.price,
-          priceUnit: formData.priceUnit,
-          location: formData.location,
-          image: formData.image,
-          amenities: formData.amenities,
-          duration: formData.duration,
-        });
-      } catch {}
     } finally {
       setIsSyncing(false);
       onClose();
     }
   };
-
-  const exploreImages = [
-    { name: 'Elegushi Royal Beach', path: '/assets/images/explore/elegushi-royal-beach.avif' },
-    { name: 'National Museum Lagos', path: '/assets/images/explore/national-museum-lagos.jpg' },
-    { name: 'Kalakuta Republic Museum', path: '/assets/images/explore/kalakuta-republic-museum.jpg' },
-    { name: 'Nike Art Gallery', path: '/assets/images/explore/nike-art-gallery.jpg' },
-    { name: 'RSVP Restaurant', path: '/assets/images/explore/rsvp-restaurant.jpg' },
-    { name: 'Cilantro Lagos', path: '/assets/images/explore/cilantro-lagos.png' },
-    { name: 'Izanagi Restaurant', path: '/assets/images/explore/izanagi-restaurant.webp' },
-    { name: 'Alara Lagos', path: '/assets/images/explore/alara-lagos.webp' },
-    { name: 'Ikeja City Mall', path: '/assets/images/explore/ikeja-city-mall.jpg' },
-    { name: 'Balogun Market', path: '/assets/images/explore/balogun-market.jpg' },
-    { name: 'Lagos Island Heritage Walk', path: '/assets/images/explore/lagos-island-heritage-walk.jpg' },
-    { name: 'Lekki Lagoon Sunset Cruise', path: '/assets/images/explore/lekki-lagoon-sunset-cruise.avif' },
-  ];
 
   return (
     <Modal onClose={onClose} title="Edit Service">
@@ -482,41 +558,7 @@ function EditServiceModal({ service, staff, onClose, onUpdate }: { service: VIPS
           <FormField label="Price Unit" value={formData.priceUnit} onChange={(v) => setFormData({ ...formData, priceUnit: v })} select options={['per_session', 'per_hour', 'per_day', 'per_item', 'flat']} />
         </div>
         <FormField label="Duration" value={formData.duration || ''} onChange={(v) => setFormData({ ...formData, duration: v })} />
-        <div>
-          <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Primary Image</label>
-          <select value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} className="w-full px-3 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/30">
-            <option value="">Select an image...</option>
-            {exploreImages.map((img) => (
-              <option key={img.path} value={img.path}>{img.name}</option>
-            ))}
-          </select>
-          {formData.image && (
-            <img src={formData.image} alt="Preview" className="mt-2 w-full h-32 object-cover rounded-lg" />
-          )}
-        </div>
-        <div>
-          <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Transition Images (hover cycle)</label>
-          <div className="space-y-2">
-            {exploreImages.slice(0, 6).map((img) => (
-              <label key={img.path} className="flex items-center gap-2 p-2 bg-white border border-charcoal/5 rounded-lg cursor-pointer hover:bg-charcoal/5">
-                <input
-                  type="checkbox"
-                  checked={formData.images?.includes(img.path) || false}
-                  onChange={(e) => {
-                    const current = formData.images || [];
-                    const updated = e.target.checked
-                      ? [...current, img.path]
-                      : current.filter(p => p !== img.path);
-                    setFormData({ ...formData, images: updated });
-                  }}
-                  className="w-4 h-4 rounded border-charcoal/20 text-gold focus:ring-gold"
-                />
-                <img src={img.path} alt={img.name} className="w-10 h-10 rounded object-cover" />
-                <span className="text-xs text-charcoal">{img.name}</span>
-              </label>
-            ))}
-          </div>
-        </div>
+        <FormField label="Image URL" value={formData.image} onChange={(v) => setFormData({ ...formData, image: v })} />
         <div>
           <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Amenities (comma-separated)</label>
           <input type="text" value={formData.amenities.join(', ')} onChange={(e) => setFormData({ ...formData, amenities: e.target.value.split(',').map(a => a.trim()) })} className="w-full px-3 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/30" />
