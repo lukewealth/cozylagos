@@ -320,6 +320,7 @@ function AddServiceModal({ providerId, staff, onClose, onAdd }: { providerId: st
     priceUnit: 'per_session',
     location: '',
     image: '',
+    images: [] as string[],
     amenities: '',
     duration: '',
     selectedStaff: [] as string[],
@@ -338,6 +339,7 @@ function AddServiceModal({ providerId, staff, onClose, onAdd }: { providerId: st
       rating: 4.5,
       reviewsCount: 0,
       image: formData.image || 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80',
+      images: formData.images.length > 0 ? [formData.image, ...formData.images] : [formData.image || 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80'],
       amenities: formData.amenities.split(',').map(a => a.trim()).filter(Boolean),
       providerName: 'My Service',
       providerId,
@@ -420,12 +422,48 @@ function AddServiceModal({ providerId, staff, onClose, onAdd }: { providerId: st
 
 function EditServiceModal({ service, staff, onClose, onUpdate }: { service: VIPService; staff: StaffMember[]; onClose: () => void; onUpdate: (s: VIPService) => Promise<void> }) {
   const [formData, setFormData] = useState(service);
+  const [isSyncing, setIsSyncing] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onUpdate({ ...formData, updatedAt: new Date().toISOString() });
-    onClose();
+    setIsSyncing(true);
+    try {
+      await onUpdate({ ...formData, updatedAt: new Date().toISOString() });
+      try {
+        const api = (await import('../services/api')).default;
+        await api.services.update({
+          id: service.id,
+          title: formData.title,
+          description: formData.description,
+          category: formData.category,
+          price: formData.price,
+          priceUnit: formData.priceUnit,
+          location: formData.location,
+          image: formData.image,
+          amenities: formData.amenities,
+          duration: formData.duration,
+        });
+      } catch {}
+    } finally {
+      setIsSyncing(false);
+      onClose();
+    }
   };
+
+  const exploreImages = [
+    { name: 'Elegushi Royal Beach', path: '/assets/images/explore/elegushi-royal-beach.avif' },
+    { name: 'National Museum Lagos', path: '/assets/images/explore/national-museum-lagos.jpg' },
+    { name: 'Kalakuta Republic Museum', path: '/assets/images/explore/kalakuta-republic-museum.jpg' },
+    { name: 'Nike Art Gallery', path: '/assets/images/explore/nike-art-gallery.jpg' },
+    { name: 'RSVP Restaurant', path: '/assets/images/explore/rsvp-restaurant.jpg' },
+    { name: 'Cilantro Lagos', path: '/assets/images/explore/cilantro-lagos.png' },
+    { name: 'Izanagi Restaurant', path: '/assets/images/explore/izanagi-restaurant.webp' },
+    { name: 'Alara Lagos', path: '/assets/images/explore/alara-lagos.webp' },
+    { name: 'Ikeja City Mall', path: '/assets/images/explore/ikeja-city-mall.jpg' },
+    { name: 'Balogun Market', path: '/assets/images/explore/balogun-market.jpg' },
+    { name: 'Lagos Island Heritage Walk', path: '/assets/images/explore/lagos-island-heritage-walk.jpg' },
+    { name: 'Lekki Lagoon Sunset Cruise', path: '/assets/images/explore/lekki-lagoon-sunset-cruise.avif' },
+  ];
 
   return (
     <Modal onClose={onClose} title="Edit Service">
@@ -444,7 +482,41 @@ function EditServiceModal({ service, staff, onClose, onUpdate }: { service: VIPS
           <FormField label="Price Unit" value={formData.priceUnit} onChange={(v) => setFormData({ ...formData, priceUnit: v })} select options={['per_session', 'per_hour', 'per_day', 'per_item', 'flat']} />
         </div>
         <FormField label="Duration" value={formData.duration || ''} onChange={(v) => setFormData({ ...formData, duration: v })} />
-        <FormField label="Image URL" value={formData.image} onChange={(v) => setFormData({ ...formData, image: v })} />
+        <div>
+          <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Primary Image</label>
+          <select value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} className="w-full px-3 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/30">
+            <option value="">Select an image...</option>
+            {exploreImages.map((img) => (
+              <option key={img.path} value={img.path}>{img.name}</option>
+            ))}
+          </select>
+          {formData.image && (
+            <img src={formData.image} alt="Preview" className="mt-2 w-full h-32 object-cover rounded-lg" />
+          )}
+        </div>
+        <div>
+          <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Transition Images (hover cycle)</label>
+          <div className="space-y-2">
+            {exploreImages.slice(0, 6).map((img) => (
+              <label key={img.path} className="flex items-center gap-2 p-2 bg-white border border-charcoal/5 rounded-lg cursor-pointer hover:bg-charcoal/5">
+                <input
+                  type="checkbox"
+                  checked={formData.images?.includes(img.path) || false}
+                  onChange={(e) => {
+                    const current = formData.images || [];
+                    const updated = e.target.checked
+                      ? [...current, img.path]
+                      : current.filter(p => p !== img.path);
+                    setFormData({ ...formData, images: updated });
+                  }}
+                  className="w-4 h-4 rounded border-charcoal/20 text-gold focus:ring-gold"
+                />
+                <img src={img.path} alt={img.name} className="w-10 h-10 rounded object-cover" />
+                <span className="text-xs text-charcoal">{img.name}</span>
+              </label>
+            ))}
+          </div>
+        </div>
         <div>
           <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Amenities (comma-separated)</label>
           <input type="text" value={formData.amenities.join(', ')} onChange={(e) => setFormData({ ...formData, amenities: e.target.value.split(',').map(a => a.trim()) })} className="w-full px-3 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/30" />
@@ -453,9 +525,9 @@ function EditServiceModal({ service, staff, onClose, onUpdate }: { service: VIPS
           <button type="button" onClick={onClose} className="flex-1 py-3 bg-charcoal/5 text-charcoal font-bold text-sm rounded-xl hover:bg-charcoal/10 transition-colors">
             Cancel
           </button>
-          <button type="submit" className="flex-1 py-3 bg-gold text-charcoal font-bold text-sm rounded-xl hover:bg-gold-dark hover:text-parchment transition-colors flex items-center justify-center gap-2">
+          <button type="submit" disabled={isSyncing} className="flex-1 py-3 bg-gold text-charcoal font-bold text-sm rounded-xl hover:bg-gold-dark hover:text-parchment transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
             <Save className="w-4 h-4" />
-            Update Service
+            {isSyncing ? 'Syncing...' : 'Update Service'}
           </button>
         </div>
       </form>

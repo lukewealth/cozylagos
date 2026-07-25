@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Sparkles, Scissors, ShoppingBag, Trophy, Dumbbell, Shirt, ChefHat,
@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { VIP_SERVICES, VIPService, getAllVIPServices } from '../data/vipServices';
 import { useCart } from '../context/CartContext';
+import Tooltip from './ui/Tooltip';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -37,6 +38,7 @@ const iconMap: Record<string, React.ReactNode> = {
 
 function ServiceCard({ service, onSelect, viewMode }: { service: VIPService; onSelect: (s: VIPService) => void; viewMode: 'grid' | 'list' }) {
   const { addServiceToCart } = useCart();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const categoryGradients: Record<string, string> = {
     spa: 'from-teal-500 via-emerald-400 to-green-400',
     barber: 'from-amber-700 via-yellow-600 to-orange-500',
@@ -48,6 +50,15 @@ function ServiceCard({ service, onSelect, viewMode }: { service: VIPService; onS
     photography: 'from-violet-600 via-purple-500 to-fuchsia-500'
   };
   const gradient = categoryGradients[service.category] || 'from-gray-500 to-gray-600';
+  const images = service.images && service.images.length > 0 ? service.images : [service.image];
+
+  React.useEffect(() => {
+    if (images.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentImageIndex(prev => (prev + 1) % images.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [images.length]);
 
   if (viewMode === 'list') {
     return (
@@ -58,19 +69,21 @@ function ServiceCard({ service, onSelect, viewMode }: { service: VIPService; onS
         className="group cursor-pointer"
       >
         <div className="bg-white rounded-xl overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-lg transition-shadow duration-300 flex">
-          <div className="w-32 sm:w-40 overflow-hidden shrink-0">
-            {service.image ? (
+          <div className="w-32 sm:w-40 overflow-hidden shrink-0 relative">
+            {images.map((img, idx) => (
               <img
-                src={service.image}
+                key={idx}
+                src={img}
                 alt={service.title}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-500 ${idx === currentImageIndex ? 'opacity-100' : 'opacity-0'}`}
                 loading="lazy"
               />
-            ) : (
-              <div className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
-                <div className="text-white/90 group-hover:scale-110 transition-transform duration-300">
-                  {iconMap[service.category] || <Sparkles className="w-8 h-8" />}
-                </div>
+            ))}
+            {images.length > 1 && (
+              <div className="absolute bottom-1 left-1 flex gap-0.5">
+                {images.map((_, idx) => (
+                  <div key={idx} className={`w-1 h-1 rounded-full ${idx === currentImageIndex ? 'bg-white' : 'bg-white/50'}`} />
+                ))}
               </div>
             )}
           </div>
@@ -108,13 +121,15 @@ function ServiceCard({ service, onSelect, viewMode }: { service: VIPService; onS
               <span className="text-sm font-bold text-gold-dark">
                 ₦{service.price.toLocaleString()} <span className="text-[9px] text-charcoal/40 font-normal">/ {service.priceUnit.replace('per_', '')}</span>
               </span>
-              <button
-                onClick={(e) => { e.stopPropagation(); addServiceToCart({ id: service.id, title: service.title, category: service.category, price: service.price, providerName: service.providerName, image: service.image }); }}
-                className="text-xs font-semibold text-gold-dark hover:text-charcoal transition-colors flex items-center gap-1"
-              >
-                <ShoppingCart className="w-3 h-3" />
-                Add
-              </button>
+              <Tooltip content="Add to Cart" description={`Add ${service.title} to your cart for ${service.price.toLocaleString()}`}>
+                <button
+                  onClick={(e) => { e.stopPropagation(); addServiceToCart({ id: service.id, title: service.title, category: service.category, price: service.price, providerName: service.providerName, image: service.image }); }}
+                  className="text-xs font-semibold text-gold-dark hover:text-charcoal hover:bg-gold/10 px-2 py-1 rounded-lg transition-all flex items-center gap-1"
+                >
+                  <ShoppingCart className="w-3 h-3" />
+                  Add
+                </button>
+              </Tooltip>
             </div>
           </div>
         </div>
@@ -132,13 +147,25 @@ function ServiceCard({ service, onSelect, viewMode }: { service: VIPService; onS
     >
       <div className="bg-white rounded-2xl overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-xl transition-shadow duration-500">
         <div className="relative h-44 sm:h-48 overflow-hidden">
-          {service.image ? (
-            <img
-              src={service.image}
-              alt={service.title}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-              loading="lazy"
-            />
+          {images.length > 0 ? (
+            <>
+              {images.map((img, idx) => (
+                <img
+                  key={idx}
+                  src={img}
+                  alt={service.title}
+                  className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-500 group-hover:scale-110 ${idx === currentImageIndex ? 'opacity-100' : 'opacity-0'}`}
+                  loading="lazy"
+                />
+              ))}
+              {images.length > 1 && (
+                <div className="absolute bottom-2 left-2 flex gap-1 z-10">
+                  {images.map((_, idx) => (
+                    <div key={idx} className={`w-1.5 h-1.5 rounded-full transition-all ${idx === currentImageIndex ? 'bg-white w-4' : 'bg-white/60'}`} />
+                  ))}
+                </div>
+              )}
+            </>
           ) : (
             <div className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
               <div className="text-white/90 group-hover:scale-110 transition-transform duration-500">
@@ -188,13 +215,15 @@ function ServiceCard({ service, onSelect, viewMode }: { service: VIPService; onS
             <span className="text-sm font-bold text-gold-dark">
               ₦{service.price.toLocaleString()}
             </span>
-            <button
-              onClick={(e) => { e.stopPropagation(); addServiceToCart({ id: service.id, title: service.title, category: service.category, price: service.price, providerName: service.providerName, image: service.image }); }}
-              className="text-xs font-semibold text-gold-dark hover:text-charcoal transition-colors flex items-center gap-1"
-            >
-              <ShoppingCart className="w-3 h-3" />
-              Add to Cart
-            </button>
+            <Tooltip content="Add to Cart" description={`Book ${service.title} for ${service.price.toLocaleString()}`}>
+              <button
+                onClick={(e) => { e.stopPropagation(); addServiceToCart({ id: service.id, title: service.title, category: service.category, price: service.price, providerName: service.providerName, image: service.image }); }}
+                className="text-xs font-semibold text-gold-dark hover:text-charcoal hover:bg-gold/10 px-3 py-1.5 rounded-lg transition-all flex items-center gap-1"
+              >
+                <ShoppingCart className="w-3 h-3" />
+                Add to Cart
+              </button>
+            </Tooltip>
           </div>
         </div>
       </div>
@@ -205,6 +234,16 @@ function ServiceCard({ service, onSelect, viewMode }: { service: VIPService; onS
 function ServiceDetailPanel({ service, onClose }: { service: VIPService; onClose: () => void }) {
   const { addServiceToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [detailImageIndex, setDetailImageIndex] = useState(0);
+  const detailImages = service.images && service.images.length > 0 ? service.images : [service.image];
+
+  useEffect(() => {
+    if (detailImages.length <= 1) return;
+    const interval = setInterval(() => {
+      setDetailImageIndex(prev => (prev + 1) % detailImages.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [detailImages.length]);
 
   return (
     <motion.div
@@ -223,18 +262,35 @@ function ServiceDetailPanel({ service, onClose }: { service: VIPService; onClose
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-md bg-parchment h-full overflow-y-auto shadow-2xl"
       >
-        <div className={`relative h-64 bg-gradient-to-br from-gold/30 via-gold-dark/20 to-charcoal/10 flex items-center justify-center`}>
+        <div className={`relative h-64 bg-gradient-to-br from-gold/30 via-gold-dark/20 to-charcoal/10 overflow-hidden`}>
+          {detailImages.map((img, idx) => (
+            <img
+              key={idx}
+              src={img}
+              alt={service.title}
+              className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-700 ${idx === detailImageIndex ? 'opacity-100' : 'opacity-0'}`}
+            />
+          ))}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+            className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors z-10"
           >
             <X className="w-5 h-5" />
           </button>
-          <div className="text-white/90 scale-150">
-            {iconMap[service.category] || <Sparkles className="w-12 h-12" />}
-          </div>
+          {detailImages.length > 1 && (
+            <div className="absolute bottom-3 left-3 flex gap-1.5 z-10">
+              {detailImages.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setDetailImageIndex(idx)}
+                  className={`h-1.5 rounded-full transition-all ${idx === detailImageIndex ? 'bg-white w-8' : 'bg-white/50 w-1.5'}`}
+                />
+              ))}
+            </div>
+          )}
           {service.verified && (
-            <div className="absolute top-4 left-4">
+            <div className="absolute top-4 left-4 z-10">
               <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold text-white flex items-center gap-1">
                 <Check className="w-3 h-3" /> Verified Provider
               </span>
@@ -306,18 +362,20 @@ function ServiceDetailPanel({ service, onClose }: { service: VIPService; onClose
               </div>
             </div>
 
-            <button
-              onClick={() => {
-                for (let i = 0; i < quantity; i++) {
-                  addServiceToCart({ id: service.id, title: service.title, category: service.category, price: service.price, providerName: service.providerName, image: service.image });
-                }
-                onClose();
-              }}
-              className="w-full py-3.5 bg-gold text-charcoal font-bold text-sm rounded-xl hover:bg-gold-dark hover:text-parchment transition-colors flex items-center justify-center gap-2"
-            >
-              <ShoppingCart className="w-4 h-4" />
-              Add to Cart — ₦{(service.price * quantity).toLocaleString()}
-            </button>
+            <Tooltip content="Add to Cart" description={`Add ${quantity}x ${service.title} for ₦${(service.price * quantity).toLocaleString()}`}>
+              <button
+                onClick={() => {
+                  for (let i = 0; i < quantity; i++) {
+                    addServiceToCart({ id: service.id, title: service.title, category: service.category, price: service.price, providerName: service.providerName, image: service.image });
+                  }
+                  onClose();
+                }}
+                className="w-full py-3.5 bg-gold text-charcoal font-bold text-sm rounded-xl hover:bg-gold-dark hover:text-parchment hover:shadow-lg transition-all flex items-center justify-center gap-2"
+              >
+                <ShoppingCart className="w-4 h-4" />
+                Add to Cart — ₦{(service.price * quantity).toLocaleString()}
+              </button>
+            </Tooltip>
           </div>
         </div>
       </motion.div>
@@ -467,58 +525,67 @@ export default function VIPServicesView({ showHero = true }: { showHero?: boolea
       <div className="sticky top-20 z-40 bg-parchment/90 backdrop-blur-xl border-b border-charcoal/5">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20">
           <div className="flex items-center justify-between py-3 sm:py-4 gap-4">
-            <div className="relative flex-1 max-w-xs">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-charcoal/40" />
-              <input
-                type="text"
-                placeholder="Search services..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-white border border-charcoal/10 rounded-full text-xs focus:outline-none focus:ring-1 focus:ring-gold"
-              />
-            </div>
+            <Tooltip content="Search Services" description="Find services by name, description, or location">
+              <div className="relative flex-1 max-w-xs">
+                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-charcoal/40" />
+                <input
+                  type="text"
+                  placeholder="Search services..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2 bg-white border border-charcoal/10 rounded-full text-xs focus:outline-none focus:ring-1 focus:ring-gold"
+                />
+              </div>
+            </Tooltip>
             <div className="flex gap-2 overflow-x-auto scrollbar-hide flex-1" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              <button
-                onClick={() => { setActiveCategory('all'); setSearchQuery(''); }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-300 shrink-0 ${
-                  activeCategory === 'all' && !searchQuery
-                    ? 'bg-charcoal text-white shadow-lg shadow-charcoal/20'
-                    : 'bg-white/70 text-charcoal/60 hover:bg-white hover:text-charcoal border border-charcoal/5'
-                }`}
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">All Services</span>
-                <span className="sm:hidden">All</span>
-              </button>
-              {VIP_SERVICES.map((cat) => (
+              <Tooltip content="All Services" description="View all available VIP services across all categories">
                 <button
-                  key={cat.id}
-                  onClick={() => { setActiveCategory(cat.id); setSearchQuery(''); }}
+                  onClick={() => { setActiveCategory('all'); setSearchQuery(''); }}
                   className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-300 shrink-0 ${
-                    activeCategory === cat.id && !searchQuery
+                    activeCategory === 'all' && !searchQuery
                       ? 'bg-charcoal text-white shadow-lg shadow-charcoal/20'
                       : 'bg-white/70 text-charcoal/60 hover:bg-white hover:text-charcoal border border-charcoal/5'
                   }`}
                 >
-                  {iconMap[cat.icon]}
-                  <span className="hidden sm:inline">{cat.title}</span>
-                  <span className="sm:hidden">{cat.title.split(' ')[0]}</span>
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">All Services</span>
+                  <span className="sm:hidden">All</span>
                 </button>
+              </Tooltip>
+              {VIP_SERVICES.map((cat) => (
+                <Tooltip key={cat.id} content={cat.title} description={cat.description}>
+                  <button
+                    onClick={() => { setActiveCategory(cat.id); setSearchQuery(''); }}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-300 shrink-0 ${
+                      activeCategory === cat.id && !searchQuery
+                        ? 'bg-charcoal text-white shadow-lg shadow-charcoal/20'
+                        : 'bg-white/70 text-charcoal/60 hover:bg-white hover:text-charcoal border border-charcoal/5'
+                    }`}
+                  >
+                    {iconMap[cat.icon]}
+                    <span className="hidden sm:inline">{cat.title}</span>
+                    <span className="sm:hidden">{cat.title.split(' ')[0]}</span>
+                  </button>
+                </Tooltip>
               ))}
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-charcoal text-white' : 'bg-white/70 text-charcoal/60 hover:bg-white'}`}
-              >
-                <Grid3X3 className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-charcoal text-white' : 'bg-white/70 text-charcoal/60 hover:bg-white'}`}
-              >
-                <List className="w-4 h-4" />
-              </button>
+              <Tooltip content="Grid View" description="Display services in a grid layout">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-charcoal text-white shadow-md' : 'bg-white/70 text-charcoal/60 hover:bg-white hover:text-charcoal'}`}
+                >
+                  <Grid3X3 className="w-4 h-4" />
+                </button>
+              </Tooltip>
+              <Tooltip content="List View" description="Display services in a compact list layout">
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-charcoal text-white shadow-md' : 'bg-white/70 text-charcoal/60 hover:bg-white hover:text-charcoal'}`}
+                >
+                  <List className="w-4 h-4" />
+                </button>
+              </Tooltip>
             </div>
           </div>
         </div>

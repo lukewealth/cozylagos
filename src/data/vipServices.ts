@@ -9,6 +9,7 @@ export interface VIPService {
   rating: number;
   reviewsCount: number;
   image: string;
+  images: string[];
   amenities: string[];
   providerName: string;
   verified: boolean;
@@ -43,7 +44,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'Ikoyi',
         rating: 4.9,
         reviewsCount: 128,
-        image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=80',
+          'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80',
+          'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=800&q=80'
+        ],
         amenities: ['Hot Stones', 'Aromatherapy', 'Private Room', 'Complimentary Tea'],
         providerName: 'Serenity Spa Ikoyi',
         verified: true,
@@ -60,7 +66,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'Victoria Island',
         rating: 4.8,
         reviewsCount: 76,
-        image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
+          'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80',
+          'https://images.unsplash.com/photo-1591343395082-e120087004b4?w=800&q=80'
+        ],
         amenities: ['Steam Room', 'Body Scrub', 'Clay Mask', 'Relaxation Lounge'],
         providerName: 'The Wellness Hub',
         verified: true,
@@ -77,7 +88,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'Lekki Phase 1',
         rating: 4.9,
         reviewsCount: 54,
-        image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?w=800&q=80',
+          'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
+          'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80'
+        ],
         amenities: ['Couples Suite', 'Champagne', 'Strawberries', 'Rose Petals'],
         providerName: 'Glow Beauty Lounge',
         verified: true,
@@ -103,7 +119,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'Ikoyi',
         rating: 4.8,
         reviewsCount: 210,
-        image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=800&q=80',
+          'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&q=80',
+          'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800&q=80'
+        ],
         amenities: ['Hot Towel', 'Beard Trim', 'Styling', 'Complimentary Drink'],
         providerName: 'The Gentlemen\'s Quarter',
         verified: true,
@@ -120,7 +141,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'Victoria Island',
         rating: 4.9,
         reviewsCount: 89,
-        image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=800&q=80',
+          'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=800&q=80',
+          'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&q=80'
+        ],
         amenities: ['Facial', 'Manicure', 'Pedicure', 'Shoulder Massage'],
         providerName: 'Luxe Barbershop VI',
         verified: true,
@@ -137,7 +163,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'All Lagos',
         rating: 4.7,
         reviewsCount: 156,
-        image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=800&q=80',
+          'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=800&q=80',
+          'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&q=80'
+        ],
         amenities: ['Mobile Service', 'Sterilized Equipment', 'Flexible Scheduling'],
         providerName: 'Mobile Grooming Co.',
         verified: true,
@@ -163,7 +194,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'Lekki Phase 1',
         rating: 4.7,
         reviewsCount: 67,
-        image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800&q=80',
+          'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80',
+          'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=800&q=80'
+        ],
         amenities: ['Style Consultation', 'Priority Access', 'VIP Lounge', 'Complimentary Parking'],
         providerName: 'Palm Mall Concierge',
         verified: true,
@@ -180,7 +216,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'VI & Ikoyi',
         rating: 4.8,
         reviewsCount: 43,
-        image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80',
+          'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800&q=80',
+          'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80'
+        ],
         amenities: ['Private Transport', 'Designer Access', 'Fitting Sessions', 'Lunch Included'],
         providerName: 'Lagos Style Tours',
         verified: true,
@@ -197,7 +238,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'Lekki Phase 1',
         rating: 4.6,
         reviewsCount: 98,
-        image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=800&q=80',
+          'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800&q=80',
+          'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80'
+        ],
         amenities: ['Expert Guide', 'Negotiation Tips', 'Cultural Insights'],
         providerName: 'Lekki Market Tours',
         verified: true,
@@ -223,7 +269,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'Ikoyi',
         rating: 4.7,
         reviewsCount: 112,
-        image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&q=80',
+          'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=800&q=80',
+          'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=800&q=80'
+        ],
         amenities: ['Court Reservation', 'Equipment Rental', 'Coaching Available', 'Showers'],
         providerName: 'Ikoyi Club',
         verified: true,
@@ -240,7 +291,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'Victoria Island',
         rating: 4.9,
         reviewsCount: 34,
-        image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=800&q=80',
+          'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=800&q=80',
+          'https://images.unsplash.com/photo-1592919505726-17c5269b5868?w=800&q=80'
+        ],
         amenities: ['18 Holes', 'Professional Caddy', 'Club Rental', 'Cart Included'],
         providerName: 'Eko Atlantic Golf',
         verified: true,
@@ -257,7 +313,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'Lekki Phase 1',
         rating: 4.5,
         reviewsCount: 187,
-        image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800&q=80',
+          'https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=800&q=80',
+          'https://images.unsplash.com/photo-1519315901367-f34f91f41f4d?w=800&q=80'
+        ],
         amenities: ['Olympic Pool', 'Towel Service', 'Locker Room', 'Lifeguard'],
         providerName: 'Lekki Sports Club',
         verified: true,
@@ -283,7 +344,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'Victoria Island',
         rating: 4.8,
         reviewsCount: 145,
-        image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
+          'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80',
+          'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=800&q=80'
+        ],
         amenities: ['Personal Trainer', 'Custom Plan', 'Equipment Access', 'Nutrition Tips'],
         providerName: 'The Fitness Hub VI',
         verified: true,
@@ -300,7 +366,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'Lekki Phase 1',
         rating: 4.9,
         reviewsCount: 98,
-        image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=800&q=80',
+          'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80',
+          'https://images.unsplash.com/photo-1588286840104-8957b019727f?w=800&q=80'
+        ],
         amenities: ['Private Session', 'All Levels', 'Mats Provided', 'Meditation'],
         providerName: 'Zen Yoga Studio',
         verified: true,
@@ -317,7 +388,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'Ikoyi',
         rating: 4.7,
         reviewsCount: 76,
-        image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1517963879433-6ad2b056d712?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1517963879433-6ad2b056d712?w=800&q=80',
+          'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80',
+          'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=800&q=80'
+        ],
         amenities: ['Certified Coach', 'Group or Private', 'Equipment Provided', 'Showers'],
         providerName: 'CrossFit Lagos',
         verified: true,
@@ -343,7 +419,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'All Lagos',
         rating: 4.6,
         reviewsCount: 234,
-        image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1545173168-9f1947eebb8f?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1545173168-9f1947eebb8f?w=800&q=80',
+          'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=800&q=80',
+          'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=800&q=80'
+        ],
         amenities: ['Same-Day Service', 'Pickup & Delivery', 'Up to 10kg', 'Eco-Friendly'],
         providerName: 'Lagos Laundry Mate',
         verified: true,
@@ -360,7 +441,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'All Lagos',
         rating: 4.8,
         reviewsCount: 167,
-        image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=800&q=80',
+          'https://images.unsplash.com/photo-1545173168-9f1947eebb8f?w=800&q=80',
+          'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=800&q=80'
+        ],
         amenities: ['Professional Cleaning', '48-Hour Turnaround', 'Pickup & Delivery', 'Garment Care'],
         providerName: 'Elite Dry Cleaners',
         verified: true,
@@ -377,7 +463,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'All Lagos',
         rating: 4.5,
         reviewsCount: 89,
-        image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=800&q=80',
+          'https://images.unsplash.com/photo-1545173168-9f1947eebb8f?w=800&q=80',
+          'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=800&q=80'
+        ],
         amenities: ['Mobile Service', 'Steam Press', 'Garment Steaming', 'Quick Turnaround'],
         providerName: 'Mobile Valet Service',
         verified: true,
@@ -403,7 +494,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'All Lagos',
         rating: 4.9,
         reviewsCount: 67,
-        image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80',
+          'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&q=80',
+          'https://images.unsplash.com/photo-1581349485608-9469926a8e5e?w=800&q=80'
+        ],
         amenities: ['5-Course Meal', 'Ingredients Included', 'Wine Pairing', 'Clean-Up'],
         providerName: 'Chef Emeka\'s Kitchen',
         verified: true,
@@ -420,7 +516,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'All Lagos',
         rating: 4.8,
         reviewsCount: 123,
-        image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=800&q=80',
+          'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80',
+          'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&q=80'
+        ],
         amenities: ['Traditional Cuisine', 'Family Style', 'Desserts Included', 'Cultural Experience'],
         providerName: 'Mama Put Premium',
         verified: true,
@@ -437,7 +538,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'All Lagos',
         rating: 4.7,
         reviewsCount: 89,
-        image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=800&q=80',
+          'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=800&q=80',
+          'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80'
+        ],
         amenities: ['Fresh Preparation', 'Continental or Local', 'Up to 6 Guests', 'Coffee & Tea'],
         providerName: 'Morning Glory Chef',
         verified: true,
@@ -463,7 +569,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'All Lagos',
         rating: 4.9,
         reviewsCount: 145,
-        image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80',
+          'https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=800&q=80',
+          'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=800&q=80'
+        ],
         amenities: ['Professional Photographer', '50 Edited Images', 'Location Scouting', 'Digital Delivery'],
         providerName: 'Lagos Lens Studio',
         verified: true,
@@ -480,7 +591,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'All Lagos',
         rating: 4.8,
         reviewsCount: 56,
-        image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=80',
+          'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=80',
+          'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80'
+        ],
         amenities: ['4K Video', 'Highlight Reel', 'Full Footage', 'Drone Shots'],
         providerName: 'Cinematic Lagos',
         verified: true,
@@ -497,7 +613,12 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'All Lagos',
         rating: 4.7,
         reviewsCount: 78,
-        image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80',
+        images: [
+          'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80',
+          'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80',
+          'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=80'
+        ],
         amenities: ['20 Photos', '5 Reels', 'Social Media Ready', 'Quick Turnaround'],
         providerName: 'Content House Lagos',
         verified: true,

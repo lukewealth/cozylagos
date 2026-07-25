@@ -3,14 +3,15 @@ import { motion } from 'motion/react';
 import {
   TrendingUp, Plus, Edit2, Trash2, Eye, Star, MapPin, Calendar,
   Search, Filter, X, Check, Image, DollarSign, Tag, BarChart3,
-  Sparkles, Crown, Award, Users, Package, Settings, Save, Upload
+  Sparkles, Crown, Award, Users, Package, Settings, Save, Upload, Layers
 } from 'lucide-react';
 import { useCMSStore } from '../stores/cmsStore';
 import { TrendingGem } from '../db/indexedDb';
+import { SERVICE_BUNDLES } from '../data';
 
 export default function AdminCMSView() {
   const { trendingGems, announcements, init, addTrendingGem, updateTrendingGem, deleteTrendingGem, toggleTrending, addAnnouncement, deleteAnnouncement } = useCMSStore();
-  const [activeTab, setActiveTab] = useState<'gems' | 'announcements' | 'analytics'>('gems');
+  const [activeTab, setActiveTab] = useState<'gems' | 'bundles' | 'announcements' | 'analytics'>('gems');
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingGem, setEditingGem] = useState<TrendingGem | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -61,6 +62,7 @@ export default function AdminCMSView() {
         {/* Tabs */}
         <div className="flex gap-2 mb-6 border-b border-charcoal/10">
           <TabButton active={activeTab === 'gems'} onClick={() => setActiveTab('gems')} icon={<Sparkles className="w-4 h-4" />}>Trending Gems</TabButton>
+          <TabButton active={activeTab === 'bundles'} onClick={() => setActiveTab('bundles')} icon={<Layers className="w-4 h-4" />}>Bundles</TabButton>
           <TabButton active={activeTab === 'announcements'} onClick={() => setActiveTab('announcements')} icon={<Crown className="w-4 h-4" />}>Announcements</TabButton>
           <TabButton active={activeTab === 'analytics'} onClick={() => setActiveTab('analytics')} icon={<BarChart3 className="w-4 h-4" />}>Analytics</TabButton>
         </div>
@@ -101,6 +103,10 @@ export default function AdminCMSView() {
               </div>
             )}
           </div>
+        )}
+
+        {activeTab === 'bundles' && (
+          <BundlesView />
         )}
 
         {activeTab === 'announcements' && (
@@ -450,6 +456,65 @@ function AnalyticsView({ gems }: { gems: TrendingGem[] }) {
             </div>
           ))}
         </div>
+      </div>
+    </div>
+  );
+}
+
+function BundlesView() {
+  const [bundles, setBundles] = useState(SERVICE_BUNDLES);
+
+  const bundleImages: Record<string, string> = {
+    'Business Bundle': '/assets/bundles/business-bundle.png',
+    'Diaspora Bundle': '/assets/bundles/diaspora-bundle.png',
+    'Tourist Bundle': '/assets/bundles/tourist-bundle.png',
+    'Executive Elite Package': '/assets/bundles/executive-elite-bundle.png',
+    'Edu - Care Package': '/assets/bundles/edu-care-bundle.png',
+    'Lavish Love': '/assets/bundles/lavish-love-bundle.png',
+    'Pulse & Zen': '/assets/bundles/pulse-zen-bundle.png',
+    'Lagos Premium Bundle': '/assets/bundles/lagos-premium-bundle.png',
+  };
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="font-serif text-xl font-bold text-charcoal">Service Bundles</h2>
+        <span className="text-xs text-charcoal/50">{bundles.length} bundles</span>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {bundles.map((bundle) => (
+          <div key={bundle.id} className="bg-white rounded-2xl overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-lg transition-all">
+            <div className="relative h-40 bg-gradient-to-br from-gold/20 to-charcoal/10 flex items-center justify-center">
+              <img
+                src={bundleImages[bundle.title] || '/assets/bundles/business-bundle.png'}
+                alt={bundle.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-3 left-3 right-3">
+                <h3 className="font-serif text-lg font-bold text-white">{bundle.title}</h3>
+                <p className="text-xs text-white/80">{bundle.tagline}</p>
+              </div>
+            </div>
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs text-charcoal/60">{bundle.tiers.length} tiers</span>
+                <span className="text-sm font-bold text-gold-dark">
+                  ₦{bundle.tiers[0]?.pricePerPerson.toLocaleString()} - ₦{bundle.tiers[bundle.tiers.length - 1]?.pricePerPerson.toLocaleString()}
+                </span>
+              </div>
+              <div className="space-y-2">
+                {bundle.tiers.map((tier, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-2 bg-charcoal/5 rounded-lg">
+                    <span className="text-xs font-bold text-charcoal">{tier.name}</span>
+                    <span className="text-xs text-charcoal/60">{tier.duration}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

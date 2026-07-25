@@ -19,10 +19,30 @@ export default function ListingEditorView({ listing, onCancel, onSave }: Listing
 
   const handleSave = async () => {
     setIsSaving(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    onSave(formData);
-    setIsSaving(false);
+    try {
+      try {
+        const api = (await import('../services/api')).default;
+        await api.listings.update({
+          id: formData.id,
+          title: formData.title,
+          description: formData.description,
+          category: formData.category,
+          location: formData.location,
+          bedrooms: formData.bedrooms,
+          bathrooms: formData.bathrooms,
+          maxGuests: formData.maxGuests,
+          nightlyRate: formData.nightlyRate,
+          weekendPremium: formData.weekendPremium,
+          cleaningFee: formData.cleaningFee,
+          securityDeposit: formData.securityDeposit,
+          images: formData.images,
+          amenities: formData.amenities,
+        });
+      } catch {}
+      onSave(formData);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
