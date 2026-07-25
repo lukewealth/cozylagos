@@ -1,6 +1,6 @@
-import { connectToDatabase } from '../src/lib/mongodb';
-import { authenticateRequest, authorizeRole, validateRequestBody, addSecurityHeaders, logAudit, checkRateLimit } from '../src/lib/middleware';
-import { sanitizeInput, generateReference } from '../src/lib/security';
+import { connectToDatabase } from '../../src/lib/mongodb';
+import { authenticateRequest, authorizeRole, validateRequestBody, addSecurityHeaders, logAudit, checkRateLimit } from '../../src/lib/middleware';
+import { sanitizeInput, generateReference } from '../../src/lib/security';
 import { ObjectId } from 'mongodb';
 
 export default async function handler(req: any, res: any) {
