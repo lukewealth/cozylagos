@@ -4,14 +4,31 @@ import {
   signInWithEmailAndPassword, 
   signOut, 
   onAuthStateChanged,
-  User
+  signInWithPopup,
+  GoogleAuthProvider,
+  OAuthProvider,
+  User,
+  updateProfile
 } from 'firebase/auth';
 import { auth } from './firebase';
+import { emailService } from './emailService';
+
+const googleProvider = new GoogleAuthProvider();
+const appleProvider = new OAuthProvider('apple.com');
 
 export const firebaseAuth = {
-  register: async (email: string, password: string) => {
+  register: async (email: string, password: string, userName?: string, userRole?: string) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      
+      if (userName && userCredential.user) {
+        await updateProfile(userCredential.user, { displayName: userName });
+      }
+
+      if (userName && userRole) {
+        await emailService.sendWelcomeEmail(email, userName, userRole);
+      }
+
       return { success: true, user: userCredential.user };
     } catch (error: any) {
       return { success: false, error: error.message };
@@ -22,6 +39,36 @@ export const firebaseAuth = {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       return { success: true, user: userCredential.user };
+    } catch (error: any) {
+      return { success: false, error: error.message };
+    }
+  },
+
+  loginWithGoogle: async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      
+      if (result.additionalUserInfo?.isNewUser && user.email && user.displayName) {
+        await emailService.sendWelcomeEmail(user.email, user.displayName, 'user');
+      }
+      
+      return { success: true, user, isNewUser: result.additionalUserInfo?.isNewUser };
+    } catch (error: any) {
+      return { success: false, error: error.message };
+    }
+  },
+
+  loginWithApple: async () => {
+    try {
+      const result = await signInWithPopup(auth, appleProvider);
+      const user = result.user;
+      
+      if (result.additionalUserInfo?.isNewUser && user.email && user.displayName) {
+        await emailService.sendWelcomeEmail(user.email, user.displayName, 'user');
+      }
+      
+      return { success: true, user, isNewUser: result.additionalUserInfo?.isNewUser };
     } catch (error: any) {
       return { success: false, error: error.message };
     }
@@ -42,5 +89,50 @@ export const firebaseAuth = {
 
   getCurrentUser: () => {
     return auth.currentUser;
+  },
+
+  sendOTP: async (email: string, userName?: string, userRole?: string) => {
+    try {
+      const response = await fetch('/api/auth/otp/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, userName, userRole }),
+      });
+      
+      const data = await response.json();
+      return data;
+    } catch (error: any) {
+      return { success: false, error: error.message };
+    }
+  },
+
+  verifyOTP: async (email: string, otp: string) => {
+    try {
+      const response = await fetch('/api/auth/otp/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp }),
+      });
+      
+      const data = await response.json();
+      return data;
+    } catch (error: any) {
+      return { success: false, error: error.message };
+    }
+  },
+
+  resendOTP: async (email: string, userName?: string, userRole?: string) => {
+    try {
+      const response = await fetch('/api/auth/otp/resend-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, userName, userRole }),
+      });
+      
+      const data = await response.json();
+      return data;
+    } catch (error: any) {
+      return { success: false, error: error.message };
+    }
   }
 };
