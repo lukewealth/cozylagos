@@ -3,6 +3,9 @@ dist/
 .DS_Store
 *.zip
 *.mp4
+.env
+.env.local
+.env.*.local
 
 # Root-level bundle images (copies live in public/assets/bundles/)
 Bundles Background.jpeg

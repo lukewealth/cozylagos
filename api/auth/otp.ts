@@ -1,6 +1,7 @@
 import { connectToDatabase } from '../../src/lib/mongodb';
 import { addSecurityHeaders, checkRateLimit } from '../../src/lib/middleware';
 import { emailService } from '../../src/lib/emailService';
+import { firebaseAdmin } from '../../src/lib/firebaseAdmin';
 import { ObjectId } from 'mongodb';
 
 const otpStore = new Map<string, { otp: string; expiresAt: number; email: string }>();
@@ -22,6 +23,7 @@ export default async function handler(req: any, res: any) {
       case 'POST': {
         const path = req.url || '';
 
+        // Send OTP
         if (path.includes('/send-otp')) {
           const { email, userName, userRole } = req.body;
           
@@ -29,11 +31,14 @@ export default async function handler(req: any, res: any) {
             return res.status(400).json({ success: false, message: 'Email is required' });
           }
 
+          // Generate 6-digit OTP
           const otp = Math.floor(100000 + Math.random() * 900000).toString();
-          const expiresAt = Date.now() + 10 * 60 * 1000;
+          const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
 
+          // Store OTP
           otpStore.set(email, { otp, expiresAt, email });
 
+          // Send email via Resend
           const emailResult = await emailService.sendOTP(email, otp, userName);
           
           if (!emailResult.success) {
@@ -50,6 +55,7 @@ export default async function handler(req: any, res: any) {
           });
         }
 
+        // Verify OTP
         if (path.includes('/verify-otp')) {
           const { email, otp } = req.body;
           
@@ -72,12 +78,26 @@ export default async function handler(req: any, res: any) {
             return res.status(400).json({ success: false, message: 'Invalid verification code' });
           }
 
+          // OTP verified, remove from store
           otpStore.delete(email);
 
+          // Mark user as verified in database
           await usersCollection.updateOne(
             { email },
             { $set: { verified: true, verifiedAt: new Date().toISOString() } }
           );
+
+          // If Firebase Admin is available, verify email in Firebase
+          if (firebaseAdmin) {
+            try {
+              const user = await firebaseAdmin.getUserByEmail(email);
+              if (user && !user.emailVerified) {
+                await firebaseAdmin.updateUser(user.uid, { emailVerified: true });
+              }
+            } catch (error) {
+              console.warn('Firebase email verification skipped:', error);
+            }
+          }
 
           return res.status(200).json({ 
             success: true, 
@@ -85,6 +105,7 @@ export default async function handler(req: any, res: any) {
           });
         }
 
+        // Resend OTP
         if (path.includes('/resend-otp')) {
           const { email, userName, userRole } = req.body;
           
@@ -94,6 +115,7 @@ export default async function handler(req: any, res: any) {
 
           const storedOTP = otpStore.get(email);
           
+          // Check if OTP was sent recently (within 60 seconds)
           if (storedOTP && Date.now() < storedOTP.expiresAt - 9 * 60 * 1000) {
             return res.status(429).json({ 
               success: false, 
@@ -101,6 +123,7 @@ export default async function handler(req: any, res: any) {
             });
           }
 
+          // Generate new OTP
           const otp = Math.floor(100000 + Math.random() * 900000).toString();
           const expiresAt = Date.now() + 10 * 60 * 1000;
 
