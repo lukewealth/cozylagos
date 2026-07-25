@@ -6,6 +6,7 @@ import { Compass } from 'lucide-react';
 import { useAuth, getDefaultDashboardTab } from '../auth';
 import { PrivacyPolicyModal } from './PrivacyPolicy';
 import Tooltip from './ui/Tooltip';
+import TermsAcceptancePopup from './ui/TermsAcceptancePopup';
 
 interface TopNavBarProps {
   activeTab: string;
@@ -24,6 +25,7 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showTermsPopup, setShowTermsPopup] = useState(false);
   const [loginStep, setLoginStep] = useState<'login' | 'register'>('login');
   const [loginEmail, setLoginEmail] = useState('');
   const [loginName, setLoginName] = useState('');
@@ -47,7 +49,7 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
     e.preventDefault();
     setLoginError('');
     if (!privacyAccepted) {
-      setLoginError('Please accept the Privacy Policy to continue.');
+      setShowTermsPopup(true);
       return;
     }
     setIsLoading(true);
@@ -69,7 +71,7 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
     e.preventDefault();
     setLoginError('');
     if (!privacyAccepted) {
-      setLoginError('Please accept the Privacy Policy to continue.');
+      setShowTermsPopup(true);
       return;
     }
     setIsLoading(true);
@@ -470,17 +472,10 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                   </div>
                 )}
 
-                {/* Privacy Acceptance */}
-                <label className="flex items-start gap-3 cursor-pointer p-3 bg-gold/5 border border-gold/10 rounded-xl" onClick={() => setPrivacyAccepted(!privacyAccepted)}>
-                  <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
-                    privacyAccepted ? 'bg-gold border-gold' : 'border-charcoal/30'
-                  }`}>
-                    {privacyAccepted && <Check className="w-3 h-3 text-charcoal" />}
-                  </div>
-                  <span className="text-[11px] text-charcoal/70 leading-relaxed">
-                    I agree to the <button type="button" onClick={(e) => { e.stopPropagation(); setShowPrivacy(true); }} className="text-gold-dark font-semibold underline">Privacy Policy</button> and <button type="button" onClick={(e) => { e.stopPropagation(); setShowPrivacy(true); }} className="text-gold-dark font-semibold underline">Terms of Service</button>
-                  </span>
-                </label>
+                {/* Terms Notice */}
+                <p className="text-[10px] text-charcoal/50 text-center">
+                  By continuing, you agree to our Terms & Privacy Policy
+                </p>
 
                 {loginError && (
                   <p className="text-red-500 text-xs bg-red-50 border border-red-100 p-2.5 rounded-lg">{loginError}</p>
@@ -539,41 +534,6 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                   </div>
                 </>
               )}
-
-              {/* Demo Accounts */}
-              {loginStep === 'login' && (
-                <div className="mt-6 pt-6 border-t border-charcoal/10">
-                  <p className="text-[10px] text-charcoal/50 text-center mb-3">Quick Demo Access:</p>
-                  <div className="grid grid-cols-1 gap-2 text-[9px]">
-                    {[
-                      { role: 'Guest User', email: 'lukeokagha@gmail.com', desc: 'Browse & book stays' },
-                      { role: 'Service Provider', email: 'chef@cozylagos.ng', desc: 'Manage services & earnings' },
-                      { role: 'Admin', email: 'contact@tricode.pro', desc: 'Platform management' },
-                      { role: 'Super Admin', email: 'luke.o@tricode.pro', desc: 'Full system control' },
-                    ].map(({ role, email, desc }) => (
-                      <button
-                        key={email}
-                        onClick={() => { setLoginEmail(email); }}
-                        className="p-3 bg-charcoal/5 hover:bg-charcoal/10 rounded-lg text-left transition-colors flex justify-between items-center group"
-                      >
-                        <div>
-                          <div className="font-bold text-charcoal flex items-center gap-2">
-                            {role}
-                            <span className="text-[8px] font-normal text-charcoal/50">({desc})</span>
-                          </div>
-                          <div className="text-charcoal/60 truncate">{email}</div>
-                        </div>
-                        <div className="text-[8px] text-charcoal/40 group-hover:text-gold-dark transition-colors">
-                          Click to fill email
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                  <p className="text-[9px] text-charcoal/40 text-center mt-3">
-                    Enter your password after selecting a demo account
-                  </p>
-                </div>
-              )}
             </motion.div>
           </motion.div>
         )}
@@ -585,10 +545,17 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
           <PrivacyPolicyModal
             isOpen={showPrivacy}
             onClose={() => setShowPrivacy(false)}
-            onAccept={() => { setPrivacyAccepted(true); setShowPrivacy(false); }}
+            onAccept={() => { setPrivacyAccepted(true); setShowPrivacy(false); setShowTermsPopup(false); }}
           />
         )}
       </AnimatePresence>
+
+      {/* Terms Acceptance Popup */}
+      <TermsAcceptancePopup
+        isOpen={showTermsPopup}
+        onAccept={() => { setPrivacyAccepted(true); setShowTermsPopup(false); }}
+        onViewMore={() => { setShowPrivacy(true); setShowTermsPopup(false); }}
+      />
     </>
   );
 }

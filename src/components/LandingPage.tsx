@@ -215,7 +215,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
                     onClick={() => setActiveTab('yacht-experience')}
                   >
                     <img
-                      src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=800&q=80"
+                      src="/assets/images/explore/lekki-lagoon-sunset-cruise.avif"
                       alt="Private Yacht Charter"
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
@@ -225,12 +225,12 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
                         <Anchor className="w-6 h-6 text-gold-light" />
                       </div>
                       <h3 className="font-serif text-xl font-bold text-parchment mb-2">Private Yacht Charter</h3>
-                      <p className="text-sm text-parchment/70 leading-relaxed mb-3">
+                      <p className="text-xs text-parchment/70 leading-relaxed mb-3">
                         65ft luxury executive boat for custom lagoon cruising with multi-course dining and premium champagnes.
                       </p>
                       <div className="flex items-center justify-between">
-                        <span className="text-gold-light font-serif font-bold text-lg">₦2,500,000</span>
-                        <span className="text-[10px] text-parchment/50 uppercase tracking-widest">From / 6hrs</span>
+                        <span className="text-gold-light font-serif font-bold text-sm">₦2,500,000</span>
+                        <span className="text-[9px] text-parchment/50 uppercase tracking-widest">From / 6hrs</span>
                       </div>
                     </div>
                   </motion.div>
@@ -244,7 +244,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
                     onClick={() => setActiveTab('bundles')}
                   >
                     <img
-                      src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800&q=80"
+                      src="/assets/images/horizontal/Premium bondle.jpg"
                       alt="Service Bundles"
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
@@ -254,12 +254,12 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
                         <Waves className="w-6 h-6 text-gold-light" />
                       </div>
                       <h3 className="font-serif text-xl font-bold text-parchment mb-2">Service Bundles</h3>
-                      <p className="text-sm text-parchment/70 leading-relaxed mb-3">
+                      <p className="text-xs text-parchment/70 leading-relaxed mb-3">
                         7 premium bundles from ₦750K to ₦88M. Business, Diaspora, Tourist, Executive Elite, and more.
                       </p>
                       <div className="flex items-center justify-between">
-                        <span className="text-gold-light font-serif font-bold text-lg">₦750,000</span>
-                        <span className="text-[10px] text-parchment/50 uppercase tracking-widest">From / 3 days</span>
+                        <span className="text-gold-light font-serif font-bold text-sm">₦750,000</span>
+                        <span className="text-[9px] text-parchment/50 uppercase tracking-widest">From / 3 days</span>
                       </div>
                     </div>
                   </motion.div>
@@ -273,7 +273,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
                     onClick={() => setActiveTab('vip-services')}
                   >
                     <img
-                      src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80"
+                      src="/assets/images/explore/cilantro-lagos.png"
                       alt="Lagos Assist"
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
@@ -283,12 +283,12 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
                         <Shield className="w-6 h-6 text-gold-light" />
                       </div>
                       <h3 className="font-serif text-xl font-bold text-parchment mb-2">Lagos Assist</h3>
-                      <p className="text-sm text-parchment/70 leading-relaxed mb-3">
+                      <p className="text-xs text-parchment/70 leading-relaxed mb-3">
                         Premium concierge services, transportation, wellness, and personalized assistance for your stay.
                       </p>
                       <div className="flex items-center justify-between">
-                        <span className="text-gold-light font-serif font-bold text-lg">Premium</span>
-                        <span className="text-[10px] text-parchment/50 uppercase tracking-widest">For all guests</span>
+                        <span className="text-gold-light font-serif font-bold text-sm">Premium</span>
+                        <span className="text-[9px] text-parchment/50 uppercase tracking-widest">For all guests</span>
                       </div>
                     </div>
                   </motion.div>

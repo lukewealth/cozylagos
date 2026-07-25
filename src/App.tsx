@@ -3,13 +3,14 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ShieldAlert } from 'lucide-react';
 import {
   INITIAL_LISTINGS,
-  INITIAL_BOOKINGS,
-  INITIAL_TRANSACTIONS
 } from './data';
 import { Listing, Booking, Transaction } from './types';
 import { CartProvider, useCart } from './context/CartContext';
 import { AuthProvider, useAuth } from './auth';
 import { ToastProvider, useToast } from './components/Toast';
+import { usePageState } from './hooks/usePageState';
+import { useCloudSync } from './hooks/useCloudSync';
+import { useAnalytics } from './hooks/useAnalytics';
 import TopNavBar from './components/TopNavBar';
 import LandingPage from './components/LandingPage';
 import CartDrawer from './components/CartDrawer';
@@ -50,10 +51,13 @@ const SuperAdminDashboard = lazy(() => import('./portals/SuperAdminDashboard'));
 function AppContent() {
   const { currentUser, isAuthenticated } = useAuth();
   const { addToast } = useToast();
+  const { pageState, updatePageState } = usePageState();
+  useCloudSync();
+  useAnalytics();
 
   const [activeTab, setActiveTab] = useState<
     'home' | 'explorer' | 'explore-lagos' | 'bundles' | 'signature-experiences' | 'yacht-experience' | 'vip-services' | 'business-lagos' | 'events' | 'favorites' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations' | 'listing-detail' | 'account-settings' | 'notifications' | 'property-listing' | 'admin-cms' | 'sp-cms'
-  >('home');
+  >(pageState.activeTab as any);
   
   const [searchDestination, setSearchDestination] = useState<string>('');
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
@@ -74,8 +78,8 @@ function AppContent() {
     const initDb = async () => {
       await seedDatabase({
         listings: INITIAL_LISTINGS,
-        bookings: INITIAL_BOOKINGS,
-        transactions: INITIAL_TRANSACTIONS,
+        bookings: [],
+        transactions: [],
         users: [],
         services: [],
         experiences: [],
@@ -85,11 +89,20 @@ function AppContent() {
       await syncToLocalStorage();
     };
     initDb();
+    
+    // Scroll to top on initial load
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
+
+  // Scroll to top on tab change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [activeTab]);
 
   const handleTabChange = (tab: any) => {
     setSelectedListing(null);
     setActiveTab(tab);
+    updatePageState({ activeTab: tab });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   
