@@ -17,7 +17,6 @@ interface TopNavBarProps {
 const ROLE_OPTIONS = [
   { value: 'user', label: 'Guest', desc: 'Book stays & experiences', icon: '🏠' },
   { value: 'service_provider', label: 'Host', desc: 'List properties & services', icon: '' },
-  { value: 'admin', label: 'Admin', desc: 'Manage platform', icon: '⚙️' },
 ];
 
 export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCart }: TopNavBarProps) {
@@ -450,7 +449,7 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                 {loginStep === 'register' && (
                   <div>
                     <label className="block text-[10px] font-bold text-charcoal/60 uppercase tracking-widest mb-2">I am a...</label>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-2 gap-2">
                       {ROLE_OPTIONS.map((role) => (
                         <button
                           key={role.value}
@@ -504,7 +503,7 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
               </form>
 
               {/* Social Login */}
-              {loginStep === 'login' && (
+              {(loginStep === 'login' || loginStep === 'register') && (
                 <>
                   <div className="mt-6 flex items-center gap-3">
                     <div className="flex-1 h-px bg-charcoal/10" />

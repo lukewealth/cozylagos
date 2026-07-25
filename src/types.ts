@@ -278,6 +278,49 @@ export interface AssetRecord {
   updatedAt: string;
 }
 
+export type EventCategory = 'concert' | 'festival' | 'exhibition' | 'conference' | 'nightlife' | 'weekly' | 'sports' | 'food' | 'art' | 'tech' | 'fashion' | 'business';
+
+export interface LagosEvent {
+  id: string;
+  title: string;
+  description: string;
+  category: EventCategory;
+  date: string;
+  endDate?: string;
+  location: string;
+  price: string;
+  pricePerTicket?: number;
+  image: string;
+  images: string[];
+  highlights: string[];
+  tags: string[];
+  isTrending: boolean;
+  isActive: boolean;
+  ticketsSold: number;
+  ticketsAvailable: number;
+  rating: number;
+  reviewsCount: number;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EventTicket {
+  id: string;
+  eventId: string;
+  eventTitle: string;
+  eventDate: string;
+  eventLocation: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  ticketCount: number;
+  totalPrice: number;
+  reference: string;
+  status: 'confirmed' | 'cancelled' | 'refunded';
+  createdAt: string;
+}
+
 export interface StaffAssetAssignment {
   id: string;
   staffId: string;

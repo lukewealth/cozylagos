@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronLeft, ChevronRight, LayoutDashboard, Users, Settings, BarChart3, Shield, Database, Globe, Key, Lock, Bell, LogOut, HelpCircle, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutDashboard, Users, Settings, BarChart3, Shield, Database, Globe, Key, Lock, Bell, LogOut, HelpCircle, X, Calendar } from 'lucide-react';
 
 interface SidebarProps {
   activeTab: string;
@@ -24,6 +24,7 @@ const ADMIN_NAV: NavItem[] = [
   { id: 'admin-dashboard', label: 'Dashboard', icon: LayoutDashboard, description: 'Overview & analytics' },
   { id: 'listings', label: 'Properties', icon: Globe, description: 'Manage all listings' },
   { id: 'bookings', label: 'Bookings', icon: Bell, description: 'Booking requests' },
+  { id: 'events', label: 'Events', icon: Calendar, description: 'Manage events & tickets' },
   { id: 'overview', label: 'Analytics', icon: BarChart3, description: 'Platform metrics' },
 ];
 

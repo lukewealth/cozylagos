@@ -20,6 +20,7 @@ import ConfirmDialog from '../components/ui/ConfirmDialog';
 import EditModal, { EditField } from '../components/ui/EditModal';
 import StaffAssignModal from '../components/ui/StaffAssignModal';
 import { ToastContainer, showToast } from '../components/ui/Toast';
+import AdminEventsView from '../components/AdminEventsView';
 
 interface AdminDashboardProps {
   listings: Listing[];
@@ -42,7 +43,7 @@ interface BookingRequest {
   services?: string[];
 }
 
-type AdminSection = 'dashboard' | 'admin-dashboard' | 'requests' | 'guests' | 'services' | 'reports' | 'listings' | 'bookings' | 'analytics' | 'overview' | 'ledger';
+type AdminSection = 'dashboard' | 'admin-dashboard' | 'requests' | 'guests' | 'services' | 'reports' | 'listings' | 'bookings' | 'events' | 'analytics' | 'overview' | 'ledger';
 
 const MOCK_ARRIVALS = [
   { id: 'arr-1', guestName: 'Adewale Johnson', initials: 'AJ', tier: 'vip' as const, listingTitle: 'The Ikoyi Penthouse', unitCode: 'UNIT 402', status: 'en_route' as const, eta: '8 mins away' },
@@ -643,6 +644,18 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                     </table>
                   </div>
                 </div>
+              </motion.div>
+            )}
+
+            {activeSection === 'events' && (
+              <motion.div
+                key="events"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+              >
+                <AdminEventsView />
               </motion.div>
             )}
 

@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Calendar, MapPin, Clock, Ticket, Filter, ChevronRight, Star, Users, Music, Theater, Briefcase, Utensils, Baby, Trophy, Waves } from 'lucide-react';
 import { CalendarIcon, MusicalNoteIcon, FireIcon, PaintBrushIcon, BriefcaseIcon, MoonIcon, ArrowPathIcon, ClockIcon, SparklesIcon, FlagIcon } from '@heroicons/react/24/outline';
 import { LAGOS_EVENTS, LagosEvent } from '../data-new-sections';
+import TrendingEventsSlider from './TrendingEventsSlider';
 
 const CATEGORY_FILTERS = [
   { id: 'all', label: 'All Events', icon: CalendarIcon },
@@ -249,6 +250,10 @@ export default function EventsView() {
             Concerts, festivals, exhibitions, and more. Discover the best events happening in Lagos.
           </motion.p>
         </div>
+      </section>
+
+      <section className="py-6 px-4 sm:px-6 md:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
+        <TrendingEventsSlider />
       </section>
 
       {/* Quick Access: Today & This Weekend */}

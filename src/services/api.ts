@@ -61,7 +61,7 @@ async function request<T>(
 
 export const api = {
   health: {
-    check: () => request<{ status: string; message: string }>('/health'),
+    check: () => request<{ status: string; message: string }>('/admin/health'),
   },
 
   auth: {
@@ -255,6 +255,25 @@ export const api = {
       request<any>('/crm/notifications', { method: 'PATCH', body: JSON.stringify({ id, ...updates }) }),
     deleteNotification: (id: string) =>
       request<any>('/crm/notifications', { method: 'DELETE', body: JSON.stringify({ id }) }),
+  },
+
+  events: {
+    getAll: (params?: Record<string, string>) => {
+      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+      return request<any[]>(`/events${qs}`);
+    },
+    getTrending: () => request<any[]>('/events?isTrending=true&isActive=true'),
+    create: (data: any) =>
+      request<any>('/events', { method: 'POST', body: JSON.stringify(data) }),
+    update: (data: any) =>
+      request<any>('/events', { method: 'PUT', body: JSON.stringify(data) }),
+    delete: (id: string) =>
+      request<any>('/events', { method: 'DELETE', body: JSON.stringify({ id }) }),
+    purchaseTickets: (eventId: string, ticketCount: number, userId: string, userName: string, userEmail: string) =>
+      request<any>('/events', {
+        method: 'PATCH',
+        body: JSON.stringify({ eventId, ticketCount, userId, userName, userEmail }),
+      }),
   },
 
   provider: {

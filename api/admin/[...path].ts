@@ -24,12 +24,29 @@ export default async function handler(req: any, res: any) {
 
     switch (method) {
       case 'GET': {
+        const path = req.url || '';
+
+        if (path.includes('/health')) {
+          try {
+            await db.command({ ping: 1 });
+            return res.status(200).json({
+              status: 'ok',
+              message: 'MongoDB connection successful',
+              timestamp: new Date().toISOString(),
+            });
+          } catch (error: any) {
+            return res.status(500).json({
+              status: 'error',
+              message: 'MongoDB connection failed',
+              error: error.message,
+            });
+          }
+        }
+
         const auth = authenticateRequest(req);
         if (!auth.authenticated) {
           return res.status(401).json({ success: false, message: auth.error });
         }
-
-        const path = req.url || '';
 
         if (path.includes('/stats')) {
           if (!authorizeRole('admin', auth.user.role)) {
