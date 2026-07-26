@@ -5,9 +5,34 @@ import {
   Package, Settings, Save, Upload, Briefcase, Phone, Mail, Award,
   ToggleLeft, ToggleRight, Calendar, DollarSign, RefreshCw
 } from 'lucide-react';
+import {
+  TruckIcon,
+  FireIcon,
+  ShieldCheckIcon,
+  SparklesIcon,
+  CameraIcon,
+  KeyIcon,
+  CakeIcon,
+  LifebuoyIcon,
+  PaperAirplaneIcon,
+  StarIcon,
+} from '@heroicons/react/24/outline';
 import { useCMSStore } from '../stores/cmsStore';
 import { VIPService, StaffMember } from '../db/indexedDb';
 import api from '../services/api';
+
+const SERVICE_CATEGORIES = [
+  { id: 'transport', label: 'Transport', icon: TruckIcon },
+  { id: 'culinary', label: 'Culinary', icon: FireIcon },
+  { id: 'security', label: 'Security', icon: ShieldCheckIcon },
+  { id: 'wellness', label: 'Wellness', icon: SparklesIcon },
+  { id: 'media', label: 'Media', icon: CameraIcon },
+  { id: 'concierge', label: 'Concierge', icon: KeyIcon },
+  { id: 'events', label: 'Events', icon: CakeIcon },
+  { id: 'marine', label: 'Marine', icon: LifebuoyIcon },
+  { id: 'aviation', label: 'Aviation', icon: PaperAirplaneIcon },
+  { id: 'other', label: 'Other', icon: StarIcon },
+];
 
 export default function SPCMSView({ providerId = 'sp-default' }: { providerId?: string }) {
   const { vipServices, staff, init, addVIPService, updateVIPService, deleteVIPService, addStaff, updateStaff, deleteStaff } = useCMSStore();
@@ -309,11 +334,19 @@ function TabButton({ active, onClick, icon, children }: { active: boolean; onCli
 }
 
 function ServiceCard({ service, onEdit, onDelete, onToggle }: { service: VIPService; onEdit: () => void; onDelete: () => void; onToggle: () => void }) {
+  const categoryIcon = SERVICE_CATEGORIES.find(c => c.id === service.category)?.icon || StarIcon;
+  const IconComponent = categoryIcon;
+
   return (
     <div className="bg-white rounded-2xl overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-lg transition-all">
       <div className="relative h-40">
         <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute top-3 left-3">
+          <div className="p-2 bg-white/90 backdrop-blur-md rounded-lg">
+            <IconComponent className="w-4 h-4 text-gold-dark" />
+          </div>
+        </div>
         <div className="absolute top-3 right-3">
           <button
             onClick={onToggle}
@@ -477,7 +510,29 @@ function AddServiceModal({ providerId, staff, onClose, onAdd }: { providerId: st
         <FormField label="Service Title" value={formData.title} onChange={(v) => setFormData({ ...formData, title: v })} required />
         <FormField label="Description" value={formData.description} onChange={(v) => setFormData({ ...formData, description: v })} textarea required />
         <div className="grid grid-cols-2 gap-4">
-          <FormField label="Category" value={formData.category} onChange={(v) => setFormData({ ...formData, category: v })} select options={['spa', 'barber', 'shopping', 'sports', 'gym', 'laundry', 'chef', 'photography']} />
+          <div>
+            <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Category</label>
+            <div className="grid grid-cols-5 gap-1.5">
+              {SERVICE_CATEGORIES.map((cat) => {
+                const IconComponent = cat.icon;
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, category: cat.id })}
+                    className={`p-2 rounded-lg border-2 text-center transition-all ${
+                      formData.category === cat.id
+                        ? 'border-gold bg-gold/10'
+                        : 'border-charcoal/10 hover:border-charcoal/30'
+                    }`}
+                  >
+                    <IconComponent className={`w-4 h-4 mx-auto mb-0.5 ${formData.category === cat.id ? 'text-gold-dark' : 'text-charcoal/50'}`} />
+                    <span className="text-[8px] font-bold uppercase">{cat.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
           <FormField label="Location" value={formData.location} onChange={(v) => setFormData({ ...formData, location: v })} required />
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -549,7 +604,29 @@ function EditServiceModal({ service, staff, onClose, onUpdate }: { service: VIPS
         <FormField label="Service Title" value={formData.title} onChange={(v) => setFormData({ ...formData, title: v })} required />
         <FormField label="Description" value={formData.description} onChange={(v) => setFormData({ ...formData, description: v })} textarea required />
         <div className="grid grid-cols-2 gap-4">
-          <FormField label="Category" value={formData.category} onChange={(v) => setFormData({ ...formData, category: v })} select options={['spa', 'barber', 'shopping', 'sports', 'gym', 'laundry', 'chef', 'photography']} />
+          <div>
+            <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Category</label>
+            <div className="grid grid-cols-5 gap-1.5">
+              {SERVICE_CATEGORIES.map((cat) => {
+                const IconComponent = cat.icon;
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, category: cat.id })}
+                    className={`p-2 rounded-lg border-2 text-center transition-all ${
+                      formData.category === cat.id
+                        ? 'border-gold bg-gold/10'
+                        : 'border-charcoal/10 hover:border-charcoal/30'
+                    }`}
+                  >
+                    <IconComponent className={`w-4 h-4 mx-auto mb-0.5 ${formData.category === cat.id ? 'text-gold-dark' : 'text-charcoal/50'}`} />
+                    <span className="text-[8px] font-bold uppercase">{cat.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
           <FormField label="Location" value={formData.location} onChange={(v) => setFormData({ ...formData, location: v })} required />
         </div>
         <div className="grid grid-cols-2 gap-4">

@@ -1,6 +1,18 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { X, Upload, Plus, Image as ImageIcon, DollarSign, Clock, MapPin, Tag, Users, Check } from 'lucide-react';
+import {
+  TruckIcon,
+  FireIcon,
+  ShieldCheckIcon,
+  SparklesIcon,
+  CameraIcon,
+  KeyIcon,
+  CakeIcon,
+  LifebuoyIcon,
+  PaperAirplaneIcon,
+  StarIcon,
+} from '@heroicons/react/24/outline';
 import { useAuth } from '../../auth';
 import { generateId } from '../../db';
 import { showToast } from '../../components/ui/Toast';
@@ -30,16 +42,16 @@ interface ServiceCreateModalProps {
 }
 
 const CATEGORIES = [
-  { id: 'transport', label: 'Transport', icon: '🚗' },
-  { id: 'culinary', label: 'Culinary', icon: '👨‍🍳' },
-  { id: 'security', label: 'Security', icon: '🛡️' },
-  { id: 'wellness', label: 'Wellness', icon: '🧖' },
-  { id: 'media', label: 'Media & Photography', icon: '📸' },
-  { id: 'concierge', label: 'Concierge', icon: '🔑' },
-  { id: 'events', label: 'Events', icon: '🎉' },
-  { id: 'marine', label: 'Marine & Yacht', icon: '⛵' },
-  { id: 'aviation', label: 'Aviation', icon: '✈️' },
-  { id: 'other', label: 'Other', icon: '✨' },
+  { id: 'transport', label: 'Transport', icon: TruckIcon },
+  { id: 'culinary', label: 'Culinary', icon: FireIcon },
+  { id: 'security', label: 'Security', icon: ShieldCheckIcon },
+  { id: 'wellness', label: 'Wellness', icon: SparklesIcon },
+  { id: 'media', label: 'Media & Photography', icon: CameraIcon },
+  { id: 'concierge', label: 'Concierge', icon: KeyIcon },
+  { id: 'events', label: 'Events', icon: CakeIcon },
+  { id: 'marine', label: 'Marine & Yacht', icon: LifebuoyIcon },
+  { id: 'aviation', label: 'Aviation', icon: PaperAirplaneIcon },
+  { id: 'other', label: 'Other', icon: StarIcon },
 ];
 
 const AMENITY_SUGGESTIONS = [
@@ -197,21 +209,24 @@ export default function ServiceCreateModal({ isOpen, onClose, onSubmit, initialD
                   Category *
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-                  {CATEGORIES.map((cat) => (
-                    <button
-                      key={cat.id}
-                      type="button"
-                      onClick={() => setFormData({ ...formData, category: cat.id })}
-                      className={`p-3 rounded-xl border-2 text-center transition-all ${
-                        formData.category === cat.id
-                          ? 'border-primary bg-primary/5'
-                          : 'border-outline-variant/10 hover:border-primary/30'
-                      }`}
-                    >
-                      <span className="text-xl mb-1 block">{cat.icon}</span>
-                      <span className="text-[10px] font-bold uppercase">{cat.label}</span>
-                    </button>
-                  ))}
+                  {CATEGORIES.map((cat) => {
+                    const IconComponent = cat.icon;
+                    return (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, category: cat.id })}
+                        className={`p-3 rounded-xl border-2 text-center transition-all ${
+                          formData.category === cat.id
+                            ? 'border-primary bg-primary/5'
+                            : 'border-outline-variant/10 hover:border-primary/30'
+                        }`}
+                      >
+                        <IconComponent className="w-6 h-6 mx-auto mb-1 text-primary" />
+                        <span className="text-[10px] font-bold uppercase">{cat.label}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 

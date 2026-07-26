@@ -42,6 +42,7 @@ import AdminCMSView from './components/AdminCMSView';
 import SPCMSView from './components/SPCMSView';
 import CRMView from './components/CRMView';
 import NotificationCenter from './components/NotificationCenter';
+import Footer from './components/Footer';
 import { useDatabase } from './hooks/useDatabase';
 import { seedDatabase, getListingsWithFallback, syncToLocalStorage } from './db';
 import DashboardSkeleton from './components/ui/DashboardSkeleton';
@@ -580,16 +581,8 @@ function AppContent() {
           )}
         </AnimatePresence>
       </main>
-  
-      <footer className="h-16 border-t border-charcoal/5 flex items-center justify-between px-6 md:px-12 xl:px-20 text-[9px] text-charcoal/40 uppercase tracking-[0.2em] relative z-20 bg-parchment shrink-0">
-        <div>&copy; {new Date().getFullYear()} Cozy Lagos Ltd &bull; Victoria Island Suite 416</div>
-        <div className="hidden sm:flex items-center gap-6 font-semibold">
-          <span className="text-gold-dark">★ Nigeria Luxury Insulated</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-charcoal/20" />
-          <a href="#privacy" className="hover:text-charcoal transition-colors">Safety Dossier</a>
-          <a href="#terms" className="hover:text-charcoal transition-colors">Guest Protocol</a>
-        </div>
-      </footer>
+
+      <Footer />
 
       <AnimatePresence>
         {showCookies && (
