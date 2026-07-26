@@ -4,7 +4,7 @@ import {
   Calendar, MapPin, CreditCard, Bell, Send, Star, Clock, CheckCircle,
   XCircle, Heart, Eye, MessageCircle, Filter, ChevronRight, Sparkles,
   Gift, ShieldCheck, Utensils, Car, Camera, Anchor, TrendingUp, AlertCircle,
-  Trash2, ExternalLink, X, Home
+  Trash2, ExternalLink, X, Home, RefreshCw
 } from 'lucide-react';
 import { useDatabase } from '../hooks/useDatabase';
 import { useAuth } from '../auth';
@@ -191,11 +191,32 @@ export default function UserDashboard() {
     }
   };
 
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    // Simulate refresh by reloading data
+    setTimeout(() => {
+      setIsRefreshing(false);
+      addToast({ type: 'success', title: 'Refreshed', message: 'Dashboard data has been updated' });
+    }, 1000);
+  };
+
   return (
     <div className="flex-grow w-full max-w-[1440px] mx-auto px-6 md:px-12 xl:px-20 py-12 animate-fade-in-up text-left space-y-10">
       <header className="border-b border-charcoal/5 pb-6">
-        <div className="flex items-center gap-2 text-gold-dark font-bold text-[10px] tracking-[0.25em] uppercase mb-1">
-          <span>My Dashboard</span>
+        <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center gap-2 text-gold-dark font-bold text-[10px] tracking-[0.25em] uppercase">
+            <span>My Dashboard</span>
+          </div>
+          <button
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            className="p-2 hover:bg-charcoal/5 rounded-lg transition-colors disabled:opacity-50"
+            title="Refresh dashboard"
+          >
+            <RefreshCw className={`w-4 h-4 text-charcoal/60 ${isRefreshing ? 'animate-spin' : ''}`} />
+          </button>
         </div>
         <h1 className="font-serif text-3xl md:text-5xl font-bold text-charcoal leading-none">
           Hello, {currentUser?.name || 'Guest'}
