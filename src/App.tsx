@@ -412,8 +412,8 @@ function AppContent() {
         <WhatsAppConcierge {...bookingContext} />
   
         <main className="flex-grow flex flex-col relative">
-          {/* Universal Sidebar for authenticated users */}
-          {isAuthenticated && (
+          {/* Universal Sidebar - only for regular users, not for admin/service_provider/super_admin who have their own dashboards */}
+          {isAuthenticated && currentUser?.role === 'user' && (
             <UniversalSidebar
               activeTab={activeTab}
               setActiveTab={handleTabChange}
