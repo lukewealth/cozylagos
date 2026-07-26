@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Calendar, MapPin, Ticket, Plus, Edit3, Trash2, Search, Filter, TrendingUp, Eye, X } from 'lucide-react';
 import { LagosEvent } from '../types';
 import api from '../services/api';
+import { AdminCard, AdminButton, AdminStatCard, AdminBadge, AdminSearch, AdminEmptyState } from './ui';
 
 interface AdminEventsProps {
   onClose?: () => void;
@@ -85,24 +86,48 @@ export default function AdminEvents({ onClose }: AdminEventsProps) {
           <h2 className="text-2xl font-serif font-bold text-charcoal">Events Management</h2>
           <p className="text-sm text-charcoal/60 mt-1">Create and manage Lagos events</p>
         </div>
-        <button
+        <AdminButton
+          variant="primary"
+          icon={Plus}
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gold text-charcoal font-bold text-xs tracking-wider uppercase rounded-lg hover:bg-gold-dark transition-all"
         >
-          <Plus className="w-4 h-4" />
           Create Event
-        </button>
+        </AdminButton>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <AdminStatCard
+          title="Total Events"
+          value={events.length}
+          icon={Calendar}
+          iconColor="text-blue-600"
+        />
+        <AdminStatCard
+          title="Trending"
+          value={events.filter(e => e.isTrending).length}
+          icon={TrendingUp}
+          iconColor="text-orange-600"
+        />
+        <AdminStatCard
+          title="Active"
+          value={events.filter(e => e.isActive !== false).length}
+          icon={Eye}
+          iconColor="text-green-600"
+        />
+        <AdminStatCard
+          title="Categories"
+          value={new Set(events.map(e => e.category)).size}
+          icon={Filter}
+          iconColor="text-purple-600"
+        />
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/40" />
-          <input
-            type="text"
-            placeholder="Search events..."
+        <div className="flex-1">
+          <AdminSearch
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+            onChange={setSearchQuery}
+            placeholder="Search events..."
           />
         </div>
         <select
@@ -118,13 +143,11 @@ export default function AdminEvents({ onClose }: AdminEventsProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredEvents.map(event => (
-          <motion.div
+          <AdminCard
             key={event.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white border border-charcoal/5 rounded-xl overflow-hidden hover:shadow-lg transition-all"
+            className="overflow-hidden hover:shadow-lg"
           >
-            <div className="relative aspect-video overflow-hidden">
+            <div className="relative aspect-video overflow-hidden -mx-6 -mt-6 mb-4">
               <img
                 src={event.image || event.images?.[0] || '/assets/bundles/eventherobackground.png'}
                 alt={event.title}
@@ -134,82 +157,82 @@ export default function AdminEvents({ onClose }: AdminEventsProps) {
                 }}
               />
               {event.isTrending && (
-                <div className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 bg-orange-500 text-white text-[10px] font-bold uppercase rounded-full">
-                  <TrendingUp className="w-3 h-3" />
+                <AdminBadge variant="warning" size="sm" className="absolute top-3 left-3">
+                  <TrendingUp className="w-3 h-3 mr-1" />
                   Trending
-                </div>
+                </AdminBadge>
               )}
-              <div className="absolute top-3 right-3 flex gap-2">
-                <button
+              <div className="absolute top-3 right-3">
+                <AdminButton
+                  variant="ghost"
+                  size="sm"
+                  icon={TrendingUp}
                   onClick={() => handleToggleTrending(event)}
-                  className="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-all"
-                  title={event.isTrending ? 'Remove from trending' : 'Mark as trending'}
-                >
-                  <TrendingUp className={`w-4 h-4 ${event.isTrending ? 'text-orange-500' : 'text-charcoal/40'}`} />
-                </button>
+                  className={event.isTrending ? 'text-orange-500' : 'text-charcoal/40'}
+                />
               </div>
             </div>
 
-            <div className="p-4">
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="font-serif text-lg font-bold text-charcoal line-clamp-1">{event.title}</h3>
-                <span className="px-2 py-0.5 bg-charcoal/5 text-charcoal/60 text-[10px] font-bold uppercase rounded-full">
-                  {event.category}
-                </span>
-              </div>
+            <div className="flex items-start justify-between mb-2">
+              <h3 className="font-serif text-lg font-bold text-charcoal line-clamp-1">{event.title}</h3>
+              <AdminBadge variant="info" size="sm">
+                {event.category}
+              </AdminBadge>
+            </div>
 
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2 text-xs text-charcoal/60">
-                  <Calendar className="w-3.5 h-3.5" />
-                  <span>{event.date}</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-charcoal/60">
-                  <MapPin className="w-3.5 h-3.5" />
-                  <span>{event.location}</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-charcoal/60">
-                  <Ticket className="w-3.5 h-3.5" />
-                  <span>{event.price}</span>
-                </div>
+            <div className="space-y-2 mb-4">
+              <div className="flex items-center gap-2 text-xs text-charcoal/60">
+                <Calendar className="w-3.5 h-3.5" />
+                <span>{event.date}</span>
               </div>
-
-              <div className="flex items-center justify-between pt-3 border-t border-charcoal/5">
-                <div className="text-xs text-charcoal/50">
-                  <span className="font-semibold text-charcoal">{event.ticketsSold || 0}</span> sold
-                  {event.ticketsAvailable > 0 && (
-                    <span className="ml-2">
-                      <span className="font-semibold text-charcoal">{event.ticketsAvailable}</span> available
-                    </span>
-                  )}
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setEditingEvent(event)}
-                    className="p-2 text-charcoal/40 hover:text-gold-dark transition-colors"
-                    title="Edit event"
-                  >
-                    <Edit3 className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => setShowDeleteConfirm(event.id)}
-                    className="p-2 text-charcoal/40 hover:text-red-500 transition-colors"
-                    title="Delete event"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
+              <div className="flex items-center gap-2 text-xs text-charcoal/60">
+                <MapPin className="w-3.5 h-3.5" />
+                <span>{event.location}</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-charcoal/60">
+                <Ticket className="w-3.5 h-3.5" />
+                <span>{event.price}</span>
               </div>
             </div>
-          </motion.div>
+
+            <div className="flex items-center justify-between pt-3 border-t border-charcoal/5">
+              <div className="text-xs text-charcoal/50">
+                <span className="font-semibold text-charcoal">{event.ticketsSold || 0}</span> sold
+                {event.ticketsAvailable > 0 && (
+                  <span className="ml-2">
+                    <span className="font-semibold text-charcoal">{event.ticketsAvailable}</span> available
+                  </span>
+                )}
+              </div>
+              <div className="flex gap-2">
+                <AdminButton
+                  variant="ghost"
+                  size="sm"
+                  icon={Edit3}
+                  onClick={() => setEditingEvent(event)}
+                />
+                <AdminButton
+                  variant="danger"
+                  size="sm"
+                  icon={Trash2}
+                  onClick={() => setShowDeleteConfirm(event.id)}
+                />
+              </div>
+            </div>
+          </AdminCard>
         ))}
       </div>
 
       {filteredEvents.length === 0 && (
-        <div className="text-center py-16">
-          <Calendar className="w-16 h-16 text-charcoal/20 mx-auto mb-4" />
-          <p className="text-lg font-semibold text-charcoal mb-2">No events found</p>
-          <p className="text-sm text-charcoal/50">Create your first event to get started</p>
-        </div>
+        <AdminEmptyState
+          icon={Calendar}
+          title="No events found"
+          description="Create your first event to get started"
+          action={{
+            label: 'Create Event',
+            onClick: () => setShowCreateModal(true)
+          }}
+        />
       )}
 
       <AnimatePresence>
