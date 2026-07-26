@@ -16,6 +16,8 @@ export interface TrendingGem {
   location: string;
   rating: number;
   isTrending: boolean;
+  isBoosted?: boolean;
+  boostSlot?: number;
   views: number;
   bookings: number;
   createdAt: string;

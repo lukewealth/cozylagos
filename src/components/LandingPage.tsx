@@ -1,8 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Anchor, ArrowRight, Shield, Waves, Wifi, Flame, MapPin, Compass, HandHelping } from 'lucide-react';
+import { Anchor, ArrowRight, Shield, Waves, Wifi, Flame, MapPin, Compass, HandHelping, TrendingUp, Star, Calendar } from 'lucide-react';
 import { Listing } from '../types';
 import { INITIAL_LISTINGS } from '../data';
+import { useCMSStore } from '../stores/cmsStore';
+import { TrendingGem } from '../db/indexedDb';
 import ApartmentCard from './ui/ApartmentCard';
 import GemCard from './ui/GemCard';
 import Hero from './Hero';
@@ -19,11 +21,19 @@ interface LandingPageProps {
 
 export default function LandingPage({ listings, onSelectListing, setActiveTab }: LandingPageProps) {
   const allListings = listings.length > 0 ? listings : INITIAL_LISTINGS;
+  const { init, getBoostedGems } = useCMSStore();
 
   const [filteredListings, setFilteredListings] = useState<Listing[]>(allListings);
   const [searchQuery, setSearchQuery] = useState('');
   const [showMap, setShowMap] = useState(false);
   const [homeTab, setHomeTab] = useState<'gems' | 'explore-lagos' | 'vip-services'>('gems');
+  const [boostedGems, setBoostedGems] = useState<TrendingGem[]>([]);
+
+  useEffect(() => {
+    init().then(() => {
+      setBoostedGems(getBoostedGems());
+    });
+  }, [init, getBoostedGems]);
 
   const handleSearchResults = (results: Listing[], query: string) => {
     setFilteredListings(results.length > 0 ? results : allListings);
@@ -81,6 +91,93 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
                 </div>
               </div>
             </Hero>
+            {/* 1B. GEM BOOST PROMOTIONS */}
+            {boostedGems.length > 0 && (
+              <section className="py-8 sm:py-12 px-4 sm:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 gap-4">
+                  <div className="text-left">
+                    <div className="flex items-center gap-2 mb-2">
+                      <TrendingUp className="w-4 h-4 text-gold-dark" />
+                      <span className="text-gold-dark font-bold text-[10px] tracking-[0.25em] uppercase">
+                        Limited Promotion
+                      </span>
+                    </div>
+                    <h2 className="font-serif text-2xl md:text-4xl text-charcoal mb-2">Trending Now</h2>
+                    <div className="w-16 h-1 bg-gold rounded-full"></div>
+                  </div>
+                  <span className="text-[10px] text-charcoal/40 font-bold uppercase tracking-widest">
+                    {boostedGems.length} spotlight{boostedGems.length !== 1 ? 's' : ''}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {boostedGems.map((gem) => (
+                    <motion.div
+                      key={gem.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4 }}
+                      className="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl border border-gold/20 transition-all duration-300 cursor-pointer"
+                      onClick={() => {
+                        if (gem.category === 'apartment') {
+                          const match = allListings.find((l) => l.title.toLowerCase() === gem.title.toLowerCase());
+                          if (match) onSelectListing(match);
+                        } else if (gem.category === 'bundle') {
+                          setActiveTab('bundles');
+                        }
+                      }}
+                    >
+                      <div className="relative aspect-[4/3] overflow-hidden">
+                        <img
+                          src={gem.image}
+                          alt={gem.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                        <div className="absolute top-2.5 left-2.5 flex items-center gap-1 bg-gold text-charcoal px-2 py-0.5 rounded-full shadow-lg">
+                          <TrendingUp className="w-3 h-3" />
+                          <span className="text-[9px] font-bold uppercase tracking-wider">Boosted</span>
+                        </div>
+                        <div className="absolute top-2.5 right-2.5 bg-white/90 backdrop-blur-md px-1.5 py-0.5 rounded-full flex items-center gap-1">
+                          <Star className="w-2.5 h-2.5 text-gold-dark fill-current" />
+                          <span className="text-[9px] font-bold text-charcoal">{gem.rating}</span>
+                        </div>
+                        <div className="absolute bottom-2.5 left-2.5 right-2.5">
+                          <h3 className="font-serif text-sm font-bold text-white line-clamp-1 drop-shadow-lg">{gem.title}</h3>
+                          <div className="flex items-center gap-1 mt-0.5">
+                            <MapPin className="w-2.5 h-2.5 text-white/80" />
+                            <span className="text-[10px] text-white/80">{gem.location}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="p-3">
+                        <p className="text-[10px] text-charcoal/60 line-clamp-1 mb-2">{gem.description}</p>
+                        <div className="flex items-center justify-between">
+                          <span className="font-serif text-sm font-bold text-gold-dark">{gem.price}</span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (gem.category === 'apartment') {
+                                const match = allListings.find((l) => l.title.toLowerCase() === gem.title.toLowerCase());
+                                if (match) onSelectListing(match);
+                              } else if (gem.category === 'bundle') {
+                                setActiveTab('bundles');
+                              }
+                            }}
+                            className="px-3 py-1.5 bg-charcoal text-parchment hover:bg-gold-dark font-bold text-[9px] uppercase tracking-wider rounded-lg transition-all flex items-center gap-1 active:scale-95"
+                          >
+                            <Calendar className="w-3 h-3" />
+                            <span>Book</span>
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </section>
+            )}
+
             {/* 2. LAGOS GEMS - HOT DEALS */}
             <section className="py-10 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
               <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10 md:mb-12 gap-4">

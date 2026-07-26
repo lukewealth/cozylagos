@@ -16,6 +16,9 @@ interface CMSState {
   updateTrendingGem: (gem: TrendingGem) => Promise<void>;
   deleteTrendingGem: (id: string) => Promise<void>;
   toggleTrending: (id: string) => Promise<void>;
+  boostGem: (id: string) => Promise<void>;
+  unboostGem: (id: string) => Promise<void>;
+  getBoostedGems: () => TrendingGem[];
   
   addVIPService: (service: VIPService) => Promise<void>;
   updateVIPService: (service: VIPService) => Promise<void>;
@@ -89,6 +92,39 @@ export const useCMSStore = create<CMSState>((set, get) => ({
       const updated = { ...gem, isTrending: !gem.isTrending, updatedAt: new Date().toISOString() };
       await get().updateTrendingGem(updated);
     }
+  },
+
+  boostGem: async (id) => {
+    const boosted = get().trendingGems.filter((g) => g.isBoosted);
+    if (boosted.length >= 8) return;
+    const gem = get().trendingGems.find((g) => g.id === id);
+    if (gem && !gem.isBoosted) {
+      const nextSlot = boosted.length + 1;
+      const updated = { ...gem, isBoosted: true, boostSlot: nextSlot, updatedAt: new Date().toISOString() };
+      await get().updateTrendingGem(updated);
+    }
+  },
+
+  unboostGem: async (id) => {
+    const gem = get().trendingGems.find((g) => g.id === id);
+    if (gem && gem.isBoosted) {
+      const updated = { ...gem, isBoosted: false, boostSlot: undefined, updatedAt: new Date().toISOString() };
+      await get().updateTrendingGem(updated);
+      const remaining = get().trendingGems.filter((g) => g.isBoosted && g.id !== id);
+      remaining.sort((a, b) => (a.boostSlot || 0) - (b.boostSlot || 0));
+      for (let i = 0; i < remaining.length; i++) {
+        if (remaining[i].boostSlot !== i + 1) {
+          const reindexed = { ...remaining[i], boostSlot: i + 1, updatedAt: new Date().toISOString() };
+          await get().updateTrendingGem(reindexed);
+        }
+      }
+    }
+  },
+
+  getBoostedGems: () => {
+    return get().trendingGems
+      .filter((g) => g.isBoosted)
+      .sort((a, b) => (a.boostSlot || 0) - (b.boostSlot || 0));
   },
 
   addVIPService: async (service) => {

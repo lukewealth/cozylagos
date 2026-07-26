@@ -238,6 +238,36 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
     setIsProcessing(false);
   };
 
+  const handlePurgeDatabase = async () => {
+    if (!confirm('Are you sure you want to purge all demo/test data from the database? This action cannot be undone.')) {
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      await purgeDemoData();
+      showToast({ type: 'success', title: 'Database Purged', message: 'All demo/test data has been removed' });
+    } catch (error) {
+      showToast({ type: 'error', title: 'Error', message: 'Failed to purge database' });
+    }
+    setIsProcessing(false);
+  };
+
+  const handleFlushSystem = async () => {
+    if (!confirm('Are you sure you want to flush the system cache? This will clear all cached data.')) {
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      await flushSystem();
+      showToast({ type: 'success', title: 'System Flushed', message: 'System cache has been cleared' });
+    } catch (error) {
+      showToast({ type: 'error', title: 'Error', message: 'Failed to flush system' });
+    }
+    setIsProcessing(false);
+  };
+
   const handleWhatsAppNotify = (booking: BookingRequest) => {
     const message = `Hi ${booking.guestName}, your booking for ${booking.listingTitle} (${booking.checkIn} to ${booking.checkOut}) has been confirmed! Total: ₦${booking.totalAmount.toLocaleString()}. Welcome to Cozy Lagos!`;
     window.open(`https://wa.me/2348064305782?text=${encodeURIComponent(message)}`, '_blank');
@@ -411,6 +441,26 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                       >
                         <Radio className="w-4 h-4" />
                         Broadcast Update
+                      </button>
+                    </Tooltip>
+                    <Tooltip content="Purge Database" description="Remove all demo/test data">
+                      <button 
+                        onClick={handlePurgeDatabase}
+                        disabled={isProcessing}
+                        className="px-6 py-3 bg-red-600 text-white rounded-lg text-body-md font-bold hover:bg-red-700 transition-colors flex items-center gap-2 disabled:opacity-50"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Purge DB
+                      </button>
+                    </Tooltip>
+                    <Tooltip content="Flush System" description="Clear system cache">
+                      <button 
+                        onClick={handleFlushSystem}
+                        disabled={isProcessing}
+                        className="px-6 py-3 bg-orange-600 text-white rounded-lg text-body-md font-bold hover:bg-orange-700 transition-colors flex items-center gap-2 disabled:opacity-50"
+                      >
+                        <RefreshCw className="w-4 h-4" />
+                        Flush
                       </button>
                     </Tooltip>
                   </div>
