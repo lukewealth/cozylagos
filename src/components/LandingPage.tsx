@@ -215,7 +215,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
                     onClick={() => setActiveTab('yacht-experience')}
                   >
                     <img
-                      src="/assets/images/explore/lekki-lagoon-sunset-cruise.avif"
+                      src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=1200&q=80"
                       alt="Private Yacht Charter"
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
@@ -244,7 +244,7 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
                     onClick={() => setActiveTab('bundles')}
                   >
                     <img
-                      src="/assets/images/horizontal/Premium bondle.jpg"
+                      src="/assets/bundles/bundles-hero-background.jpeg"
                       alt="Service Bundles"
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />

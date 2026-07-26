@@ -226,6 +226,18 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
     );
   }, [searchQuery]);
 
+  const handleDeleteBooking = async (booking: BookingRequest) => {
+    setIsProcessing(true);
+    try {
+      await api.bookings.delete(booking.id);
+      updateBooking({ ...booking, status: 'deleted', updatedAt: new Date().toISOString() } as any);
+      showToast({ type: 'success', title: 'Booking Deleted', message: `Booking for ${booking.guestName} has been permanently removed` });
+    } catch (error) {
+      showToast({ type: 'error', title: 'Error', message: 'Failed to delete booking' });
+    }
+    setIsProcessing(false);
+  };
+
   const handleWhatsAppNotify = (booking: BookingRequest) => {
     const message = `Hi ${booking.guestName}, your booking for ${booking.listingTitle} (${booking.checkIn} to ${booking.checkOut}) has been confirmed! Total: ₦${booking.totalAmount.toLocaleString()}. Welcome to Cozy Lagos!`;
     window.open(`https://wa.me/2348064305782?text=${encodeURIComponent(message)}`, '_blank');
@@ -729,6 +741,18 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                                 <Tooltip content="View Details" description="See full booking info">
                                   <button className="p-1.5 text-secondary hover:bg-surface-container rounded-lg transition-colors">
                                     <Eye className="w-4 h-4" />
+                                  </button>
+                                </Tooltip>
+                                <Tooltip content="Delete Booking" description="Permanently remove this booking">
+                                  <button
+                                    onClick={() => {
+                                      if (confirm(`Are you sure you want to delete this booking for ${booking.guestName}? This action cannot be undone.`)) {
+                                        handleDeleteBooking(booking);
+                                      }
+                                    }}
+                                    className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
                                   </button>
                                 </Tooltip>
                               </div>
