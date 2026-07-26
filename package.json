@@ -32,6 +32,8 @@
     "express": "^4.21.2",
     "firebase": "^12.16.0",
     "firebase-admin": "^14.2.0",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.546.0",
     "mongodb": "^7.3.0",

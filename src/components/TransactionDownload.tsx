@@ -6,6 +6,8 @@ import {
 } from 'lucide-react';
 import { useDatabase } from '../hooks/useDatabase';
 import { useAuth } from '../auth';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 interface Transaction {
   id: string;
@@ -84,85 +86,56 @@ export default function TransactionDownload() {
   };
 
   const handleDownloadPDF = () => {
-    // Create a simple HTML report for PDF
-    const reportHTML = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Transaction Report - ${new Date().toLocaleDateString()}</title>
-        <style>
-          body { font-family: Arial, sans-serif; padding: 20px; }
-          h1 { color: #333; }
-          .summary { display: flex; gap: 20px; margin: 20px 0; }
-          .summary-item { padding: 15px; background: #f5f5f5; border-radius: 8px; flex: 1; }
-          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-          th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
-          th { background: #f9f9f9; font-weight: bold; }
-          .amount-positive { color: green; }
-          .amount-negative { color: red; }
-        </style>
-      </head>
-      <body>
-        <h1>Transaction Report</h1>
-        <p>Generated on: ${new Date().toLocaleString()}</p>
-        <p>Date Range: ${dateRange.start || 'All'} to ${dateRange.end || 'All'}</p>
-        
-        <div class="summary">
-          <div class="summary-item">
-            <h3>Total Revenue</h3>
-            <p class="amount-positive">₦${totalRevenue.toLocaleString()}</p>
-          </div>
-          <div class="summary-item">
-            <h3>Total Payouts</h3>
-            <p class="amount-negative">₦${totalPayouts.toLocaleString()}</p>
-          </div>
-          <div class="summary-item">
-            <h3>Total Refunds</h3>
-            <p class="amount-negative">₦${totalRefunds.toLocaleString()}</p>
-          </div>
-          <div class="summary-item">
-            <h3>Net Amount</h3>
-            <p>₦${(totalRevenue - totalPayouts - totalRefunds).toLocaleString()}</p>
-          </div>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Reference</th>
-              <th>Type</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${filteredTransactions.map(tx => `
-              <tr>
-                <td>${tx.date}</td>
-                <td>${tx.reference}</td>
-                <td>${tx.type}</td>
-                <td class="${tx.amount >= 0 ? 'amount-positive' : 'amount-negative'}">
-                  ₦${Math.abs(tx.amount).toLocaleString()}
-                </td>
-                <td>${tx.status}</td>
-                <td>${tx.description}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </body>
-      </html>
-    `;
-
-    const blob = new Blob([reportHTML], { type: 'text/html' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `transaction_report_${new Date().toISOString().split('T')[0]}.html`;
-    a.click();
-    window.URL.revokeObjectURL(url);
+    const doc = new jsPDF();
+    
+    // Add title
+    doc.setFontSize(20);
+    doc.setTextColor(40);
+    doc.text('Transaction Report', 14, 22);
+    
+    // Add metadata
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    const dateStr = new Date().toLocaleString();
+    doc.text(`Generated on: ${dateStr}`, 14, 32);
+    doc.text(`Date Range: ${dateRange.start || 'All'} to ${dateRange.end || 'All'}`, 14, 38);
+    
+    // Add summary section
+    doc.setFontSize(14);
+    doc.setTextColor(40);
+    doc.text('Summary', 14, 50);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(60);
+    doc.text(`Total Revenue: ₦${totalRevenue.toLocaleString()}`, 14, 58);
+    doc.setTextColor(220, 50, 50);
+    doc.text(`Total Payouts: ₦${totalPayouts.toLocaleString()}`, 14, 65);
+    doc.text(`Total Refunds: ₦${totalRefunds.toLocaleString()}`, 14, 72);
+    doc.setTextColor(40);
+    doc.text(`Net Amount: ₦${(totalRevenue - totalPayouts - totalRefunds).toLocaleString()}`, 14, 79);
+    
+    // Add table
+    const tableColumn = ['Date', 'Reference', 'Type', 'Amount', 'Status', 'Description'];
+    const tableRows = filteredTransactions.map(tx => [
+      tx.date,
+      tx.reference,
+      tx.type.replace('_', ' '),
+      `₦${Math.abs(tx.amount).toLocaleString()}`,
+      tx.status,
+      tx.description.substring(0, 40) + (tx.description.length > 40 ? '...' : '')
+    ]);
+    
+    (doc as any).autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 85,
+      theme: 'striped',
+      headStyles: { fillColor: [212, 175, 55] },
+      styles: { fontSize: 8 }
+    });
+    
+    // Save the PDF
+    doc.save(`transaction_report_${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
   const types = ['all', 'booking_revenue', 'payout', 'refund', 'redemption'];
