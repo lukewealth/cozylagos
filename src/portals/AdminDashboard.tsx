@@ -213,6 +213,19 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
     setIsProcessing(false);
   };
 
+  const filteredArrivals = useMemo(() => {
+    if (!searchQuery.trim()) return MOCK_ARRIVALS;
+    
+    const query = searchQuery.toLowerCase();
+    return MOCK_ARRIVALS.filter(arrival => 
+      arrival.guestName.toLowerCase().includes(query) ||
+      arrival.listingTitle.toLowerCase().includes(query) ||
+      arrival.unitCode.toLowerCase().includes(query) ||
+      arrival.status.toLowerCase().includes(query) ||
+      arrival.tier.toLowerCase().includes(query)
+    );
+  }, [searchQuery]);
+
   const handleWhatsAppNotify = (booking: BookingRequest) => {
     const message = `Hi ${booking.guestName}, your booking for ${booking.listingTitle} (${booking.checkIn} to ${booking.checkOut}) has been confirmed! Total: ₦${booking.totalAmount.toLocaleString()}. Welcome to Cozy Lagos!`;
     window.open(`https://wa.me/2348064305782?text=${encodeURIComponent(message)}`, '_blank');
@@ -441,7 +454,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-outline-variant/10">
-                            {MOCK_ARRIVALS.map((arrival) => (
+                            {filteredArrivals.map((arrival) => (
                               <motion.tr
                                 key={arrival.id}
                                 whileHover={{ backgroundColor: 'rgba(244, 243, 242, 0.5)' }}
