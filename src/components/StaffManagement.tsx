@@ -8,6 +8,7 @@ import { useDatabase } from '../hooks/useDatabase';
 import { useAuth } from '../auth';
 import api from '../services/api';
 import { ToastContainer, showToast } from './ui/Toast';
+import { AdminCard, AdminButton, AdminStatCard, AdminBadge, AdminSearch, AdminEmptyState, AdminModal } from './ui';
 
 interface StaffMember {
   id: string;
@@ -112,52 +113,51 @@ export default function StaffManagement() {
           <h2 className="text-2xl font-serif font-bold text-charcoal">Staff Management</h2>
           <p className="text-sm text-charcoal/60 mt-1">Manage your team members and their roles</p>
         </div>
-        <button
+        <AdminButton
+          variant="primary"
+          icon={Plus}
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gold text-charcoal font-bold text-xs tracking-wider uppercase rounded-lg hover:bg-gold-dark transition-all"
         >
-          <Plus className="w-4 h-4" />
           Add Staff
-        </button>
+        </AdminButton>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
-          <p className="text-xs text-charcoal/60 uppercase tracking-wider">Total Staff</p>
-          <p className="text-2xl font-bold text-charcoal mt-1">{staff.length}</p>
-        </div>
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
-          <p className="text-xs text-charcoal/60 uppercase tracking-wider">Active</p>
-          <p className="text-2xl font-bold text-green-600 mt-1">
-            {staff.filter((s: any) => s.status === 'active').length}
-          </p>
-        </div>
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
-          <p className="text-xs text-charcoal/60 uppercase tracking-wider">On Leave</p>
-          <p className="text-2xl font-bold text-orange-600 mt-1">
-            {staff.filter((s: any) => s.status === 'on_leave').length}
-          </p>
-        </div>
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
-          <p className="text-xs text-charcoal/60 uppercase tracking-wider">Avg Rating</p>
-          <p className="text-2xl font-bold text-gold-dark mt-1">
-            {staff.length > 0 
-              ? (staff.reduce((sum: number, s: any) => sum + (s.rating || 0), 0) / staff.length).toFixed(1)
-              : '0.0'
-            }
-          </p>
-        </div>
+        <AdminStatCard
+          title="Total Staff"
+          value={staff.length}
+          icon={Users}
+          iconColor="text-blue-600"
+        />
+        <AdminStatCard
+          title="Active"
+          value={staff.filter((s: any) => s.status === 'active').length}
+          icon={Check}
+          iconColor="text-green-600"
+        />
+        <AdminStatCard
+          title="On Leave"
+          value={staff.filter((s: any) => s.status === 'on_leave').length}
+          icon={Clock}
+          iconColor="text-orange-600"
+        />
+        <AdminStatCard
+          title="Avg Rating"
+          value={staff.length > 0 
+            ? (staff.reduce((sum: number, s: any) => sum + (s.rating || 0), 0) / staff.length).toFixed(1)
+            : '0.0'
+          }
+          icon={Star}
+          iconColor="text-gold-dark"
+        />
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/40" />
-          <input
-            type="text"
-            placeholder="Search staff..."
+        <div className="flex-1">
+          <AdminSearch
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+            onChange={setSearchQuery}
+            placeholder="Search staff..."
           />
         </div>
         <select
@@ -182,17 +182,15 @@ export default function StaffManagement() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredStaff.map((member: any) => (
-          <motion.div
+          <AdminCard
             key={member.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white border border-charcoal/5 rounded-xl p-5 hover:shadow-lg transition-all"
+            className="hover:shadow-lg"
           >
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center">
                   <span className="text-lg font-bold text-gold-dark">
-                    {member.name.split(' ').map(n => n[0]).join('')}
+                    {member.name.split(' ').map((n: string) => n[0]).join('')}
                   </span>
                 </div>
                 <div>
@@ -200,13 +198,16 @@ export default function StaffManagement() {
                   <p className="text-xs text-charcoal/60">{member.role}</p>
                 </div>
               </div>
-              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
-                member.status === 'active' ? 'bg-green-100 text-green-700' :
-                member.status === 'on_leave' ? 'bg-orange-100 text-orange-700' :
-                'bg-slate-100 text-slate-700'
-              }`}>
+              <AdminBadge
+                variant={
+                  member.status === 'active' ? 'success' :
+                  member.status === 'on_leave' ? 'warning' :
+                  'default'
+                }
+                size="sm"
+              >
                 {member.status}
-              </span>
+              </AdminBadge>
             </div>
 
             <div className="space-y-2 mb-4">
@@ -233,37 +234,43 @@ export default function StaffManagement() {
             {member.specialties && member.specialties.length > 0 && (
               <div className="flex flex-wrap gap-1 mb-4">
                 {member.specialties.slice(0, 3).map((spec: string, i: number) => (
-                  <span key={i} className="text-[9px] font-medium text-charcoal/50 bg-charcoal/5 px-2 py-0.5 rounded-full">
+                  <AdminBadge key={i} variant="info" size="sm">
                     {spec}
-                  </span>
+                  </AdminBadge>
                 ))}
               </div>
             )}
 
             <div className="flex gap-2 pt-3 border-t border-charcoal/5">
-              <button
+              <AdminButton
+                variant="ghost"
+                size="sm"
                 onClick={() => setEditingStaff(member)}
-                className="flex-1 py-2 bg-charcoal/5 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/10 transition-colors"
+                className="flex-1"
               >
                 Edit
-              </button>
-              <button
+              </AdminButton>
+              <AdminButton
+                variant="danger"
+                size="sm"
+                icon={Trash2}
                 onClick={() => setShowDeleteConfirm(member.id)}
-                className="py-2 px-3 bg-red-50 text-red-500 font-bold text-xs uppercase rounded-lg hover:bg-red-100 transition-colors"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
+              />
             </div>
-          </motion.div>
+          </AdminCard>
         ))}
       </div>
 
       {filteredStaff.length === 0 && (
-        <div className="text-center py-16">
-          <Users className="w-16 h-16 text-charcoal/20 mx-auto mb-4" />
-          <p className="text-lg font-semibold text-charcoal mb-2">No staff members found</p>
-          <p className="text-sm text-charcoal/50">Add your first staff member to get started</p>
-        </div>
+        <AdminEmptyState
+          icon={Users}
+          title="No staff members found"
+          description="Add your first staff member to get started"
+          action={{
+            label: 'Add Staff',
+            onClick: () => setShowCreateModal(true)
+          }}
+        />
       )}
 
       <AnimatePresence>

@@ -7,6 +7,7 @@ import {
 import { useDatabase } from '../hooks/useDatabase';
 import { useAuth } from '../auth';
 import { ToastContainer, showToast } from './ui/Toast';
+import { AdminCard, AdminButton, AdminStatCard, AdminBadge, AdminSearch, AdminEmptyState } from './ui';
 
 interface User {
   id: string;
@@ -99,49 +100,48 @@ export default function UserManagement() {
           <h2 className="text-2xl font-serif font-bold text-charcoal">User Management</h2>
           <p className="text-sm text-charcoal/60 mt-1">Manage all users across the platform</p>
         </div>
-        <button
+        <AdminButton
+          variant="primary"
+          icon={Plus}
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gold text-charcoal font-bold text-xs tracking-wider uppercase rounded-lg hover:bg-gold-dark transition-all"
         >
-          <Plus className="w-4 h-4" />
           Add User
-        </button>
+        </AdminButton>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
-          <p className="text-xs text-charcoal/60 uppercase tracking-wider">Total Users</p>
-          <p className="text-2xl font-bold text-charcoal mt-1">{users.length}</p>
-        </div>
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
-          <p className="text-xs text-charcoal/60 uppercase tracking-wider">Active</p>
-          <p className="text-2xl font-bold text-green-600 mt-1">
-            {users.filter((u: any) => u.status === 'active').length}
-          </p>
-        </div>
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
-          <p className="text-xs text-charcoal/60 uppercase tracking-wider">Suspended</p>
-          <p className="text-2xl font-bold text-red-600 mt-1">
-            {users.filter((u: any) => u.status === 'suspended').length}
-          </p>
-        </div>
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
-          <p className="text-xs text-charcoal/60 uppercase tracking-wider">Verified</p>
-          <p className="text-2xl font-bold text-gold-dark mt-1">
-            {users.filter((u: any) => u.verified).length}
-          </p>
-        </div>
+        <AdminStatCard
+          title="Total Users"
+          value={users.length}
+          icon={Users}
+          iconColor="text-blue-600"
+        />
+        <AdminStatCard
+          title="Active"
+          value={users.filter((u: any) => u.status === 'active').length}
+          icon={Check}
+          iconColor="text-green-600"
+        />
+        <AdminStatCard
+          title="Suspended"
+          value={users.filter((u: any) => u.status === 'suspended').length}
+          icon={Ban}
+          iconColor="text-red-600"
+        />
+        <AdminStatCard
+          title="Verified"
+          value={users.filter((u: any) => u.verified).length}
+          icon={Shield}
+          iconColor="text-gold-dark"
+        />
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/40" />
-          <input
-            type="text"
-            placeholder="Search users..."
+        <div className="flex-1">
+          <AdminSearch
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+            onChange={setSearchQuery}
+            placeholder="Search users..."
           />
         </div>
         <select
@@ -204,14 +204,17 @@ export default function UserManagement() {
                     </div>
                   </td>
                   <td className="py-3 px-4">
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
-                      user.role === 'super_admin' ? 'bg-red-100 text-red-700' :
-                      user.role === 'admin' ? 'bg-purple-100 text-purple-700' :
-                      user.role === 'service_provider' ? 'bg-blue-100 text-blue-700' :
-                      'bg-charcoal/5 text-charcoal/70'
-                    }`}>
+                    <AdminBadge
+                      variant={
+                        user.role === 'super_admin' ? 'danger' :
+                        user.role === 'admin' ? 'warning' :
+                        user.role === 'service_provider' ? 'info' :
+                        'default'
+                      }
+                      size="sm"
+                    >
                       {user.role.replace('_', ' ')}
-                    </span>
+                    </AdminBadge>
                   </td>
                   <td className="py-3 px-4">
                     <span className={`flex items-center gap-1 text-xs font-bold ${

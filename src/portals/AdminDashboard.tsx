@@ -28,7 +28,7 @@ import NotificationManagement from '../components/NotificationManagement';
 import TransactionDownload from '../components/TransactionDownload';
 import UserManagement from '../components/UserManagement';
 import PropertyManagement from '../components/PropertyManagement';
-import { AdminStatCard, AdminCard, AdminButton, AdminBadge } from '../components/ui';
+import { AdminStatCard, AdminCard, AdminButton, AdminBadge, CloudSyncIndicator } from '../components/ui';
 import { purgeDemoData, flushSystem, syncRealData, getSystemStats } from '../utils/databasePurge';
 
 interface AdminDashboardProps {
@@ -255,6 +255,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                   {backendHealth.status === 'connected' ? 'Cloud' : backendHealth.status === 'fallback' ? 'Local' : 'Offline'}
                 </div>
               </Tooltip>
+              <CloudSyncIndicator />
               <Tooltip content="Notifications" description="View alerts and updates">
                 <button className="p-2 rounded-full hover:bg-surface-container text-secondary transition-colors relative">
                   <Bell className="w-5 h-5" />

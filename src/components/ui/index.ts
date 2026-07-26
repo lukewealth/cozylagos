@@ -10,3 +10,4 @@ export { AdminInput } from './AdminInput';
 export { default as AdminSearch } from './AdminSearch';
 export { default as AdminTabs } from './AdminTabs';
 export { default as AdminDropdown } from './AdminDropdown';
+export { default as CloudSyncIndicator } from './CloudSyncIndicator';
