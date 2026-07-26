@@ -28,6 +28,7 @@ import NotificationManagement from '../components/NotificationManagement';
 import TransactionDownload from '../components/TransactionDownload';
 import UserManagement from '../components/UserManagement';
 import PropertyManagement from '../components/PropertyManagement';
+import AdminSupportManagement from '../components/AdminSupportManagement';
 import CRMView from '../components/CRMView';
 import HelpSupportModal from '../components/ui/HelpSupportModal';
 import { AdminStatCard, AdminCard, AdminButton, AdminBadge, CloudSyncIndicator } from '../components/ui';
@@ -54,7 +55,7 @@ interface BookingRequest {
   services?: string[];
 }
 
-type AdminSection = 'dashboard' | 'admin-dashboard' | 'requests' | 'guests' | 'services' | 'reports' | 'listings' | 'bookings' | 'events' | 'tasks' | 'crm' | 'staff' | 'notifications' | 'transactions' | 'users' | 'properties' | 'analytics' | 'overview' | 'ledger';
+type AdminSection = 'dashboard' | 'admin-dashboard' | 'requests' | 'guests' | 'services' | 'reports' | 'listings' | 'bookings' | 'events' | 'tasks' | 'crm' | 'staff' | 'notifications' | 'support' | 'transactions' | 'users' | 'properties' | 'analytics' | 'overview' | 'ledger';
 
 const MOCK_ARRIVALS = [
   { id: 'arr-1', guestName: 'Adewale Johnson', initials: 'AJ', tier: 'vip' as const, listingTitle: 'The Ikoyi Penthouse', unitCode: 'UNIT 402', status: 'en_route' as const, eta: '8 mins away' },
@@ -765,6 +766,18 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                 transition={{ duration: 0.25 }}
               >
                 <NotificationManagement />
+              </motion.div>
+            )}
+
+            {activeSection === 'support' && (
+              <motion.div
+                key="support"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+              >
+                <AdminSupportManagement />
               </motion.div>
             )}
 

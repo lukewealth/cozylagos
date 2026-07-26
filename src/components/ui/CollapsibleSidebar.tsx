@@ -29,6 +29,7 @@ const ADMIN_NAV: NavItem[] = [
   { id: 'crm', label: 'CRM & Tickets', icon: MessageSquare, description: 'Support tickets & CRM' },
   { id: 'staff', label: 'Staff', icon: UserCheck, description: 'Manage staff members' },
   { id: 'notifications', label: 'Notifications', icon: Send, description: 'Send & manage notifications' },
+  { id: 'support', label: 'Support', icon: MessageSquare, description: 'Manage support tickets' },
   { id: 'transactions', label: 'Transactions', icon: FileText, description: 'Download & audit transactions' },
   { id: 'users', label: 'Users', icon: Users, description: 'Manage all users' },
   { id: 'overview', label: 'Analytics', icon: BarChart3, description: 'Platform metrics' },
