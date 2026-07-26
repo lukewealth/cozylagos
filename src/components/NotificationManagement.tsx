@@ -8,6 +8,7 @@ import { useDatabase } from '../hooks/useDatabase';
 import { useAuth } from '../auth';
 import api from '../services/api';
 import { ToastContainer, showToast } from './ui/Toast';
+import { AdminCard, AdminButton, AdminStatCard, AdminBadge, AdminSearch, AdminEmptyState, AdminTabs } from './ui';
 
 interface Notification {
   id: string;
@@ -124,49 +125,32 @@ export default function NotificationManagement() {
           <h2 className="text-2xl font-serif font-bold text-charcoal">Notifications & Support</h2>
           <p className="text-sm text-charcoal/60 mt-1">Manage notifications and support tickets</p>
         </div>
-        <button
+        <AdminButton
+          variant="primary"
+          icon={Send}
           onClick={() => setShowSendModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gold text-charcoal font-bold text-xs tracking-wider uppercase rounded-lg hover:bg-gold-dark transition-all"
         >
-          <Send className="w-4 h-4" />
           Send Notification
-        </button>
+        </AdminButton>
       </div>
 
-      <div className="flex gap-2 border-b border-charcoal/10">
-        <button
-          onClick={() => setActiveTab('notifications')}
-          className={`px-4 py-2 font-bold text-xs uppercase tracking-wider transition-colors border-b-2 ${
-            activeTab === 'notifications'
-              ? 'border-gold text-gold-dark'
-              : 'border-transparent text-charcoal/40 hover:text-charcoal/60'
-          }`}
-        >
-          Notifications
-        </button>
-        <button
-          onClick={() => setActiveTab('support')}
-          className={`px-4 py-2 font-bold text-xs uppercase tracking-wider transition-colors border-b-2 ${
-            activeTab === 'support'
-              ? 'border-gold text-gold-dark'
-              : 'border-transparent text-charcoal/40 hover:text-charcoal/60'
-          }`}
-        >
-          Support Tickets
-        </button>
-      </div>
+      <AdminTabs
+        tabs={[
+          { id: 'notifications', label: 'Notifications' },
+          { id: 'support', label: 'Support Tickets' }
+        ]}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
 
       {activeTab === 'notifications' && (
         <>
           <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/40" />
-              <input
-                type="text"
-                placeholder="Search notifications..."
+            <div className="flex-1">
+              <AdminSearch
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                onChange={setSearchQuery}
+                placeholder="Search notifications..."
               />
             </div>
             <select
@@ -182,27 +166,26 @@ export default function NotificationManagement() {
 
           <div className="space-y-3">
             {filteredNotifications.map((notif: any) => (
-              <motion.div
+              <AdminCard
                 key={notif.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`bg-white border rounded-xl p-5 hover:shadow-lg transition-all ${
-                  !notif.read ? 'border-l-4 border-l-gold' : 'border-charcoal/5'
-                }`}
+                className={`hover:shadow-lg ${!notif.read ? 'border-l-4 border-l-gold' : ''}`}
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-serif text-lg font-bold text-charcoal">{notif.title}</h3>
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
-                        notif.type === 'info' ? 'bg-blue-100 text-blue-700' :
-                        notif.type === 'warning' ? 'bg-orange-100 text-orange-700' :
-                        notif.type === 'success' ? 'bg-green-100 text-green-700' :
-                        notif.type === 'error' ? 'bg-red-100 text-red-700' :
-                        'bg-charcoal/5 text-charcoal/70'
-                      }`}>
+                      <AdminBadge
+                        variant={
+                          notif.type === 'info' ? 'info' :
+                          notif.type === 'warning' ? 'warning' :
+                          notif.type === 'success' ? 'success' :
+                          notif.type === 'error' ? 'danger' :
+                          'default'
+                        }
+                        size="sm"
+                      >
                         {notif.type}
-                      </span>
+                      </AdminBadge>
                     </div>
                     <p className="text-sm text-charcoal/60">{notif.message}</p>
                     <div className="flex items-center gap-3 mt-2 text-xs text-charcoal/50">
@@ -211,41 +194,43 @@ export default function NotificationManagement() {
                         {new Date(notif.sentAt).toLocaleString()}
                       </span>
                       {notif.targetRole !== 'all' && (
-                        <span className="bg-charcoal/5 px-2 py-0.5 rounded">
+                        <AdminBadge variant="default" size="sm">
                           {notif.targetRole}
-                        </span>
+                        </AdminBadge>
                       )}
                     </div>
                   </div>
                   <div className="flex gap-2 ml-4">
                     {!notif.read && (
-                      <button
+                      <AdminButton
+                        variant="ghost"
+                        size="sm"
+                        icon={Check}
                         onClick={() => handleMarkAsRead(notif.id)}
-                        className="p-2 bg-gold/10 text-gold-dark rounded-lg hover:bg-gold/20 transition-colors"
-                        title="Mark as read"
-                      >
-                        <Check className="w-4 h-4" />
-                      </button>
+                      />
                     )}
-                    <button
+                    <AdminButton
+                      variant="danger"
+                      size="sm"
+                      icon={Trash2}
                       onClick={() => handleDeleteNotification(notif.id)}
-                      className="p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-100 transition-colors"
-                      title="Delete"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    />
                   </div>
                 </div>
-              </motion.div>
+              </AdminCard>
             ))}
           </div>
 
           {filteredNotifications.length === 0 && (
-            <div className="text-center py-16">
-              <Bell className="w-16 h-16 text-charcoal/20 mx-auto mb-4" />
-              <p className="text-lg font-semibold text-charcoal mb-2">No notifications found</p>
-              <p className="text-sm text-charcoal/50">Send your first notification to get started</p>
-            </div>
+            <AdminEmptyState
+              icon={Bell}
+              title="No notifications found"
+              description="Send your first notification to get started"
+              action={{
+                label: 'Send Notification',
+                onClick: () => setShowSendModal(true)
+              }}
+            />
           )}
         </>
       )}
