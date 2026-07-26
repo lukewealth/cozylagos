@@ -14,7 +14,7 @@ export function subscribeToDatabase(callback: (event: string) => void) {
 }
 
 const DB_NAME = 'cozy_lagos_db';
-const DB_VERSION = 1;
+const DB_VERSION = 2; // Incremented to trigger migration for missing stores
 
 export interface DBSchema {
   users: UserRecord;
@@ -193,52 +193,73 @@ function openDB(): Promise<IDBDatabase> {
 
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
+      const oldVersion = event.oldVersion;
 
-      if (!db.objectStoreNames.contains('users')) {
-        const userStore = db.createObjectStore('users', { keyPath: 'id' });
-        userStore.createIndex('email', 'email', { unique: true });
-        userStore.createIndex('role', 'role', { unique: false });
+      // Version 1: Initial schema
+      if (oldVersion < 1) {
+        if (!db.objectStoreNames.contains('users')) {
+          const userStore = db.createObjectStore('users', { keyPath: 'id' });
+          userStore.createIndex('email', 'email', { unique: true });
+          userStore.createIndex('role', 'role', { unique: false });
+        }
+
+        if (!db.objectStoreNames.contains('listings')) {
+          const listingStore = db.createObjectStore('listings', { keyPath: 'id' });
+          listingStore.createIndex('ownerId', 'ownerId', { unique: false });
+          listingStore.createIndex('location', 'location', { unique: false });
+          listingStore.createIndex('isActive', 'isActive', { unique: false });
+        }
+
+        if (!db.objectStoreNames.contains('bookings')) {
+          const bookingStore = db.createObjectStore('bookings', { keyPath: 'id' });
+          bookingStore.createIndex('guestId', 'guestId', { unique: false });
+          bookingStore.createIndex('listingId', 'listingId', { unique: false });
+          bookingStore.createIndex('status', 'status', { unique: false });
+        }
+
+        if (!db.objectStoreNames.contains('transactions')) {
+          const txStore = db.createObjectStore('transactions', { keyPath: 'id' });
+          txStore.createIndex('userId', 'userId', { unique: false });
+          txStore.createIndex('type', 'type', { unique: false });
+        }
+
+        if (!db.objectStoreNames.contains('services')) {
+          const serviceStore = db.createObjectStore('services', { keyPath: 'id' });
+          serviceStore.createIndex('providerId', 'providerId', { unique: false });
+          serviceStore.createIndex('category', 'category', { unique: false });
+        }
+
+        if (!db.objectStoreNames.contains('experiences')) {
+          const expStore = db.createObjectStore('experiences', { keyPath: 'id' });
+          expStore.createIndex('vendorId', 'vendorId', { unique: false });
+          expStore.createIndex('category', 'category', { unique: false });
+        }
+
+        if (!db.objectStoreNames.contains('chatMessages')) {
+          const chatStore = db.createObjectStore('chatMessages', { keyPath: 'id' });
+          chatStore.createIndex('userId', 'userId', { unique: false });
+        }
+
+        if (!db.objectStoreNames.contains('cache')) {
+          db.createObjectStore('cache', { keyPath: 'key' });
+        }
       }
 
-      if (!db.objectStoreNames.contains('listings')) {
-        const listingStore = db.createObjectStore('listings', { keyPath: 'id' });
-        listingStore.createIndex('ownerId', 'ownerId', { unique: false });
-        listingStore.createIndex('location', 'location', { unique: false });
-        listingStore.createIndex('isActive', 'isActive', { unique: false });
-      }
+      // Version 2: Add missing notifications and staff stores
+      if (oldVersion < 2) {
+        if (!db.objectStoreNames.contains('notifications')) {
+          const notifStore = db.createObjectStore('notifications', { keyPath: 'id' });
+          notifStore.createIndex('userId', 'userId', { unique: false });
+          notifStore.createIndex('type', 'type', { unique: false });
+          notifStore.createIndex('read', 'read', { unique: false });
+        }
 
-      if (!db.objectStoreNames.contains('bookings')) {
-        const bookingStore = db.createObjectStore('bookings', { keyPath: 'id' });
-        bookingStore.createIndex('guestId', 'guestId', { unique: false });
-        bookingStore.createIndex('listingId', 'listingId', { unique: false });
-        bookingStore.createIndex('status', 'status', { unique: false });
-      }
-
-      if (!db.objectStoreNames.contains('transactions')) {
-        const txStore = db.createObjectStore('transactions', { keyPath: 'id' });
-        txStore.createIndex('userId', 'userId', { unique: false });
-        txStore.createIndex('type', 'type', { unique: false });
-      }
-
-      if (!db.objectStoreNames.contains('services')) {
-        const serviceStore = db.createObjectStore('services', { keyPath: 'id' });
-        serviceStore.createIndex('providerId', 'providerId', { unique: false });
-        serviceStore.createIndex('category', 'category', { unique: false });
-      }
-
-      if (!db.objectStoreNames.contains('experiences')) {
-        const expStore = db.createObjectStore('experiences', { keyPath: 'id' });
-        expStore.createIndex('vendorId', 'vendorId', { unique: false });
-        expStore.createIndex('category', 'category', { unique: false });
-      }
-
-      if (!db.objectStoreNames.contains('chatMessages')) {
-        const chatStore = db.createObjectStore('chatMessages', { keyPath: 'id' });
-        chatStore.createIndex('userId', 'userId', { unique: false });
-      }
-
-      if (!db.objectStoreNames.contains('cache')) {
-        db.createObjectStore('cache', { keyPath: 'key' });
+        if (!db.objectStoreNames.contains('staff')) {
+          const staffStore = db.createObjectStore('staff', { keyPath: 'id' });
+          staffStore.createIndex('providerId', 'providerId', { unique: false });
+          staffStore.createIndex('role', 'role', { unique: false });
+          staffStore.createIndex('status', 'status', { unique: false });
+        }
       }
     };
   });
@@ -249,6 +270,13 @@ export async function dbGet<T extends keyof DBSchema>(
   id: string
 ): Promise<DBSchema[T] | undefined> {
   const db = await openDB();
+  
+  // Safety check: ensure store exists
+  if (!db.objectStoreNames.contains(storeName)) {
+    console.warn(`IndexedDB store '${storeName}' does not exist. Returning undefined.`);
+    return undefined;
+  }
+  
   return new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, 'readonly');
     const store = tx.objectStore(storeName);
@@ -262,6 +290,13 @@ export async function dbGetAll<T extends keyof DBSchema>(
   storeName: T
 ): Promise<DBSchema[T][]> {
   const db = await openDB();
+  
+  // Safety check: ensure store exists
+  if (!db.objectStoreNames.contains(storeName)) {
+    console.warn(`IndexedDB store '${storeName}' does not exist. Returning empty array.`);
+    return [];
+  }
+  
   return new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, 'readonly');
     const store = tx.objectStore(storeName);
@@ -277,9 +312,24 @@ export async function dbGetByIndex<T extends keyof DBSchema>(
   value: any
 ): Promise<DBSchema[T][]> {
   const db = await openDB();
+  
+  // Safety check: ensure store exists
+  if (!db.objectStoreNames.contains(storeName)) {
+    console.warn(`IndexedDB store '${storeName}' does not exist. Returning empty array.`);
+    return [];
+  }
+  
   return new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, 'readonly');
     const store = tx.objectStore(storeName);
+    
+    // Safety check: ensure index exists
+    if (!store.indexNames.contains(indexName)) {
+      console.warn(`Index '${indexName}' does not exist in store '${storeName}'. Returning empty array.`);
+      resolve([]);
+      return;
+    }
+    
     const index = store.index(indexName);
     const request = index.getAll(value);
     request.onerror = () => reject(request.error);
@@ -292,6 +342,13 @@ export async function dbPut<T extends keyof DBSchema>(
   record: DBSchema[T]
 ): Promise<void> {
   const db = await openDB();
+  
+  // Safety check: ensure store exists
+  if (!db.objectStoreNames.contains(storeName)) {
+    console.warn(`IndexedDB store '${storeName}' does not exist. Skipping put operation.`);
+    return;
+  }
+  
   return new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, 'readwrite');
     const store = tx.objectStore(storeName);
@@ -306,6 +363,13 @@ export async function dbDelete<T extends keyof DBSchema>(
   id: string
 ): Promise<void> {
   const db = await openDB();
+  
+  // Safety check: ensure store exists
+  if (!db.objectStoreNames.contains(storeName)) {
+    console.warn(`IndexedDB store '${storeName}' does not exist. Skipping delete operation.`);
+    return;
+  }
+  
   return new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, 'readwrite');
     const store = tx.objectStore(storeName);
@@ -319,6 +383,13 @@ export async function dbClear<T extends keyof DBSchema>(
   storeName: T
 ): Promise<void> {
   const db = await openDB();
+  
+  // Safety check: ensure store exists
+  if (!db.objectStoreNames.contains(storeName)) {
+    console.warn(`IndexedDB store '${storeName}' does not exist. Skipping clear operation.`);
+    return;
+  }
+  
   return new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, 'readwrite');
     const store = tx.objectStore(storeName);
