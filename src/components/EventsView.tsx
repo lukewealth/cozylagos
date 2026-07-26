@@ -439,78 +439,31 @@ export default function EventsView() {
   const todayEvents = LAGOS_EVENTS.filter(e => isToday(getEventDate(e)));
   const weekendEvents = LAGOS_EVENTS.filter(e => isThisWeekend(getEventDate(e)));
 
-  const [showSlider, setShowSlider] = useState(false);
-
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSlider(true);
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <div className="flex-grow flex flex-col animate-fade-in-up">
-      <section className="relative w-full h-[250px] sm:h-[350px] flex items-center justify-center overflow-hidden bg-rose-900">
-        <AnimatePresence mode="wait">
-          {!showSlider ? (
-            <motion.div
-              key="static-hero"
-              initial={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8 }}
-              className="absolute inset-0"
-            >
-              <motion.img
-                initial={{ scale: 1.1 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 10, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full h-full object-cover opacity-40"
-                src="/assets/bundles/eventherobackground.png"
-                alt="Lagos Events"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-rose-900/80 via-rose-900/50 to-rose-900/90" />
-              <div className="relative z-10 w-full max-w-[1440px] px-4 sm:px-6 md:px-12 xl:px-20 mx-auto flex flex-col items-center text-center h-full justify-center">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="flex items-center gap-3 mb-4"
-                >
-                  <CalendarIcon className="w-6 h-6 text-gold" />
-                  <span className="text-gold text-[10px] font-bold tracking-[0.4em] uppercase">
-                    What's Happening
-                  </span>
-                </motion.div>
-                <motion.h1
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="font-serif text-3xl sm:text-4xl md:text-5xl text-parchment leading-tight tracking-tight"
-                >
-                  Lagos <span className="italic font-light text-gold">Events</span>
-                </motion.h1>
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                  className="font-sans text-xs sm:text-sm text-parchment/70 max-w-xl font-light mt-4 px-2"
-                >
-                  Concerts, festivals, exhibitions, and more. Discover the best events happening in Lagos.
-                </motion.p>
-              </div>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="slider-hero"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              className="absolute inset-0"
-            >
-              <TrendingEventsSlider />
-            </motion.div>
-          )}
-        </AnimatePresence>
+      <section className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] flex items-center justify-center overflow-hidden bg-charcoal group">
+        <TrendingEventsSlider />
+        <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 text-center pointer-events-none">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex items-center gap-2 mb-2"
+          >
+            <CalendarIcon className="w-5 h-5 text-gold" />
+            <span className="text-gold text-[10px] font-bold tracking-[0.4em] uppercase">
+              What's Happening
+            </span>
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="font-serif text-2xl sm:text-3xl md:text-4xl text-parchment leading-tight tracking-tight drop-shadow-lg"
+          >
+            Lagos <span className="italic font-light text-gold">Events</span>
+          </motion.h1>
+        </div>
       </section>
 
       {/* Quick Access: Today & This Weekend */}

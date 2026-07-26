@@ -180,6 +180,17 @@ export interface LagosEvent {
   price: string;
   image: string;
   highlights: string[];
+  images?: string[];
+  tags?: string[];
+  isTrending?: boolean;
+  isActive?: boolean;
+  ticketsSold?: number;
+  ticketsAvailable?: number;
+  rating?: number;
+  reviewsCount?: number;
+  createdBy?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export const LAGOS_EVENTS: LagosEvent[] = [
@@ -191,7 +202,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: '2026-07-15',
     location: 'Eko Convention Centre',
     price: '₦25,000 - ₦150,000',
-    image: '/assets/images/explore/elegushi-royal-beach.avif',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=1200&q=80',
     highlights: ['Top artists', '3-day event', 'Food vendors', 'VIP areas']
   },
   {
@@ -202,7 +213,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: '2026-08-20',
     location: 'Federal Palace Hotel',
     price: '₦50,000 - ₦250,000',
-    image: '/assets/images/explore/nigerian-designers.png',
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80',
     highlights: ['Runway shows', 'Designer showcases', 'Networking', 'After-parties']
   },
   {
@@ -213,7 +224,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: '2026-09-10',
     location: 'Landmark Centre',
     price: '₦75,000 - ₦300,000',
-    image: '/assets/images/explore/landmark-beach.jpg',
+    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=80',
     highlights: ['Keynote speakers', 'Workshops', 'Exhibition hall', 'Networking']
   },
   {
@@ -224,7 +235,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: 'Every Saturday',
     location: 'Elegushi Beach',
     price: '₦5,000 - ₦20,000',
-    image: '/assets/images/explore/elegushi-royal-beach.avif',
+    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&q=80',
     highlights: ['Live DJs', 'Beach setting', 'Food & drinks', 'Night swimming']
   },
   {
@@ -235,7 +246,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: '2026-06-01 to 2026-06-30',
     location: 'Nike Art Gallery',
     price: 'Free entry',
-    image: '/assets/images/explore/nike-art-gallery.jpg',
+    image: 'https://images.unsplash.com/photo-1577720643272-265f09367456?w=1200&q=80',
     highlights: ['Local artists', 'Guided tours', 'Art workshops', 'Gift shop']
   },
   {
@@ -246,7 +257,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: '2026-10-05',
     location: 'Freedom Park',
     price: '₦10,000 - ₦50,000',
-    image: '/assets/images/explore/freedom-park.jpeg',
+    image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1200&q=80',
     highlights: ['Food stalls', 'Cooking demos', 'Cultural shows', 'Family-friendly']
   },
   {
@@ -257,7 +268,7 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: 'Every Friday',
     location: 'The RSVP, VI',
     price: '₦15,000',
-    image: '/assets/images/explore/rsvp-restaurant.jpg',
+    image: 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=1200&q=80',
     highlights: ['Live jazz', 'Fine dining', 'Intimate setting', 'Cocktail bar']
   },
   {
@@ -268,8 +279,30 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: 'Last Thursday monthly',
     location: 'Co-Creation Hub',
     price: 'Free entry',
-    image: '/assets/images/horizontal/Research.jpg',
+    image: 'https://images.unsplash.com/photo-1559223607-a43c990c692c?w=1200&q=80',
     highlights: ['Startup pitches', 'Investor networking', 'Mentorship', 'Prizes']
+  },
+  {
+    id: 'evt-9',
+    title: 'Lagos International Film Festival',
+    description: 'Annual celebration of African cinema with screenings, masterclasses, and red carpet premieres.',
+    category: 'festival',
+    date: '2026-11-15',
+    location: 'Silverbird Galleria',
+    price: '₦20,000 - ₦100,000',
+    image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&q=80',
+    highlights: ['Film screenings', 'Red carpet', 'Masterclasses', 'Awards night']
+  },
+  {
+    id: 'evt-10',
+    title: 'Gospel Music Concert',
+    description: 'Powerful praise and worship concert featuring top gospel artists from Nigeria and beyond.',
+    category: 'concert',
+    date: '2026-12-20',
+    location: 'Tafawa Balewa Square',
+    price: '₦15,000 - ₦75,000',
+    image: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=1200&q=80',
+    highlights: ['Top gospel artists', 'Worship session', 'Choir performances', 'VIP lounge']
   }
 ];
 

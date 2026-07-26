@@ -78,6 +78,45 @@ export default function PropertyManagement() {
     });
   };
 
+  const [blockedDates, setBlockedDates] = useState<string[]>(() => {
+    const stored = localStorage.getItem('cozy_lagos_blocked_dates');
+    return stored ? JSON.parse(stored) : [];
+  });
+  const [showBlockDateModal, setShowBlockDateModal] = useState(false);
+  const [blockDateRange, setBlockDateRange] = useState({ start: '', end: '' });
+
+  useEffect(() => {
+    localStorage.setItem('cozy_lagos_blocked_dates', JSON.stringify(blockedDates));
+  }, [blockedDates]);
+
+  const handleBlockDates = () => {
+    if (!blockDateRange.start || !blockDateRange.end) {
+      showToast({ type: 'error', title: 'Error', message: 'Please select both start and end dates' });
+      return;
+    }
+
+    const start = new Date(blockDateRange.start);
+    const end = new Date(blockDateRange.end);
+    const newBlockedDates: string[] = [];
+
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+      const dateStr = d.toISOString().split('T')[0];
+      if (!blockedDates.includes(dateStr)) {
+        newBlockedDates.push(dateStr);
+      }
+    }
+
+    setBlockedDates([...blockedDates, ...newBlockedDates]);
+    setShowBlockDateModal(false);
+    setBlockDateRange({ start: '', end: '' });
+    showToast({ type: 'success', title: 'Dates Blocked', message: `${newBlockedDates.length} date(s) have been blocked` });
+  };
+
+  const handleUnblockDate = (date: string) => {
+    setBlockedDates(blockedDates.filter(d => d !== date));
+    showToast({ type: 'success', title: 'Date Unblocked', message: `${date} has been unblocked` });
+  };
+
   const categories = ['all', 'Penthouse', 'Luxury Villa', 'Executive Studio', 'Serviced Apartment', 'Premium Package'];
   const locations = ['all', 'Ikoyi', 'Victoria Island', 'Banana Island', 'Lekki Phase 1'];
 
@@ -248,6 +287,50 @@ export default function PropertyManagement() {
         </div>
       )}
 
+      {/* Date Blocking Section */}
+      <div className="bg-white rounded-2xl border border-charcoal/5 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h3 className="font-serif text-xl font-bold text-charcoal">Blocked Dates</h3>
+            <p className="text-xs text-charcoal/60 mt-1">Manage unavailable dates for all properties</p>
+          </div>
+          <button
+            onClick={() => setShowBlockDateModal(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white font-bold text-xs tracking-wider uppercase rounded-lg hover:bg-red-600 transition-all"
+          >
+            <X className="w-4 h-4" />
+            Block Dates
+          </button>
+        </div>
+
+        {blockedDates.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+            {blockedDates.slice(0, 12).map(date => (
+              <div key={date} className="bg-red-50 border border-red-100 rounded-lg p-3 flex items-center justify-between">
+                <span className="text-xs font-bold text-red-700">{date}</span>
+                <button
+                  onClick={() => handleUnblockDate(date)}
+                  className="p-1 hover:bg-red-100 rounded transition-colors"
+                  title="Unblock date"
+                >
+                  <X className="w-3 h-3 text-red-500" />
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-sm text-charcoal/50">No blocked dates</p>
+          </div>
+        )}
+
+        {blockedDates.length > 12 && (
+          <p className="text-xs text-charcoal/50 mt-4 text-center">
+            + {blockedDates.length - 12} more blocked date(s)
+          </p>
+        )}
+      </div>
+
       <AnimatePresence>
         {showCreateModal && (
           <PropertyFormModal
@@ -292,6 +375,78 @@ export default function PropertyManagement() {
                 >
                   Delete
                 </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showBlockDateModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+            onClick={() => setShowBlockDateModal(false)}
+          >
+            <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-md bg-parchment rounded-3xl overflow-hidden shadow-2xl"
+            >
+              <div className="sticky top-0 bg-parchment border-b border-charcoal/10 px-6 py-4 flex items-center justify-between">
+                <h2 className="font-serif text-xl font-bold text-charcoal">Block Dates</h2>
+                <button onClick={() => setShowBlockDateModal(false)} className="p-2 hover:bg-charcoal/5 rounded-lg transition-colors">
+                  <X className="w-5 h-5 text-charcoal/60" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Start Date</label>
+                  <input
+                    type="date"
+                    value={blockDateRange.start}
+                    onChange={(e) => setBlockDateRange({ ...blockDateRange, start: e.target.value })}
+                    className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">End Date</label>
+                  <input
+                    type="date"
+                    value={blockDateRange.end}
+                    onChange={(e) => setBlockDateRange({ ...blockDateRange, end: e.target.value })}
+                    className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                  />
+                </div>
+
+                <div className="bg-red-50 border border-red-100 rounded-lg p-3">
+                  <p className="text-xs text-charcoal/60">
+                    <span className="font-bold">Note:</span> Blocked dates will be unavailable for booking across all properties.
+                  </p>
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    onClick={() => setShowBlockDateModal(false)}
+                    className="flex-1 py-3 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleBlockDates}
+                    className="flex-[2] py-3 bg-red-500 text-white font-bold text-xs uppercase rounded-lg hover:bg-red-600 transition-all flex items-center justify-center gap-2"
+                  >
+                    <X className="w-4 h-4" />
+                    Block Dates
+                  </button>
+                </div>
               </div>
             </motion.div>
           </motion.div>
