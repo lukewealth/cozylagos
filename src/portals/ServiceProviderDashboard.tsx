@@ -229,6 +229,32 @@ export default function ServiceProviderDashboard() {
     setIsProcessing(false);
   };
 
+  const handleExportCalendar = () => {
+    const bookings = activeBookings.map(b => ({
+      guest: b.guestName || 'Guest',
+      property: b.listingTitle || 'Property',
+      checkIn: b.checkIn || 'TBD',
+      checkOut: b.checkOut || 'TBD',
+      amount: b.totalAmount || 0,
+      status: b.status || 'pending'
+    }));
+
+    const csvContent = [
+      'Guest,Property,Check-In,Check-Out,Amount,Status',
+      ...bookings.map(b => `${b.guest},${b.property},${b.checkIn},${b.checkOut},${b.amount},${b.status}`)
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `calendar_bookings_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+
+    showToast({ type: 'success', title: 'Exported', message: 'Calendar bookings exported successfully' });
+  };
+
   const handleSectionChange = (section: ProviderSection) => {
     setActiveSection(section);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -913,7 +939,10 @@ export default function ServiceProviderDashboard() {
                   </div>
                   <div className="flex gap-3">
                     <Tooltip content="Download Schedule">
-                      <button className="px-5 py-2.5 bg-surface-container-lowest border border-outline-variant/30 rounded-lg text-body-md font-semibold text-on-surface hover:bg-surface-container-low transition-colors flex items-center gap-2">
+                      <button 
+                        onClick={handleExportCalendar}
+                        className="px-5 py-2.5 bg-surface-container-lowest border border-outline-variant/30 rounded-lg text-body-md font-semibold text-on-surface hover:bg-surface-container-low transition-colors flex items-center gap-2"
+                      >
                         <Download className="w-4 h-4" /> Export
                       </button>
                     </Tooltip>
