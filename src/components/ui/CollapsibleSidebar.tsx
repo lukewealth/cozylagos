@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronLeft, ChevronRight, LayoutDashboard, Users, Settings, BarChart3, Shield, Database, Globe, Key, Lock, Bell, LogOut, HelpCircle, X, Calendar, CheckSquare, Activity, FileText, Send, UserCheck } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutDashboard, Users, Settings, BarChart3, Shield, Database, Globe, Key, Lock, Bell, LogOut, HelpCircle, X, Calendar, CheckSquare, Activity, FileText, Send, UserCheck, MessageSquare } from 'lucide-react';
 
 interface SidebarProps {
   activeTab: string;
@@ -26,6 +26,7 @@ const ADMIN_NAV: NavItem[] = [
   { id: 'bookings', label: 'Bookings', icon: Bell, description: 'Booking requests' },
   { id: 'events', label: 'Events', icon: Calendar, description: 'Manage events & tickets' },
   { id: 'tasks', label: 'Tasks', icon: CheckSquare, description: 'Staff task management' },
+  { id: 'crm', label: 'CRM & Tickets', icon: MessageSquare, description: 'Support tickets & CRM' },
   { id: 'staff', label: 'Staff', icon: UserCheck, description: 'Manage staff members' },
   { id: 'notifications', label: 'Notifications', icon: Send, description: 'Send & manage notifications' },
   { id: 'transactions', label: 'Transactions', icon: FileText, description: 'Download & audit transactions' },

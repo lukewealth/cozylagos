@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { LucideIcon } from 'lucide-react';
 
 interface AdminButtonProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   onClick?: () => void;
   variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
@@ -65,7 +65,7 @@ export default function AdminButton({
       ) : Icon ? (
         <Icon className="w-4 h-4" />
       ) : null}
-      {children}
+      {children && <span>{children}</span>}
     </motion.button>
   );
 }

@@ -28,6 +28,8 @@ import NotificationManagement from '../components/NotificationManagement';
 import TransactionDownload from '../components/TransactionDownload';
 import UserManagement from '../components/UserManagement';
 import PropertyManagement from '../components/PropertyManagement';
+import CRMView from '../components/CRMView';
+import HelpSupportModal from '../components/ui/HelpSupportModal';
 import { AdminStatCard, AdminCard, AdminButton, AdminBadge, CloudSyncIndicator } from '../components/ui';
 import { purgeDemoData, flushSystem, syncRealData, getSystemStats } from '../utils/databasePurge';
 
@@ -52,7 +54,7 @@ interface BookingRequest {
   services?: string[];
 }
 
-type AdminSection = 'dashboard' | 'admin-dashboard' | 'requests' | 'guests' | 'services' | 'reports' | 'listings' | 'bookings' | 'events' | 'tasks' | 'staff' | 'notifications' | 'transactions' | 'users' | 'properties' | 'analytics' | 'overview' | 'ledger';
+type AdminSection = 'dashboard' | 'admin-dashboard' | 'requests' | 'guests' | 'services' | 'reports' | 'listings' | 'bookings' | 'events' | 'tasks' | 'crm' | 'staff' | 'notifications' | 'transactions' | 'users' | 'properties' | 'analytics' | 'overview' | 'ledger';
 
 const MOCK_ARRIVALS = [
   { id: 'arr-1', guestName: 'Adewale Johnson', initials: 'AJ', tier: 'vip' as const, listingTitle: 'The Ikoyi Penthouse', unitCode: 'UNIT 402', status: 'en_route' as const, eta: '8 mins away' },
@@ -85,6 +87,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
   const [showAssignStaffModal, setShowAssignStaffModal] = useState(false);
   const [selectedListingForAction, setSelectedListingForAction] = useState<Listing | null>(null);
   const [selectedBookingForAssign, setSelectedBookingForAssign] = useState<any>(null);
+  const [showHelpModal, setShowHelpModal] = useState(false);
 
   const backendHealth = useBackendHealth();
 
@@ -216,6 +219,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
         setActiveTab={handleSectionChange as any}
         userRole="admin"
         onLogout={handleLogout}
+        onHelp={() => setShowHelpModal(true)}
         onCollapse={setIsSidebarCollapsed}
         isMobileOpen={isMobileMenuOpen}
         onMobileClose={() => setIsMobileMenuOpen(false)}
@@ -728,6 +732,18 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
               </motion.div>
             )}
 
+            {activeSection === 'crm' && (
+              <motion.div
+                key="crm"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+              >
+                <CRMView />
+              </motion.div>
+            )}
+
             {activeSection === 'staff' && (
               <motion.div
                 key="staff"
@@ -1090,6 +1106,11 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
           guestName: selectedBookingForAssign.guestName || 'Guest',
           date: selectedBookingForAssign.checkIn || 'TBD',
         } : undefined}
+      />
+
+      <HelpSupportModal
+        isOpen={showHelpModal}
+        onClose={() => setShowHelpModal(false)}
       />
 
       <ToastContainer />
