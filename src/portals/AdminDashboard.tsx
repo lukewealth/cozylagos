@@ -89,6 +89,9 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
   const [selectedListingForAction, setSelectedListingForAction] = useState<Listing | null>(null);
   const [selectedBookingForAssign, setSelectedBookingForAssign] = useState<any>(null);
   const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showBroadcastModal, setShowBroadcastModal] = useState(false);
+  const [broadcastMessage, setBroadcastMessage] = useState('');
+  const [broadcastTitle, setBroadcastTitle] = useState('');
 
   const backendHealth = useBackendHealth();
 
@@ -142,6 +145,37 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
     setShowRejectModal(false);
     setRejectReason('');
     setSelectedBooking(null);
+    setIsProcessing(false);
+  };
+
+  const handleBroadcastUpdate = async () => {
+    if (!broadcastTitle.trim() || !broadcastMessage.trim()) {
+      showToast({ type: 'error', title: 'Error', message: 'Please fill in both title and message' });
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      const notification = {
+        id: `notif-${Date.now()}`,
+        title: broadcastTitle,
+        message: broadcastMessage,
+        type: 'broadcast',
+        targetRole: 'all',
+        read: false,
+        sentBy: currentUser?.id || 'admin',
+        sentAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+      };
+
+      await api.crm.sendNotification(notification);
+      showToast({ type: 'success', title: 'Broadcast Sent', message: 'Notification sent to all users' });
+      setShowBroadcastModal(false);
+      setBroadcastTitle('');
+      setBroadcastMessage('');
+    } catch (error) {
+      showToast({ type: 'error', title: 'Error', message: 'Failed to send broadcast notification' });
+    }
     setIsProcessing(false);
   };
 
@@ -312,7 +346,10 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                       </button>
                     </Tooltip>
                     <Tooltip content="Broadcast Update" description="Send notification to all users">
-                      <button className="px-6 py-3 bg-primary text-on-primary rounded-lg text-body-md font-bold luxury-shadow hover:opacity-90 transition-opacity flex items-center gap-2">
+                      <button 
+                        onClick={() => setShowBroadcastModal(true)}
+                        className="px-6 py-3 bg-primary text-on-primary rounded-lg text-body-md font-bold luxury-shadow hover:opacity-90 transition-opacity flex items-center gap-2"
+                      >
                         <Radio className="w-4 h-4" />
                         Broadcast Update
                       </button>
@@ -1125,6 +1162,93 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
         isOpen={showHelpModal}
         onClose={() => setShowHelpModal(false)}
       />
+
+      <AnimatePresence>
+        {showBroadcastModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+            onClick={() => setShowBroadcastModal(false)}
+          >
+            <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-lg bg-parchment rounded-3xl overflow-hidden shadow-2xl"
+            >
+              <div className="sticky top-0 bg-parchment border-b border-charcoal/10 px-6 py-4 flex items-center justify-between">
+                <h2 className="font-serif text-xl font-bold text-charcoal">Broadcast Update</h2>
+                <button onClick={() => setShowBroadcastModal(false)} className="p-2 hover:bg-charcoal/5 rounded-lg transition-colors">
+                  <X className="w-5 h-5 text-charcoal/60" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Title</label>
+                  <input
+                    type="text"
+                    value={broadcastTitle}
+                    onChange={(e) => setBroadcastTitle(e.target.value)}
+                    placeholder="Enter broadcast title..."
+                    className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                    disabled={isProcessing}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Message</label>
+                  <textarea
+                    value={broadcastMessage}
+                    onChange={(e) => setBroadcastMessage(e.target.value)}
+                    placeholder="Enter broadcast message..."
+                    rows={4}
+                    className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 resize-none"
+                    disabled={isProcessing}
+                  />
+                </div>
+
+                <div className="bg-gold/5 border border-gold/10 rounded-lg p-3">
+                  <p className="text-xs text-charcoal/60">
+                    <span className="font-bold">Note:</span> This notification will be sent to all users across the platform.
+                  </p>
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    onClick={() => { setShowBroadcastModal(false); setBroadcastTitle(''); setBroadcastMessage(''); }}
+                    disabled={isProcessing}
+                    className="flex-1 py-3 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleBroadcastUpdate}
+                    disabled={isProcessing || !broadcastTitle.trim() || !broadcastMessage.trim()}
+                    className="flex-[2] py-3 bg-gold text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-gold-dark transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-charcoal/30 border-t-charcoal rounded-full animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Radio className="w-4 h-4" />
+                        Send Broadcast
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <ToastContainer />
     </div>
