@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+import { apiRequest } from '../lib/apiClient';
 
 interface ApiResponse<T> {
   success: boolean;
@@ -13,50 +13,7 @@ async function request<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<ApiResponse<T>> {
-  const url = `${API_BASE_URL}${endpoint}`;
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-    ...options.headers,
-  };
-
-  const token = localStorage.getItem('cozy_lagos_auth_token');
-  if (token) {
-    (headers as Record<string, string>)['Authorization'] = `Bearer ${token}`;
-  }
-
-  try {
-    const response = await fetch(url, {
-      ...options,
-      headers,
-    });
-
-    const data = await response.json();
-
-    if (response.status === 401) {
-      localStorage.removeItem('cozy_lagos_auth_token');
-      window.dispatchEvent(new CustomEvent('auth:logout'));
-    }
-
-    if (!response.ok) {
-      return {
-        success: false,
-        error: data.message || data.error || 'Request failed',
-      };
-    }
-
-    return {
-      success: data.success !== false,
-      data: data.data || data,
-      message: data.message,
-      count: data.count,
-      summary: data.summary,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Network error',
-    };
-  }
+  return apiRequest<T>(endpoint, options);
 }
 
 export const api = {

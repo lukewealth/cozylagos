@@ -2,6 +2,8 @@ export function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 }
 
+import { logger } from './lib/logger';
+
 const listeners = new Set<(event: string) => void>();
 
 export function notifyListeners(event: string) {
@@ -273,7 +275,7 @@ export async function dbGet<T extends keyof DBSchema>(
   
   // Safety check: ensure store exists
   if (!db.objectStoreNames.contains(storeName)) {
-    console.warn(`IndexedDB store '${storeName}' does not exist. Returning undefined.`);
+    logger.warn('IndexedDB', `Store '${storeName}' does not exist. Returning undefined.`);
     return undefined;
   }
   
@@ -293,7 +295,7 @@ export async function dbGetAll<T extends keyof DBSchema>(
   
   // Safety check: ensure store exists
   if (!db.objectStoreNames.contains(storeName)) {
-    console.warn(`IndexedDB store '${storeName}' does not exist. Returning empty array.`);
+    logger.warn('IndexedDB', `Store '${storeName}' does not exist. Returning empty array.`);
     return [];
   }
   
@@ -315,7 +317,7 @@ export async function dbGetByIndex<T extends keyof DBSchema>(
   
   // Safety check: ensure store exists
   if (!db.objectStoreNames.contains(storeName)) {
-    console.warn(`IndexedDB store '${storeName}' does not exist. Returning empty array.`);
+    logger.warn('IndexedDB', `Store '${storeName}' does not exist. Returning empty array.`);
     return [];
   }
   
@@ -325,7 +327,7 @@ export async function dbGetByIndex<T extends keyof DBSchema>(
     
     // Safety check: ensure index exists
     if (!store.indexNames.contains(indexName)) {
-      console.warn(`Index '${indexName}' does not exist in store '${storeName}'. Returning empty array.`);
+      logger.warn('IndexedDB', `Index '${indexName}' does not exist in store '${storeName}'. Returning empty array.`);
       resolve([]);
       return;
     }
@@ -345,7 +347,7 @@ export async function dbPut<T extends keyof DBSchema>(
   
   // Safety check: ensure store exists
   if (!db.objectStoreNames.contains(storeName)) {
-    console.warn(`IndexedDB store '${storeName}' does not exist. Skipping put operation.`);
+    logger.warn('IndexedDB', `Store '${storeName}' does not exist. Skipping put operation.`);
     return;
   }
   
@@ -366,7 +368,7 @@ export async function dbDelete<T extends keyof DBSchema>(
   
   // Safety check: ensure store exists
   if (!db.objectStoreNames.contains(storeName)) {
-    console.warn(`IndexedDB store '${storeName}' does not exist. Skipping delete operation.`);
+    logger.warn('IndexedDB', `Store '${storeName}' does not exist. Skipping delete operation.`);
     return;
   }
   
@@ -386,7 +388,7 @@ export async function dbClear<T extends keyof DBSchema>(
   
   // Safety check: ensure store exists
   if (!db.objectStoreNames.contains(storeName)) {
-    console.warn(`IndexedDB store '${storeName}' does not exist. Skipping clear operation.`);
+    logger.warn('IndexedDB', `Store '${storeName}' does not exist. Skipping clear operation.`);
     return;
   }
   
@@ -455,14 +457,14 @@ export async function getListingsWithFallback(fallbackListings: any[]): Promise<
       return dbListings;
     }
   } catch (e) {
-    console.warn('IndexedDB listings read failed, using cache/fallback', e);
+    logger.warn('IndexedDB', 'Listings read failed, using cache/fallback', e);
   }
 
   try {
     const cached = await cacheGet<any[]>('listings_snapshot');
     if (cached && cached.length > 0) return cached;
   } catch (e) {
-    console.warn('Cache listings read failed, using static fallback', e);
+    logger.warn('Cache', 'Listings read failed, using static fallback', e);
   }
 
   try {
@@ -472,7 +474,7 @@ export async function getListingsWithFallback(fallbackListings: any[]): Promise<
       if (parsed.length > 0) return parsed;
     }
   } catch (e) {
-    console.warn('LocalStorage fallback failed', e);
+    logger.warn('LocalStorage', 'Fallback failed', e);
   }
 
   return fallbackListings;

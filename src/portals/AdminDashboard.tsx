@@ -31,6 +31,7 @@ import PropertyManagement from '../components/PropertyManagement';
 import AdminSupportManagement from '../components/AdminSupportManagement';
 import CRMView from '../components/CRMView';
 import HelpSupportModal from '../components/ui/HelpSupportModal';
+import DashboardErrorBoundary from '../components/ui/DashboardErrorBoundary';
 import { AdminStatCard, AdminCard, AdminButton, AdminBadge, CloudSyncIndicator } from '../components/ui';
 import { purgeDemoData, flushSystem, syncRealData, getSystemStats } from '../utils/databasePurge';
 
@@ -337,6 +338,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
   const todayStr = currentTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
   return (
+    <DashboardErrorBoundary>
     <div className="flex min-h-screen bg-parchment">
       <CollapsibleSidebar
         activeTab={activeSection}
@@ -1471,5 +1473,6 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
 
       <ToastContainer />
     </div>
+    </DashboardErrorBoundary>
   );
 }
