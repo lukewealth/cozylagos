@@ -92,6 +92,8 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
   const [showBroadcastModal, setShowBroadcastModal] = useState(false);
   const [broadcastMessage, setBroadcastMessage] = useState('');
   const [broadcastTitle, setBroadcastTitle] = useState('');
+  const [showVerifyAccessModal, setShowVerifyAccessModal] = useState(false);
+  const [selectedArrival, setSelectedArrival] = useState<any>(null);
 
   const backendHealth = useBackendHealth();
 
@@ -175,6 +177,38 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
       setBroadcastMessage('');
     } catch (error) {
       showToast({ type: 'error', title: 'Error', message: 'Failed to send broadcast notification' });
+    }
+    setIsProcessing(false);
+  };
+
+  const handleVerifyAccess = async (arrival: any) => {
+    setSelectedArrival(arrival);
+    setShowVerifyAccessModal(true);
+  };
+
+  const handleConfirmAccess = async () => {
+    if (!selectedArrival) return;
+
+    setIsProcessing(true);
+    try {
+      // Update arrival status to checked_in
+      const updatedArrivals = MOCK_ARRIVALS.map(arr => 
+        arr.id === selectedArrival.id 
+          ? { ...arr, status: 'checked_in' as const }
+          : arr
+      );
+      
+      // In a real app, this would update the database
+      showToast({ 
+        type: 'success', 
+        title: 'Access Verified', 
+        message: `${selectedArrival.guestName} has been checked in to ${selectedArrival.listingTitle}` 
+      });
+      
+      setShowVerifyAccessModal(false);
+      setSelectedArrival(null);
+    } catch (error) {
+      showToast({ type: 'error', title: 'Error', message: 'Failed to verify access' });
     }
     setIsProcessing(false);
   };
@@ -439,7 +473,10 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                                 </td>
                                 <td className="px-8 py-6">
                                   <Tooltip content="Verify Access" description="Confirm guest identity">
-                                    <button className="px-4 py-2 border border-primary text-primary rounded-lg text-label-caps font-bold hover:bg-primary hover:text-on-primary transition-all uppercase tracking-widest text-xs">
+                                    <button 
+                                      onClick={() => handleVerifyAccess(arrival)}
+                                      className="px-4 py-2 border border-primary text-primary rounded-lg text-label-caps font-bold hover:bg-primary hover:text-on-primary transition-all uppercase tracking-widest text-xs"
+                                    >
                                       Verify Access
                                     </button>
                                   </Tooltip>
@@ -1240,6 +1277,101 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                       <>
                         <Radio className="w-4 h-4" />
                         Send Broadcast
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showVerifyAccessModal && selectedArrival && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+            onClick={() => setShowVerifyAccessModal(false)}
+          >
+            <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-md bg-parchment rounded-3xl overflow-hidden shadow-2xl"
+            >
+              <div className="sticky top-0 bg-parchment border-b border-charcoal/10 px-6 py-4 flex items-center justify-between">
+                <h2 className="font-serif text-xl font-bold text-charcoal">Verify Guest Access</h2>
+                <button onClick={() => setShowVerifyAccessModal(false)} className="p-2 hover:bg-charcoal/5 rounded-lg transition-colors">
+                  <X className="w-5 h-5 text-charcoal/60" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-4">
+                <div className="bg-gold/5 border border-gold/10 rounded-lg p-4">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center font-bold text-gold-dark">
+                      {selectedArrival.initials}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-charcoal">{selectedArrival.guestName}</h3>
+                      <p className="text-xs text-charcoal/60">{selectedArrival.tier.toUpperCase()} Guest</p>
+                    </div>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-charcoal/60">Property:</span>
+                      <span className="font-bold text-charcoal">{selectedArrival.listingTitle}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-charcoal/60">Unit:</span>
+                      <span className="font-bold text-charcoal">{selectedArrival.unitCode}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-charcoal/60">Status:</span>
+                      <span className="font-bold text-primary">{selectedArrival.status}</span>
+                    </div>
+                    {selectedArrival.eta && (
+                      <div className="flex justify-between">
+                        <span className="text-charcoal/60">ETA:</span>
+                        <span className="font-bold text-charcoal">{selectedArrival.eta}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
+                  <p className="text-xs text-charcoal/60">
+                    <span className="font-bold">Verification Process:</span> By confirming access, you verify the guest's identity and grant them entry to the property. This action will be logged in the security system.
+                  </p>
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    onClick={() => setShowVerifyAccessModal(false)}
+                    disabled={isProcessing}
+                    className="flex-1 py-3 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleConfirmAccess}
+                    disabled={isProcessing}
+                    className="flex-[2] py-3 bg-gold text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-gold-dark transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-charcoal/30 border-t-charcoal rounded-full animate-spin" />
+                        Verifying...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="w-4 h-4" />
+                        Confirm Access
                       </>
                     )}
                   </button>
