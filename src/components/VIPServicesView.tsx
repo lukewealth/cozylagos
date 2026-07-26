@@ -49,7 +49,19 @@ function ServiceCard({ service, onSelect, viewMode }: { service: VIPService; onS
     photography: 'from-violet-600 via-purple-500 to-fuchsia-500'
   };
   const gradient = categoryGradients[service.category] || 'from-gray-500 to-gray-600';
-  const images = service.images && service.images.length > 0 ? service.images : [service.image];
+  
+  // Ensure unique images - start with primary image, then add unique secondary images
+  const images = React.useMemo(() => {
+    const uniqueImages = [service.image];
+    if (service.images && service.images.length > 0) {
+      service.images.forEach(img => {
+        if (img !== service.image && !uniqueImages.includes(img)) {
+          uniqueImages.push(img);
+        }
+      });
+    }
+    return uniqueImages;
+  }, [service.image, service.images]);
 
   React.useEffect(() => {
     if (images.length <= 1) return;
