@@ -137,6 +137,21 @@ function AppContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [activeTab]);
 
+  // Route protection: redirect to home if not authenticated on protected tabs
+  useEffect(() => {
+    const protectedTabs = ['user-dashboard', 'service-dashboard', 'admin-dashboard', 'super-admin-dashboard', 'favorites', 'account-settings', 'notifications'];
+    if (!isAuthenticated && protectedTabs.includes(activeTab)) {
+      setActiveTab('home');
+    }
+  }, [isAuthenticated, activeTab]);
+
+  // Handle logout with redirect
+  const handleLogout = useCallback(() => {
+    logout();
+    setActiveTab('home');
+    addToast({ type: 'info', title: 'Logged out', message: 'You have been successfully logged out' });
+  }, [logout, addToast]);
+
   const handleTabChange = (tab: any) => {
     setSelectedListing(null);
     setActiveTab(tab);
@@ -429,7 +444,7 @@ function AppContent() {
               activeTab={activeTab}
               setActiveTab={(tab) => { setActiveTab(tab as any); setUserSidebarMobileOpen(false); }}
               userRole="user"
-              onLogout={logout}
+              onLogout={handleLogout}
               onCollapse={setUserSidebarCollapsed}
               isMobileOpen={userSidebarMobileOpen}
               onMobileClose={() => setUserSidebarMobileOpen(false)}
@@ -520,37 +535,37 @@ function AppContent() {
               )}
               {activeTab === 'service-dashboard' && (
                 <Suspense fallback={<DashboardSkeleton />}>
-                  <ServiceProviderDashboard />
+                  <ServiceProviderDashboard onLogout={handleLogout} />
                 </Suspense>
               )}
               {activeTab === 'listings' && currentUser?.role === 'service_provider' && (
                 <Suspense fallback={<DashboardSkeleton />}>
-                  <ServiceProviderDashboard />
+                  <ServiceProviderDashboard onLogout={handleLogout} />
                 </Suspense>
               )}
               {activeTab === 'my-services' && currentUser?.role === 'service_provider' && (
                 <Suspense fallback={<DashboardSkeleton />}>
-                  <ServiceProviderDashboard />
+                  <ServiceProviderDashboard onLogout={handleLogout} />
                 </Suspense>
               )}
               {activeTab === 'booking-requests' && currentUser?.role === 'service_provider' && (
                 <Suspense fallback={<DashboardSkeleton />}>
-                  <ServiceProviderDashboard />
+                  <ServiceProviderDashboard onLogout={handleLogout} />
                 </Suspense>
               )}
               {activeTab === 'inventory' && currentUser?.role === 'service_provider' && (
                 <Suspense fallback={<DashboardSkeleton />}>
-                  <ServiceProviderDashboard />
+                  <ServiceProviderDashboard onLogout={handleLogout} />
                 </Suspense>
               )}
               {activeTab === 'earnings' && currentUser?.role === 'service_provider' && (
                 <Suspense fallback={<DashboardSkeleton />}>
-                  <ServiceProviderDashboard />
+                  <ServiceProviderDashboard onLogout={handleLogout} />
                 </Suspense>
               )}
               {activeTab === 'admin-dashboard' && (
                 <Suspense fallback={<DashboardSkeleton />}>
-                  <AdminDashboard listings={listings} onToggleStatus={handleToggleStatus} onDeleteListing={handleDeleteListing} />
+                  <AdminDashboard listings={listings} onToggleStatus={handleToggleStatus} onDeleteListing={handleDeleteListing} onLogout={handleLogout} />
                 </Suspense>
               )}
               {activeTab === 'admin-cms' && (
@@ -567,7 +582,7 @@ function AppContent() {
               )}
               {activeTab === 'super-admin-dashboard' && (
                 <Suspense fallback={<DashboardSkeleton />}>
-                  <SuperAdminDashboard />
+                  <SuperAdminDashboard onLogout={handleLogout} />
                 </Suspense>
               )}
               {activeTab === 'account-settings' && (

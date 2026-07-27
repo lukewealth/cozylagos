@@ -39,6 +39,7 @@ interface AdminDashboardProps {
   listings: Listing[];
   onToggleStatus: (id: string) => void;
   onDeleteListing: (id: string) => void;
+  onLogout?: () => void;
 }
 
 interface BookingRequest {
@@ -69,7 +70,7 @@ const MOCK_SECURITY_LOGS = [
   { id: 'log-2', timestamp: '14:15', type: 'service_pass' as const, title: 'Eko Glasshouse', description: 'Valet Access Granted. Plate: LAG-992-VIP', icon: Car },
 ];
 
-export default function AdminDashboard({ listings, onToggleStatus, onDeleteListing }: AdminDashboardProps) {
+export default function AdminDashboard({ listings, onToggleStatus, onDeleteListing, onLogout }: AdminDashboardProps) {
   const { currentUser, logout } = useAuth();
   const [activeSection, setActiveSection] = useState<AdminSection>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
@@ -121,7 +122,11 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
   const totalRevenue = confirmedBookings.reduce((sum: number, b: any) => sum + (b.totalAmount || 0), 0);
 
   const handleLogout = () => {
-    logout();
+    if (onLogout) {
+      onLogout();
+    } else {
+      logout();
+    }
   };
 
   const handleSectionChange = (section: AdminSection) => {

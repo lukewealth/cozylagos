@@ -1,6 +1,6 @@
 import { connectToDatabase } from '../src/lib/mongodb';
-import { authenticateRequest, validateRequestBody, addSecurityHeaders, logAudit, checkRateLimit } from '../src/lib/middleware';
-import { sanitizeInput } from '../src/lib/security';
+import { authenticateRequest, validateRequestBody, addSecurityHeaders, logAudit, checkRateLimit, detectSecurityThreat, logSecurityEvent } from '../src/lib/middleware';
+import { sanitizeInput, encryptSensitiveData, decryptSensitiveData, generateReference } from '../src/lib/security';
 import { ObjectId } from 'mongodb';
 
 export default async function handler(req: any, res: any) {
@@ -8,9 +8,26 @@ export default async function handler(req: any, res: any) {
   const { method } = req;
 
   try {
+    // Rate limiting
     const rateCheck = checkRateLimit(req, 100, 60000);
     if (!rateCheck.allowed) {
+      logSecurityEvent({
+        type: 'RATE_LIMIT_EXCEEDED',
+        severity: 'medium',
+        details: { endpoint: req.url, ip: req.headers?.['x-forwarded-for'] },
+      });
       return res.status(429).json({ success: false, message: 'Too many requests' });
+    }
+
+    // Threat detection
+    const threatCheck = detectSecurityThreat(req);
+    if (threatCheck.isThreat) {
+      logSecurityEvent({
+        type: threatCheck.threatType || 'SECURITY_THREAT',
+        severity: threatCheck.severity || 'high',
+        details: { endpoint: req.url, ip: req.headers?.['x-forwarded-for'] },
+      });
+      return res.status(403).json({ success: false, message: 'Access denied' });
     }
 
     const { db } = await connectToDatabase();
@@ -40,23 +57,48 @@ export default async function handler(req: any, res: any) {
 
         const transactions = await transactionsCollection.find(filter).sort({ createdAt: -1 }).toArray();
 
+        // Decrypt sensitive fields for authorized users
+        const decryptedTransactions = transactions.map((tx: any) => {
+          if (tx.encrypted) {
+            const sensitiveFields = ['cardNumber', 'cvv', 'bankAccount'];
+            const decrypted = decryptSensitiveData(tx, sensitiveFields);
+            
+            // Only return sensitive data to admins or the transaction owner
+            if (auth.user.role !== 'admin' && auth.user.role !== 'super_admin' && tx.userId !== auth.user.userId) {
+              // Remove sensitive fields for non-owners
+              const { cardNumber, cvv, bankAccount, ...safeData } = decrypted;
+              return safeData;
+            }
+            
+            return decrypted;
+          }
+          return tx;
+        });
+
         const summary = {
-          total: transactions.length,
-          totalAmount: transactions.reduce((sum: number, t: any) => sum + (t.amount || 0), 0),
-          pending: transactions.filter((t: any) => t.status === 'pending').reduce((sum: number, t: any) => sum + (t.amount || 0), 0),
-          processed: transactions.filter((t: any) => t.status === 'processed').reduce((sum: number, t: any) => sum + (t.amount || 0), 0),
-          byType: transactions.reduce((acc: any, t: any) => {
+          total: decryptedTransactions.length,
+          totalAmount: decryptedTransactions.reduce((sum: number, t: any) => sum + (t.amount || 0), 0),
+          pending: decryptedTransactions.filter((t: any) => t.status === 'pending').reduce((sum: number, t: any) => sum + (t.amount || 0), 0),
+          processed: decryptedTransactions.filter((t: any) => t.status === 'processed').reduce((sum: number, t: any) => sum + (t.amount || 0), 0),
+          byType: decryptedTransactions.reduce((acc: any, t: any) => {
             acc[t.type] = (acc[t.type] || 0) + (t.amount || 0);
             return acc;
           }, {}),
         };
 
-        return res.status(200).json({ success: true, data: transactions, summary });
+        logAudit('DATA_ACCESS', auth.user.userId, { 
+          endpoint: '/api/transactions', 
+          method: 'GET',
+          count: decryptedTransactions.length,
+        });
+
+        return res.status(200).json({ success: true, data: decryptedTransactions, summary });
       }
 
       case 'POST': {
         const auth = authenticateRequest(req);
         if (!auth.authenticated) {
+          logAudit('AUTH_FAILURE', 'unknown', { endpoint: '/api/transactions', method: 'POST' });
           return res.status(401).json({ success: false, message: auth.error });
         }
 
@@ -69,20 +111,45 @@ export default async function handler(req: any, res: any) {
         }
 
         const txData = req.body;
+        
+        // Encrypt sensitive fields before storing
+        const sensitiveFields = ['cardNumber', 'cvv', 'bankAccount'];
+        const encryptedTxData = encryptSensitiveData(txData, sensitiveFields);
+        
         const newTx = {
-          ...txData,
-          reference: txData.reference || `TX-${Date.now().toString(36).toUpperCase()}`,
+          ...encryptedTxData,
+          reference: txData.reference || generateReference('TX'),
           status: txData.status || 'pending',
           date: txData.date || new Date().toISOString(),
           description: txData.description ? sanitizeInput(txData.description) : '',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
+          encrypted: true,
         };
 
         const result = await transactionsCollection.insertOne(newTx);
-        logAudit('TRANSACTION_CREATED', auth.user.userId, { transactionId: result.insertedId.toString(), amount: txData.amount });
+        
+        logAudit('TRANSACTION_CREATED', auth.user.userId, { 
+          transactionId: result.insertedId.toString(), 
+          amount: txData.amount,
+          reference: newTx.reference,
+          encrypted: true,
+        });
 
-        return res.status(201).json({ success: true, data: { ...newTx, _id: result.insertedId } });
+        logSecurityEvent({
+          type: 'PAYMENT_PROCESSING',
+          severity: 'medium',
+          details: {
+            userId: auth.user.userId,
+            amount: txData.amount,
+            transactionId: result.insertedId.toString(),
+          },
+          userId: auth.user.userId,
+        });
+
+        // Return data without sensitive encrypted fields
+        const { cardNumber, cvv, bankAccount, ...safeTxData } = newTx;
+        return res.status(201).json({ success: true, data: { ...safeTxData, _id: result.insertedId } });
       }
 
       case 'PATCH': {

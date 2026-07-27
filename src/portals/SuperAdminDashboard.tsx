@@ -26,8 +26,12 @@ interface UserDisplay {
   phone?: string;
 }
 
-export default function SuperAdminDashboard() {
-  const { currentUser } = useAuth();
+interface SuperAdminDashboardProps {
+  onLogout?: () => void;
+}
+
+export default function SuperAdminDashboard({ onLogout }: SuperAdminDashboardProps) {
+  const { currentUser, logout } = useAuth();
   const { data: dbUsers } = useDatabase('users');
   
   const [activeSection, setActiveSection] = useState<'overview' | 'users' | 'infrastructure' | 'health' | 'admin-dashboard'>('overview');
@@ -86,6 +90,7 @@ export default function SuperAdminDashboard() {
         activeTab="super-admin-dashboard"
         setActiveTab={handleSectionChange as any}
         userRole="super_admin"
+        onLogout={onLogout || logout}
       />
 
       <main className="flex-1 ml-[280px] transition-all duration-300">

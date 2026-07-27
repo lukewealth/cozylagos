@@ -67,7 +67,11 @@ interface ServiceItem {
   providerId?: string;
 }
 
-export default function ServiceProviderDashboard() {
+interface ServiceProviderDashboardProps {
+  onLogout?: () => void;
+}
+
+export default function ServiceProviderDashboard({ onLogout }: ServiceProviderDashboardProps) {
   const { currentUser, logout } = useAuth();
   const [activeSection, setActiveSection] = useState<ProviderSection>('overview');
   const [searchQuery, setSearchQuery] = useState('');
@@ -193,7 +197,13 @@ export default function ServiceProviderDashboard() {
 
   const onDutyCount = staff.filter(s => s.status === 'on_duty').length;
 
-  const handleLogout = () => logout();
+  const handleLogout = () => {
+    if (onLogout) {
+      onLogout();
+    } else {
+      logout();
+    }
+  };
 
   const handleWithdrawal = async () => {
     if (!withdrawalAmount || parseFloat(withdrawalAmount) <= 0) {

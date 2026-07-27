@@ -1,6 +1,8 @@
 import { verifyJWT, hasRole, sanitizeInput, rateLimitKey } from './security';
 
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
+const auditLogStore: any[] = [];
+const MAX_AUDIT_LOGS = 10000;
 
 export function authenticateRequest(req: any): { authenticated: boolean; user?: any; error?: string } {
   const authHeader = req.headers?.authorization;
@@ -78,21 +80,119 @@ export function sanitizeRequestBody(body: any, fields: string[]): any {
 }
 
 export function addSecurityHeaders(res: any): void {
+  // HTTP Strict Transport Security (HSTS) - Enforce HTTPS
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  
+  // Prevent MIME type sniffing
   res.setHeader('X-Content-Type-Options', 'nosniff');
+  
+  // Prevent clickjacking
   res.setHeader('X-Frame-Options', 'DENY');
+  
+  // XSS Protection
   res.setHeader('X-XSS-Protection', '1; mode=block');
-  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-  res.setHeader('Content-Security-Policy', "default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'");
+  
+  // Content Security Policy
+  res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:;");
+  
+  // Referrer Policy
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  
+  // Permissions Policy
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+  
+  // Cache Control for sensitive data
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
 }
 
 export function logAudit(action: string, userId: string, details: Record<string, any> = {}): void {
   const logEntry = {
+    id: `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     timestamp: new Date().toISOString(),
     action,
     userId,
-    ...details,
+    details,
     ip: 'server-side',
+    userAgent: 'server',
   };
+  
+  auditLogStore.push(logEntry);
+  
+  // Keep only the last MAX_AUDIT_LOGS entries
+  if (auditLogStore.length > MAX_AUDIT_LOGS) {
+    auditLogStore.splice(0, auditLogStore.length - MAX_AUDIT_LOGS);
+  }
+  
   console.log(`[AUDIT] ${JSON.stringify(logEntry)}`);
 }
+
+export function getAuditLogs(filters?: { userId?: string; action?: string; startDate?: string; endDate?: string }): any[] {
+  let logs = [...auditLogStore];
+  
+  if (filters?.userId) {
+    logs = logs.filter(log => log.userId === filters.userId);
+  }
+  if (filters?.action) {
+    logs = logs.filter(log => log.action === filters.action);
+  }
+  if (filters?.startDate) {
+    logs = logs.filter(log => new Date(log.timestamp) >= new Date(filters.startDate!));
+  }
+  if (filters?.endDate) {
+    logs = logs.filter(log => new Date(log.timestamp) <= new Date(filters.endDate!));
+  }
+  
+  return logs.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+}
+
+// Security Monitoring
+export function detectSecurityThreat(req: any): { isThreat: boolean; threatType?: string; severity?: string } {
+  const userAgent = req.headers?.['user-agent'] || '';
+  const ip = req.headers?.['x-forwarded-for'] || req.headers?.['x-real-ip'] || 'unknown';
+  
+  // Check for common attack patterns in user agent
+  const suspiciousAgents = ['sqlmap', 'nikto', 'nmap', 'masscan', 'zgrab'];
+  if (suspiciousAgents.some(agent => userAgent.toLowerCase().includes(agent))) {
+    return { isThreat: true, threatType: 'SUSPICIOUS_USER_AGENT', severity: 'high' };
+  }
+  
+  // Check for SQL injection patterns in URL
+  const sqlPatterns = ['union select', 'or 1=1', 'drop table', 'insert into'];
+  const url = (req.url || '').toLowerCase();
+  if (sqlPatterns.some(pattern => url.includes(pattern))) {
+    return { isThreat: true, threatType: 'SQL_INJECTION_ATTEMPT', severity: 'critical' };
+  }
+  
+  // Check for XSS patterns
+  const xssPatterns = ['<script', 'javascript:', 'onerror='];
+  if (xssPatterns.some(pattern => url.includes(pattern))) {
+    return { isThreat: true, threatType: 'XSS_ATTEMPT', severity: 'high' };
+  }
+  
+  return { isThreat: false };
+}
+
+export function logSecurityEvent(event: {
+  type: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  details: Record<string, any>;
+  ip?: string;
+  userId?: string;
+}): void {
+  const logEntry = {
+    id: `security_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    timestamp: new Date().toISOString(),
+    ...event,
+  };
+  
+  console.log(`[SECURITY] ${event.severity.toUpperCase()}: ${JSON.stringify(logEntry)}`);
+  
+  // For critical events, you might want to trigger alerts
+  if (event.severity === 'critical') {
+    // In production, integrate with alerting system (Slack, PagerDuty, etc.)
+    console.error(`[ALERT] Critical security event detected:`, logEntry);
+  }
+}
+

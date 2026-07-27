@@ -238,7 +238,7 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
     video.play().catch(() => {});
     const hideTimer = setTimeout(() => {
       setShowVideo(false);
-    }, 5000);
+    }, 16000);
     return () => clearTimeout(hideTimer);
   }, [showVideo]);
 
