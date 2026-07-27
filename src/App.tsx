@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense, useCallback } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ShieldAlert } from 'lucide-react';
 import {
