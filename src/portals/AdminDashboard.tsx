@@ -419,7 +419,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
           </div>
         </header>
 
-        <div className="px-4 sm:px-6 lg:px-20 pt-8 sm:pt-12 pb-16 sm:pb-20">
+        <div className="px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 pb-8 sm:pb-12">
           <AnimatePresence mode="wait">
             {(activeSection === 'dashboard' || activeSection === 'admin-dashboard') && (
               <motion.div
@@ -429,7 +429,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.25 }}
               >
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 gap-4">
                   <div>
                     <h2 className="font-serif text-2xl md:text-3xl text-on-surface">Arrival Operations Center</h2>
                     <p className="text-body-lg text-secondary mt-2">Monitoring guest check-ins for {todayStr}</p>
@@ -473,7 +473,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                   </div>
                 </div>
 
-                <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                   {[
                     { label: 'Total Arrivals Today', value: '14', sub: '7 Checked-in, 7 Pending', icon: Plane, iconColor: 'text-primary' },
                     { label: 'VIP Clearances', value: '3', sub: 'Critical Priority', icon: Shield, iconColor: 'text-error', valueColor: 'text-error' },
@@ -499,7 +499,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                   ))}
                 </section>
 
-                <div className="grid grid-cols-12 gap-8">
+                <div className="grid grid-cols-12 gap-4">
                   <div className="col-span-12 lg:col-span-8">
                     <div className="bg-surface-container-lowest rounded-xl luxury-shadow overflow-hidden border border-outline-variant/10">
                       <div className="px-3 py-3 sm:px-4 sm:py-4 lg:px-8 lg:py-6 border-b border-outline-variant/10 flex justify-between items-center">
@@ -571,7 +571,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                     </div>
                   </div>
 
-                  <div className="col-span-12 lg:col-span-4 flex flex-col gap-8">
+                  <div className="col-span-12 lg:col-span-4 flex flex-col gap-4">
                     <div className="bg-surface-container-lowest rounded-xl luxury-shadow border border-outline-variant/10 flex flex-col">
                       <div className="px-6 py-6 border-b border-outline-variant/10 flex justify-between items-center">
                         <h3 className="font-serif text-headline-sm text-on-surface">Security Logs</h3>
@@ -866,7 +866,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                   <h2 className="font-serif text-2xl md:text-3xl text-on-surface">Platform Analytics</h2>
                   <p className="text-body-lg text-secondary mt-2">Revenue and performance insights</p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 luxury-shadow">
                     <TrendingUp className="w-6 h-6 text-green-600 mb-4" />
                     <p className="text-label-caps text-secondary uppercase">Monthly Revenue</p>
@@ -1005,7 +1005,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                   </Tooltip>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                   {[
                     { label: 'Total Revenue', value: `₦${(totalRevenue / 1000000).toFixed(1)}M`, icon: DollarSign, color: 'text-green-600' },
                     { label: 'Pending Payments', value: pendingBookings.length.toString(), icon: Clock, color: 'text-amber-600' },

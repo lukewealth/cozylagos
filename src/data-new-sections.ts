@@ -268,7 +268,13 @@ export const LAGOS_EVENTS: LagosEvent[] = [
     date: 'Every Friday',
     location: 'The RSVP, VI',
     price: '₦15,000',
-    image: '/assets/events/jazz-night.jpg',
+    image: '/assets/events/Jazz Night.jpeg',
+    images: [
+      '/assets/events/Jazz Night.jpeg',
+      '/assets/events/Jazz Live.jpeg',
+      '/assets/events/Jazz.jpeg',
+      '/assets/events/Jazz mucic.jpeg'
+    ],
     highlights: ['Live jazz', 'Fine dining', 'Intimate setting', 'Cocktail bar']
   },
   {

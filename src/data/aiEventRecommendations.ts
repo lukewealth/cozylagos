@@ -231,8 +231,13 @@ const LAGOS_EVENT_RECOMMENDATIONS: Record<string, Partial<LagosEvent>[]> = {
       price: '₦10,000 - ₦25,000',
       pricePerTicket: 10000,
       ticketsAvailable: 100,
-      image: '/assets/images/explore/rsvp-restaurant.jpg',
-      images: ['/assets/images/explore/rsvp-restaurant.jpg', '/assets/images/secondary/rsvp-restaurant-2.jpg'],
+      image: '/assets/events/Jazz Night.jpeg',
+      images: [
+        '/assets/events/Jazz Night.jpeg',
+        '/assets/events/Jazz Live.jpeg',
+        '/assets/events/Jazz.jpeg',
+        '/assets/events/Jazz mucic.jpeg'
+      ],
       highlights: ['Live jazz', 'Cocktails', 'Fine dining', 'Intimate setting'],
       tags: ['jazz', 'weekly', 'friday', 'dining'],
       isTrending: false,

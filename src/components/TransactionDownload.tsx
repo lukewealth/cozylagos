@@ -142,7 +142,7 @@ export default function TransactionDownload() {
   const statuses = ['all', 'pending', 'processed'];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-serif font-bold text-charcoal">Transaction Reports</h2>

@@ -125,7 +125,7 @@ export default function AdminTaskManagement() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-serif font-bold text-charcoal">Task Management</h2>

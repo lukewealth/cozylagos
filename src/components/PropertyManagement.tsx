@@ -121,7 +121,7 @@ export default function PropertyManagement() {
   const locations = ['all', 'Ikoyi', 'Victoria Island', 'Banana Island', 'Lekki Phase 1'];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-serif font-bold text-charcoal">Property Management</h2>

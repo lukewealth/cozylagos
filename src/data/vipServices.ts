@@ -119,11 +119,11 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'Ikoyi',
         rating: 4.8,
         reviewsCount: 210,
-        image: 'https://images.unsplash.com/photo-1599351431202-a5f56b2b7c34?fm=jpg&w=1600&q=80&fit=crop',
+        image: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?fm=jpg&w=1600&q=80&fit=crop',
         images: [
-          'https://images.unsplash.com/photo-1599351431202-a5f56b2b7c34?fm=jpg&w=1600&q=80&fit=crop',
           'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?fm=jpg&w=1600&q=80&fit=crop',
-          'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?fm=jpg&w=1600&q=80&fit=crop'
+          'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?fm=jpg&w=1600&q=80&fit=crop',
+          'https://images.unsplash.com/photo-1599351431202-a5f56b2b7c34?fm=jpg&w=1600&q=80&fit=crop'
         ],
         amenities: ['Hot Towel', 'Beard Trim', 'Styling', 'Complimentary Drink'],
         providerName: 'The Gentlemen\'s Quarter',
@@ -141,11 +141,11 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'Victoria Island',
         rating: 4.9,
         reviewsCount: 89,
-        image: 'https://images.unsplash.com/photo-1596728372348-b1a5a6e58c3d?fm=jpg&w=1600&q=80&fit=crop',
+        image: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?fm=jpg&w=1600&q=80&fit=crop',
         images: [
-          'https://images.unsplash.com/photo-1596728372348-b1a5a6e58c3d?fm=jpg&w=1600&q=80&fit=crop',
-          'https://images.unsplash.com/photo-1593702288056-f173a1c07c4d?fm=jpg&w=1600&q=80&fit=crop',
-          'https://images.unsplash.com/photo-1621605815971-fbc98d665033?fm=jpg&w=1600&q=80&fit=crop'
+          'https://images.unsplash.com/photo-1621605815971-fbc98d665033?fm=jpg&w=1600&q=80&fit=crop',
+          'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?fm=jpg&w=1600&q=80&fit=crop',
+          'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?fm=jpg&w=1600&q=80&fit=crop'
         ],
         amenities: ['Facial', 'Manicure', 'Pedicure', 'Shoulder Massage'],
         providerName: 'Luxe Barbershop VI',
@@ -163,10 +163,10 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'All Lagos',
         rating: 4.7,
         reviewsCount: 156,
-        image: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?fm=jpg&w=1600&q=80&fit=crop',
+        image: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?fm=jpg&w=1600&q=80&fit=crop',
         images: [
+          'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?fm=jpg&w=1600&q=80&fit=crop',
           'https://images.unsplash.com/photo-1621605815971-fbc98d665033?fm=jpg&w=1600&q=80&fit=crop',
-          'https://images.unsplash.com/photo-1599351431202-a5f56b2b7c34?fm=jpg&w=1600&q=80&fit=crop',
           'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?fm=jpg&w=1600&q=80&fit=crop'
         ],
         amenities: ['Mobile Service', 'Sterilized Equipment', 'Flexible Scheduling'],
@@ -242,7 +242,7 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         images: [
           'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?fm=jpg&w=1600&q=80&fit=crop',
           'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?fm=jpg&w=1600&q=80&fit=crop',
-          'https://images.unsplash.com/photo-1528698827591-e19cef51a699?fm=jpg&w=1600&q=80&fit=crop'
+          'https://images.unsplash.com/photo-1578916171728-46686eac8d58?fm=jpg&w=1600&q=80&fit=crop'
         ],
         amenities: ['Expert Guide', 'Negotiation Tips', 'Cultural Insights'],
         providerName: 'Lekki Market Tours',
@@ -444,7 +444,7 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         image: 'https://images.unsplash.com/photo-1616627547584-bf28cee262db?fm=jpg&w=1600&q=80&fit=crop',
         images: [
           'https://images.unsplash.com/photo-1616627547584-bf28cee262db?fm=jpg&w=1600&q=80&fit=crop',
-          'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?fm=jpg&w=1600&q=80&fit=crop',
+          'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?fm=jpg&w=1600&q=80&fit=crop',
           'https://images.unsplash.com/photo-1590510696098-58d2dbf8dbf6?fm=jpg&w=1600&q=80&fit=crop'
         ],
         amenities: ['Professional Cleaning', '48-Hour Turnaround', 'Pickup & Delivery', 'Garment Care'],
@@ -463,10 +463,10 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         location: 'All Lagos',
         rating: 4.5,
         reviewsCount: 89,
-        image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?fm=jpg&w=1600&q=80&fit=crop',
+        image: 'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?fm=jpg&w=1600&q=80&fit=crop',
         images: [
-          'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?fm=jpg&w=1600&q=80&fit=crop',
           'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?fm=jpg&w=1600&q=80&fit=crop',
+          'https://images.unsplash.com/photo-1616627547584-bf28cee262db?fm=jpg&w=1600&q=80&fit=crop',
           'https://images.unsplash.com/photo-1590510696098-58d2dbf8dbf6?fm=jpg&w=1600&q=80&fit=crop'
         ],
         amenities: ['Mobile Service', 'Steam Press', 'Garment Steaming', 'Quick Turnaround'],

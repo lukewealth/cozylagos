@@ -151,8 +151,8 @@ export default function CRMView() {
 
   return (
     <div className="flex-grow bg-parchment">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20 py-8">
-        <div className="flex items-center justify-between mb-8">
+      <div className="max-w-[1440px] mx-auto">
+        <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="font-serif text-3xl sm:text-4xl font-bold text-charcoal">
               Support <span className="italic font-light text-gold-dark">Tickets</span>

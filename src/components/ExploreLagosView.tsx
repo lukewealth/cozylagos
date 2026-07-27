@@ -228,18 +228,36 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
     if (!showHero) return;
     const videoTimer = setTimeout(() => {
       setShowVideo(true);
-    }, 5000);
+    }, 2000);
     return () => clearTimeout(videoTimer);
   }, [showHero]);
 
   useEffect(() => {
     if (!showVideo || !videoRef.current) return;
     const video = videoRef.current;
-    video.play().catch(() => {});
+    
+    const playVideo = async () => {
+      try {
+        await video.play();
+      } catch (error) {
+        console.warn('Video autoplay failed:', error);
+        setShowVideo(false);
+      }
+    };
+    
+    if (video.readyState >= 2) {
+      playVideo();
+    } else {
+      video.addEventListener('canplay', playVideo, { once: true });
+    }
+    
     const hideTimer = setTimeout(() => {
       setShowVideo(false);
     }, 16000);
-    return () => clearTimeout(hideTimer);
+    return () => {
+      clearTimeout(hideTimer);
+      video.removeEventListener('canplay', playVideo);
+    };
   }, [showVideo]);
 
   const handleAddToCart = (item: ExploreItem) => {
@@ -309,8 +327,18 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
               src="/assets/lagos-drone-video.mp4"
               muted
               playsInline
+              autoPlay
               loop={false}
               preload="auto"
+              onLoadedData={() => {
+                if (videoRef.current) {
+                  videoRef.current.play().catch(() => {});
+                }
+              }}
+              onError={() => {
+                console.warn('Video failed to load, falling back to image');
+                setShowVideo(false);
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-charcoal/50 via-charcoal/20 to-charcoal/80" />
           </div>
