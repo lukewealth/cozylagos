@@ -23,7 +23,7 @@ export function useBackendHealth(checkIntervalMs: number = 60000) {
 
     try {
       const result = await api.health.check();
-      if (result.success && result.data?.status === 'ok') {
+      if (result.success && (result.data?.status === 'healthy' || result.data?.status === 'ok')) {
         setHealth({
           status: 'connected',
           lastChecked: new Date(),

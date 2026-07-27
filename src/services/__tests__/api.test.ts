@@ -9,16 +9,19 @@ describe('API Service', () => {
 
   describe('health.check', () => {
     it('should call health endpoint', async () => {
-      const mockResponse = { success: true, data: { status: 'ok' } };
+      const mockResponse = { success: true, data: { status: 'healthy' } };
       (global.fetch as any).mockResolvedValueOnce({
         ok: true,
+        headers: {
+          get: (key: string) => key === 'content-type' ? 'application/json' : null,
+        },
         json: () => Promise.resolve(mockResponse),
       });
 
       const result = await api.health.check();
       
       expect(global.fetch).toHaveBeenCalledWith(
-        '/api/admin/health',
+        '/api/health',
         expect.objectContaining({
           headers: expect.objectContaining({
             'Content-Type': 'application/json',
@@ -35,6 +38,7 @@ describe('API Service', () => {
         { id: '1', email: 'test@example.com', name: 'Test User' },
       ];
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, data: mockUsers }),
       });
@@ -47,6 +51,7 @@ describe('API Service', () => {
 
     it('should handle query parameters', async () => {
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, data: [] }),
       });
@@ -69,6 +74,7 @@ describe('API Service', () => {
         role: 'user',
       };
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, data: { id: '123', ...newUser } }),
       });
@@ -89,6 +95,7 @@ describe('API Service', () => {
   describe('bookings.confirm', () => {
     it('should confirm a booking', async () => {
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, message: 'Booking confirmed' }),
       });
@@ -112,6 +119,7 @@ describe('API Service', () => {
         { id: '1', title: 'Test Property' },
       ];
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, data: mockListings }),
       });
@@ -135,6 +143,7 @@ describe('API Service', () => {
 
     it('should handle API errors', async () => {
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: false,
         json: () => Promise.resolve({ message: 'Unauthorized' }),
       });
@@ -150,6 +159,7 @@ describe('API Service', () => {
     it('should include auth token when available', async () => {
       localStorage.setItem('cozy_lagos_auth_token', 'test-token');
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, data: [] }),
       });

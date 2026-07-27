@@ -11,6 +11,7 @@ describe('API Service - Extended Endpoints', () => {
     it('should fetch all assets', async () => {
       const mockAssets = [{ id: '1', name: 'Test Asset', assetCode: 'AST-001' }];
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, data: mockAssets }),
       });
@@ -23,6 +24,7 @@ describe('API Service - Extended Endpoints', () => {
     it('should create an asset', async () => {
       const newAsset = { name: 'New Asset', assetCode: 'AST-002', category: 'fleet' };
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, data: { id: '123', ...newAsset } }),
       });
@@ -37,6 +39,7 @@ describe('API Service - Extended Endpoints', () => {
 
     it('should update an asset', async () => {
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, message: 'Updated' }),
       });
@@ -51,6 +54,7 @@ describe('API Service - Extended Endpoints', () => {
 
     it('should patch an asset', async () => {
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, message: 'Patched' }),
       });
@@ -65,6 +69,7 @@ describe('API Service - Extended Endpoints', () => {
 
     it('should delete an asset', async () => {
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, message: 'Deleted' }),
       });
@@ -82,6 +87,7 @@ describe('API Service - Extended Endpoints', () => {
     it('should fetch all staff', async () => {
       const mockStaff = [{ id: '1', name: 'Test Staff', role: 'driver' }];
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, data: mockStaff }),
       });
@@ -94,6 +100,7 @@ describe('API Service - Extended Endpoints', () => {
     it('should create staff', async () => {
       const newStaff = { name: 'New Staff', role: 'chef' };
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, data: { id: '123', ...newStaff } }),
       });
@@ -104,6 +111,7 @@ describe('API Service - Extended Endpoints', () => {
 
     it('should update staff', async () => {
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, message: 'Updated' }),
       });
@@ -114,6 +122,7 @@ describe('API Service - Extended Endpoints', () => {
 
     it('should patch staff status', async () => {
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, message: 'Patched' }),
       });
@@ -124,6 +133,7 @@ describe('API Service - Extended Endpoints', () => {
 
     it('should delete staff', async () => {
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, message: 'Deleted' }),
       });
@@ -134,6 +144,7 @@ describe('API Service - Extended Endpoints', () => {
 
     it('should filter staff by role', async () => {
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, data: [] }),
       });
@@ -149,6 +160,7 @@ describe('API Service - Extended Endpoints', () => {
   describe('bookings extended', () => {
     it('should cancel a booking', async () => {
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, message: 'Cancelled' }),
       });
@@ -166,6 +178,7 @@ describe('API Service - Extended Endpoints', () => {
 
     it('should update booking status', async () => {
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, message: 'Updated' }),
       });
@@ -179,6 +192,7 @@ describe('API Service - Extended Endpoints', () => {
     it('should create a service', async () => {
       const newService = { title: 'VIP Driver', providerId: 'p1', category: 'driver', price: 180000 };
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, data: { id: '123', ...newService } }),
       });
@@ -189,6 +203,7 @@ describe('API Service - Extended Endpoints', () => {
 
     it('should update a service', async () => {
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, message: 'Updated' }),
       });
@@ -199,6 +214,7 @@ describe('API Service - Extended Endpoints', () => {
 
     it('should delete a service', async () => {
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, message: 'Deleted' }),
       });
@@ -212,6 +228,7 @@ describe('API Service - Extended Endpoints', () => {
     it('should create a transaction', async () => {
       const tx = { amount: 500000, userId: 'u1', type: 'booking_revenue', description: 'Booking payment' };
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, data: { id: '123', ...tx } }),
       });
@@ -222,6 +239,7 @@ describe('API Service - Extended Endpoints', () => {
 
     it('should process payout', async () => {
       (global.fetch as any).mockResolvedValueOnce({
+        headers: { get: (key: string) => key === 'content-type' ? 'application/json' : null },
         ok: true,
         json: () => Promise.resolve({ success: true, message: 'Processed' }),
       });

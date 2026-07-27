@@ -106,7 +106,35 @@ async function requestWithRetry<T>(
         continue;
       }
 
-      const data = await response.json();
+      // Handle 404 Not Found
+      if (response.status === 404) {
+        logger.error('API', `Endpoint not found: ${endpoint}`);
+        return {
+          success: false,
+          error: 'Service temporarily unavailable. Please try again later.',
+        };
+      }
+
+      // Check if response is JSON before parsing
+      const contentType = response.headers?.get?.('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        logger.error('API', `Non-JSON response from ${endpoint}`, { contentType });
+        return {
+          success: false,
+          error: 'Invalid server response. Please try again later.',
+        };
+      }
+
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        logger.error('API', `Failed to parse JSON from ${endpoint}`, jsonError);
+        return {
+          success: false,
+          error: 'Invalid server response. Please try again later.',
+        };
+      }
 
       if (!response.ok) {
         throw new ApiError(
