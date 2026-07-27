@@ -15,6 +15,7 @@ interface JourneyStep {
   duration: string;
   highlights: string[];
   image: string;
+  secondaryImage?: string;
   time: string;
 }
 
@@ -26,7 +27,8 @@ const JOURNEY_STEPS: JourneyStep[] = [
     icon: <Plane className="w-8 h-8" />,
     duration: '1 hour',
     highlights: ['Meet & greet service', 'Luxury sedan', 'Fast-track immigration', 'Cold water & refreshments', 'Luggage assistance'],
-    image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1436491865332-7a61a109db05?fm=jpg&w=1600&q=80&fit=crop',
+    secondaryImage: 'https://images.unsplash.com/photo-1529074963764-98f45c47344b?fm=jpg&w=1600&q=80&fit=crop',
     time: 'Arrival Day'
   },
   {
@@ -36,7 +38,8 @@ const JOURNEY_STEPS: JourneyStep[] = [
     icon: <Hotel className="w-8 h-8" />,
     duration: '30 mins',
     highlights: ['Premium apartment', 'Concierge welcome', 'Apartment orientation', 'Welcome package', '24/7 support'],
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
+    image: '/assets/images/vertical/IMG-20260621-WA0039.jpg',
+    secondaryImage: '/assets/images/horizontal/IMG-20260621-WA0164.jpg',
     time: 'Arrival Day'
   },
   {
@@ -165,6 +168,14 @@ export default function YachtExperienceView({ onNavigate }: { onNavigate: (tab: 
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         onError={(e) => { (e.target as HTMLImageElement).src = '/assets/bundles/bundles-hero-background.jpeg'; }}
                       />
+                      {step.secondaryImage && (
+                        <img
+                          src={step.secondaryImage}
+                          alt={`${step.title} - Secondary View`}
+                          className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                        />
+                      )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                       <div className="absolute top-4 left-4">
                         <div className="bg-gold/90 backdrop-blur-md p-3 rounded-xl text-charcoal">
