@@ -583,7 +583,7 @@ function PropertyFormModal({ listing, onClose, onSubmit }: {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Bedrooms</label>
               <input

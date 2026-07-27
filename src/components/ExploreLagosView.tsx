@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   MapPin, Star, Clock, Waves, TreePine, Building2, Palette, Landmark,
@@ -215,12 +215,32 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState<ExploreItem | null>(null);
+  const [showVideo, setShowVideo] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const { addExperienceToCart, experienceCart } = useCart();
   const { addToast } = useToast();
 
   useEffect(() => {
     preloadExploreImages();
   }, []);
+
+  useEffect(() => {
+    if (!showHero) return;
+    const videoTimer = setTimeout(() => {
+      setShowVideo(true);
+    }, 5000);
+    return () => clearTimeout(videoTimer);
+  }, [showHero]);
+
+  useEffect(() => {
+    if (!showVideo || !videoRef.current) return;
+    const video = videoRef.current;
+    video.play().catch(() => {});
+    const hideTimer = setTimeout(() => {
+      setShowVideo(false);
+    }, 5000);
+    return () => clearTimeout(hideTimer);
+  }, [showVideo]);
 
   const handleAddToCart = (item: ExploreItem) => {
     const priceNum = parseInt(item.price.replace(/[^\d]/g, '')) || 0;
@@ -265,12 +285,32 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
         <section className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0 bg-charcoal">
             <motion.img
-              initial={{ scale: 1.1 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 10, ease: [0.16, 1, 0.3, 1] }}
+              key="hero-image"
+              initial={{ scale: 1.1, opacity: 1 }}
+              animate={{ 
+                scale: showVideo ? 1.05 : 1, 
+                opacity: showVideo ? 0 : 1 
+              }}
+              transition={{ 
+                scale: { duration: 10, ease: [0.16, 1, 0.3, 1] },
+                opacity: { duration: 1.2, ease: "easeInOut" }
+              }}
               className="w-full h-full object-cover opacity-35 select-none pointer-events-none"
               src="/assets/bundles/bundles-hero-background.jpeg"
               alt="Explore Lagos"
+            />
+            <motion.video
+              ref={videoRef}
+              key="hero-video"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: showVideo ? 1 : 0 }}
+              transition={{ duration: 1.2, ease: "easeInOut" }}
+              className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+              src="/assets/lagos-drone-video.mp4"
+              muted
+              playsInline
+              loop={false}
+              preload="auto"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-charcoal/50 via-charcoal/20 to-charcoal/80" />
           </div>

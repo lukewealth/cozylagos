@@ -370,7 +370,7 @@ function EventFormModal({ event, onClose, onSave }: { event: LagosEvent | null; 
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Category</label>
               <select
@@ -410,7 +410,7 @@ function EventFormModal({ event, onClose, onSave }: { event: LagosEvent | null; 
             />
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Price Display</label>
               <input

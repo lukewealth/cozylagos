@@ -76,7 +76,7 @@ export default function ApartmentCard({ listing, onClick }: ApartmentCardProps) 
       <div className="flex items-center justify-between p-6 pt-4 border-t border-charcoal/5">
         <div>
           <span className="text-xs text-charcoal/40 block uppercase font-bold tracking-tighter">Nightly Rate</span>
-          <span className="font-serif text-lg font-bold text-gold-dark">
+          <span className="font-serif text-sm font-bold text-gold-dark">
             ₦{listing.nightlyRate.toLocaleString()}
           </span>
         </div>

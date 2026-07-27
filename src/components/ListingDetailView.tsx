@@ -434,7 +434,7 @@ export default function ListingDetailView({ listing, onBack, onConfirmBooking, o
               <div className="pb-6 border-b border-charcoal/5">
                 <div className="flex justify-between items-baseline">
                   <span className="text-charcoal/40 text-xs font-bold uppercase tracking-widest">Nightly Rate</span>
-                  <span className="text-2xl font-serif font-bold text-gold-dark">₦{listing.nightlyRate.toLocaleString()}</span>
+                  <span className="text-base font-serif font-bold text-gold-dark">₦{listing.nightlyRate.toLocaleString()}</span>
                 </div>
               </div>
 

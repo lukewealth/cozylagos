@@ -143,7 +143,7 @@ export default function AdminSupportManagement() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         <AdminStatCard
           title="Total Tickets"
           value={stats.total}
@@ -218,8 +218,8 @@ export default function AdminSupportManagement() {
           >
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <h3 className="font-serif text-lg font-bold text-charcoal">{ticket.subject}</h3>
+                <div className="flex flex-wrap items-center gap-2 mb-2">
+                  <h3 className="font-serif text-lg font-bold text-charcoal min-w-0 truncate">{ticket.subject}</h3>
                   <AdminBadge variant={getPriorityBadge(ticket.priority)} size="sm">
                     {ticket.priority}
                   </AdminBadge>

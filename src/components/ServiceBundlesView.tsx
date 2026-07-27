@@ -79,7 +79,7 @@ function TierSelector({ tier, isSelected, onClick }: { tier: BundleTier; isSelec
         {tierLabel}
       </span>
       <div className="font-serif text-base sm:text-lg font-bold text-charcoal mt-1">{tier.duration}</div>
-      <div className="font-serif text-lg sm:text-xl font-bold text-gold-dark mt-1">
+      <div className="font-serif text-sm sm:text-base font-bold text-gold-dark mt-1">
         ₦{tier.price.toLocaleString()}
       </div>
     </button>
@@ -220,7 +220,7 @@ function BundleDetailPanel({ bundle, onClose }: { bundle: ServiceBundle; onClose
                   <div className="bg-charcoal text-parchment rounded-2xl p-4 sm:p-6">
                     <span className="text-[9px] font-bold text-gold uppercase tracking-widest block mb-1">Selected Package</span>
                     <div className="flex items-baseline justify-between">
-                      <span className="font-serif text-2xl sm:text-3xl font-bold text-parchment">
+                      <span className="font-serif text-base sm:text-lg font-bold text-parchment">
                         ₦{tier.price.toLocaleString()}
                       </span>
                       <span className="text-xs text-parchment/60">{tier.duration}</span>
@@ -287,7 +287,7 @@ function BundleDetailPanel({ bundle, onClose }: { bundle: ServiceBundle; onClose
                   ))}
                   <div className="flex items-center justify-between pt-4 mt-4 border-t-2 border-gold/20">
                     <span className="text-sm font-bold text-charcoal uppercase tracking-wider">Total</span>
-                    <span className="font-serif text-xl sm:text-2xl font-bold text-gold-dark">
+                    <span className="font-serif text-sm sm:text-base font-bold text-gold-dark">
                       ₦{tier.price.toLocaleString()}
                     </span>
                   </div>
@@ -343,7 +343,7 @@ function BundleCard({ bundle, index, onSelect }: { bundle: ServiceBundle; index:
         <img
           src={bundle.image}
           alt={bundle.title}
-          className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+          className="w-full h-full object-cover"
           loading="lazy"
           onError={(e) => { (e.target as HTMLImageElement).src = '/assets/images/horizontal/CozyLagos.jpeg'; }}
         />
@@ -404,7 +404,7 @@ function BundleCard({ bundle, index, onSelect }: { bundle: ServiceBundle; index:
             <span className="text-[8px] sm:text-[9px] font-bold text-charcoal/40 uppercase tracking-widest block mb-0.5">
               {tierLabel} Package
             </span>
-            <span className="font-serif text-xl sm:text-2xl font-bold text-gold-dark">
+            <span className="font-serif text-sm sm:text-base font-bold text-gold-dark relative z-10 transition-transform duration-300 hover:scale-[2] origin-left">
               {tier.price.toLocaleString()}
             </span>
           </div>

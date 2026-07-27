@@ -59,7 +59,7 @@ export default function GemCard({ listing, onClick, index }: GemCardProps) {
         <div className="flex items-baseline justify-between">
           <div>
             <span className="text-[9px] text-charcoal/40 uppercase font-bold tracking-wider">From</span>
-            <span className="font-serif text-base sm:text-lg font-bold text-gold-dark ml-1">
+            <span className="font-serif text-xs sm:text-sm font-bold text-gold-dark ml-1">
               {listing.nightlyRate.toLocaleString()}
             </span>
             <span className="text-[9px] text-charcoal/40 ml-0.5">/night</span>

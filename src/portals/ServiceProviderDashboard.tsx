@@ -26,6 +26,7 @@ import StaffAssignModal from '../components/ui/StaffAssignModal';
 import AssetCreateModal from '../components/ui/AssetCreateModal';
 import ServiceCreateModal from '../components/ui/ServiceCreateModal';
 import HelpSupportModal from '../components/ui/HelpSupportModal';
+import BottomNavBar from '../components/ui/BottomNavBar';
 import { ToastContainer, showToast } from '../components/ui/Toast';
 import api from '../services/api';
 import StaffManagement from '../components/StaffManagement';
@@ -510,7 +511,7 @@ export default function ServiceProviderDashboard() {
           </div>
         </header>
 
-        <div className="pt-8 pb-16 px-4 lg:px-20 max-w-[1440px]">
+        <div className="pt-8 pb-20 lg:pb-16 px-4 lg:px-20 max-w-[1440px]">
           <AnimatePresence mode="wait">
             {(activeSection === 'overview' || activeSection === 'service-dashboard') && (
               <motion.div key="overview" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
@@ -570,7 +571,7 @@ export default function ServiceProviderDashboard() {
                             <h3 className="font-bold text-on-surface text-lg">{booking.listingTitle}</h3>
                             <p className="text-xs text-secondary mt-1">{booking.guestName} • {booking.checkIn} → {booking.checkOut}</p>
                           </div>
-                          <span className="font-bold text-primary text-sm">₦{(booking.totalAmount || 0).toLocaleString()}</span>
+                          <span className="font-bold text-primary text-xs">₦{(booking.totalAmount || 0).toLocaleString()}</span>
                         </div>
                         <div className="flex items-center justify-between pt-3 border-t border-outline-variant/10">
                           <div className="flex items-center gap-2 text-xs text-secondary">
@@ -1015,7 +1016,7 @@ export default function ServiceProviderDashboard() {
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="font-bold text-primary text-sm">₦{(booking.totalAmount || 0).toLocaleString()}</span>
+                          <span className="font-bold text-primary text-xs">₦{(booking.totalAmount || 0).toLocaleString()}</span>
                           <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full ${
                             booking.status === 'confirmed' || booking.status === 'Confirmed' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
                           }`}>
@@ -1463,6 +1464,13 @@ export default function ServiceProviderDashboard() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <BottomNavBar
+        role="service_provider"
+        activeTab={activeSection}
+        onTabChange={(tab) => handleSectionChange(tab as ProviderSection)}
+        onSettings={() => setShowHelpModal(true)}
+      />
 
       <ToastContainer />
     </div>

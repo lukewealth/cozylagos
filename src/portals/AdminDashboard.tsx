@@ -414,7 +414,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
           </div>
         </header>
 
-        <div className="px-20 pt-12 pb-20">
+        <div className="px-4 sm:px-6 lg:px-20 pt-8 sm:pt-12 pb-16 sm:pb-20">
           <AnimatePresence mode="wait">
             {(activeSection === 'dashboard' || activeSection === 'admin-dashboard') && (
               <motion.div
@@ -429,7 +429,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                     <h2 className="font-serif text-headline-lg text-on-surface">Arrival Operations Center</h2>
                     <p className="text-body-lg text-secondary mt-2">Monitoring guest check-ins for {todayStr}</p>
                   </div>
-                  <div className="flex gap-3">
+                  <div className="flex flex-wrap gap-3">
                     <Tooltip content="Download Report" description="Export data as CSV">
                       <button className="px-6 py-3 bg-surface-container-lowest border border-outline-variant/30 rounded-lg text-body-md font-semibold text-on-surface hover:bg-surface-container-low transition-colors flex items-center gap-2">
                         <Download className="w-4 h-4" />
@@ -485,7 +485,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                       <p className="text-label-caps text-secondary uppercase mb-2">{stat.label}</p>
                       <div className="flex items-end justify-between">
                         <div>
-                          <span className={`font-serif text-headline-md ${stat.valueColor || 'text-on-surface'}`}>{stat.value}</span>
+                          <span className={`font-serif text-xl ${stat.valueColor || 'text-on-surface'}`}>{stat.value}</span>
                           <p className="text-body-md text-secondary mt-1">{stat.sub}</p>
                         </div>
                         <stat.icon className={`${stat.iconColor} mb-1 w-6 h-6`} />
@@ -497,7 +497,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                 <div className="grid grid-cols-12 gap-8">
                   <div className="col-span-12 lg:col-span-8">
                     <div className="bg-surface-container-lowest rounded-xl luxury-shadow overflow-hidden border border-outline-variant/10">
-                      <div className="px-8 py-6 border-b border-outline-variant/10 flex justify-between items-center">
+                      <div className="px-3 py-3 sm:px-4 sm:py-4 lg:px-8 lg:py-6 border-b border-outline-variant/10 flex justify-between items-center">
                         <h3 className="font-serif text-headline-sm text-on-surface">Live Arrival Stream</h3>
                         <div className="flex gap-2 items-center">
                           <span className="relative flex h-2 w-2">
@@ -524,7 +524,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                                 whileHover={{ backgroundColor: 'rgba(244, 243, 242, 0.5)' }}
                                 className="transition-colors group"
                               >
-                                <td className="px-8 py-6">
+                                <td className="px-3 py-3 sm:px-4 sm:py-4 lg:px-8 lg:py-6">
                                   <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center font-bold">
                                       {arrival.initials}
@@ -535,11 +535,11 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                                     </div>
                                   </div>
                                 </td>
-                                <td className="px-8 py-6">
+                                <td className="px-3 py-3 sm:px-4 sm:py-4 lg:px-8 lg:py-6">
                                   <p className="text-body-md text-on-surface">{arrival.listingTitle}</p>
                                   <p className="text-label-caps text-secondary">{arrival.unitCode}</p>
                                 </td>
-                                <td className="px-8 py-6">
+                                <td className="px-3 py-3 sm:px-4 sm:py-4 lg:px-8 lg:py-6">
                                   <div className="flex items-center gap-2 text-primary font-semibold">
                                     <span className="relative flex h-2 w-2">
                                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
@@ -548,7 +548,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                                     {arrival.status === 'en_route' ? `En Route (${arrival.eta})` : arrival.status}
                                   </div>
                                 </td>
-                                <td className="px-8 py-6">
+                                <td className="px-3 py-3 sm:px-4 sm:py-4 lg:px-8 lg:py-6">
                                   <Tooltip content="Verify Access" description="Confirm guest identity">
                                     <button 
                                       onClick={() => handleVerifyAccess(arrival)}
@@ -625,11 +625,11 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                     <table className="w-full text-left border-collapse">
                       <thead>
                         <tr className="text-label-caps text-secondary bg-surface-container-low border-b border-outline-variant/10">
-                          <th className="px-6 py-4 font-bold">Residence</th>
-                          <th className="px-6 py-4 font-bold">Location</th>
-                          <th className="px-6 py-4 font-bold">Category</th>
-                          <th className="px-6 py-4 font-bold">Status</th>
-                          <th className="px-6 py-4 font-bold text-right">Actions</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Residence</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Location</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Category</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Status</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody className="text-sm divide-y divide-outline-variant/10">
@@ -722,12 +722,12 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                     <table className="w-full text-left border-collapse">
                       <thead>
                         <tr className="text-label-caps text-secondary bg-surface-container-low border-b border-outline-variant/10">
-                          <th className="px-6 py-4 font-bold">Guest</th>
-                          <th className="px-6 py-4 font-bold">Property</th>
-                          <th className="px-6 py-4 font-bold">Dates</th>
-                          <th className="px-6 py-4 font-bold">Amount</th>
-                          <th className="px-6 py-4 font-bold">Status</th>
-                          <th className="px-6 py-4 font-bold text-right">Actions</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Guest</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Property</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Dates</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Amount</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Status</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody className="text-sm divide-y divide-outline-variant/10">
@@ -865,19 +865,19 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                   <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 luxury-shadow">
                     <TrendingUp className="w-6 h-6 text-green-600 mb-4" />
                     <p className="text-label-caps text-secondary uppercase">Monthly Revenue</p>
-                    <p className="text-headline-md font-serif font-bold text-on-surface mt-1">₦{(totalRevenue / 1000000).toFixed(1)}M</p>
+                    <p className="text-xl font-serif font-bold text-on-surface mt-1">₦{(totalRevenue / 1000000).toFixed(1)}M</p>
                     <p className="text-xs text-green-600 mt-1">+12% from last month</p>
                   </div>
                   <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 luxury-shadow">
                     <Calendar className="w-6 h-6 text-primary mb-4" />
                     <p className="text-label-caps text-secondary uppercase">Bookings This Month</p>
-                    <p className="text-headline-md font-serif font-bold text-on-surface mt-1">{confirmedBookings.length}</p>
+                    <p className="text-xl font-serif font-bold text-on-surface mt-1">{confirmedBookings.length}</p>
                     <p className="text-xs text-secondary mt-1">{pendingBookings.length} pending</p>
                   </div>
                   <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 luxury-shadow">
                     <Users className="w-6 h-6 text-blue-600 mb-4" />
                     <p className="text-label-caps text-secondary uppercase">Active Guests</p>
-                    <p className="text-headline-md font-serif font-bold text-on-surface mt-1">48</p>
+                    <p className="text-xl font-serif font-bold text-on-surface mt-1">48</p>
                     <p className="text-xs text-blue-600 mt-1">+8 new this week</p>
                   </div>
                 </div>
@@ -1010,7 +1010,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                     <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
                       className="glass-card luxury-shadow p-6 rounded-xl border-l-4 border-primary">
                       <p className="text-label-caps text-secondary uppercase mb-2">{stat.label}</p>
-                      <span className={`font-serif text-headline-md ${stat.color}`}>{stat.value}</span>
+                      <span className={`font-serif text-xl ${stat.color}`}>{stat.value}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -1020,14 +1020,14 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                     <table className="w-full text-left border-collapse">
                       <thead>
                         <tr className="text-label-caps text-secondary bg-surface-container-low border-b border-outline-variant/10">
-                          <th className="px-6 py-4 font-bold">Ref</th>
-                          <th className="px-6 py-4 font-bold">Guest</th>
-                          <th className="px-6 py-4 font-bold">Property</th>
-                          <th className="px-6 py-4 font-bold">Services</th>
-                          <th className="px-6 py-4 font-bold">Total</th>
-                          <th className="px-6 py-4 font-bold">Platform</th>
-                          <th className="px-6 py-4 font-bold">Provider</th>
-                          <th className="px-6 py-4 font-bold">Status</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Ref</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Guest</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Property</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Services</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Total</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Platform</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Provider</th>
+                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Status</th>
                         </tr>
                       </thead>
                       <tbody className="text-sm divide-y divide-outline-variant/10">

@@ -43,6 +43,7 @@ import SPCMSView from './components/SPCMSView';
 import CRMView from './components/CRMView';
 import NotificationCenter from './components/NotificationCenter';
 import Footer from './components/Footer';
+import BottomNavBar from './components/ui/BottomNavBar';
 import { useDatabase } from './hooks/useDatabase';
 import { seedDatabase, getListingsWithFallback, syncToLocalStorage } from './db';
 import DashboardSkeleton from './components/ui/DashboardSkeleton';
@@ -412,7 +413,7 @@ function AppContent() {
         <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} onCheckout={() => setIsCheckoutOpen(true)} />
         <WhatsAppConcierge {...bookingContext} />
   
-        <main className="flex-grow flex flex-col relative">
+        <main className={`flex-grow flex flex-col relative ${isAuthenticated && currentUser?.role === 'user' ? 'pb-20 lg:pb-0' : ''}`}>
           {/* Universal Sidebar - only for regular users, not for admin/service_provider/super_admin who have their own dashboards */}
           {isAuthenticated && currentUser?.role === 'user' && (
             <UniversalSidebar
@@ -581,6 +582,14 @@ function AppContent() {
           )}
         </AnimatePresence>
       </main>
+
+      {isAuthenticated && currentUser?.role === 'user' && (
+        <BottomNavBar
+          role="user"
+          activeTab={activeTab}
+          onTabChange={(tab) => setActiveTab(tab as any)}
+        />
+      )}
 
       <Footer />
 
