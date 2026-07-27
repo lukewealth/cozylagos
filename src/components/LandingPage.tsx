@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Anchor, ArrowRight, Shield, Waves, Wifi, Flame, MapPin, Compass, HandHelping, TrendingUp, Star, Calendar } from 'lucide-react';
+import { Anchor, ArrowRight, Shield, Waves, Wifi, Flame, MapPin, Compass, HandHelping, TrendingUp, Star, Calendar, CheckCircle, Lock, Award, Globe, Users } from 'lucide-react';
 import { Listing } from '../types';
 import { INITIAL_LISTINGS } from '../data';
 import { useCMSStore } from '../stores/cmsStore';
@@ -413,6 +413,235 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
                 <span className="flex items-center gap-2"><Wifi className="w-4 h-4 text-gold-dark" /> Fiber Internet</span>
                 <span className="hidden md:block w-1 h-1 rounded-full bg-charcoal/20" />
                 <span className="flex items-center gap-2"><Anchor className="w-4 h-4 text-gold-dark" /> Yacht Access</span>
+              </div>
+            </section>
+
+            {/* 6. WHAT WE DO */}
+            <section className="py-16 px-4 md:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
+              <div className="text-center mb-12">
+                <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-4">What We Do</h2>
+                <p className="text-sm text-charcoal/60 max-w-2xl mx-auto">
+                  Cozy Lagos is an AI-powered lifestyle and hospitality platform that connects residents, visitors, and businesses with premium experiences across Lagos.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[
+                  { icon: '🏨', title: 'Shortlet Apartments', desc: 'Book verified luxury apartments across Lagos' },
+                  { icon: '💆', title: 'Wellness', desc: 'Spa, massage, therapy, and wellness services' },
+                  { icon: '🍽', title: 'Dining', desc: 'Restaurants, private chefs, and culinary experiences' },
+                  { icon: '🚗', title: 'Transportation', desc: 'Airport pickups, chauffeur services, and car rentals' },
+                  { icon: '🎭', title: 'Experiences', desc: 'Tours, art, music, nightlife, and cultural events' },
+                  { icon: '🏢', title: 'Corporate Concierge', desc: 'Business travel and executive support services' },
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                    className="bg-white rounded-2xl p-6 border border-charcoal/5 shadow-sm hover:shadow-lg transition-all"
+                  >
+                    <div className="text-4xl mb-3">{item.icon}</div>
+                    <h3 className="font-serif text-lg font-bold text-charcoal mb-2">{item.title}</h3>
+                    <p className="text-xs text-charcoal/60">{item.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+
+            {/* 7. HOW IT WORKS */}
+            <section className="py-16 px-4 md:px-6 lg:px-12 xl:px-20 bg-charcoal/5">
+              <div className="max-w-[1440px] mx-auto">
+                <div className="text-center mb-12">
+                  <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-4">How It Works</h2>
+                  <p className="text-sm text-charcoal/60">Simple, seamless, and secure</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {[
+                    { step: '1', title: 'Search', desc: 'Browse verified apartments, services, and experiences' },
+                    { step: '2', title: 'Book', desc: 'Reserve instantly with secure payment processing' },
+                    { step: '3', title: 'Enjoy', desc: 'Experience the best of Lagos with 24/7 support' },
+                  ].map((item, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: i * 0.15 }}
+                      className="text-center"
+                    >
+                      <div className="w-16 h-16 bg-gold text-charcoal rounded-full flex items-center justify-center font-serif text-2xl font-bold mx-auto mb-4">
+                        {item.step}
+                      </div>
+                      <h3 className="font-serif text-xl font-bold text-charcoal mb-2">{item.title}</h3>
+                      <p className="text-xs text-charcoal/60">{item.desc}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* 8. WHO WE SERVE */}
+            <section className="py-16 px-4 md:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
+              <div className="text-center mb-12">
+                <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-4">Who We Serve</h2>
+                <p className="text-sm text-charcoal/60 max-w-2xl mx-auto">
+                  Trusted by travelers, residents, and businesses across Lagos
+                </p>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {[
+                  'Travelers',
+                  'Tourists',
+                  'Corporate Teams',
+                  'Lagos Residents',
+                  'Property Owners',
+                  'Hospitality Businesses',
+                  'Service Providers',
+                  'Event Organizers',
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: i * 0.05 }}
+                    className="bg-white rounded-xl p-4 text-center border border-charcoal/5 shadow-sm"
+                  >
+                    <p className="text-xs font-bold text-charcoal">{item}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+
+            {/* 9. FOR BUSINESSES */}
+            <section className="py-16 px-4 md:px-6 lg:px-12 xl:px-20 bg-gradient-to-br from-gold/10 to-gold-dark/10">
+              <div className="max-w-[1440px] mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                  <div>
+                    <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-4">For Businesses</h2>
+                    <p className="text-sm text-charcoal/70 mb-6 leading-relaxed">
+                      Cozy Lagos helps hospitality businesses, property owners, and service providers grow their reach and revenue through our platform.
+                    </p>
+                    <div className="space-y-3">
+                      {[
+                        'Receive bookings from verified guests',
+                        'Manage availability and pricing',
+                        'Reach new customers across Lagos',
+                        'Automate operations and payments',
+                        'Increase visibility and brand awareness',
+                        'Grow revenue with commission-based model',
+                      ].map((item, i) => (
+                        <div key={i} className="flex items-start gap-2">
+                          <CheckCircle className="w-4 h-4 text-gold-dark shrink-0 mt-0.5" />
+                          <span className="text-xs text-charcoal/70">{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      onClick={() => setActiveTab('about')}
+                      className="mt-6 px-6 py-3 bg-charcoal text-parchment hover:bg-gold-dark rounded-xl font-bold text-xs uppercase tracking-wider transition-all"
+                    >
+                      Learn More
+                    </button>
+                  </div>
+                  <div className="bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 className="font-serif text-xl font-bold text-charcoal mb-4">Partner With Us</h3>
+                    <p className="text-xs text-charcoal/60 mb-6">
+                      Join Lagos's leading hospitality platform and reach thousands of verified customers.
+                    </p>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3 p-3 bg-parchment/50 rounded-lg">
+                        <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
+                          <Users className="w-5 h-5 text-gold-dark" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-charcoal">10,000+ Users</p>
+                          <p className="text-[10px] text-charcoal/50">Active monthly users</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 p-3 bg-parchment/50 rounded-lg">
+                        <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
+                          <Award className="w-5 h-5 text-gold-dark" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-charcoal">Verified Platform</p>
+                          <p className="text-[10px] text-charcoal/50">Licensed & insured</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 p-3 bg-parchment/50 rounded-lg">
+                        <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
+                          <Globe className="w-5 h-5 text-gold-dark" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-charcoal">Lagos-Wide Coverage</p>
+                          <p className="text-[10px] text-charcoal/50">All major areas covered</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 10. TRUST & SECURITY */}
+            <section className="py-16 px-4 md:px-6 lg:px-12 xl:px-20 max-w-[1440px] mx-auto w-full">
+              <div className="text-center mb-12">
+                <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-4">Trust & Security</h2>
+                <p className="text-sm text-charcoal/60 max-w-2xl mx-auto">
+                  We're committed to providing a secure, reliable, and transparent platform
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[
+                  { icon: <Shield className="w-6 h-6 text-gold-dark" />, title: 'Secure Payments', desc: 'PCI-DSS compliant payment processing with 256-bit encryption' },
+                  { icon: <CheckCircle className="w-6 h-6 text-gold-dark" />, title: 'Verified Listings', desc: 'All properties and services are verified for quality and safety' },
+                  { icon: <Lock className="w-6 h-6 text-gold-dark" />, title: 'Data Privacy', desc: 'NDPR compliant with strict data protection measures' },
+                  { icon: <Award className="w-6 h-6 text-gold-dark" />, title: 'Customer Support', desc: '24/7 reliable customer support via phone, email, and WhatsApp' },
+                  { icon: <Star className="w-6 h-6 text-gold-dark" />, title: 'High Standards', desc: 'Rigorous quality standards for all partners and services' },
+                  { icon: <Globe className="w-6 h-6 text-gold-dark" />, title: 'NDPA Compliance', desc: 'Fully compliant with Nigerian data protection regulations' },
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                    className="bg-white rounded-2xl p-6 border border-charcoal/5 shadow-sm"
+                  >
+                    <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mb-4">
+                      {item.icon}
+                    </div>
+                    <h3 className="font-serif text-lg font-bold text-charcoal mb-2">{item.title}</h3>
+                    <p className="text-xs text-charcoal/60">{item.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+
+            {/* 11. ABOUT PREVIEW */}
+            <section className="py-16 px-4 md:px-6 lg:px-12 xl:px-20 bg-charcoal text-parchment">
+              <div className="max-w-[1440px] mx-auto text-center">
+                <h2 className="font-serif text-3xl md:text-4xl text-parchment mb-6">About Cozy Lagos</h2>
+                <p className="text-sm text-parchment/70 max-w-3xl mx-auto leading-relaxed mb-8">
+                  Cozy Lagos LTD is a Nigerian technology and hospitality company transforming how people discover, book, and experience Lagos. 
+                  Through AI-powered concierge services, trusted local partnerships, and premium hospitality experiences, we make exploring Lagos 
+                  seamless for visitors while empowering local businesses to grow through digital innovation.
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-4">
+                  <button
+                    onClick={() => setActiveTab('about')}
+                    className="px-6 py-3 bg-gold text-charcoal hover:bg-parchment rounded-xl font-bold text-xs uppercase tracking-wider transition-all"
+                  >
+                    Learn More About Us
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('contact')}
+                    className="px-6 py-3 border border-parchment/30 text-parchment hover:bg-parchment/10 rounded-xl font-bold text-xs uppercase tracking-wider transition-all"
+                  >
+                    Contact Us
+                  </button>
+                </div>
               </div>
             </section>
           </motion.div>

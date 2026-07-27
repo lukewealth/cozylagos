@@ -6,7 +6,11 @@ import {
   ChevronRight, Sparkles, Users, Building, Landmark, ExternalLink
 } from 'lucide-react';
 
-export default function Footer() {
+interface FooterProps {
+  onNavigate?: (tab: string) => void;
+}
+
+export default function Footer({ onNavigate }: FooterProps) {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
   const [subscribing, setSubscribing] = useState(false);
@@ -34,8 +38,8 @@ export default function Footer() {
 
   const footerLinks = {
     company: [
-      { label: 'About Cozy Lagos', href: '#about' },
-      { label: 'Our Story', href: '#story' },
+      { label: 'About Cozy Lagos', href: 'about', isTab: true },
+      { label: 'Contact Us', href: 'contact', isTab: true },
       { label: 'Careers', href: '#careers' },
       { label: 'Press & Media', href: '#press' },
       { label: 'Blog', href: '#blog' },
@@ -49,20 +53,20 @@ export default function Footer() {
     ],
     support: [
       { label: 'Help Center', href: '#help' },
-      { label: 'Safety Information', href: '#safety' },
+      { label: 'Security', href: 'security', isTab: true },
       { label: 'Cancellation Policy', href: '#cancellation' },
       { label: 'Report a Concern', href: '#report' },
       { label: 'Accessibility', href: '#accessibility' },
     ],
     legal: [
-      { label: 'Privacy Policy', href: '#privacy' },
-      { label: 'Terms of Service', href: '#terms' },
-      { label: 'Cookie Policy', href: '#cookies' },
+      { label: 'Privacy Policy', href: 'privacy', isTab: true },
+      { label: 'Terms of Service', href: 'terms', isTab: true },
+      { label: 'Cookie Policy', href: 'cookies', isTab: true },
       { label: 'Guest Protocol', href: '#protocol' },
       { label: 'Refund Policy', href: '#refund' },
     ],
     partnerships: [
-      { label: 'Lagos State Tourism', href: '#lagos-tourism' },
+      { label: 'Lagos State Tourism', href: 'https://lagosstatetourism.com', external: true },
       { label: 'Become a Partner', href: '#partner' },
       { label: 'Host Your Property', href: '#host' },
       { label: 'Service Provider', href: '#provider' },
@@ -159,9 +163,18 @@ export default function Footer() {
                 <ul className="space-y-2.5">
                   {footerLinks.company.map((link) => (
                     <li key={link.label}>
-                      <a href={link.href} className="text-xs text-parchment/60 hover:text-gold transition-colors">
-                        {link.label}
-                      </a>
+                      {(link as any).isTab ? (
+                        <button 
+                          onClick={() => onNavigate?.(link.href)}
+                          className="text-xs text-parchment/60 hover:text-gold transition-colors text-left"
+                        >
+                          {link.label}
+                        </button>
+                      ) : (
+                        <a href={link.href} className="text-xs text-parchment/60 hover:text-gold transition-colors">
+                          {link.label}
+                        </a>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -185,9 +198,18 @@ export default function Footer() {
                 <ul className="space-y-2.5">
                   {footerLinks.support.map((link) => (
                     <li key={link.label}>
-                      <a href={link.href} className="text-xs text-parchment/60 hover:text-gold transition-colors">
-                        {link.label}
-                      </a>
+                      {(link as any).isTab ? (
+                        <button 
+                          onClick={() => onNavigate?.(link.href)}
+                          className="text-xs text-parchment/60 hover:text-gold transition-colors text-left"
+                        >
+                          {link.label}
+                        </button>
+                      ) : (
+                        <a href={link.href} className="text-xs text-parchment/60 hover:text-gold transition-colors">
+                          {link.label}
+                        </a>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -198,9 +220,18 @@ export default function Footer() {
                 <ul className="space-y-2.5">
                   {footerLinks.legal.map((link) => (
                     <li key={link.label}>
-                      <a href={link.href} className="text-xs text-parchment/60 hover:text-gold transition-colors">
-                        {link.label}
-                      </a>
+                      {(link as any).isTab ? (
+                        <button 
+                          onClick={() => onNavigate?.(link.href)}
+                          className="text-xs text-parchment/60 hover:text-gold transition-colors text-left"
+                        >
+                          {link.label}
+                        </button>
+                      ) : (
+                        <a href={link.href} className="text-xs text-parchment/60 hover:text-gold transition-colors">
+                          {link.label}
+                        </a>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -211,10 +242,21 @@ export default function Footer() {
                 <ul className="space-y-2.5">
                   {footerLinks.partnerships.map((link) => (
                     <li key={link.label}>
-                      <a href={link.href} className="text-xs text-parchment/60 hover:text-gold transition-colors flex items-center gap-1">
-                        {link.label}
-                        {link.label.includes('Lagos State') && <ExternalLink className="w-3 h-3" />}
-                      </a>
+                      {(link as any).external ? (
+                        <a 
+                          href={link.href} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-xs text-parchment/60 hover:text-gold transition-colors flex items-center gap-1"
+                        >
+                          {link.label}
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      ) : (
+                        <a href={link.href} className="text-xs text-parchment/60 hover:text-gold transition-colors">
+                          {link.label}
+                        </a>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -328,11 +370,15 @@ export default function Footer() {
             </div>
 
             <div className="flex items-center gap-4 text-[10px] text-parchment/40">
-              <a href="#privacy" className="hover:text-gold transition-colors">Privacy</a>
+              <button onClick={() => onNavigate?.('privacy')} className="hover:text-gold transition-colors">Privacy</button>
               <span>&bull;</span>
-              <a href="#terms" className="hover:text-gold transition-colors">Terms</a>
+              <button onClick={() => onNavigate?.('terms')} className="hover:text-gold transition-colors">Terms</button>
               <span>&bull;</span>
-              <a href="#sitemap" className="hover:text-gold transition-colors">Sitemap</a>
+              <button onClick={() => onNavigate?.('cookies')} className="hover:text-gold transition-colors">Cookies</button>
+              <span>&bull;</span>
+              <button onClick={() => onNavigate?.('contact')} className="hover:text-gold transition-colors">Contact</button>
+              <span>&bull;</span>
+              <button onClick={() => onNavigate?.('security')} className="hover:text-gold transition-colors">Security</button>
             </div>
           </div>
 

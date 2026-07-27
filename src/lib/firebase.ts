@@ -1,11 +1,9 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getAnalytics, isSupported } from "firebase/analytics";
+import { getAuth, setPersistence, browserLocalPersistence, indexedDBLocalPersistence } from "firebase/auth";
+import { getFirestore, enableMultiTabIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDVB6mwWVmmVvII4E73i8zNvrkXTUIW-kk",
   authDomain: "cozylagos-90da0.firebaseapp.com",
@@ -16,23 +14,39 @@ const firebaseConfig = {
   measurementId: "G-N8KTEPJ7SC"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Analytics (only in browser)
-let analytics;
+let analytics: any = null;
 if (typeof window !== 'undefined') {
-  analytics = getAnalytics(app);
+  isSupported().then(supported => {
+    if (supported) {
+      analytics = getAnalytics(app);
+      analytics.logEvent('app_initialized');
+    }
+  }).catch(() => {});
 }
 
-// Initialize Auth with persistence
 const auth = getAuth(app);
-setPersistence(auth, browserLocalPersistence).catch((error) => {
-  console.error('Auth persistence error:', error);
-});
+setPersistence(auth, indexedDBLocalPersistence)
+  .then(() => {
+    console.log('Firebase Auth persistence set to IndexedDB');
+  })
+  .catch((error) => {
+    console.warn('IndexedDB persistence not available, falling back to local storage:', error);
+    setPersistence(auth, browserLocalPersistence).catch(() => {});
+  });
 
-// Initialize Firestore and Storage
 const db = getFirestore(app);
+if (typeof window !== 'undefined') {
+  enableMultiTabIndexedDbPersistence(db).catch((err) => {
+    if (err.code === 'failed-precondition') {
+      console.warn('Firestore persistence: multiple tabs open, persistence can only be enabled in one tab at a time.');
+    } else if (err.code === 'unimplemented') {
+      console.warn('Firestore persistence: browser doesn\'t support IndexedDB.');
+    }
+  });
+}
+
 const storage = getStorage(app);
 
 export { app, analytics, auth, db, storage };

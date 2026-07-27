@@ -6,9 +6,10 @@ interface CookiesAlertProps {
   onAccept: () => void;
   onDecline: () => void;
   onPreferences: () => void;
+  onNavigatePrivacy?: () => void;
 }
 
-export default function CookiesAlert({ onAccept, onDecline, onPreferences }: CookiesAlertProps) {
+export default function CookiesAlert({ onAccept, onDecline, onPreferences, onNavigatePrivacy }: CookiesAlertProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 100 }}
@@ -27,7 +28,12 @@ export default function CookiesAlert({ onAccept, onDecline, onPreferences }: Coo
             <p className="text-xs sm:text-sm text-charcoal/60 leading-relaxed mb-4">
               We use cookies and similar technologies to enhance your browsing experience, personalize content, and analyze site traffic. 
               By clicking "Accept All", you consent to our use of cookies. Read our{' '}
-              <button className="text-gold-dark font-semibold underline">Privacy Policy</button> for more details.
+              <button 
+                onClick={onNavigatePrivacy}
+                className="text-gold-dark font-semibold underline hover:text-gold transition-colors"
+              >
+                Privacy Policy
+              </button> for more details.
             </p>
             <div className="flex flex-wrap gap-2">
               <button

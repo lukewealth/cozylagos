@@ -42,6 +42,12 @@ import AdminCMSView from './components/AdminCMSView';
 import SPCMSView from './components/SPCMSView';
 import CRMView from './components/CRMView';
 import NotificationCenter from './components/NotificationCenter';
+import PrivacyPolicyView from './components/PrivacyPolicyView';
+import TermsOfServiceView from './components/TermsOfServiceView';
+import AboutCozyView from './components/AboutCozyView';
+import ContactView from './components/ContactView';
+import SecurityView from './components/SecurityView';
+import CookiesView from './components/CookiesView';
 import Footer from './components/Footer';
 import BottomNavBar from './components/ui/BottomNavBar';
 import { useDatabase } from './hooks/useDatabase';
@@ -85,7 +91,7 @@ function AppContent() {
   }, [logError]);
 
   const [activeTab, setActiveTab] = useState<
-    'home' | 'explorer' | 'explore-lagos' | 'bundles' | 'signature-experiences' | 'yacht-experience' | 'vip-services' | 'business-lagos' | 'events' | 'favorites' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations' | 'listing-detail' | 'account-settings' | 'notifications' | 'property-listing' | 'admin-cms' | 'sp-cms'
+    'home' | 'explorer' | 'explore-lagos' | 'bundles' | 'signature-experiences' | 'yacht-experience' | 'vip-services' | 'business-lagos' | 'events' | 'favorites' | 'guest-dashboard' | 'user-dashboard' | 'service-dashboard' | 'admin-dashboard' | 'super-admin-dashboard' | 'overview' | 'listings' | 'calendar' | 'payouts' | 'wizard' | 'concierge-hub' | 'smart-recommendations' | 'listing-detail' | 'account-settings' | 'notifications' | 'property-listing' | 'admin-cms' | 'sp-cms' | 'privacy' | 'terms' | 'about' | 'contact' | 'security' | 'cookies'
   >(pageState.activeTab as any);
   
   const [searchDestination, setSearchDestination] = useState<string>('');
@@ -578,6 +584,24 @@ function AppContent() {
                   </div>
                 </div>
               )}
+              {activeTab === 'privacy' && (
+                <PrivacyPolicyView onBack={() => setActiveTab('home')} />
+              )}
+              {activeTab === 'terms' && (
+                <TermsOfServiceView onBack={() => setActiveTab('home')} />
+              )}
+              {activeTab === 'about' && (
+                <AboutCozyView onBack={() => setActiveTab('home')} onNavigate={setActiveTab} />
+              )}
+              {activeTab === 'contact' && (
+                <ContactView onBack={() => setActiveTab('home')} />
+              )}
+              {activeTab === 'security' && (
+                <SecurityView onBack={() => setActiveTab('home')} />
+              )}
+              {activeTab === 'cookies' && (
+                <CookiesView onBack={() => setActiveTab('home')} />
+              )}
             </motion.div>
           )}
         </AnimatePresence>
@@ -591,11 +615,16 @@ function AppContent() {
         />
       )}
 
-      <Footer />
+      <Footer onNavigate={handleTabChange} />
 
       <AnimatePresence>
         {showCookies && (
-          <CookiesAlert onAccept={handleAcceptCookies} onDecline={handleDeclineCookies} onPreferences={handleAcceptCookies} />
+          <CookiesAlert 
+            onAccept={handleAcceptCookies} 
+            onDecline={handleDeclineCookies} 
+            onPreferences={handleAcceptCookies}
+            onNavigatePrivacy={() => setActiveTab('privacy')}
+          />
         )}
       </AnimatePresence>
     </div>
