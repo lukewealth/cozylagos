@@ -59,7 +59,8 @@ const JOURNEY_STEPS: JourneyStep[] = [
     icon: <Plane className="w-8 h-8" />,
     duration: '30 mins',
     highlights: ['Flexible checkout', 'Airport transfer', 'Luggage assistance', 'Departure coordination', 'Farewell gift'],
-    image: 'https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?fm=jpg&w=1600&q=80&fit=crop',
+    secondaryImage: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?fm=jpg&w=1600&q=80&fit=crop',
     time: 'Departure Day'
   }
 ];
