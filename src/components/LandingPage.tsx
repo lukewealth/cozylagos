@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Anchor, ArrowRight, Shield, Waves, Wifi, Flame, MapPin, Compass, HandHelping, TrendingUp, Star, Calendar, CheckCircle, Lock, Award, Globe, Users } from 'lucide-react';
+import { Anchor, ArrowRight, Shield, Waves, Wifi, Flame, MapPin, Compass, HandHelping, TrendingUp, Star, Calendar, CheckCircle, Lock, Award, Globe, Users, Building2, Sparkles, Utensils, Car, PartyPopper, Briefcase } from 'lucide-react';
 import { Listing } from '../types';
 import { INITIAL_LISTINGS } from '../data';
 import { useCMSStore } from '../stores/cmsStore';
@@ -312,9 +312,9 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
                     onClick={() => setActiveTab('yacht-experience')}
                   >
                     <img
-                      src="/assets/images/explore/Bridge.jpg"
+                      src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=800&q=80"
                       alt="Private Yacht Charter"
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -426,26 +426,31 @@ export default function LandingPage({ listings, onSelectListing, setActiveTab }:
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                  { icon: '🏨', title: 'Shortlet Apartments', desc: 'Book verified luxury apartments across Lagos' },
-                  { icon: '💆', title: 'Wellness', desc: 'Spa, massage, therapy, and wellness services' },
-                  { icon: '🍽', title: 'Dining', desc: 'Restaurants, private chefs, and culinary experiences' },
-                  { icon: '🚗', title: 'Transportation', desc: 'Airport pickups, chauffeur services, and car rentals' },
-                  { icon: '🎭', title: 'Experiences', desc: 'Tours, art, music, nightlife, and cultural events' },
-                  { icon: '🏢', title: 'Corporate Concierge', desc: 'Business travel and executive support services' },
-                ].map((item, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: i * 0.1 }}
-                    className="bg-white rounded-2xl p-6 border border-charcoal/5 shadow-sm hover:shadow-lg transition-all"
-                  >
-                    <div className="text-4xl mb-3">{item.icon}</div>
-                    <h3 className="font-serif text-lg font-bold text-charcoal mb-2">{item.title}</h3>
-                    <p className="text-xs text-charcoal/60">{item.desc}</p>
-                  </motion.div>
-                ))}
+                  { icon: Building2, title: 'Shortlet Apartments', desc: 'Book verified luxury apartments across Lagos' },
+                  { icon: Sparkles, title: 'Wellness', desc: 'Spa, massage, therapy, and wellness services' },
+                  { icon: Utensils, title: 'Dining', desc: 'Restaurants, private chefs, and culinary experiences' },
+                  { icon: Car, title: 'Transportation', desc: 'Airport pickups, chauffeur services, and car rentals' },
+                  { icon: PartyPopper, title: 'Experiences', desc: 'Tours, art, music, nightlife, and cultural events' },
+                  { icon: Briefcase, title: 'Corporate Concierge', desc: 'Business travel and executive support services' },
+                ].map((item, i) => {
+                  const Icon = item.icon;
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: i * 0.1 }}
+                      className="bg-white rounded-2xl p-6 border border-charcoal/5 shadow-sm hover:shadow-lg hover:border-gold/30 transition-all group"
+                    >
+                      <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-gold/20 group-hover:scale-110 transition-all">
+                        <Icon className="w-6 h-6 text-gold-dark" />
+                      </div>
+                      <h3 className="font-serif text-lg font-bold text-charcoal mb-2">{item.title}</h3>
+                      <p className="text-xs text-charcoal/60">{item.desc}</p>
+                    </motion.div>
+                  );
+                })}
               </div>
             </section>
 

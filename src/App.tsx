@@ -615,7 +615,8 @@ function AppContent() {
         />
       )}
 
-      <Footer onNavigate={handleTabChange} />
+      {/* Only show footer when user is not authenticated */}
+      {!isAuthenticated && <Footer onNavigate={handleTabChange} />}
 
       <AnimatePresence>
         {showCookies && (

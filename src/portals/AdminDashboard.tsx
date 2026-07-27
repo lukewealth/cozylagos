@@ -426,7 +426,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
               >
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
                   <div>
-                    <h2 className="font-serif text-headline-lg text-on-surface">Arrival Operations Center</h2>
+                    <h2 className="font-serif text-2xl md:text-3xl text-on-surface">Arrival Operations Center</h2>
                     <p className="text-body-lg text-secondary mt-2">Monitoring guest check-ins for {todayStr}</p>
                   </div>
                   <div className="flex flex-wrap gap-3">
@@ -603,7 +603,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
               >
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
                   <div>
-                    <h2 className="font-serif text-headline-lg text-on-surface">Residence Management</h2>
+                    <h2 className="font-serif text-2xl md:text-3xl text-on-surface">Residence Management</h2>
                     <p className="text-body-lg text-secondary mt-2">Manage all property listings</p>
                   </div>
                   <div className="flex items-center gap-3">
@@ -703,7 +703,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
               >
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
                   <div>
-                    <h2 className="font-serif text-headline-lg text-on-surface">Booking Requests</h2>
+                    <h2 className="font-serif text-2xl md:text-3xl text-on-surface">Booking Requests</h2>
                     <p className="text-body-lg text-secondary mt-2">Manage and confirm guest reservations</p>
                   </div>
                 </div>
@@ -858,7 +858,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                 transition={{ duration: 0.25 }}
               >
                 <div className="mb-8">
-                  <h2 className="font-serif text-headline-lg text-on-surface">Platform Analytics</h2>
+                  <h2 className="font-serif text-2xl md:text-3xl text-on-surface">Platform Analytics</h2>
                   <p className="text-body-lg text-secondary mt-2">Revenue and performance insights</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -990,7 +990,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
               >
                 <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
                   <div>
-                    <h2 className="font-serif text-headline-lg text-on-surface">Payment Ledger</h2>
+                    <h2 className="font-serif text-2xl md:text-3xl text-on-surface">Payment Ledger</h2>
                     <p className="text-body-lg text-secondary mt-2">Complete transaction history with billing metadata</p>
                   </div>
                   <Tooltip content="Download Ledger" description="Export as CSV">
@@ -1098,7 +1098,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                 transition={{ duration: 0.25 }}
               >
                 <div className="mb-8">
-                  <h2 className="font-serif text-headline-lg text-on-surface capitalize">{activeSection}</h2>
+                  <h2 className="font-serif text-2xl md:text-3xl text-on-surface capitalize">{activeSection}</h2>
                   <p className="text-body-lg text-secondary mt-2">
                     {activeSection === 'guests' && 'Manage guest profiles and preferences'}
                     {activeSection === 'services' && 'Oversee concierge services and assignments'}
