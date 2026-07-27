@@ -14,6 +14,7 @@ import { useAnalytics } from './hooks/useAnalytics';
 import { useErrorLogger } from './hooks/useErrorLogger';
 import ErrorBoundary from './components/ErrorBoundary';
 import UniversalSidebar from './components/UniversalSidebar';
+import CollapsibleSidebar from './components/ui/CollapsibleSidebar';
 import TopNavBar from './components/TopNavBar';
 import LandingPage from './components/LandingPage';
 import CartDrawer from './components/CartDrawer';
@@ -104,6 +105,8 @@ function AppContent() {
   const [showCookies, setShowCookies] = useState(() => {
     return !localStorage.getItem('cozy_lagos_cookies_accepted');
   });
+  const [userSidebarCollapsed, setUserSidebarCollapsed] = useState(false);
+  const [userSidebarMobileOpen, setUserSidebarMobileOpen] = useState(false);
   
   const { data: listings, addRecord: addListing, removeRecord: removeListing } = useDatabase('listings');
   const { data: bookings, addRecord: addBooking } = useDatabase('bookings');
@@ -419,14 +422,29 @@ function AppContent() {
         <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} onCheckout={() => setIsCheckoutOpen(true)} />
         <WhatsAppConcierge {...bookingContext} />
   
-        <main className={`flex-grow flex flex-col relative ${isAuthenticated && currentUser?.role === 'user' ? 'pb-20 lg:pb-0' : ''}`}>
-          {/* Universal Sidebar - only for regular users, not for admin/service_provider/super_admin who have their own dashboards */}
+        <main className={`flex-grow flex flex-col relative ${isAuthenticated && currentUser?.role === 'user' ? 'pb-20 lg:pb-0' : ''} ${isAuthenticated && currentUser?.role === 'user' ? (userSidebarCollapsed ? 'lg:ml-[80px]' : 'lg:ml-[280px]') : ''} transition-all duration-300`}>
+          {/* Collapsible Sidebar for user role */}
           {isAuthenticated && currentUser?.role === 'user' && (
-            <UniversalSidebar
+            <CollapsibleSidebar
               activeTab={activeTab}
-              setActiveTab={handleTabChange}
+              setActiveTab={(tab) => { setActiveTab(tab as any); setUserSidebarMobileOpen(false); }}
+              userRole="user"
               onLogout={logout}
+              onCollapse={setUserSidebarCollapsed}
+              isMobileOpen={userSidebarMobileOpen}
+              onMobileClose={() => setUserSidebarMobileOpen(false)}
             />
+          )}
+          {/* Mobile menu button for user sidebar */}
+          {isAuthenticated && currentUser?.role === 'user' && !userSidebarMobileOpen && (
+            <button
+              onClick={() => setUserSidebarMobileOpen(true)}
+              className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-lg"
+            >
+              <svg className="w-6 h-6 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
           )}
         <AnimatePresence mode="wait">
           {isCheckoutOpen ? (
@@ -497,7 +515,7 @@ function AppContent() {
               {activeTab === 'guest-dashboard' && <GuestDashboard />}
               {activeTab === 'user-dashboard' && (
                 <Suspense fallback={<DashboardSkeleton />}>
-                  <UserDashboard />
+                  <UserDashboard onNavigate={(tab, data) => setActiveTab(tab as any)} />
                 </Suspense>
               )}
               {activeTab === 'service-dashboard' && (

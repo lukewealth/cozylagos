@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronLeft, ChevronRight, LayoutDashboard, Users, Settings, BarChart3, Shield, Database, Globe, Key, Lock, Bell, LogOut, HelpCircle, X, Calendar, CheckSquare, Activity, FileText, Send, UserCheck, MessageSquare } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutDashboard, Users, Settings, BarChart3, Shield, Database, Globe, Key, Lock, Bell, LogOut, HelpCircle, X, Calendar, CheckSquare, Activity, FileText, Send, UserCheck, MessageSquare, Home, Search, Compass, Briefcase, Package } from 'lucide-react';
 
 interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  userRole: 'admin' | 'super_admin' | 'service_provider';
+  userRole: 'admin' | 'super_admin' | 'service_provider' | 'user';
   onLogout?: () => void;
   onHelp?: () => void;
   onCollapse?: (collapsed: boolean) => void;
@@ -56,6 +56,16 @@ const PROVIDER_NAV: NavItem[] = [
   { id: 'earnings', label: 'Earnings', icon: Key, description: 'Financial reports' },
 ];
 
+const USER_NAV: NavItem[] = [
+  { id: 'home', label: 'Home', icon: Home, description: 'Welcome page' },
+  { id: 'explorer', label: 'Stay', icon: Search, description: 'Find properties' },
+  { id: 'explore-lagos', label: 'Explore', icon: Compass, description: 'Discover Lagos' },
+  { id: 'vip-services', label: 'Services', icon: Briefcase, description: 'VIP services' },
+  { id: 'bundles', label: 'Bundles', icon: Package, description: 'Service packages' },
+  { id: 'events', label: 'Events', icon: Calendar, description: 'Upcoming events' },
+  { id: 'user-dashboard', label: 'Dashboard', icon: LayoutDashboard, description: 'Your dashboard' },
+];
+
 export default function CollapsibleSidebar({ activeTab, setActiveTab, userRole, onLogout, onHelp, onCollapse, isMobileOpen = false, onMobileClose }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -66,12 +76,13 @@ export default function CollapsibleSidebar({ activeTab, setActiveTab, userRole, 
     onCollapse?.(newState);
   };
 
-  const navItems = userRole === 'super_admin' ? SUPER_ADMIN_NAV : userRole === 'admin' ? ADMIN_NAV : PROVIDER_NAV;
+  const navItems = userRole === 'super_admin' ? SUPER_ADMIN_NAV : userRole === 'admin' ? ADMIN_NAV : userRole === 'user' ? USER_NAV : PROVIDER_NAV;
 
   const roleConfig = {
     admin: { title: 'Admin Portal', subtitle: 'Platform Management', color: 'text-primary' },
     super_admin: { title: 'Super Admin', subtitle: 'Root Access', color: 'text-error' },
     service_provider: { title: 'Provider Hub', subtitle: 'Service Management', color: 'text-primary' },
+    user: { title: 'Guest Portal', subtitle: 'Luxury Stays & Services', color: 'text-gold-dark' },
   };
 
   const config = roleConfig[userRole];

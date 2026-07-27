@@ -4,7 +4,7 @@ import {
   Calendar, MapPin, CreditCard, Bell, Send, Star, Clock, CheckCircle,
   XCircle, Heart, Eye, MessageCircle, Filter, ChevronRight, Sparkles,
   Gift, ShieldCheck, Utensils, Car, Camera, Anchor, TrendingUp, AlertCircle,
-  Trash2, ExternalLink, X, Home, RefreshCw
+  Trash2, ExternalLink, X, Home, RefreshCw, Briefcase
 } from 'lucide-react';
 import { useDatabase } from '../hooks/useDatabase';
 import { useAuth } from '../auth';
@@ -31,16 +31,21 @@ interface FavoriteApartment {
   addedAt: string;
 }
 
-type UserSection = 'bookings' | 'saved' | 'payments' | 'favorites';
+type UserSection = 'bookings' | 'saved' | 'payments' | 'favorites' | 'services';
 
 const STORAGE_KEYS = {
   savedPlaces: 'cozy_lagos_saved_places',
   favoriteApartments: 'cozy_lagos_favorite_apartments',
 };
 
-export default function UserDashboard() {
+interface UserDashboardProps {
+  onNavigate?: (tab: string, data?: any) => void;
+}
+
+export default function UserDashboard({ onNavigate }: UserDashboardProps) {
   const { currentUser } = useAuth();
   const { addToast } = useToast();
+  const { serviceCart } = useCart();
   const [activeSection, setActiveSection] = useState<UserSection>('bookings');
   const [chatInput, setChatInput] = useState('');
   const [messages, setMessageList] = useState<Message[]>([
@@ -226,11 +231,12 @@ export default function UserDashboard() {
         </p>
       </header>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
           { label: 'Total Bookings', value: userBookings.length, icon: Calendar, color: 'text-gold-dark' },
           { label: 'Confirmed', value: confirmedCount, icon: CheckCircle, color: 'text-green-600' },
           { label: 'Saved Places', value: savedPlaces.length, icon: Heart, color: 'text-rose-500' },
+          { label: 'Saved Services', value: serviceCart.length, icon: Briefcase, color: 'text-blue-600' },
           { label: 'Total Spent', value: `₦${(totalSpent / 1000).toFixed(0)}K`, icon: CreditCard, color: 'text-charcoal' },
         ].map((stat, i) => (
           <motion.div
@@ -247,12 +253,13 @@ export default function UserDashboard() {
         ))}
       </div>
 
-      <div className="flex gap-2 border-b border-charcoal/5 pb-0">
+      <div className="flex gap-2 border-b border-charcoal/5 pb-0 overflow-x-auto">
         {([
           { id: 'bookings', label: 'My Bookings', icon: Calendar },
           { id: 'saved', label: 'Saved Places', icon: Heart },
           { id: 'payments', label: 'Transactions', icon: CreditCard },
           { id: 'favorites', label: 'Favorites', icon: Star },
+          { id: 'services', label: 'Saved Services', icon: Briefcase },
         ] as const).map(tab => (
           <button
             key={tab.id}
@@ -395,12 +402,13 @@ export default function UserDashboard() {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ delay: idx * 0.05 }}
-                        className="bg-white rounded-2xl border border-charcoal/5 p-5 shadow-sm hover:shadow-md transition-all group"
+                        className="bg-white rounded-2xl border border-charcoal/5 p-5 shadow-sm hover:shadow-md transition-all group cursor-pointer"
+                        onClick={() => onNavigate?.('explore-lagos')}
                       >
                         <div className="flex items-start justify-between mb-3">
                           <span className="text-2xl">{getPlaceTypeIcon(place.type)}</span>
                           <button
-                            onClick={() => handleRemoveSavedPlace(place.id)}
+                            onClick={(e) => { e.stopPropagation(); handleRemoveSavedPlace(place.id); }}
                             className="p-1.5 rounded-lg hover:bg-red-50 text-charcoal/30 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -411,9 +419,14 @@ export default function UserDashboard() {
                           <MapPin className="w-3 h-3" />
                           <span>{place.location}</span>
                         </div>
-                        <p className="text-[10px] text-charcoal/30 mt-2">
-                          Saved {new Date(place.addedAt).toLocaleDateString()}
-                        </p>
+                        <div className="flex items-center justify-between mt-3">
+                          <p className="text-[10px] text-charcoal/30">
+                            Saved {new Date(place.addedAt).toLocaleDateString()}
+                          </p>
+                          <span className="text-[10px] font-bold text-gold-dark uppercase tracking-wider flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            View <ExternalLink className="w-3 h-3" />
+                          </span>
+                        </div>
                       </motion.div>
                     ))}
                   </div>
@@ -518,12 +531,13 @@ export default function UserDashboard() {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: idx * 0.05 }}
-                        className="bg-white rounded-2xl border border-charcoal/5 overflow-hidden shadow-sm hover:shadow-md transition-all group"
+                        className="bg-white rounded-2xl border border-charcoal/5 overflow-hidden shadow-sm hover:shadow-md transition-all group cursor-pointer"
+                        onClick={() => onNavigate?.('explorer')}
                       >
                         <div className="relative h-32 bg-gradient-to-br from-gold/20 to-charcoal/10 flex items-center justify-center">
                           <Home className="w-12 h-12 text-charcoal/20" />
                           <button
-                            onClick={() => handleRemoveFavorite(listing.id)}
+                            onClick={(e) => { e.stopPropagation(); handleRemoveFavorite(listing.id); }}
                             className="absolute top-2 right-2 p-1.5 rounded-full bg-white/80 hover:bg-red-50 text-charcoal/40 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
                           >
                             <X className="w-4 h-4" />
@@ -542,12 +556,76 @@ export default function UserDashboard() {
                               <span>{listing.rating}</span>
                             </div>
                           </div>
-                          <p className="text-[10px] text-charcoal/30 mt-2">
-                            Added {new Date(listing.addedAt).toLocaleDateString()}
-                          </p>
+                          <div className="flex items-center justify-between mt-2">
+                            <p className="text-[10px] text-charcoal/30">
+                              Added {new Date(listing.addedAt).toLocaleDateString()}
+                            </p>
+                            <span className="text-[10px] font-bold text-gold-dark uppercase tracking-wider flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                              View <ExternalLink className="w-3 h-3" />
+                            </span>
+                          </div>
                         </div>
                       </motion.div>
                     ))}
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {activeSection === 'services' && (
+              <motion.div
+                key="services"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                className="space-y-4"
+              >
+                <h3 className="font-serif text-xl font-bold text-charcoal">Saved Services</h3>
+                {serviceCart.length === 0 ? (
+                  <div className="bg-white rounded-2xl border border-charcoal/5 p-12 text-center">
+                    <Briefcase className="w-12 h-12 text-charcoal/10 mx-auto mb-4" />
+                    <p className="text-charcoal/40 text-sm">No saved services yet.</p>
+                    <p className="text-charcoal/30 text-xs mt-1">Browse VIP services and add them to your cart.</p>
+                    <button
+                      onClick={() => onNavigate?.('vip-services')}
+                      className="mt-4 px-6 py-3 bg-gold text-charcoal hover:bg-gold-dark rounded-lg text-xs font-bold uppercase tracking-wider transition-colors"
+                    >
+                      Browse Services
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {serviceCart.map((service, idx) => {
+                      const SvcIcon = getServiceIcon(service.title);
+                      return (
+                        <motion.div
+                          key={service.id}
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: idx * 0.05 }}
+                          className="bg-white rounded-2xl border border-charcoal/5 p-5 shadow-sm hover:shadow-md transition-all group cursor-pointer"
+                          onClick={() => onNavigate?.('vip-services')}
+                        >
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="w-12 h-12 rounded-xl bg-gold/5 flex items-center justify-center">
+                              <SvcIcon className="w-6 h-6 text-gold-dark" />
+                            </div>
+                            <span className="text-xs font-bold text-charcoal/40">Qty: {service.quantity}</span>
+                          </div>
+                          <h4 className="font-bold text-charcoal text-sm mb-1">{service.title}</h4>
+                          <p className="text-xs text-charcoal/50 capitalize mb-2">{service.category}</p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-bold text-gold-dark">₦{service.price.toLocaleString()}</span>
+                            <span className="text-[10px] font-bold text-gold-dark uppercase tracking-wider flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                              View <ExternalLink className="w-3 h-3" />
+                            </span>
+                          </div>
+                          {service.providerName && (
+                            <p className="text-[10px] text-charcoal/30 mt-2">by {service.providerName}</p>
+                          )}
+                        </motion.div>
+                      );
+                    })}
                   </div>
                 )}
               </motion.div>
