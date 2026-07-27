@@ -8,6 +8,18 @@ export default async function handler(req: any, res: any) {
   const { method } = req;
 
   try {
+    if (req.query.health === '1') {
+      const { db } = await connectToDatabase();
+      await db.command({ ping: 1 });
+      return res.status(200).json({
+        success: true,
+        status: 'healthy',
+        database: 'connected',
+        version: '1.0.0',
+        timestamp: new Date().toISOString(),
+      });
+    }
+
     const rateCheck = checkRateLimit(req, 60, 60000);
     if (!rateCheck.allowed) {
       return res.status(429).json({ success: false, message: 'Too many requests' });

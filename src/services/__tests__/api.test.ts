@@ -21,7 +21,7 @@ describe('API Service', () => {
       const result = await api.health.check();
       
       expect(global.fetch).toHaveBeenCalledWith(
-        '/api/health',
+        '/api/users?health=1',
         expect.objectContaining({
           headers: expect.objectContaining({
             'Content-Type': 'application/json',

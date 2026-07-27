@@ -18,7 +18,7 @@ async function request<T>(
 
 export const api = {
   health: {
-    check: () => request<{ status: string; message: string }>('/health'),
+    check: () => request<{ status: string; message: string }>('/users?health=1'),
   },
 
   auth: {
