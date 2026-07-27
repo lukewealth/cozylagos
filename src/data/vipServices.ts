@@ -626,6 +626,107 @@ export const VIP_SERVICES: VIPServiceCategory[] = [
         duration: '3 hours'
       }
     ]
+  },
+  {
+    id: 'grooming-salon',
+    title: 'Grooming & Salon',
+    description: 'Premium grooming and salon services',
+    icon: 'scissors',
+    gradient: 'from-pink-500 via-rose-400 to-red-400',
+    services: [
+      {
+        id: 'groom-001',
+        title: 'Groomed By Elereka - Premium Hair Styling',
+        description: 'Professional hair styling and grooming services by Elereka in Ikoyi. Specializing in traditional and contemporary Nigerian hairstyles.',
+        category: 'barber',
+        price: 35000,
+        priceUnit: 'per_session',
+        location: 'Ikoyi',
+        rating: 4.9,
+        reviewsCount: 156,
+        image: '/assets/images/explore/Groomed-By-Elereka-Ikoyi-3.jpg',
+        images: [
+          '/assets/images/explore/Groomed-By-Elereka-Ikoyi-3.jpg',
+          '/assets/images/explore/Groomed-By-Elereka-Ikoyi-13.jpg'
+        ],
+        amenities: ['Hair Styling', 'Braiding', 'Treatment', 'Consultation'],
+        providerName: 'Groomed By Elereka',
+        verified: true,
+        available: true,
+        duration: '2-3 hours'
+      }
+    ]
+  },
+  {
+    id: 'golf-experiences',
+    title: 'Golf & Country Clubs',
+    description: 'Exclusive golf experiences at Lagos finest country clubs',
+    icon: 'trophy',
+    gradient: 'from-green-500 via-emerald-400 to-teal-400',
+    services: [
+      {
+        id: 'golf-001',
+        title: 'Lakowe Lakes Golf & Country Estate',
+        description: 'Championship 18-hole golf course with lake views. Premium facilities including pro shop, restaurant, and luxury clubhouse.',
+        category: 'sports',
+        price: 85000,
+        priceUnit: 'per_session',
+        location: 'Lakowe, Ibeju-Lekki',
+        rating: 4.8,
+        reviewsCount: 89,
+        image: '/assets/images/explore/Lakowe Lakes Golf & Country Estate .jpg',
+        images: [
+          '/assets/images/explore/Lakowe Lakes Golf & Country Estate .jpg',
+          '/assets/images/explore/Lakowe Lakes Hotel, Golf and Country Estate by NEWMARK, Lagos.jpg',
+          '/assets/images/explore/Golf Lake.jpg'
+        ],
+        amenities: ['18-Hole Course', 'Pro Shop', 'Restaurant', 'Clubhouse', 'Caddy Service'],
+        providerName: 'Lakowe Lakes Golf & Country Estate',
+        verified: true,
+        available: true,
+        duration: 'Full Day'
+      },
+      {
+        id: 'golf-002',
+        title: 'Lagos Acres Golf & Country Club',
+        description: 'Exclusive golf club with championship course, practice facilities, and premium amenities. Perfect for serious golfers.',
+        category: 'sports',
+        price: 95000,
+        priceUnit: 'per_session',
+        location: 'Sangotedo, Lekki',
+        rating: 4.9,
+        reviewsCount: 67,
+        image: '/assets/images/explore/Lagos Acres Golf & Country Club - GOLF Course Finder .png',
+        images: [
+          '/assets/images/explore/Lagos Acres Golf & Country Club - GOLF Course Finder .png'
+        ],
+        amenities: ['Championship Course', 'Practice Range', 'Pro Shop', 'Restaurant', 'Coaching'],
+        providerName: 'Lagos Acres Golf & Country Club',
+        verified: true,
+        available: true,
+        duration: 'Full Day'
+      },
+      {
+        id: 'golf-003',
+        title: 'Lawoke Golf Club',
+        description: 'Intimate golf experience with scenic views and personalized service. Ideal for both beginners and experienced players.',
+        category: 'sports',
+        price: 65000,
+        priceUnit: 'per_session',
+        location: 'Lawoke, Ibeju-Lekki',
+        rating: 4.7,
+        reviewsCount: 45,
+        image: '/assets/images/explore/Lawoke Gol.jpeg',
+        images: [
+          '/assets/images/explore/Lawoke Gol.jpeg'
+        ],
+        amenities: ['9-Hole Course', 'Practice Area', 'Club Rental', 'Refreshments'],
+        providerName: 'Lawoke Golf Club',
+        verified: true,
+        available: true,
+        duration: '4-6 hours'
+      }
+    ]
   }
 ];
 

@@ -9,6 +9,7 @@ interface HeroProps {
 export default function Hero({ children }: HeroProps) {
   const [isNight, setIsNight] = useState(false);
   const [imgError, setImgError] = useState({ day: false, night: false });
+  const [showWelcome, setShowWelcome] = useState(false);
 
   const dayImg = imgError.day
     ? 'assets/images/horizontal/CozyLagos.jpeg'
@@ -20,6 +21,13 @@ export default function Hero({ children }: HeroProps) {
   useEffect(() => {
     const hour = new Date().getHours();
     setIsNight(hour >= 19 || hour < 6);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowWelcome(prev => !prev);
+    }, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -68,6 +76,29 @@ export default function Hero({ children }: HeroProps) {
               onError={() => setImgError(prev => ({ ...prev, night: true }))}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-charcoal/60 via-charcoal/30 to-charcoal/90" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Welcome to Lagos Transition */}
+      <AnimatePresence>
+        {showWelcome && (
+          <motion.div
+            className="absolute inset-0 z-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1, ease: [0.4, 0, 0.2, 1] }}
+          >
+            <motion.img
+              initial={{ scale: 1.05 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 3, ease: "easeOut" }}
+              className="w-full h-full object-cover"
+              src="/assets/images/horizontal/welcome-to-Lagos.jpg"
+              alt="Welcome to Lagos"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-charcoal/30 via-transparent to-charcoal/70" />
           </motion.div>
         )}
       </AnimatePresence>
