@@ -1,5 +1,5 @@
-import { connectToDatabase } from '../../src/lib/mongodb';
-import { addSecurityHeaders } from '../../src/lib/middleware';
+import { connectToDatabase } from '../src/lib/mongodb';
+import { addSecurityHeaders } from '../src/lib/middleware';
 
 export default async function handler(req: any, res: any) {
   addSecurityHeaders(res);

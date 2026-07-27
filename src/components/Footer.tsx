@@ -38,8 +38,8 @@ export default function Footer({ onNavigate }: FooterProps) {
 
   const footerLinks = {
     company: [
-      { label: 'About Cozy Lagos', href: 'about', isTab: true },
-      { label: 'Contact Us', href: 'contact', isTab: true },
+      { label: 'About Cozy Lagos', href: '/about', isTab: true },
+      { label: 'Contact Us', href: '/contact', isTab: true },
       { label: 'Careers', href: '#careers' },
       { label: 'Press & Media', href: '#press' },
       { label: 'Blog', href: '#blog' },
@@ -53,15 +53,15 @@ export default function Footer({ onNavigate }: FooterProps) {
     ],
     support: [
       { label: 'Help Center', href: '#help' },
-      { label: 'Security', href: 'security', isTab: true },
+      { label: 'Security', href: '/security', isTab: true },
       { label: 'Cancellation Policy', href: '#cancellation' },
       { label: 'Report a Concern', href: '#report' },
       { label: 'Accessibility', href: '#accessibility' },
     ],
     legal: [
-      { label: 'Privacy Policy', href: 'privacy', isTab: true },
-      { label: 'Terms of Service', href: 'terms', isTab: true },
-      { label: 'Cookie Policy', href: 'cookies', isTab: true },
+      { label: 'Privacy Policy', href: 'https://cozylagos.com/privacy', external: true },
+      { label: 'Terms of Service', href: 'https://cozylagos.com/terms', external: true },
+      { label: 'Cookie Policy', href: '/cookies', isTab: true },
       { label: 'Guest Protocol', href: '#protocol' },
       { label: 'Refund Policy', href: '#refund' },
     ],
@@ -220,7 +220,17 @@ export default function Footer({ onNavigate }: FooterProps) {
                 <ul className="space-y-2.5">
                   {footerLinks.legal.map((link) => (
                     <li key={link.label}>
-                      {(link as any).isTab ? (
+                      {(link as any).external ? (
+                        <a 
+                          href={link.href} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-xs text-parchment/60 hover:text-gold transition-colors flex items-center gap-1"
+                        >
+                          {link.label}
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      ) : (link as any).isTab ? (
                         <button 
                           onClick={() => onNavigate?.(link.href)}
                           className="text-xs text-parchment/60 hover:text-gold transition-colors text-left"
@@ -370,9 +380,9 @@ export default function Footer({ onNavigate }: FooterProps) {
             </div>
 
             <div className="flex items-center gap-4 text-[10px] text-parchment/40">
-              <button onClick={() => onNavigate?.('privacy')} className="hover:text-gold transition-colors">Privacy</button>
+              <a href="https://cozylagos.com/privacy" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">Privacy</a>
               <span>&bull;</span>
-              <button onClick={() => onNavigate?.('terms')} className="hover:text-gold transition-colors">Terms</button>
+              <a href="https://cozylagos.com/terms" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">Terms</a>
               <span>&bull;</span>
               <button onClick={() => onNavigate?.('cookies')} className="hover:text-gold transition-colors">Cookies</button>
               <span>&bull;</span>
