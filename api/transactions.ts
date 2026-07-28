@@ -24,7 +24,7 @@ export default async function handler(req: any, res: any) {
     if (threatCheck.isThreat) {
       logSecurityEvent({
         type: threatCheck.threatType || 'SECURITY_THREAT',
-        severity: threatCheck.severity || 'high',
+        severity: (threatCheck.severity || 'high') as 'high' | 'critical' | 'low' | 'medium',
         details: { endpoint: req.url, ip: req.headers?.['x-forwarded-for'] },
       });
       return res.status(403).json({ success: false, message: 'Access denied' });
