@@ -200,6 +200,64 @@ export default async function handler(req: any, res: any) {
         return res.status(200).json({ success: true, message: 'Transaction deleted successfully' });
       }
 
+      case 'PUT': {
+        const auth = authenticateRequest(req);
+        if (!auth.authenticated) {
+          return res.status(401).json({ success: false, message: auth.error });
+        }
+
+        const { action } = req.body;
+        
+        // Flush transactions - archive old and start fresh
+        if (action === 'flush') {
+          const { providerId, flushBefore } = req.body;
+          
+          if (!providerId) {
+            return res.status(400).json({ success: false, message: 'Provider ID is required' });
+          }
+
+          // Only allow SPs to flush their own transactions, or admins to flush any
+          if (auth.user.role !== 'admin' && auth.user.role !== 'super_admin' && auth.user.userId !== providerId) {
+            return res.status(403).json({ success: false, message: 'Unauthorized to flush these transactions' });
+          }
+
+          const flushDate = flushBefore ? new Date(flushBefore) : new Date();
+          
+          // Archive old transactions
+          const archiveResult = await transactionsCollection.updateMany(
+            { 
+              userId: providerId,
+              createdAt: { $lt: flushDate.toISOString() },
+              archived: { $ne: true }
+            },
+            { 
+              $set: { 
+                archived: true, 
+                archivedAt: new Date().toISOString(),
+                archivedBy: auth.user.userId
+              } 
+            }
+          );
+
+          logAudit('TRANSACTIONS_FLUSHED', auth.user.userId, { 
+            providerId,
+            flushDate: flushDate.toISOString(),
+            archivedCount: archiveResult.modifiedCount
+          });
+
+          return res.status(200).json({ 
+            success: true, 
+            message: 'Transactions flushed successfully',
+            data: {
+              archivedCount: archiveResult.modifiedCount,
+              flushDate: flushDate.toISOString()
+            }
+          });
+        }
+
+        return res.status(400).json({ success: false, message: 'Invalid action' });
+      }
+
       default:
         return res.status(405).json({ success: false, message: `Method ${method} not allowed` });
     }

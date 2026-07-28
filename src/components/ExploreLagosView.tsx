@@ -228,7 +228,7 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
     if (!showHero) return;
     const videoTimer = setTimeout(() => {
       setShowVideo(true);
-    }, 2000);
+    }, 1500);
     return () => clearTimeout(videoTimer);
   }, [showHero]);
 
@@ -238,6 +238,7 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
     
     const playVideo = async () => {
       try {
+        video.muted = true;
         await video.play();
       } catch (error) {
         console.warn('Video autoplay failed:', error);
@@ -251,11 +252,7 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
       video.addEventListener('canplay', playVideo, { once: true });
     }
     
-    const hideTimer = setTimeout(() => {
-      setShowVideo(false);
-    }, 16000);
     return () => {
-      clearTimeout(hideTimer);
       video.removeEventListener('canplay', playVideo);
     };
   }, [showVideo]);
@@ -311,7 +308,7 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
               }}
               transition={{ 
                 scale: { duration: 10, ease: [0.16, 1, 0.3, 1] },
-                opacity: { duration: 1.2, ease: "easeInOut" }
+                opacity: { duration: 2, ease: "easeInOut" }
               }}
               className="w-full h-full object-cover opacity-35 select-none pointer-events-none"
               src="/assets/bundles/bundles-hero-background.jpeg"
@@ -320,11 +317,17 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
             <motion.video
               ref={videoRef}
               key="hero-video"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: showVideo ? 1 : 0 }}
-              transition={{ duration: 1.2, ease: "easeInOut" }}
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={{ 
+                opacity: showVideo ? 1 : 0,
+                scale: showVideo ? 1 : 1.1
+              }}
+              transition={{ 
+                opacity: { duration: 2, ease: "easeInOut" },
+                scale: { duration: 10, ease: [0.16, 1, 0.3, 1] }
+              }}
               className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
-              src="/assets/lagos-drone-video.mp4"
+              src="/assets/lagos-hero-video.mp4"
               muted
               playsInline
               autoPlay
@@ -335,12 +338,19 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
                   videoRef.current.play().catch(() => {});
                 }
               }}
+              onEnded={() => {
+                setShowVideo(false);
+              }}
               onError={() => {
                 console.warn('Video failed to load, falling back to image');
                 setShowVideo(false);
               }}
+              style={{
+                maskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)'
+              }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-charcoal/50 via-charcoal/20 to-charcoal/80" />
+            <div className="absolute inset-0 bg-gradient-to-b from-charcoal/50 via-charcoal/20 to-charcoal/80 pointer-events-none" />
           </div>
 
           <div className="relative z-10 w-full max-w-[1440px] px-4 sm:px-6 md:px-12 xl:px-20 mx-auto flex flex-col items-center text-center">

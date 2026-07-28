@@ -44,26 +44,77 @@ export default async function handler(req: any, res: any) {
           listingId: { type: 'string', required: true },
           guestId: { type: 'string', required: true },
           guestName: { type: 'string', required: true, min: 2 },
+          checkIn: { type: 'string', required: true },
+          checkOut: { type: 'string', required: true },
         });
         if (!validation.valid) {
           return res.status(400).json({ success: false, message: validation.errors.join(', ') });
         }
 
         const bookingData = req.body;
+        
+        // Check for blocked dates
+        const blockedDatesCollection = db.collection('blockedDates');
+        const blockedDate = await blockedDatesCollection.findOne({
+          listingId: bookingData.listingId,
+          $or: [
+            { startDate: { $lte: bookingData.checkOut }, endDate: { $gte: bookingData.checkIn } },
+            { startDate: { $lte: bookingData.checkIn }, endDate: { $gte: bookingData.checkOut } }
+          ]
+        });
+
+        if (blockedDate) {
+          return res.status(409).json({ 
+            success: false, 
+            message: 'Selected dates are blocked for this property',
+            blockedDates: blockedDate
+          });
+        }
+
+        // Check for overlapping bookings
+        const overlappingBooking = await bookingsCollection.findOne({
+          listingId: bookingData.listingId,
+          status: { $in: ['confirmed', 'pending'] },
+          $or: [
+            { checkIn: { $lte: bookingData.checkOut }, checkOut: { $gte: bookingData.checkIn } },
+            { checkIn: { $lte: bookingData.checkIn }, checkOut: { $gte: bookingData.checkOut } }
+          ]
+        });
+
+        if (overlappingBooking) {
+          return res.status(409).json({ 
+            success: false, 
+            message: 'Selected dates overlap with an existing booking'
+          });
+        }
+
         const totalAmount = bookingData.totalAmount || 0;
         const platformCut = Math.round(totalAmount * 0.15);
         const providerCut = totalAmount - platformCut;
         const reference = generateReference('CL');
+        const bookingId = `booking-${Date.now()}`;
+
+        // Get listing to find provider
+        const listingsCollection = db.collection('listings');
+        const listing = await listingsCollection.findOne({ _id: new ObjectId(bookingData.listingId) });
+        
+        if (!listing) {
+          return res.status(404).json({ success: false, message: 'Listing not found' });
+        }
 
         const newBooking = {
+          id: bookingId,
           ...bookingData,
           guestName: sanitizeInput(bookingData.guestName),
+          listingTitle: listing.title,
+          providerId: listing.ownerId,
           status: bookingData.status || 'pending',
           services: bookingData.services || [],
+          serviceIds: bookingData.serviceIds || [],
           providerAssignmentStatus: 'unassigned',
           paymentLedger: {
             id: `ledger-${Date.now()}`,
-            bookingId: `booking-${Date.now()}`,
+            bookingId,
             reference,
             guestName: sanitizeInput(bookingData.guestName),
             guestEmail: bookingData.guestEmail || '',
@@ -87,9 +138,71 @@ export default async function handler(req: any, res: any) {
         };
 
         const result = await bookingsCollection.insertOne(newBooking);
-        logAudit('BOOKING_CREATED', auth.user.userId, { bookingId: result.insertedId.toString(), totalAmount });
+        
+        // Create corresponding transaction
+        const transactionsCollection = db.collection('transactions');
+        const transaction = {
+          id: `tx-${Date.now()}`,
+          bookingId,
+          userId: bookingData.guestId,
+          providerId: listing.ownerId,
+          amount: totalAmount,
+          type: 'booking_revenue',
+          status: 'pending',
+          description: `Booking for ${listing.title}`,
+          reference,
+          date: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        await transactionsCollection.insertOne(transaction);
 
-        return res.status(201).json({ success: true, data: { ...newBooking, _id: result.insertedId } });
+        // Send notifications to SP and Admin
+        const notificationsCollection = db.collection('notifications');
+        
+        // Notify SP
+        if (listing.ownerId) {
+          await notificationsCollection.insertOne({
+            id: `notif-sp-${Date.now()}`,
+            userId: listing.ownerId,
+            title: 'New Booking Request',
+            message: `You have a new booking request for ${listing.title} from ${bookingData.guestName}`,
+            type: 'booking',
+            targetRole: 'service_provider',
+            read: false,
+            bookingId,
+            sentAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
+          });
+        }
+
+        // Notify Admin
+        await notificationsCollection.insertOne({
+          id: `notif-admin-${Date.now()}`,
+          userId: 'admin',
+          title: 'New Booking Created',
+          message: `New booking created for ${listing.title} by ${bookingData.guestName}`,
+          type: 'booking',
+          targetRole: 'admin',
+          read: false,
+          bookingId,
+          sentAt: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
+        });
+
+        logAudit('BOOKING_CREATED', auth.user.userId, { 
+          bookingId: result.insertedId.toString(), 
+          totalAmount,
+          listingId: bookingData.listingId,
+          providerId: listing.ownerId,
+          serviceIds: bookingData.serviceIds || []
+        });
+
+        return res.status(201).json({ 
+          success: true, 
+          data: { ...newBooking, _id: result.insertedId },
+          message: 'Booking created successfully'
+        });
       }
 
       case 'PATCH': {
