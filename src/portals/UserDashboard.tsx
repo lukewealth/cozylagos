@@ -4,7 +4,7 @@ import {
   Calendar, MapPin, CreditCard, Bell, Send, Star, Clock, CheckCircle,
   XCircle, Heart, Eye, MessageCircle, Filter, ChevronRight, Sparkles,
   Gift, ShieldCheck, Utensils, Car, Camera, Anchor, TrendingUp, AlertCircle,
-  Trash2, ExternalLink, X, Home, RefreshCw, Briefcase
+  Trash2, ExternalLink, X, Home, RefreshCw, Briefcase, Settings
 } from 'lucide-react';
 import { useDatabase } from '../hooks/useDatabase';
 import { useAuth } from '../auth';
@@ -12,6 +12,8 @@ import { useCart } from '../context/CartContext';
 import { useToast } from '../components/Toast';
 import { Listing } from '../types';
 import { INITIAL_LISTINGS } from '../data';
+import NotificationCenter from '../components/NotificationCenter';
+import UserSettings from '../components/UserSettings';
 
 interface Message {
   sender: 'user' | 'concierge';
@@ -31,7 +33,7 @@ interface FavoriteApartment {
   addedAt: string;
 }
 
-type UserSection = 'bookings' | 'saved' | 'payments' | 'favorites' | 'services';
+type UserSection = 'bookings' | 'saved' | 'payments' | 'favorites' | 'services' | 'settings';
 
 const STORAGE_KEYS = {
   savedPlaces: 'cozy_lagos_saved_places',
@@ -260,6 +262,7 @@ export default function UserDashboard({ onNavigate }: UserDashboardProps) {
           { id: 'payments', label: 'Transactions', icon: CreditCard },
           { id: 'favorites', label: 'Favorites', icon: Star },
           { id: 'services', label: 'Saved Services', icon: Briefcase },
+          { id: 'settings', label: 'Settings', icon: Settings },
         ] as const).map(tab => (
           <button
             key={tab.id}
@@ -628,6 +631,18 @@ export default function UserDashboard({ onNavigate }: UserDashboardProps) {
                     })}
                   </div>
                 )}
+              </motion.div>
+            )}
+
+            {activeSection === 'settings' && (
+              <motion.div
+                key="settings"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                className="space-y-4"
+              >
+                <UserSettings />
               </motion.div>
             )}
           </AnimatePresence>

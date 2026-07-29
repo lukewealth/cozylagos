@@ -15,6 +15,9 @@ interface AuthContextType {
   logout: () => void;
   switchRole: (role: UserRole) => void;
   updateUser: (updates: Partial<UserRecord>) => Promise<void>;
+  updateProfile: (profile: any) => Promise<void>;
+  sendPasswordReset: (email: string) => Promise<void>;
+  resendVerificationEmail: () => Promise<void>;
   isAuthenticated: boolean;
 }
 
@@ -186,6 +189,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setCurrentUser(updated);
   }, [currentUser]);
 
+  const updateProfile = useCallback(async (profile: any) => {
+    if (!currentUser) return;
+    const updated = { ...currentUser, ...profile };
+    await dbPut('users', updated);
+    await cacheSet('current_user', updated, 86400000);
+    setCurrentUser(updated);
+  }, [currentUser]);
+
+  const sendPasswordReset = useCallback(async (email: string) => {
+    try {
+      await firebaseAuth.sendPasswordResetEmail(email);
+    } catch (error) {
+      console.error('Password reset error:', error);
+      throw error;
+    }
+  }, []);
+
+  const resendVerificationEmail = useCallback(async () => {
+    try {
+      await firebaseAuth.sendEmailVerification();
+    } catch (error) {
+      console.error('Verification email error:', error);
+      throw error;
+    }
+  }, []);
+
   return (
     <AuthContext.Provider value={{
       currentUser,
@@ -197,6 +226,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       logout,
       switchRole,
       updateUser,
+      updateProfile,
+      sendPasswordReset,
+      resendVerificationEmail,
       isAuthenticated: !!currentUser
     }}>
       {children}

@@ -176,6 +176,26 @@ export default async function handler(req: any, res: any) {
           return res.status(200).json({ success: true, data: assets, count: assets.length });
         }
 
+        if (path.includes('/withdrawals')) {
+          if (!authorizeRole('admin', auth.user.role)) {
+            return res.status(403).json({ success: false, message: 'Admin access required' });
+          }
+
+          const withdrawalsCollection = db.collection('withdrawals');
+          const { status, providerId } = req.query;
+          let filter: any = {};
+
+          if (status) filter.status = status;
+          if (providerId) filter.providerId = providerId;
+
+          const withdrawals = await withdrawalsCollection
+            .find(filter)
+            .sort({ createdAt: -1 })
+            .toArray();
+
+          return res.status(200).json({ success: true, data: withdrawals });
+        }
+
         return res.status(404).json({ success: false, message: 'Admin endpoint not found' });
       }
 
@@ -316,6 +336,74 @@ export default async function handler(req: any, res: any) {
           logAudit('ASSET_CREATED', auth.user.userId, { assetId: result.insertedId.toString(), assetCode: sanitizedCode });
 
           return res.status(201).json({ success: true, data: { ...newAsset, _id: result.insertedId } });
+        }
+
+        return res.status(404).json({ success: false, message: 'Admin endpoint not found' });
+      }
+
+      case 'PATCH': {
+        const auth = authenticateRequest(req);
+        if (!auth.authenticated) {
+          return res.status(401).json({ success: false, message: auth.error });
+        }
+        if (!authorizeRole('admin', auth.user.role)) {
+          return res.status(403).json({ success: false, message: 'Admin access required' });
+        }
+
+        const path = req.url || '';
+
+        if (path.includes('/withdrawals')) {
+          const withdrawalsCollection = db.collection('withdrawals');
+          const { id, status, adminNotes, rejectionReason } = req.body;
+          if (!id) {
+            return res.status(400).json({ success: false, message: 'Withdrawal ID is required' });
+          }
+
+          const updateFields: any = {
+            updatedAt: new Date().toISOString(),
+            reviewedBy: auth.user.userId,
+            reviewedAt: new Date().toISOString()
+          };
+
+          if (status) updateFields.status = status;
+          if (adminNotes) updateFields.adminNotes = sanitizeInput(adminNotes);
+          if (rejectionReason) updateFields.rejectionReason = sanitizeInput(rejectionReason);
+
+          if (status === 'completed') {
+            updateFields.completedAt = new Date().toISOString();
+
+            // Create a transaction record for the withdrawal
+            const withdrawal = await withdrawalsCollection.findOne({ _id: new ObjectId(id) });
+            if (withdrawal) {
+              await transactionsCollection.insertOne({
+                reference: generateReference('TX'),
+                userId: withdrawal.providerId,
+                type: 'withdrawal',
+                amount: -withdrawal.amount,
+                status: 'processed',
+                description: `Withdrawal ${withdrawal.reference} processed`,
+                withdrawalId: id,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+              });
+            }
+          }
+
+          const result = await withdrawalsCollection.updateOne(
+            { _id: new ObjectId(id) },
+            { $set: updateFields }
+          );
+
+          if (result.matchedCount === 0) {
+            return res.status(404).json({ success: false, message: 'Withdrawal not found' });
+          }
+
+          logAudit('WITHDRAWAL_UPDATED', auth.user.userId, {
+            withdrawalId: id,
+            status
+          });
+
+          return res.status(200).json({ success: true, message: 'Withdrawal updated successfully' });
         }
 
         return res.status(404).json({ success: false, message: 'Admin endpoint not found' });
