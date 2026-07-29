@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import {
-  Bell, Send, Search, Filter, X, Check, Mail, Phone, Calendar,
+  Bell, Send, Search, Filter, Check, Mail, Phone, Calendar,
   MessageSquare, AlertCircle, CheckCircle, Clock, Trash2, Eye
 } from 'lucide-react';
 import { useDatabase } from '../hooks/useDatabase';
@@ -244,21 +243,25 @@ export default function NotificationManagement() {
         </div>
       )}
 
-      <AnimatePresence>
-        {showSendModal && (
-          <SendNotificationModal
-            onClose={() => setShowSendModal(false)}
-            onSend={handleSendNotification}
-          />
-        )}
-      </AnimatePresence>
+      <UniversalModal
+        isOpen={showSendModal}
+        onClose={() => setShowSendModal(false)}
+        title="Send Notification"
+        size="md"
+        variant="auto"
+      >
+        <SendNotificationForm
+          onClose={() => setShowSendModal(false)}
+          onSend={handleSendNotification}
+        />
+      </UniversalModal>
 
       <ToastContainer />
     </div>
   );
 }
 
-function SendNotificationModal({ onClose, onSend }: {
+function SendNotificationForm({ onClose, onSend }: {
   onClose: () => void;
   onSend: (data: any) => void;
 }) {
@@ -275,27 +278,6 @@ function SendNotificationModal({ onClose, onSend }: {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-charcoal/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-white rounded-xl p-6 max-w-lg w-full"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-serif text-xl font-bold text-charcoal">Send Notification</h3>
-          <button onClick={onClose} className="p-2 text-charcoal/40 hover:text-charcoal transition-colors">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Title</label>
@@ -367,7 +349,5 @@ function SendNotificationModal({ onClose, onSend }: {
             </button>
           </div>
         </form>
-      </motion.div>
-    </motion.div>
   );
 }

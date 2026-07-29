@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Calendar, MapPin, Ticket, Plus, Edit3, Trash2, Search, Filter, TrendingUp, Eye, X } from 'lucide-react';
+import { Calendar, MapPin, Ticket, Plus, Edit3, Trash2, Search, Filter, TrendingUp, Eye } from 'lucide-react';
 import { LagosEvent } from '../types';
 import api from '../services/api';
 import { AdminCard, AdminButton, AdminStatCard, AdminBadge, AdminSearch, AdminEmptyState } from './ui';
+import UniversalModal from './ui/UniversalModal';
 
 interface AdminEventsProps {
   onClose?: () => void;
@@ -235,45 +235,41 @@ export default function AdminEvents({ onClose }: AdminEventsProps) {
         />
       )}
 
-      <AnimatePresence>
-        {showDeleteConfirm && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-charcoal/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      <UniversalModal
+        isOpen={!!showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(null)}
+        title="Delete Event?"
+        size="sm"
+        variant="auto"
+      >
+        <p className="text-sm text-charcoal/60 mb-6">This action cannot be undone. All ticket sales data will be lost.</p>
+        <div className="flex gap-3">
+          <button
             onClick={() => setShowDeleteConfirm(null)}
+            className="flex-1 px-4 py-2 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all"
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-xl p-6 max-w-md w-full"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h3 className="font-serif text-xl font-bold text-charcoal mb-2">Delete Event?</h3>
-              <p className="text-sm text-charcoal/60 mb-6">This action cannot be undone. All ticket sales data will be lost.</p>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setShowDeleteConfirm(null)}
-                  className="flex-1 px-4 py-2 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => handleDelete(showDeleteConfirm)}
-                  className="flex-1 px-4 py-2 bg-red-500 text-white font-bold text-xs uppercase rounded-lg hover:bg-red-600 transition-all"
-                >
-                  Delete
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            Cancel
+          </button>
+          <button
+            onClick={() => handleDelete(showDeleteConfirm!)}
+            className="flex-1 px-4 py-2 bg-red-500 text-white font-bold text-xs uppercase rounded-lg hover:bg-red-600 transition-all"
+          >
+            Delete
+          </button>
+        </div>
+      </UniversalModal>
 
-      {(showCreateModal || editingEvent) && (
-        <EventFormModal
+      <UniversalModal
+        isOpen={showCreateModal || !!editingEvent}
+        onClose={() => {
+          setShowCreateModal(false);
+          setEditingEvent(null);
+        }}
+        title={editingEvent ? 'Edit Event' : 'Create New Event'}
+        size="lg"
+        variant="auto"
+      >
+        <EventForm
           event={editingEvent}
           onClose={() => {
             setShowCreateModal(false);
@@ -285,12 +281,12 @@ export default function AdminEvents({ onClose }: AdminEventsProps) {
             fetchEvents();
           }}
         />
-      )}
+      </UniversalModal>
     </div>
   );
 }
 
-function EventFormModal({ event, onClose, onSave }: { event: LagosEvent | null; onClose: () => void; onSave: () => void }) {
+function EventForm({ event, onClose, onSave }: { event: LagosEvent | null; onClose: () => void; onSave: () => void }) {
   const [formData, setFormData] = useState({
     title: event?.title || '',
     description: event?.description || '',
@@ -324,29 +320,6 @@ function EventFormModal({ event, onClose, onSave }: { event: LagosEvent | null; 
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-charcoal/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-white rounded-xl p-6 max-w-2xl w-full my-8"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-serif text-xl font-bold text-charcoal">
-            {event ? 'Edit Event' : 'Create New Event'}
-          </h3>
-          <button onClick={onClose} className="p-2 text-charcoal/40 hover:text-charcoal transition-colors">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Title</label>
@@ -489,7 +462,5 @@ function EventFormModal({ event, onClose, onSave }: { event: LagosEvent | null; 
             </button>
           </div>
         </form>
-      </motion.div>
-    </motion.div>
   );
 }

@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useDatabase } from '../hooks/useDatabase';
 import UniversalModal from './ui/UniversalModal';
+import { dbGetAll, dbPut, dbDelete, generateId } from '../db';
 
 interface SPTask {
   id: string;
@@ -38,85 +39,105 @@ interface Asset {
   assetCode: string;
 }
 
-const STORAGE_KEY = 'cozy_lagos_sp_tasks';
-
-function getSPTasks(): SPTask[] {
-  try {
-    const tasks = localStorage.getItem(STORAGE_KEY);
-    return tasks ? JSON.parse(tasks) : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveSPTasks(tasks: SPTask[]): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-  } catch {
-    // Silent fail
-  }
-}
-
 export default function SPTaskManagement({ providerId }: { providerId: string }) {
   const { data: allUsers } = useDatabase('users');
   const staff = allUsers.filter(u => u.role === 'admin' || u.role === 'service_provider' || u.role === 'super_admin');
   const { data: servicesData } = useDatabase('services');
-  const assets = servicesData.map(s => ({ ...s, name: s.title }));
+  const assets = servicesData.map(s => ({ ...s, name: s.title, assetCode: s.id }));
   const [tasks, setTasks] = useState<SPTask[]>([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingTask, setEditingTask] = useState<SPTask | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTasks(getSPTasks());
+    loadTasks();
   }, []);
 
-  const handleCreateTask = (taskData: Omit<SPTask, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const loadTasks = async () => {
+    setLoading(true);
+    try {
+      const dbTasks = await dbGetAll('tasks');
+      setTasks(dbTasks as SPTask[]);
+    } catch (error) {
+      console.error('Failed to load tasks:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateTask = async (taskData: Omit<SPTask, 'id' | 'createdAt' | 'updatedAt'>) => {
     const newTask: SPTask = {
       ...taskData,
-      id: `sp-task-${Date.now()}`,
+      id: generateId(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    const updatedTasks = [newTask, ...tasks];
-    setTasks(updatedTasks);
-    saveSPTasks(updatedTasks);
-    setShowCreateModal(false);
+    
+    try {
+      await dbPut('tasks', newTask);
+      await loadTasks();
+      setShowCreateModal(false);
+    } catch (error) {
+      console.error('Failed to create task:', error);
+    }
   };
 
-  const handleUpdateTask = (taskId: string, updates: Partial<SPTask>) => {
-    const updatedTasks = tasks.map(t =>
-      t.id === taskId ? { ...t, ...updates, updatedAt: new Date().toISOString() } : t
+  const handleUpdateTask = async (taskId: string, updates: Partial<SPTask>) => {
+    const task = tasks.find(t => t.id === taskId);
+    if (!task) return;
+
+    const updatedTask = {
+      ...task,
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    };
+
+    try {
+      await dbPut('tasks', updatedTask);
+      await loadTasks();
+      setEditingTask(null);
+    } catch (error) {
+      console.error('Failed to update task:', error);
+    }
+  };
+
+  const handleDeleteTask = async (taskId: string) => {
+    try {
+      await dbDelete('tasks', taskId);
+      await loadTasks();
+    } catch (error) {
+      console.error('Failed to delete task:', error);
+    }
+  };
+
+  const handleToggleChecklistItem = async (taskId: string, itemId: string) => {
+    const task = tasks.find(t => t.id === taskId);
+    if (!task) return;
+
+    const updatedChecklist = task.checklist.map(item =>
+      item.id === itemId ? { ...item, completed: !item.completed } : item
     );
-    setTasks(updatedTasks);
-    saveSPTasks(updatedTasks);
-    setEditingTask(null);
-  };
+    const completedCount = updatedChecklist.filter(i => i.completed).length;
+    const newStatus = completedCount === updatedChecklist.length && updatedChecklist.length > 0
+      ? 'completed'
+      : completedCount > 0 ? 'in_progress' : 'pending';
 
-  const handleDeleteTask = (taskId: string) => {
-    const updatedTasks = tasks.filter(t => t.id !== taskId);
-    setTasks(updatedTasks);
-    saveSPTasks(updatedTasks);
-  };
+    const updatedTask = {
+      ...task,
+      checklist: updatedChecklist,
+      status: newStatus,
+      updatedAt: new Date().toISOString(),
+    };
 
-  const handleToggleChecklistItem = (taskId: string, itemId: string) => {
-    const updatedTasks = tasks.map(t => {
-      if (t.id === taskId) {
-        const updatedChecklist = t.checklist.map(item =>
-          item.id === itemId ? { ...item, completed: !item.completed } : item
-        );
-        const completedCount = updatedChecklist.filter(i => i.completed).length;
-        const newStatus = completedCount === updatedChecklist.length && updatedChecklist.length > 0
-          ? 'completed'
-          : completedCount > 0 ? 'in_progress' : 'pending';
-        return { ...t, checklist: updatedChecklist, status: newStatus, updatedAt: new Date().toISOString() };
-      }
-      return t;
-    });
-    setTasks(updatedTasks);
-    saveSPTasks(updatedTasks);
+    try {
+      await dbPut('tasks', updatedTask);
+      await loadTasks();
+    } catch (error) {
+      console.error('Failed to toggle checklist item:', error);
+    }
   };
 
   const filteredTasks = tasks.filter(task => {
@@ -209,24 +230,33 @@ export default function SPTaskManagement({ providerId }: { providerId: string })
         </select>
       </div>
 
-      <div className="space-y-4">
-        {filteredTasks.map(task => (
-          <SPTaskCard
-            key={task.id}
-            task={task}
-            onToggleChecklist={handleToggleChecklistItem}
-            onEdit={() => setEditingTask(task)}
-            onDelete={() => handleDeleteTask(task.id)}
-          />
-        ))}
-      </div>
-
-      {filteredTasks.length === 0 && (
+      {loading ? (
         <div className="text-center py-16">
-          <CheckSquare className="w-16 h-16 text-charcoal/20 mx-auto mb-4" />
-          <p className="text-lg font-semibold text-charcoal mb-2">No tasks found</p>
-          <p className="text-sm text-charcoal/50">Create a task to get started</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold mx-auto mb-4"></div>
+          <p className="text-sm text-charcoal/60">Loading tasks...</p>
         </div>
+      ) : (
+        <>
+          <div className="space-y-4">
+            {filteredTasks.map(task => (
+              <SPTaskCard
+                key={task.id}
+                task={task}
+                onToggleChecklist={handleToggleChecklistItem}
+                onEdit={() => setEditingTask(task)}
+                onDelete={() => handleDeleteTask(task.id)}
+              />
+            ))}
+          </div>
+
+          {filteredTasks.length === 0 && (
+            <div className="text-center py-16">
+              <CheckSquare className="w-16 h-16 text-charcoal/20 mx-auto mb-4" />
+              <p className="text-lg font-semibold text-charcoal mb-2">No tasks found</p>
+              <p className="text-sm text-charcoal/50">Create a task to get started</p>
+            </div>
+          )}
+        </>
       )}
 
       <AnimatePresence>

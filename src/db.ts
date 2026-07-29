@@ -16,7 +16,7 @@ export function subscribeToDatabase(callback: (event: string) => void) {
 }
 
 const DB_NAME = 'cozy_lagos_db';
-const DB_VERSION = 2; // Incremented to trigger migration for missing stores
+const DB_VERSION = 3; // Incremented to trigger migration for tasks and assets stores
 
 export interface DBSchema {
   users: UserRecord;
@@ -29,6 +29,8 @@ export interface DBSchema {
   cache: CacheRecord;
   notifications: NotificationRecord;
   staff: StaffRecord;
+  tasks: TaskRecord;
+  assets: AssetRecord;
 }
 
 export interface UserRecord {
@@ -179,6 +181,36 @@ export interface StaffRecord {
   updatedAt: string;
 }
 
+export interface TaskRecord {
+  id: string;
+  title: string;
+  description: string;
+  assignedTo: string;
+  assignedToName: string;
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
+  checklist: { id: string; text: string; completed: boolean }[];
+  dueDate: string;
+  tags: string[];
+  createdBy: string;
+  assetId?: string;
+  assetName?: string;
+  category?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AssetRecord {
+  id: string;
+  name: string;
+  category: string;
+  status: 'available' | 'in_use' | 'maintenance';
+  assetCode: string;
+  providerId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 let dbInstance: IDBDatabase | null = null;
 
 function openDB(): Promise<IDBDatabase> {
@@ -261,6 +293,25 @@ function openDB(): Promise<IDBDatabase> {
           staffStore.createIndex('providerId', 'providerId', { unique: false });
           staffStore.createIndex('role', 'role', { unique: false });
           staffStore.createIndex('status', 'status', { unique: false });
+        }
+      }
+
+      // Version 3: Add tasks and assets stores
+      if (oldVersion < 3) {
+        if (!db.objectStoreNames.contains('tasks')) {
+          const taskStore = db.createObjectStore('tasks', { keyPath: 'id' });
+          taskStore.createIndex('assignedTo', 'assignedTo', { unique: false });
+          taskStore.createIndex('status', 'status', { unique: false });
+          taskStore.createIndex('priority', 'priority', { unique: false });
+          taskStore.createIndex('createdBy', 'createdBy', { unique: false });
+        }
+
+        if (!db.objectStoreNames.contains('assets')) {
+          const assetStore = db.createObjectStore('assets', { keyPath: 'id' });
+          assetStore.createIndex('providerId', 'providerId', { unique: false });
+          assetStore.createIndex('category', 'category', { unique: false });
+          assetStore.createIndex('status', 'status', { unique: false });
+          assetStore.createIndex('assetCode', 'assetCode', { unique: true });
         }
       }
     };
