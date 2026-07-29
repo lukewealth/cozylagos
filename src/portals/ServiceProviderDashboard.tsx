@@ -773,7 +773,7 @@ export default function ServiceProviderDashboard({ onLogout }: ServiceProviderDa
                             >
                               <MoreVertical className="w-4 h-4 text-secondary" />
                             </button>
-                            <div id={`service-menu-${service.id}`} className="hidden absolute right-6 top-12 bg-white border border-outline-variant/20 rounded-lg shadow-lg py-1 z-10">
+                            <div id={`service-menu-${service.id}`} className="hidden absolute right-0 top-12 bg-white border border-outline-variant/20 rounded-lg shadow-lg py-1 z-50 w-48">
                               <button
                                 onClick={() => { setEditingService(service); setShowServiceModal(true); }}
                                 className="w-full px-4 py-2 text-left text-sm hover:bg-surface-container flex items-center gap-2"
@@ -1001,7 +1001,7 @@ export default function ServiceProviderDashboard({ onLogout }: ServiceProviderDa
                         const isBooked = bookedDates.has(dateStr);
                         const isToday = day === new Date().getDate() && calendarMonth.getMonth() === new Date().getMonth();
                         return (
-                          <div key={idx} className={`aspect-square flex items-center justify-center rounded-lg text-sm transition-colors ${
+                          <div key={idx} className={`relative aspect-square flex items-center justify-center rounded-lg text-sm transition-colors ${
                             !day ? '' :
                             isToday ? 'bg-primary text-on-primary font-bold' :
                             isBooked ? 'bg-primary/10 text-primary font-bold' :
@@ -1282,7 +1282,7 @@ export default function ServiceProviderDashboard({ onLogout }: ServiceProviderDa
                               <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full ${badge.bg} ${badge.text}`}>{badge.label}</span>
                             </div>
                             {staffMember.currentAssignment && (
-                              <div className="ml-13 pl-13 border-l-2 border-primary/20">
+                              <div className="ml-12 pl-4 border-l-2 border-primary/20">
                                 <p className="text-xs text-secondary">Currently assigned to: <span className="font-semibold text-primary">{staffMember.currentAssignment}</span></p>
                               </div>
                             )}

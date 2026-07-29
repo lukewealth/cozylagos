@@ -618,7 +618,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                         <h3 className="font-serif text-headline-sm text-on-surface">Security Logs</h3>
                         <Shield className="w-5 h-5 text-outline" />
                       </div>
-                      <div className="p-6 flex flex-col gap-6 overflow-y-auto max-h-[500px]">
+                      <div className="p-4 sm:p-6 flex flex-col gap-4 sm:gap-6 overflow-y-auto max-h-[60vh] sm:max-h-[500px]">
                         {MOCK_SECURITY_LOGS.map((log) => (
                           <div key={log.id} className="flex gap-4 relative">
                             <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0 z-10">
@@ -1069,14 +1069,14 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                     <table className="w-full text-left border-collapse">
                       <thead>
                         <tr className="text-label-caps text-secondary bg-surface-container-low border-b border-outline-variant/10">
-                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Ref</th>
-                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Guest</th>
-                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Property</th>
-                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Services</th>
-                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Total</th>
-                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Platform</th>
-                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Provider</th>
-                          <th className="px-3 py-3 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold">Status</th>
+                          <th className="px-2 py-2 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold text-[10px] sm:text-xs">Ref</th>
+                          <th className="px-2 py-2 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold text-[10px] sm:text-xs hidden md:table-cell">Guest</th>
+                          <th className="px-2 py-2 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold text-[10px] sm:text-xs hidden lg:table-cell">Property</th>
+                          <th className="px-2 py-2 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold text-[10px] sm:text-xs hidden xl:table-cell">Services</th>
+                          <th className="px-2 py-2 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold text-[10px] sm:text-xs">Total</th>
+                          <th className="px-2 py-2 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold text-[10px] sm:text-xs hidden sm:table-cell">Platform</th>
+                          <th className="px-2 py-2 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold text-[10px] sm:text-xs hidden lg:table-cell">Provider</th>
+                          <th className="px-2 py-2 sm:px-4 sm:py-3 lg:px-6 lg:py-4 font-bold text-[10px] sm:text-xs">Status</th>
                         </tr>
                       </thead>
                       <tbody className="text-sm divide-y divide-outline-variant/10">
@@ -1087,17 +1087,17 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                           const providerCut = total - platformCut;
                           return (
                             <tr key={booking.id} className="hover:bg-surface-container-low/50 transition-colors">
-                              <td className="px-6 py-4">
-                                <span className="font-mono text-[10px] text-secondary">{ledger?.reference || booking.id?.slice(0, 12)}</span>
+                              <td className="px-2 py-2 sm:px-4 sm:py-4 lg:px-6 lg:py-4">
+                                <span className="font-mono text-[9px] sm:text-[10px] text-secondary">{ledger?.reference || booking.id?.slice(0, 12)}</span>
                               </td>
-                              <td className="px-6 py-4">
+                              <td className="px-2 py-2 sm:px-4 sm:py-4 lg:px-6 lg:py-4 hidden md:table-cell">
                                 <div>
                                   <p className="font-bold text-on-surface text-xs">{booking.guestName}</p>
                                   <p className="text-[10px] text-secondary">{booking.guestEmail}</p>
                                 </div>
                               </td>
-                              <td className="px-6 py-4 text-on-surface-variant text-xs">{booking.listingTitle}</td>
-                              <td className="px-6 py-4">
+                              <td className="px-2 py-2 sm:px-4 sm:py-4 lg:px-6 lg:py-4 text-on-surface-variant text-xs hidden lg:table-cell">{booking.listingTitle}</td>
+                              <td className="px-2 py-2 sm:px-4 sm:py-4 lg:px-6 lg:py-4 hidden xl:table-cell">
                                 <div className="flex flex-wrap gap-1">
                                   {(booking.services || []).slice(0, 2).map((s: string, i: number) => (
                                     <span key={i} className="bg-primary/10 text-primary px-1.5 py-0.5 rounded text-[8px] font-bold">{s}</span>
@@ -1105,13 +1105,13 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                                   {(!booking.services || booking.services.length === 0) && <span className="text-[10px] text-secondary">—</span>}
                                 </div>
                               </td>
-                              <td className="px-6 py-4">
+                              <td className="px-2 py-2 sm:px-4 sm:py-4 lg:px-6 lg:py-4">
                                 <span className="font-bold text-primary text-xs">₦{total.toLocaleString()}</span>
                               </td>
-                              <td className="px-6 py-4 text-xs text-on-surface-variant">₦{platformCut.toLocaleString()}</td>
-                              <td className="px-6 py-4 text-xs text-green-600 font-semibold">₦{providerCut.toLocaleString()}</td>
-                              <td className="px-6 py-4">
-                                <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full ${
+                              <td className="px-2 py-2 sm:px-4 sm:py-4 lg:px-6 lg:py-4 text-xs text-on-surface-variant hidden sm:table-cell">₦{platformCut.toLocaleString()}</td>
+                              <td className="px-2 py-2 sm:px-4 sm:py-4 lg:px-6 lg:py-4 text-xs text-green-600 font-semibold hidden lg:table-cell">₦{providerCut.toLocaleString()}</td>
+                              <td className="px-2 py-2 sm:px-4 sm:py-4 lg:px-6 lg:py-4">
+                                <span className={`text-[9px] sm:text-[10px] font-bold uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full ${
                                   booking.status === 'confirmed' || booking.status === 'Confirmed'
                                     ? 'bg-green-100 text-green-700'
                                     : booking.status === 'cancelled' || booking.status === 'Cancelled'
@@ -1581,14 +1581,14 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                 <>
                   <button
                     onClick={() => { setShowBookingDetailModal(false); setSelectedBooking(selectedBookingDetail); setShowConfirmModal(true); }}
-                    className="flex-1 min-w-[120px] py-2.5 bg-green-600 text-white font-bold text-xs uppercase rounded-xl hover:bg-green-700 transition-all flex items-center justify-center gap-2"
+                    className="flex-1 min-w-[100px] sm:min-w-[120px] py-2.5 bg-green-600 text-white font-bold text-xs uppercase rounded-xl hover:bg-green-700 transition-all flex items-center justify-center gap-2"
                   >
                     <CheckCircle className="w-4 h-4" />
                     Confirm
                   </button>
                   <button
                     onClick={() => { setShowBookingDetailModal(false); setSelectedBooking(selectedBookingDetail); setShowRejectModal(true); }}
-                    className="flex-1 min-w-[120px] py-2.5 bg-red-600 text-white font-bold text-xs uppercase rounded-xl hover:bg-red-700 transition-all flex items-center justify-center gap-2"
+                    className="flex-1 min-w-[100px] sm:min-w-[120px] py-2.5 bg-red-600 text-white font-bold text-xs uppercase rounded-xl hover:bg-red-700 transition-all flex items-center justify-center gap-2"
                   >
                     <XCircle className="w-4 h-4" />
                     Reject

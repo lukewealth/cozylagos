@@ -361,12 +361,12 @@ export default function TransactionDownload() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-charcoal/10">
-                <th className="text-left py-3 px-4 text-xs font-bold text-charcoal/60 uppercase tracking-wider">Date</th>
-                <th className="text-left py-3 px-4 text-xs font-bold text-charcoal/60 uppercase tracking-wider">Reference</th>
-                <th className="text-left py-3 px-4 text-xs font-bold text-charcoal/60 uppercase tracking-wider">Type</th>
-                <th className="text-right py-3 px-4 text-xs font-bold text-charcoal/60 uppercase tracking-wider">Amount</th>
-                <th className="text-left py-3 px-4 text-xs font-bold text-charcoal/60 uppercase tracking-wider">Status</th>
-                <th className="text-left py-3 px-4 text-xs font-bold text-charcoal/60 uppercase tracking-wider">Description</th>
+                <th className="text-left py-3 px-2 sm:px-4 text-xs font-bold text-charcoal/60 uppercase tracking-wider">Date</th>
+                <th className="text-left py-3 px-2 sm:px-4 text-xs font-bold text-charcoal/60 uppercase tracking-wider hidden sm:table-cell">Reference</th>
+                <th className="text-left py-3 px-2 sm:px-4 text-xs font-bold text-charcoal/60 uppercase tracking-wider">Type</th>
+                <th className="text-right py-3 px-2 sm:px-4 text-xs font-bold text-charcoal/60 uppercase tracking-wider">Amount</th>
+                <th className="text-left py-3 px-2 sm:px-4 text-xs font-bold text-charcoal/60 uppercase tracking-wider">Status</th>
+                <th className="text-left py-3 px-2 sm:px-4 text-xs font-bold text-charcoal/60 uppercase tracking-wider hidden md:table-cell">Description</th>
               </tr>
             </thead>
             <tbody>
@@ -377,10 +377,10 @@ export default function TransactionDownload() {
                   animate={{ opacity: 1 }}
                   className="border-b border-charcoal/5 hover:bg-charcoal/5 transition-colors"
                 >
-                  <td className="py-3 px-4 text-sm text-charcoal">{tx.date}</td>
-                  <td className="py-3 px-4 text-sm font-mono text-charcoal/80">{tx.reference}</td>
-                  <td className="py-3 px-4">
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                  <td className="py-3 px-2 sm:px-4 text-xs sm:text-sm text-charcoal whitespace-nowrap">{tx.date}</td>
+                  <td className="py-3 px-2 sm:px-4 text-xs sm:text-sm font-mono text-charcoal/80 hidden sm:table-cell">{tx.reference}</td>
+                  <td className="py-3 px-2 sm:px-4">
+                    <span className={`px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold uppercase ${
                       tx.type === 'booking_revenue' ? 'bg-green-100 text-green-700' :
                       tx.type === 'payout' ? 'bg-blue-100 text-blue-700' :
                       tx.type === 'refund' ? 'bg-orange-100 text-orange-700' :
@@ -389,12 +389,12 @@ export default function TransactionDownload() {
                       {tx.type.replace('_', ' ')}
                     </span>
                   </td>
-                  <td className={`py-3 px-4 text-sm font-bold text-right ${
+                  <td className={`py-3 px-2 sm:px-4 text-xs sm:text-sm font-bold text-right whitespace-nowrap ${
                     tx.amount >= 0 ? 'text-green-600' : 'text-red-600'
                   }`}>
                     ₦{Math.abs(tx.amount).toLocaleString()}
                   </td>
-                  <td className="py-3 px-4">
+                  <td className="py-3 px-2 sm:px-4">
                     <span className={`flex items-center gap-1 text-xs font-bold ${
                       tx.status === 'processed' ? 'text-green-600' : 'text-orange-600'
                     }`}>
@@ -403,10 +403,10 @@ export default function TransactionDownload() {
                       ) : (
                         <Clock className="w-3.5 h-3.5" />
                       )}
-                      {tx.status}
+                      <span className="hidden sm:inline">{tx.status}</span>
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-sm text-charcoal/60">{tx.description}</td>
+                  <td className="py-3 px-2 sm:px-4 text-xs sm:text-sm text-charcoal/60 hidden md:table-cell max-w-[200px] truncate">{tx.description}</td>
                 </motion.tr>
               ))}
             </tbody>
