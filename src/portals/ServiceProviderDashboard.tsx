@@ -90,6 +90,7 @@ export default function ServiceProviderDashboard({ onLogout }: ServiceProviderDa
   const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
   const [withdrawalAmount, setWithdrawalAmount] = useState('');
   const [withdrawalMethod, setWithdrawalMethod] = useState('bank_transfer');
+  const [isProcessing, setIsProcessing] = useState(false);
   const [showBookingConfirm, setShowBookingConfirm] = useState<string | null>(null);
   const [showBookingReject, setShowBookingReject] = useState<string | null>(null);
   const [selectedListing, setSelectedListing] = useState<any>(null);
