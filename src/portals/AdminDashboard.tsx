@@ -26,6 +26,7 @@ import AdminTaskManagement from '../components/AdminTaskManagement';
 import StaffManagement from '../components/StaffManagement';
 import NotificationManagement from '../components/NotificationManagement';
 import TransactionDownload from '../components/TransactionDownload';
+import AdminWithdrawalManagement from '../components/AdminWithdrawalManagement';
 import UserManagement from '../components/UserManagement';
 import PropertyManagement from '../components/PropertyManagement';
 import AdminSupportManagement from '../components/AdminSupportManagement';
@@ -58,7 +59,7 @@ interface BookingRequest {
   services?: string[];
 }
 
-type AdminSection = 'dashboard' | 'admin-dashboard' | 'requests' | 'guests' | 'services' | 'reports' | 'listings' | 'bookings' | 'events' | 'tasks' | 'crm' | 'staff' | 'notifications' | 'support' | 'transactions' | 'users' | 'properties' | 'analytics' | 'overview' | 'ledger';
+type AdminSection = 'dashboard' | 'admin-dashboard' | 'requests' | 'guests' | 'services' | 'reports' | 'listings' | 'bookings' | 'events' | 'tasks' | 'crm' | 'staff' | 'notifications' | 'support' | 'transactions' | 'withdrawals' | 'users' | 'properties' | 'analytics' | 'overview' | 'ledger';
 
 const MOCK_ARRIVALS = [
   { id: 'arr-1', guestName: 'Adewale Johnson', initials: 'AJ', tier: 'vip' as const, listingTitle: 'The Ikoyi Penthouse', unitCode: 'UNIT 402', status: 'en_route' as const, eta: '8 mins away' },
@@ -989,6 +990,18 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                 transition={{ duration: 0.25 }}
               >
                 <TransactionDownload />
+              </motion.div>
+            )}
+
+            {activeSection === 'withdrawals' && (
+              <motion.div
+                key="withdrawals"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+              >
+                <AdminWithdrawalManagement />
               </motion.div>
             )}
 

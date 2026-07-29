@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronLeft, ChevronRight, LayoutDashboard, Users, Settings, BarChart3, Shield, Database, Globe, Key, Lock, Bell, LogOut, HelpCircle, X, Calendar, CheckSquare, Activity, FileText, Send, UserCheck, MessageSquare, Home, Search, Compass, Briefcase, Package } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutDashboard, Users, Settings, BarChart3, Shield, Database, Globe, Key, Lock, Bell, LogOut, HelpCircle, X, Calendar, CheckSquare, Activity, FileText, Send, UserCheck, MessageSquare, Home, Search, Compass, Briefcase, Package, DollarSign } from 'lucide-react';
 
 interface SidebarProps {
   activeTab: string;
@@ -31,6 +31,7 @@ const ADMIN_NAV: NavItem[] = [
   { id: 'notifications', label: 'Notifications', icon: Send, description: 'Send & manage notifications' },
   { id: 'support', label: 'Support', icon: MessageSquare, description: 'Manage support tickets' },
   { id: 'transactions', label: 'Transactions', icon: FileText, description: 'Download & audit transactions' },
+  { id: 'withdrawals', label: 'Withdrawals', icon: DollarSign, description: 'Manage withdrawal requests' },
   { id: 'users', label: 'Users', icon: Users, description: 'Manage all users' },
   { id: 'overview', label: 'Analytics', icon: BarChart3, description: 'Platform metrics' },
 ];

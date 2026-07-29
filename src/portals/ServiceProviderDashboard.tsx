@@ -35,6 +35,7 @@ import TransactionDownload from '../components/TransactionDownload';
 import { Listing } from '../types';
 import SPTaskManagement from '../components/SPTaskManagement';
 import { generateId } from '../db';
+import WithdrawalRequestModal, { WithdrawalHistory } from '../components/WithdrawalRequestModal';
 
 type ProviderSection = 'overview' | 'service-dashboard' | 'listings' | 'my-services' | 'schedule' | 'calendar' | 'earnings' | 'inventory' | 'booking-requests' | 'wizard' | 'tasks' | 'staff' | 'transactions';
 
@@ -173,6 +174,10 @@ export default function ServiceProviderDashboard({ onLogout }: ServiceProviderDa
     } finally {
       setIsLoadingServices(false);
     }
+  };
+
+  const fetchWithdrawals = async () => {
+    // This is handled by the WithdrawalHistory component
   };
 
   const getCategoryIcon = (category: string): React.ElementType => {
@@ -1182,6 +1187,17 @@ export default function ServiceProviderDashboard({ onLogout }: ServiceProviderDa
                     )}
                   </div>
                 </div>
+
+                <div className="mt-8">
+                  <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-3xl overflow-hidden luxury-shadow">
+                    <div className="px-6 py-4 border-b border-outline-variant/10">
+                      <h3 className="font-serif text-headline-sm text-on-surface">Withdrawal History</h3>
+                    </div>
+                    <div className="p-6">
+                      <WithdrawalHistory />
+                    </div>
+                  </div>
+                </div>
               </motion.div>
             )}
 
@@ -1382,80 +1398,14 @@ export default function ServiceProviderDashboard({ onLogout }: ServiceProviderDa
         variant="danger"
       />
 
-      <UniversalModal
+      <WithdrawalRequestModal
         isOpen={showWithdrawalModal}
         onClose={() => setShowWithdrawalModal(false)}
-        title="Request Withdrawal"
-        size="md"
-        variant="auto"
-      >
-        <div className="space-y-4">
-          <div className="bg-gold/5 border border-gold/10 rounded-lg p-4">
-            <p className="text-xs text-charcoal/60">
-              <span className="font-bold">Available Balance:</span> ₦{(totalEarnings / 1000000).toFixed(1)}M
-            </p>
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Amount (₦)</label>
-            <input
-              type="number"
-              value={withdrawalAmount}
-              onChange={(e) => setWithdrawalAmount(e.target.value)}
-              placeholder="Enter amount..."
-              className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
-              disabled={isProcessing}
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Withdrawal Method</label>
-            <select
-              value={withdrawalMethod}
-              onChange={(e) => setWithdrawalMethod(e.target.value)}
-              className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
-              disabled={isProcessing}
-            >
-              <option value="bank_transfer">Bank Transfer</option>
-              <option value="mobile_money">Mobile Money</option>
-              <option value="paypal">PayPal</option>
-            </select>
-          </div>
-
-          <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
-            <p className="text-xs text-charcoal/60">
-              <span className="font-bold">Note:</span> Withdrawals are processed within 1-3 business days. Minimum withdrawal amount is ₦10,000.
-            </p>
-          </div>
-
-          <div className="flex gap-3 pt-4">
-            <button
-              onClick={() => setShowWithdrawalModal(false)}
-              disabled={isProcessing}
-              className="flex-1 py-3 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all disabled:opacity-50"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleWithdrawal}
-              disabled={isProcessing || !withdrawalAmount || parseFloat(withdrawalAmount) <= 0}
-              className="flex-[2] py-3 bg-gold text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-gold-dark transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-            >
-              {isProcessing ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-charcoal/30 border-t-charcoal rounded-full animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <DollarSign className="w-4 h-4" />
-                  Request Withdrawal
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-      </UniversalModal>
+        onSuccess={() => {
+          fetchWithdrawals();
+        }}
+        availableBalance={totalEarnings}
+      />
 
       <BottomNavBar
         role="service_provider"

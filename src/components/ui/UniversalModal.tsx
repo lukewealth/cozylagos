@@ -137,7 +137,11 @@ export default function UniversalModal({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 flex items-center justify-center"
+          className={`fixed inset-0 flex items-center ${
+            resolvedVariant === 'drawer-right' ? 'justify-end' :
+            resolvedVariant === 'drawer-left' ? 'justify-start' :
+            'justify-center'
+          }`}
           style={{ zIndex }}
           role="dialog"
           aria-modal="true"
