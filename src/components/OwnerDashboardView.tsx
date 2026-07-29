@@ -8,6 +8,7 @@ interface OwnerDashboardProps {
   listings: Listing[];
   bookings: Booking[];
   transactions: Transaction[];
+  userName?: string;
   onAddListingClick: () => void;
   onUpdateListingsStatus: (id: string, active: boolean) => void;
   onUpdateListing: (updatedListing: Listing) => void;
@@ -17,6 +18,7 @@ export default function OwnerDashboardView({
   listings,
   bookings,
   transactions,
+  userName,
   onAddListingClick,
   onUpdateListingsStatus,
   onUpdateListing
@@ -110,7 +112,7 @@ export default function OwnerDashboardView({
         <div className="space-y-8">
           <div>
             <span className="text-gold-dark font-bold text-[9px] tracking-[0.25em] uppercase block mb-1">Owner Area</span>
-            <h3 className="font-serif text-[18px] font-bold text-charcoal">Emeka Anene</h3>
+            <h3 className="font-serif text-[18px] font-bold text-charcoal">{userName || 'Property Owner'}</h3>
             <p className="text-[10px] text-charcoal/40 font-mono mt-0.5">ESTABLISHED 2024</p>
           </div>
 
@@ -200,7 +202,7 @@ export default function OwnerDashboardView({
               
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3">
                 <div>
-                  <h1 className="font-serif text-3.5xl md:text-5xl font-bold text-charcoal">Welcome Back, Emeka</h1>
+                  <h1 className="font-serif text-3.5xl md:text-5xl font-bold text-charcoal">Welcome Back, {userName?.split(' ')[0] || 'Host'}</h1>
                   <p className="text-sm text-charcoal-light mt-1">Lekki &amp; Ikoyi premium pipeline is performing optimally.</p>
                 </div>
                 <button

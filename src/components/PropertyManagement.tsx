@@ -447,6 +447,7 @@ function PropertyFormModal({ listing, onClose, onSubmit }: {
     image: listing?.image || '',
     images: listing?.images || [],
     amenities: listing?.amenities || [],
+    videoUrl: listing?.videoUrl || '',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -458,7 +459,7 @@ function PropertyFormModal({ listing, onClose, onSubmit }: {
     if (formData.title.length < 5) newErrors.title = 'Title must be at least 5 characters';
     if (!formData.description.trim()) newErrors.description = 'Description is required';
     if (formData.nightlyRate <= 0) newErrors.nightlyRate = 'Nightly rate must be greater than 0';
-    if (!formData.image.trim()) newErrors.image = 'Image URL is required';
+    if (!formData.image.trim()) newErrors.image = 'Image is required';
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -621,17 +622,70 @@ function PropertyFormModal({ listing, onClose, onSubmit }: {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Main Image URL *</label>
+            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Main Image *</label>
+            <div className="space-y-2">
+              <div className="flex gap-2">
+                <label className="flex-1 px-4 py-2 bg-charcoal/5 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/10 transition-colors cursor-pointer text-center">
+                  Upload Image
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        if (file.size > 10 * 1024 * 1024) {
+                          errors.image = 'Image must be less than 10MB';
+                          setErrors({ ...errors });
+                          return;
+                        }
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setFormData({ ...formData, image: reader.result as string });
+                          setErrors({ ...errors, image: undefined });
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    className="hidden"
+                  />
+                </label>
+                <input
+                  type="url"
+                  value={formData.image.startsWith('data:') ? '' : formData.image}
+                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                  className={`flex-1 px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 ${
+                    errors.image ? 'border-red-500' : 'border-charcoal/10'
+                  }`}
+                  placeholder="Or paste image URL..."
+                />
+              </div>
+              {formData.image && (
+                <div className="relative aspect-video rounded-lg overflow-hidden border border-charcoal/10">
+                  <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, image: '' })}
+                    className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+              {errors.image && <p className="text-red-500 text-xs mt-1">{errors.image}</p>}
+              <p className="text-[10px] text-charcoal/40">Max file size: 10MB. Supported formats: JPG, PNG, GIF, WebP</p>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Video Preview (Optional)</label>
             <input
               type="url"
-              value={formData.image}
-              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-              className={`w-full px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 ${
-                errors.image ? 'border-red-500' : 'border-charcoal/10'
-              }`}
-              placeholder="https://..."
+              value={formData.videoUrl || ''}
+              onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+              className="w-full px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+              placeholder="https://... (YouTube, Vimeo, or direct video URL)"
             />
-            {errors.image && <p className="text-red-500 text-xs mt-1">{errors.image}</p>}
+            <p className="text-[10px] text-charcoal/40 mt-1">Add a video tour link for potential guests</p>
           </div>
 
           <div className="flex gap-3 pt-4">

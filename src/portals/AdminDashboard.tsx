@@ -122,6 +122,14 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+
   const totalRevenue = confirmedBookings.reduce((sum: number, b: any) => sum + (b.totalAmount || 0), 0);
 
   const handleLogout = () => {
@@ -347,7 +355,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
 
   return (
     <DashboardErrorBoundary>
-    <div className="flex min-h-screen bg-parchment">
+    <div className={`flex min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-parchment'}`}>
       <CollapsibleSidebar
         activeTab={activeSection}
         setActiveTab={handleSectionChange as any}
@@ -360,7 +368,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
       />
 
       <main className={`flex-1 transition-all duration-300 ${isSidebarCollapsed ? 'lg:ml-[80px]' : 'lg:ml-[280px]'} ml-0 lg:ml-[80px]`}>
-        <header className="h-20 px-4 lg:px-20 w-full sticky top-0 bg-surface/80 backdrop-blur-md border-b border-outline-variant/10 z-40 flex justify-between items-center">
+        <header className={`h-20 px-4 lg:px-20 w-full sticky top-0 ${isDarkMode ? 'bg-gray-800/80' : 'bg-surface/80'} backdrop-blur-md border-b ${isDarkMode ? 'border-gray-700' : 'border-outline-variant/10'} z-40 flex justify-between items-center`}>
           <div className="flex items-center gap-4">
             <Tooltip content="Open Menu" position="right">
               <button

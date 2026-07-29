@@ -592,7 +592,7 @@ function AppContent() {
                 <PropertyListingView listings={listings} onSelectListing={(listing) => { setSelectedListing(listing); setActiveTab('listing-detail'); }} />
               )}
               {(activeTab === 'overview' || activeTab === 'listings' || activeTab === 'calendar' || activeTab === 'payouts') && (
-                <OwnerDashboardView listings={listings} bookings={bookings} transactions={transactions} onAddListingClick={() => {
+                <OwnerDashboardView listings={listings} bookings={bookings} transactions={transactions} userName={currentUser?.name} onAddListingClick={() => {
                   if (currentUser?.role === 'admin' || currentUser?.role === 'super_admin' || currentUser?.role === 'service_provider') {
                     setActiveTab('wizard');
                   } else {
