@@ -11,3 +11,5 @@ export { default as AdminSearch } from './AdminSearch';
 export { default as AdminTabs } from './AdminTabs';
 export { default as AdminDropdown } from './AdminDropdown';
 export { default as CloudSyncIndicator } from './CloudSyncIndicator';
+export { default as UniversalModal } from './UniversalModal';
+export type { ModalSize, ModalVariant } from './UniversalModal';

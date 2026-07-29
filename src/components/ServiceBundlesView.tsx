@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { SERVICE_BUNDLES, ServiceBundle, BundleTier, BundleActivity } from '../data';
 import BundleBookingModal from './BundleBookingModal';
+import UniversalModal from './ui/UniversalModal';
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   briefcase: <Briefcase className="w-5 h-5" />,
@@ -117,21 +118,13 @@ function BundleDetailPanel({ bundle, onClose }: { bundle: ServiceBundle; onClose
   const tier = bundle.tiers[selectedTier];
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center"
+    <UniversalModal
+      isOpen={true}
+      onClose={onClose}
+      title={bundle.title}
+      size="lg"
+      variant="auto"
     >
-      <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" onClick={onClose} />
-      <motion.div
-        initial={{ y: '100%', opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: '100%', opacity: 0 }}
-        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="relative bg-parchment w-full sm:max-w-2xl sm:rounded-3xl rounded-t-3xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl"
-      >
         {/* Header */}
         <div className="relative h-40 sm:h-48 overflow-hidden shrink-0">
           <img
@@ -307,8 +300,6 @@ function BundleDetailPanel({ bundle, onClose }: { bundle: ServiceBundle; onClose
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
-      </motion.div>
-
       <AnimatePresence>
         {showBookingModal && (
           <BundleBookingModal
@@ -319,7 +310,7 @@ function BundleDetailPanel({ bundle, onClose }: { bundle: ServiceBundle; onClose
           />
         )}
       </AnimatePresence>
-    </motion.div>
+    </UniversalModal>
   );
 }
 
@@ -592,14 +583,12 @@ export default function ServiceBundlesView() {
       </section>
 
       {/* Detail Panel */}
-      <AnimatePresence>
-        {selectedBundle && (
-          <BundleDetailPanel
-            bundle={selectedBundle}
-            onClose={() => setSelectedBundle(null)}
-          />
-        )}
-      </AnimatePresence>
+      {selectedBundle && (
+        <BundleDetailPanel
+          bundle={selectedBundle}
+          onClose={() => setSelectedBundle(null)}
+        />
+      )}
     </div>
   );
 }

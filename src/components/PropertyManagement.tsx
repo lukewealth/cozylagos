@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import {
   Home, Plus, Edit3, Trash2, Search, Filter, X, Check,
   MapPin, DollarSign, Users, Bed, Bath, Image, Eye, EyeOff
@@ -8,6 +8,7 @@ import { useDatabase } from '../hooks/useDatabase';
 import { useAuth } from '../auth';
 import { Listing } from '../types';
 import { ToastContainer, showToast } from './ui/Toast';
+import UniversalModal from './ui/UniversalModal';
 
 export default function PropertyManagement() {
   const { currentUser } = useAuth();
@@ -331,127 +332,95 @@ export default function PropertyManagement() {
         )}
       </div>
 
-      <AnimatePresence>
-        {showCreateModal && (
-          <PropertyFormModal
-            onClose={() => setShowCreateModal(false)}
-            onSubmit={handleCreateListing}
-          />
-        )}
-        {editingListing && (
-          <PropertyFormModal
-            listing={editingListing}
-            onClose={() => setEditingListing(null)}
-            onSubmit={(data) => handleUpdateListing(editingListing.id, data)}
-          />
-        )}
-        {showDeleteConfirm && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-charcoal/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      {showCreateModal && (
+        <PropertyFormModal
+          onClose={() => setShowCreateModal(false)}
+          onSubmit={handleCreateListing}
+        />
+      )}
+      {editingListing && (
+        <PropertyFormModal
+          listing={editingListing}
+          onClose={() => setEditingListing(null)}
+          onSubmit={(data) => handleUpdateListing(editingListing.id, data)}
+        />
+      )}
+
+      <UniversalModal
+        isOpen={!!showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(null)}
+        size="sm"
+        variant="auto"
+        title="Delete Property"
+      >
+        <p className="text-sm text-charcoal/60 mb-6">This action cannot be undone. The property will be permanently removed.</p>
+        <div className="flex gap-3">
+          <button
             onClick={() => setShowDeleteConfirm(null)}
+            className="flex-1 px-4 py-2 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all"
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-xl p-6 max-w-md w-full"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h3 className="font-serif text-xl font-bold text-charcoal mb-2">Delete Property?</h3>
-              <p className="text-sm text-charcoal/60 mb-6">This action cannot be undone. The property will be permanently removed.</p>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setShowDeleteConfirm(null)}
-                  className="flex-1 px-4 py-2 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => handleDeleteListing(showDeleteConfirm)}
-                  className="flex-1 px-4 py-2 bg-red-500 text-white font-bold text-xs uppercase rounded-lg hover:bg-red-600 transition-all"
-                >
-                  Delete
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {showBlockDateModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-            onClick={() => setShowBlockDateModal(false)}
+            Cancel
+          </button>
+          <button
+            onClick={() => handleDeleteListing(showDeleteConfirm!)}
+            className="flex-1 px-4 py-2 bg-red-500 text-white font-bold text-xs uppercase rounded-lg hover:bg-red-600 transition-all"
           >
-            <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-md bg-parchment rounded-3xl overflow-hidden shadow-2xl"
+            Delete
+          </button>
+        </div>
+      </UniversalModal>
+
+      <UniversalModal
+        isOpen={showBlockDateModal}
+        onClose={() => setShowBlockDateModal(false)}
+        size="md"
+        variant="auto"
+        title="Block Dates"
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Start Date</label>
+            <input
+              type="date"
+              value={blockDateRange.start}
+              onChange={(e) => setBlockDateRange({ ...blockDateRange, start: e.target.value })}
+              className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">End Date</label>
+            <input
+              type="date"
+              value={blockDateRange.end}
+              onChange={(e) => setBlockDateRange({ ...blockDateRange, end: e.target.value })}
+              className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+            />
+          </div>
+
+          <div className="bg-red-50 border border-red-100 rounded-lg p-3">
+            <p className="text-xs text-charcoal/60">
+              <span className="font-bold">Note:</span> Blocked dates will be unavailable for booking across all properties.
+            </p>
+          </div>
+
+          <div className="flex gap-3 pt-4">
+            <button
+              onClick={() => setShowBlockDateModal(false)}
+              className="flex-1 py-3 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all"
             >
-              <div className="sticky top-0 bg-parchment border-b border-charcoal/10 px-6 py-4 flex items-center justify-between">
-                <h2 className="font-serif text-xl font-bold text-charcoal">Block Dates</h2>
-                <button onClick={() => setShowBlockDateModal(false)} className="p-2 hover:bg-charcoal/5 rounded-lg transition-colors">
-                  <X className="w-5 h-5 text-charcoal/60" />
-                </button>
-              </div>
-
-              <div className="p-6 space-y-4">
-                <div>
-                  <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Start Date</label>
-                  <input
-                    type="date"
-                    value={blockDateRange.start}
-                    onChange={(e) => setBlockDateRange({ ...blockDateRange, start: e.target.value })}
-                    className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">End Date</label>
-                  <input
-                    type="date"
-                    value={blockDateRange.end}
-                    onChange={(e) => setBlockDateRange({ ...blockDateRange, end: e.target.value })}
-                    className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
-                  />
-                </div>
-
-                <div className="bg-red-50 border border-red-100 rounded-lg p-3">
-                  <p className="text-xs text-charcoal/60">
-                    <span className="font-bold">Note:</span> Blocked dates will be unavailable for booking across all properties.
-                  </p>
-                </div>
-
-                <div className="flex gap-3 pt-4">
-                  <button
-                    onClick={() => setShowBlockDateModal(false)}
-                    className="flex-1 py-3 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleBlockDates}
-                    className="flex-[2] py-3 bg-red-500 text-white font-bold text-xs uppercase rounded-lg hover:bg-red-600 transition-all flex items-center justify-center gap-2"
-                  >
-                    <X className="w-4 h-4" />
-                    Block Dates
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              Cancel
+            </button>
+            <button
+              onClick={handleBlockDates}
+              className="flex-[2] py-3 bg-red-500 text-white font-bold text-xs uppercase rounded-lg hover:bg-red-600 transition-all flex items-center justify-center gap-2"
+            >
+              <X className="w-4 h-4" />
+              Block Dates
+            </button>
+          </div>
+        </div>
+      </UniversalModal>
 
       <ToastContainer />
     </div>
@@ -503,29 +472,13 @@ function PropertyFormModal({ listing, onClose, onSubmit }: {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-charcoal/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
-      onClick={onClose}
+    <UniversalModal
+      isOpen={true}
+      onClose={onClose}
+      size="lg"
+      variant="auto"
+      title={listing ? 'Edit Property' : 'Create Property'}
     >
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-white rounded-xl p-6 max-w-3xl w-full my-8 max-h-[90vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-serif text-xl font-bold text-charcoal">
-            {listing ? 'Edit Property' : 'Add New Property'}
-          </h3>
-          <button onClick={onClose} className="p-2 text-charcoal/40 hover:text-charcoal transition-colors">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Title *</label>
@@ -697,7 +650,6 @@ function PropertyFormModal({ listing, onClose, onSubmit }: {
             </button>
           </div>
         </form>
-      </motion.div>
-    </motion.div>
+    </UniversalModal>
   );
 }

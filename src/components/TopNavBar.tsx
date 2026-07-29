@@ -7,6 +7,7 @@ import { useAuth, getDefaultDashboardTab } from '../auth';
 import { PrivacyPolicyModal } from './PrivacyPolicy';
 import Tooltip from './ui/Tooltip';
 import TermsAcceptancePopup from './ui/TermsAcceptancePopup';
+import UniversalModal from './ui/UniversalModal';
 
 interface TopNavBarProps {
   activeTab: string;
@@ -348,37 +349,16 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
       </header>
 
       {/* Login / Register Modal */}
-      <AnimatePresence>
-        {showLoginModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-charcoal/60 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4"
-            onClick={() => setShowLoginModal(false)}
-          >
-            <motion.div
-              initial={{ y: '100%', opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: '100%', opacity: 0 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="bg-parchment rounded-t-3xl sm:rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl max-h-[90vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Header */}
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h2 className="font-serif text-2xl font-bold text-charcoal">
-                    {loginStep === 'login' ? 'Welcome Back' : 'Join Cozy Lagos'}
-                  </h2>
-                  <p className="text-xs text-charcoal/50 mt-1">
-                    {loginStep === 'login' ? 'Login to your account' : 'Create your account'}
-                  </p>
-                </div>
-                <button onClick={() => setShowLoginModal(false)} className="p-2 hover:bg-charcoal/5 rounded-full transition-colors">
-                  <X className="w-5 h-5 text-charcoal/60" />
-                </button>
-              </div>
+      <UniversalModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title={loginStep === 'login' ? 'Welcome Back' : 'Join Cozy Lagos'}
+        size="md"
+        variant="auto"
+      >
+              <p className="text-xs text-charcoal/50 mb-6">
+                {loginStep === 'login' ? 'Login to your account' : 'Create your account'}
+              </p>
 
               {/* Step Toggle */}
               <div className="flex bg-charcoal/5 rounded-xl p-1 mb-6">
@@ -538,10 +518,7 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
                   </div>
                 </>
               )}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </UniversalModal>
 
       {/* Privacy Policy Modal */}
       <AnimatePresence>

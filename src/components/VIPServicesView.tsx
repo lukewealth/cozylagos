@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import {
   Sparkles, Scissors, ShoppingBag, Trophy, Dumbbell, Shirt, ChefHat,
   Camera, MapPin, Star, Clock, Check, X, ShoppingCart, Crown, Award,
@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { VIP_SERVICES, VIPService, getAllVIPServices } from '../data/vipServices';
 import { useCart } from '../context/CartContext';
+import UniversalModal from './ui/UniversalModal';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -238,11 +239,11 @@ function ServiceCard({ service, onSelect, viewMode }: { service: VIPService; onS
   );
 }
 
-function ServiceDetailPanel({ service, onClose }: { service: VIPService; onClose: () => void }) {
+function ServiceDetailPanel({ service, isOpen, onClose }: { service: VIPService | null; isOpen: boolean; onClose: () => void }) {
   const { addServiceToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [detailImageIndex, setDetailImageIndex] = useState(0);
-  const detailImages = service.images && service.images.length > 0 ? service.images : [service.image];
+  const detailImages = service?.images && service.images.length > 0 ? service.images : service ? [service.image] : [];
 
   useEffect(() => {
     if (detailImages.length <= 1) return;
@@ -253,22 +254,15 @@ function ServiceDetailPanel({ service, onClose }: { service: VIPService; onClose
   }, [detailImages.length]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[80] flex justify-end"
-      onClick={onClose}
+    <UniversalModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={service?.title ?? ''}
+      size="md"
+      variant="drawer-right"
     >
-      <div className="absolute inset-0 bg-charcoal/40 backdrop-blur-sm" />
-      <motion.div
-        initial={{ x: '100%' }}
-        animate={{ x: 0 }}
-        exit={{ x: '100%' }}
-        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-md bg-parchment h-full overflow-y-auto shadow-2xl"
-      >
+      {service && (
+        <>
         <div className={`relative h-64 bg-gradient-to-br from-gold/30 via-gold-dark/20 to-charcoal/10 overflow-hidden`}>
           {detailImages.map((img, idx) => (
             <img
@@ -383,8 +377,9 @@ function ServiceDetailPanel({ service, onClose }: { service: VIPService; onClose
             </button>
           </div>
         </div>
-      </motion.div>
-    </motion.div>
+        </>
+      )}
+    </UniversalModal>
   );
 }
 
@@ -706,11 +701,11 @@ export default function VIPServicesView({ showHero = true }: { showHero?: boolea
         )}
       </div>
 
-      <AnimatePresence>
-        {selectedService && (
-          <ServiceDetailPanel service={selectedService} onClose={() => setSelectedService(null)} />
-        )}
-      </AnimatePresence>
+      <ServiceDetailPanel
+        service={selectedService}
+        isOpen={!!selectedService}
+        onClose={() => setSelectedService(null)}
+      />
     </div>
   );
 }

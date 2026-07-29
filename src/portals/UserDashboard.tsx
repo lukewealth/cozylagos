@@ -223,7 +223,7 @@ export default function UserDashboard({ onNavigate }: UserDashboardProps) {
             <RefreshCw className={`w-4 h-4 text-charcoal/60 ${isRefreshing ? 'animate-spin' : ''}`} />
           </button>
         </div>
-        <h1 className="font-serif text-3xl md:text-5xl font-bold text-charcoal leading-none">
+        <h1 className="font-serif text-lg sm:text-xl md:text-2xl font-bold text-charcoal leading-none">
           Hello, {currentUser?.name || 'Guest'}
         </h1>
         <p className="text-sm text-charcoal-light mt-2 max-w-xl">

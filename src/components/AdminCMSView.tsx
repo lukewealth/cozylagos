@@ -5,6 +5,7 @@ import {
   Search, Filter, X, Check, Image, DollarSign, Tag, BarChart3,
   Sparkles, Crown, Award, Users, Package, Settings, Save, Upload, Layers
 } from 'lucide-react';
+import UniversalModal from './ui/UniversalModal';
 import { useCMSStore } from '../stores/cmsStore';
 import { TrendingGem, Announcement } from '../db/indexedDb';
 import { SERVICE_BUNDLES } from '../data';
@@ -634,24 +635,9 @@ function BundlesView() {
 
 function Modal({ onClose, title, children }: { onClose: () => void; title: string; children: React.ReactNode }) {
   return (
-    <div className="fixed inset-0 z-[90] flex items-center justify-center p-4" onClick={onClose}>
-      <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-lg bg-parchment rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
-      >
-        <div className="sticky top-0 bg-parchment border-b border-charcoal/10 px-6 py-4 flex items-center justify-between">
-          <h2 className="font-serif text-xl font-bold text-charcoal">{title}</h2>
-          <button onClick={onClose} className="p-2 hover:bg-charcoal/5 rounded-lg transition-colors">
-            <X className="w-5 h-5 text-charcoal/60" />
-          </button>
-        </div>
-        <div className="p-6">{children}</div>
-      </motion.div>
-    </div>
+    <UniversalModal isOpen={true} onClose={onClose} title={title} size="md" variant="auto">
+      {children}
+    </UniversalModal>
   );
 }
 

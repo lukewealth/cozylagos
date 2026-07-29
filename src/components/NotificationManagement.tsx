@@ -9,6 +9,7 @@ import { useAuth } from '../auth';
 import api from '../services/api';
 import { ToastContainer, showToast } from './ui/Toast';
 import { AdminCard, AdminButton, AdminStatCard, AdminBadge, AdminSearch, AdminEmptyState, AdminTabs } from './ui';
+import UniversalModal from './ui/UniversalModal';
 
 interface Notification {
   id: string;
@@ -120,10 +121,10 @@ export default function NotificationManagement() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-serif font-bold text-charcoal">Notifications & Support</h2>
-          <p className="text-sm text-charcoal/60 mt-1">Manage notifications and support tickets</p>
+          <h2 className="text-sm sm:text-base md:text-lg font-serif font-bold text-charcoal">Notifications & Support</h2>
+          <p className="text-xs sm:text-sm text-charcoal/60 mt-1">Manage notifications and support tickets</p>
         </div>
         <AdminButton
           variant="primary"

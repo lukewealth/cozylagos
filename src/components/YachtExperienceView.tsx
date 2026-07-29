@@ -6,6 +6,7 @@ import {
   ArrowRight, Package, Calendar, Users, DollarSign
 } from 'lucide-react';
 import { SERVICE_BUNDLES } from '../data';
+import UniversalModal from './ui/UniversalModal';
 
 interface JourneyStep {
   id: string;
@@ -276,157 +277,117 @@ export default function YachtExperienceView({ onNavigate }: { onNavigate: (tab: 
         </div>
       </section>
 
-      {/* Detail Modal */}
-      <AnimatePresence>
+      <UniversalModal
+        isOpen={!!selectedStep}
+        onClose={() => setSelectedStep(null)}
+        title={selectedStep?.title || ''}
+        size="lg"
+        variant="auto"
+      >
         {selectedStep && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center p-0 sm:p-4"
-            onClick={() => setSelectedStep(null)}
-          >
-            <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
-            <motion.div
-              initial={{ y: '100%', opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: '100%', opacity: 0 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="relative bg-parchment w-full sm:max-w-2xl sm:rounded-3xl rounded-t-3xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="relative h-48 sm:h-64 overflow-hidden shrink-0">
-                <img src={selectedStep.image} alt={selectedStep.title} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <button
-                  onClick={() => setSelectedStep(null)}
-                  className="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-                >
-                  <Check className="w-4 h-4" />
-                </button>
-                <div className="absolute bottom-4 left-4 right-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="bg-gold/90 backdrop-blur-md p-2 rounded-lg text-charcoal">
-                      {selectedStep.icon}
-                    </div>
-                    <span className="text-gold-light text-[9px] font-bold tracking-[0.3em] uppercase">
-                      {selectedStep.time}
-                    </span>
+          <>
+            <div className="relative h-48 sm:h-64 overflow-hidden shrink-0 -mx-4 sm:-mx-6 -mt-4 sm:-mt-6 mb-4 sm:mb-6">
+              <img src={selectedStep.image} alt={selectedStep.title} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="bg-gold/90 backdrop-blur-md p-2 rounded-lg text-charcoal">
+                    {selectedStep.icon}
                   </div>
-                  <h2 className="font-serif text-2xl sm:text-3xl font-bold text-parchment">{selectedStep.title}</h2>
-                </div>
-              </div>
-
-              <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-                <p className="text-sm text-charcoal/70 leading-relaxed mb-6">{selectedStep.description}</p>
-
-                <div className="mb-6">
-                  <h4 className="text-[10px] font-bold text-charcoal/40 uppercase tracking-widest mb-3">What's Included</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {selectedStep.highlights.map((h, i) => (
-                      <div key={i} className="flex items-center gap-2 p-2.5 rounded-lg bg-gold/5 border border-gold/10">
-                        <Check className="w-3.5 h-3.5 text-gold-dark shrink-0" />
-                        <span className="text-xs text-charcoal font-medium">{h}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="bg-charcoal text-parchment rounded-2xl p-4 sm:p-6">
-                  <span className="text-[9px] font-bold text-gold uppercase tracking-widest block mb-1">Duration</span>
-                  <div className="flex items-center gap-2 mb-4">
-                    <Clock className="w-5 h-5 text-gold" />
-                    <span className="font-serif text-xl font-bold text-parchment">{selectedStep.duration}</span>
-                  </div>
-                  <p className="text-xs text-parchment/70 mb-4">
-                    This experience is included in our premium bundles. Book now for a seamless luxury experience.
-                  </p>
-                  <button
-                    onClick={() => { setSelectedStep(null); onNavigate('bundles'); }}
-                    className="w-full py-3 bg-gold text-charcoal hover:bg-gold-dark font-bold text-xs tracking-widest uppercase rounded-xl transition-all flex items-center justify-center gap-2"
-                  >
-                    <span>View Bundles</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Bundle Detail Modal */}
-      <AnimatePresence>
-        {selectedBundle && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center p-0 sm:p-4"
-            onClick={() => setSelectedBundle(null)}
-          >
-            <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
-            <motion.div
-              initial={{ y: '100%', opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: '100%', opacity: 0 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="relative bg-parchment w-full sm:max-w-2xl sm:rounded-3xl rounded-t-3xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="relative h-48 overflow-hidden shrink-0">
-                <img src={selectedBundle.image} alt={selectedBundle.title} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <button
-                  onClick={() => setSelectedBundle(null)}
-                  className="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-                >
-                  <Check className="w-4 h-4" />
-                </button>
-                <div className="absolute bottom-4 left-4 right-4">
-                  <span className="text-gold-light text-[9px] font-bold tracking-[0.3em] uppercase block mb-1">
-                    {selectedBundle.tagline}
+                  <span className="text-gold-light text-[9px] font-bold tracking-[0.3em] uppercase">
+                    {selectedStep.time}
                   </span>
-                  <h2 className="font-serif text-2xl font-bold text-parchment">{selectedBundle.title}</h2>
                 </div>
               </div>
+            </div>
 
-              <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-                <p className="text-sm text-charcoal/70 leading-relaxed mb-6">{selectedBundle.description}</p>
+            <p className="text-sm text-charcoal/70 leading-relaxed mb-6">{selectedStep.description}</p>
 
-                <div className="mb-6">
-                  <h4 className="text-[10px] font-bold text-charcoal/40 uppercase tracking-widest mb-3">Package Highlights</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {selectedBundle.highlights.slice(0, 6).map((h, i) => (
-                      <div key={i} className="flex items-center gap-2 p-2.5 rounded-lg bg-gold/5 border border-gold/10">
-                        <Check className="w-3.5 h-3.5 text-gold-dark shrink-0" />
-                        <span className="text-xs text-charcoal font-medium">{h}</span>
-                      </div>
-                    ))}
+            <div className="mb-6">
+              <h4 className="text-[10px] font-bold text-charcoal/40 uppercase tracking-widest mb-3">What's Included</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {selectedStep.highlights.map((h, i) => (
+                  <div key={i} className="flex items-center gap-2 p-2.5 rounded-lg bg-gold/5 border border-gold/10">
+                    <Check className="w-3.5 h-3.5 text-gold-dark shrink-0" />
+                    <span className="text-xs text-charcoal font-medium">{h}</span>
                   </div>
-                </div>
-
-                <div className="bg-charcoal text-parchment rounded-2xl p-4 sm:p-6">
-                  <span className="text-[9px] font-bold text-gold uppercase tracking-widest block mb-1">Starting From</span>
-                  <div className="flex items-baseline justify-between mb-4">
-                    <span className="font-serif text-3xl font-bold text-parchment">
-                      ₦{selectedBundle.tiers[0].price.toLocaleString()}
-                    </span>
-                    <span className="text-xs text-parchment/60">{selectedBundle.tiers[0].duration}</span>
-                  </div>
-                  <button
-                    onClick={() => { setSelectedBundle(null); onNavigate('bundles'); }}
-                    className="w-full py-3 bg-gold text-charcoal hover:bg-gold-dark font-bold text-xs tracking-widest uppercase rounded-xl transition-all flex items-center justify-center gap-2"
-                  >
-                    <span>Book This Bundle</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
+                ))}
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+
+            <div className="bg-charcoal text-parchment rounded-2xl p-4 sm:p-6">
+              <span className="text-[9px] font-bold text-gold uppercase tracking-widest block mb-1">Duration</span>
+              <div className="flex items-center gap-2 mb-4">
+                <Clock className="w-5 h-5 text-gold" />
+                <span className="font-serif text-xl font-bold text-parchment">{selectedStep.duration}</span>
+              </div>
+              <p className="text-xs text-parchment/70 mb-4">
+                This experience is included in our premium bundles. Book now for a seamless luxury experience.
+              </p>
+              <button
+                onClick={() => { setSelectedStep(null); onNavigate('bundles'); }}
+                className="w-full py-3 bg-gold text-charcoal hover:bg-gold-dark font-bold text-xs tracking-widest uppercase rounded-xl transition-all flex items-center justify-center gap-2"
+              >
+                <span>View Bundles</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </>
         )}
-      </AnimatePresence>
+      </UniversalModal>
+
+      <UniversalModal
+        isOpen={!!selectedBundle}
+        onClose={() => setSelectedBundle(null)}
+        title={selectedBundle?.title || ''}
+        size="lg"
+        variant="auto"
+      >
+        {selectedBundle && (
+          <>
+            <div className="relative h-48 overflow-hidden shrink-0 -mx-4 sm:-mx-6 -mt-4 sm:-mt-6 mb-4 sm:mb-6">
+              <img src={selectedBundle.image} alt={selectedBundle.title} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4">
+                <span className="text-gold-light text-[9px] font-bold tracking-[0.3em] uppercase block mb-1">
+                  {selectedBundle.tagline}
+                </span>
+              </div>
+            </div>
+
+            <p className="text-sm text-charcoal/70 leading-relaxed mb-6">{selectedBundle.description}</p>
+
+            <div className="mb-6">
+              <h4 className="text-[10px] font-bold text-charcoal/40 uppercase tracking-widest mb-3">Package Highlights</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {selectedBundle.highlights.slice(0, 6).map((h, i) => (
+                  <div key={i} className="flex items-center gap-2 p-2.5 rounded-lg bg-gold/5 border border-gold/10">
+                    <Check className="w-3.5 h-3.5 text-gold-dark shrink-0" />
+                    <span className="text-xs text-charcoal font-medium">{h}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-charcoal text-parchment rounded-2xl p-4 sm:p-6">
+              <span className="text-[9px] font-bold text-gold uppercase tracking-widest block mb-1">Starting From</span>
+              <div className="flex items-baseline justify-between mb-4">
+                <span className="font-serif text-3xl font-bold text-parchment">
+                  ₦{selectedBundle.tiers[0].price.toLocaleString()}
+                </span>
+                <span className="text-xs text-parchment/60">{selectedBundle.tiers[0].duration}</span>
+              </div>
+              <button
+                onClick={() => { setSelectedBundle(null); onNavigate('bundles'); }}
+                className="w-full py-3 bg-gold text-charcoal hover:bg-gold-dark font-bold text-xs tracking-widest uppercase rounded-xl transition-all flex items-center justify-center gap-2"
+              >
+                <span>Book This Bundle</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </>
+        )}
+      </UniversalModal>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import {
   X, Edit2, Trash2, Filter, Search, ChevronDown, User, Tag
 } from 'lucide-react';
 import { useDatabase } from '../hooks/useDatabase';
+import UniversalModal from './ui/UniversalModal';
 
 interface Task {
   id: string;
@@ -126,44 +127,44 @@ export default function AdminTaskManagement() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-serif font-bold text-charcoal">Task Management</h2>
-          <p className="text-sm text-charcoal/60 mt-1">Assign and track staff tasks</p>
+          <h2 className="text-sm sm:text-base md:text-lg font-serif font-bold text-charcoal">Task Management</h2>
+          <p className="text-xs sm:text-sm text-charcoal/60 mt-1">Assign and track staff tasks</p>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gold text-charcoal font-bold text-xs tracking-wider uppercase rounded-lg hover:bg-gold-dark transition-all"
+          className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gold text-charcoal font-bold text-[10px] sm:text-xs tracking-wider uppercase rounded-lg hover:bg-gold-dark transition-all"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-3.5 h-3.5" />
           Create Task
         </button>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
-          <p className="text-xs text-charcoal/60 uppercase tracking-wider">Total</p>
-          <p className="text-2xl font-bold text-charcoal mt-1">{stats.total}</p>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        <div className="bg-white p-3 sm:p-4 rounded-xl border border-charcoal/5">
+          <p className="text-[10px] sm:text-xs text-charcoal/60 uppercase tracking-wider">Total</p>
+          <p className="text-xl sm:text-2xl font-bold text-charcoal mt-1">{stats.total}</p>
         </div>
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
-          <p className="text-xs text-charcoal/60 uppercase tracking-wider">Pending</p>
-          <p className="text-2xl font-bold text-orange-600 mt-1">{stats.pending}</p>
+        <div className="bg-white p-3 sm:p-4 rounded-xl border border-charcoal/5">
+          <p className="text-[10px] sm:text-xs text-charcoal/60 uppercase tracking-wider">Pending</p>
+          <p className="text-xl sm:text-2xl font-bold text-orange-600 mt-1">{stats.pending}</p>
         </div>
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
-          <p className="text-xs text-charcoal/60 uppercase tracking-wider">In Progress</p>
-          <p className="text-2xl font-bold text-blue-600 mt-1">{stats.inProgress}</p>
+        <div className="bg-white p-3 sm:p-4 rounded-xl border border-charcoal/5">
+          <p className="text-[10px] sm:text-xs text-charcoal/60 uppercase tracking-wider">In Progress</p>
+          <p className="text-xl sm:text-2xl font-bold text-blue-600 mt-1">{stats.inProgress}</p>
         </div>
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
-          <p className="text-xs text-charcoal/60 uppercase tracking-wider">Completed</p>
-          <p className="text-2xl font-bold text-green-600 mt-1">{stats.completed}</p>
+        <div className="bg-white p-3 sm:p-4 rounded-xl border border-charcoal/5">
+          <p className="text-[10px] sm:text-xs text-charcoal/60 uppercase tracking-wider">Completed</p>
+          <p className="text-xl sm:text-2xl font-bold text-green-600 mt-1">{stats.completed}</p>
         </div>
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
-          <p className="text-xs text-charcoal/60 uppercase tracking-wider">Urgent</p>
-          <p className="text-2xl font-bold text-red-600 mt-1">{stats.urgent}</p>
+        <div className="bg-white p-3 sm:p-4 rounded-xl border border-charcoal/5 col-span-2 sm:col-span-1">
+          <p className="text-[10px] sm:text-xs text-charcoal/60 uppercase tracking-wider">Urgent</p>
+          <p className="text-xl sm:text-2xl font-bold text-red-600 mt-1">{stats.urgent}</p>
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col sm:flex-row gap-3">
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/40" />
           <input
@@ -424,29 +425,13 @@ function TaskFormModal({ staff, task, onClose, onSubmit }: {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-charcoal/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
-      onClick={onClose}
+    <UniversalModal
+      isOpen={true}
+      onClose={onClose}
+      title={task ? 'Edit Task' : 'Create New Task'}
+      size="lg"
+      variant="auto"
     >
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-white rounded-xl p-6 max-w-2xl w-full my-8"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-serif text-xl font-bold text-charcoal">
-            {task ? 'Edit Task' : 'Create New Task'}
-          </h3>
-          <button onClick={onClose} className="p-2 text-charcoal/40 hover:text-charcoal transition-colors">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Title</label>
@@ -606,7 +591,6 @@ function TaskFormModal({ staff, task, onClose, onSubmit }: {
             </button>
           </div>
         </form>
-      </motion.div>
-    </motion.div>
+    </UniversalModal>
   );
 }

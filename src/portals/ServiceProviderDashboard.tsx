@@ -26,6 +26,7 @@ import StaffAssignModal from '../components/ui/StaffAssignModal';
 import AssetCreateModal from '../components/ui/AssetCreateModal';
 import ServiceCreateModal from '../components/ui/ServiceCreateModal';
 import HelpSupportModal from '../components/ui/HelpSupportModal';
+import UniversalModal from '../components/ui/UniversalModal';
 import BottomNavBar from '../components/ui/BottomNavBar';
 import { ToastContainer, showToast } from '../components/ui/Toast';
 import api from '../services/api';
@@ -1380,100 +1381,80 @@ export default function ServiceProviderDashboard({ onLogout }: ServiceProviderDa
         variant="danger"
       />
 
-      <AnimatePresence>
-        {showWithdrawalModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-            onClick={() => setShowWithdrawalModal(false)}
-          >
-            <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-md bg-parchment rounded-3xl overflow-hidden shadow-2xl"
+      <UniversalModal
+        isOpen={showWithdrawalModal}
+        onClose={() => setShowWithdrawalModal(false)}
+        title="Request Withdrawal"
+        size="md"
+        variant="auto"
+      >
+        <div className="space-y-4">
+          <div className="bg-gold/5 border border-gold/10 rounded-lg p-4">
+            <p className="text-xs text-charcoal/60">
+              <span className="font-bold">Available Balance:</span> ₦{(totalEarnings / 1000000).toFixed(1)}M
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Amount (₦)</label>
+            <input
+              type="number"
+              value={withdrawalAmount}
+              onChange={(e) => setWithdrawalAmount(e.target.value)}
+              placeholder="Enter amount..."
+              className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+              disabled={isProcessing}
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Withdrawal Method</label>
+            <select
+              value={withdrawalMethod}
+              onChange={(e) => setWithdrawalMethod(e.target.value)}
+              className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+              disabled={isProcessing}
             >
-              <div className="sticky top-0 bg-parchment border-b border-charcoal/10 px-6 py-4 flex items-center justify-between">
-                <h2 className="font-serif text-xl font-bold text-charcoal">Request Withdrawal</h2>
-                <button onClick={() => setShowWithdrawalModal(false)} className="p-2 hover:bg-charcoal/5 rounded-lg transition-colors">
-                  <X className="w-5 h-5 text-charcoal/60" />
-                </button>
-              </div>
+              <option value="bank_transfer">Bank Transfer</option>
+              <option value="mobile_money">Mobile Money</option>
+              <option value="paypal">PayPal</option>
+            </select>
+          </div>
 
-              <div className="p-6 space-y-4">
-                <div className="bg-gold/5 border border-gold/10 rounded-lg p-4">
-                  <p className="text-xs text-charcoal/60">
-                    <span className="font-bold">Available Balance:</span> ₦{(totalEarnings / 1000000).toFixed(1)}M
-                  </p>
-                </div>
+          <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
+            <p className="text-xs text-charcoal/60">
+              <span className="font-bold">Note:</span> Withdrawals are processed within 1-3 business days. Minimum withdrawal amount is ₦10,000.
+            </p>
+          </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Amount (₦)</label>
-                  <input
-                    type="number"
-                    value={withdrawalAmount}
-                    onChange={(e) => setWithdrawalAmount(e.target.value)}
-                    placeholder="Enter amount..."
-                    className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
-                    disabled={isProcessing}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Withdrawal Method</label>
-                  <select
-                    value={withdrawalMethod}
-                    onChange={(e) => setWithdrawalMethod(e.target.value)}
-                    className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
-                    disabled={isProcessing}
-                  >
-                    <option value="bank_transfer">Bank Transfer</option>
-                    <option value="mobile_money">Mobile Money</option>
-                    <option value="paypal">PayPal</option>
-                  </select>
-                </div>
-
-                <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
-                  <p className="text-xs text-charcoal/60">
-                    <span className="font-bold">Note:</span> Withdrawals are processed within 1-3 business days. Minimum withdrawal amount is ₦10,000.
-                  </p>
-                </div>
-
-                <div className="flex gap-3 pt-4">
-                  <button
-                    onClick={() => setShowWithdrawalModal(false)}
-                    disabled={isProcessing}
-                    className="flex-1 py-3 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all disabled:opacity-50"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleWithdrawal}
-                    disabled={isProcessing || !withdrawalAmount || parseFloat(withdrawalAmount) <= 0}
-                    className="flex-[2] py-3 bg-gold text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-gold-dark transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                  >
-                    {isProcessing ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-charcoal/30 border-t-charcoal rounded-full animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <DollarSign className="w-4 h-4" />
-                        Request Withdrawal
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          <div className="flex gap-3 pt-4">
+            <button
+              onClick={() => setShowWithdrawalModal(false)}
+              disabled={isProcessing}
+              className="flex-1 py-3 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleWithdrawal}
+              disabled={isProcessing || !withdrawalAmount || parseFloat(withdrawalAmount) <= 0}
+              className="flex-[2] py-3 bg-gold text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-gold-dark transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+            >
+              {isProcessing ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-charcoal/30 border-t-charcoal rounded-full animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <DollarSign className="w-4 h-4" />
+                  Request Withdrawal
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </UniversalModal>
 
       <BottomNavBar
         role="service_provider"

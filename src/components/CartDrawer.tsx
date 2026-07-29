@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { X, Trash2, ShoppingBag, Minus, Plus, Crown, Anchor, Sparkles, CheckCircle2, MessageCircle, ArrowRight } from 'lucide-react';
+import { motion } from 'motion/react';
+import UniversalModal from './ui/UniversalModal';
+import { Trash2, ShoppingBag, Minus, Plus, Crown, Anchor, Sparkles, CheckCircle2, MessageCircle, ArrowRight } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../auth';
 
@@ -90,44 +91,13 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }: CartDrawerPr
   };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={handleClose}
-            className="fixed inset-0 bg-charcoal/40 backdrop-blur-sm z-[60]"
-          />
-
-          <motion.div
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full sm:h-auto sm:bottom-0 w-full max-w-md bg-parchment z-[70] shadow-2xl flex flex-col sm:rounded-l-3xl"
-          >
-            <div className="p-6 border-b border-charcoal/5 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <ShoppingBag className="text-gold-dark w-5 h-5" />
-                <h2 className="font-serif text-2xl text-charcoal">
-                  {view === 'main' ? 'Your Cart' : view === 'checkout' ? 'Checkout' : 'Confirmed'}
-                </h2>
-                {view === 'main' && getTotalItemCount() > 0 && (
-                  <span className="px-2 py-0.5 bg-gold/15 text-gold-dark text-[10px] font-bold rounded-full">
-                    {getTotalItemCount()}
-                  </span>
-                )}
-              </div>
-              <button
-                onClick={handleClose}
-                className="p-2 hover:bg-charcoal/5 rounded-full transition-colors"
-              >
-                <X className="w-6 h-6 text-charcoal/60" />
-              </button>
-            </div>
-
+    <UniversalModal
+      isOpen={isOpen}
+      onClose={handleClose}
+      title={view === 'main' ? 'Your Cart' : view === 'checkout' ? 'Checkout' : 'Confirmed'}
+      size="md"
+      variant="drawer-right"
+    >
             {view === 'main' && (
               <>
                 <div className="flex border-b border-charcoal/5">
@@ -469,9 +439,6 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }: CartDrawerPr
                 </button>
               </div>
             )}
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+    </UniversalModal>
   );
 }

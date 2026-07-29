@@ -8,7 +8,7 @@ import {
   Key, Car, Sparkles, Activity, Download, Radio, Cloud, Moon, Sun,
   LayoutDashboard, ClipboardList, UserCheck, ConciergeBell, BarChart3,
   ChevronRight, Plus, ArrowUpRight, Wifi, Zap, UserCircle, Menu, X, WifiOff,
-  FileText, Send
+  FileText, Send, Utensils, Anchor
 } from 'lucide-react';
 import { Listing } from '../types';
 import { useDatabase } from '../hooks/useDatabase';
@@ -31,6 +31,7 @@ import PropertyManagement from '../components/PropertyManagement';
 import AdminSupportManagement from '../components/AdminSupportManagement';
 import CRMView from '../components/CRMView';
 import HelpSupportModal from '../components/ui/HelpSupportModal';
+import UniversalModal from '../components/ui/UniversalModal';
 import DashboardErrorBoundary from '../components/ui/DashboardErrorBoundary';
 import { AdminStatCard, AdminCard, AdminButton, AdminBadge, CloudSyncIndicator } from '../components/ui';
 import { purgeDemoData, flushSystem, syncRealData, getSystemStats } from '../utils/databasePurge';
@@ -96,6 +97,8 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
   const [broadcastTitle, setBroadcastTitle] = useState('');
   const [showVerifyAccessModal, setShowVerifyAccessModal] = useState(false);
   const [selectedArrival, setSelectedArrival] = useState<any>(null);
+  const [showBookingDetailModal, setShowBookingDetailModal] = useState(false);
+  const [selectedBookingDetail, setSelectedBookingDetail] = useState<any>(null);
 
   const backendHealth = useBackendHealth();
 
@@ -367,16 +370,20 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                 <Menu className="w-5 h-5" />
               </button>
             </Tooltip>
-            <div className="relative focus-within:ring-1 focus-within:ring-primary rounded-lg transition-all">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-outline w-4 h-4" />
+            <motion.div 
+              className="relative rounded-lg transition-all focus-within:ring-2 focus-within:ring-primary/40"
+              whileFocus={{ scale: 1.02 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+            >
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-outline w-4 h-4 transition-colors group-focus-within:text-primary" />
               <input
-                className="bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 w-48 md:w-72 text-body-md focus:ring-0 focus:outline-none"
-                placeholder="Search arrivals..."
+                className="bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 w-36 sm:w-48 md:w-72 text-body-md focus:ring-0 focus:outline-none transition-all"
+                placeholder="Search..."
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-            </div>
+            </motion.div>
           </div>
           <div className="flex items-center gap-2 md:gap-6">
             <div className="flex gap-2 md:gap-4 items-center">
@@ -392,18 +399,39 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
               </Tooltip>
               <CloudSyncIndicator />
               <Tooltip content="Notifications" description="View alerts and updates">
-                <button className="p-2 rounded-full hover:bg-surface-container text-secondary transition-colors relative">
+                <motion.button 
+                  className="p-2 rounded-full hover:bg-surface-container text-secondary transition-colors relative"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95, rotate: 15 }}
+                >
                   <Bell className="w-5 h-5" />
-                  <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full" />
-                </button>
+                  <motion.span 
+                    className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"
+                    animate={{ scale: [1, 1.3, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                </motion.button>
               </Tooltip>
               <Tooltip content={isDarkMode ? "Light Mode" : "Dark Mode"}>
-                <button
+                <motion.button
                   onClick={() => setIsDarkMode(!isDarkMode)}
                   className="p-2 rounded-full hover:bg-surface-container text-secondary transition-colors"
+                  whileHover={{ scale: 1.1, rotate: 180 }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 15 }}
                 >
-                  {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                </button>
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={isDarkMode ? 'sun' : 'moon'}
+                      initial={{ rotate: -90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                    </motion.div>
+                  </AnimatePresence>
+                </motion.button>
               </Tooltip>
             </div>
             <div className="h-10 w-px bg-outline-variant/30 hidden md:block" />
@@ -431,49 +459,53 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
               >
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 gap-4">
                   <div>
-                    <h2 className="font-serif text-2xl md:text-3xl text-on-surface">Arrival Operations Center</h2>
-                    <p className="text-body-lg text-secondary mt-2">Monitoring guest check-ins for {todayStr}</p>
+                    <h2 className="font-serif text-base sm:text-lg md:text-xl text-on-surface">Arrival Operations Center</h2>
+                    <p className="text-sm sm:text-body-lg text-secondary mt-2">Monitoring guest check-ins for {todayStr}</p>
                   </div>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-2">
                     <Tooltip content="Download Report" description="Export data as CSV">
-                      <button className="px-6 py-3 bg-surface-container-lowest border border-outline-variant/30 rounded-lg text-body-md font-semibold text-on-surface hover:bg-surface-container-low transition-colors flex items-center gap-2">
-                        <Download className="w-4 h-4" />
-                        Download Report
+                      <button className="px-3 sm:px-6 py-2 sm:py-3 bg-surface-container-lowest border border-outline-variant/30 rounded-lg text-[10px] sm:text-body-md font-semibold text-on-surface hover:bg-surface-container-low transition-colors flex items-center gap-1.5 sm:gap-2">
+                        <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        <span className="hidden sm:inline">Download Report</span>
+                        <span className="sm:hidden">Export</span>
                       </button>
                     </Tooltip>
                     <Tooltip content="Broadcast Update" description="Send notification to all users">
                       <button 
                         onClick={() => setShowBroadcastModal(true)}
-                        className="px-6 py-3 bg-primary text-on-primary rounded-lg text-body-md font-bold luxury-shadow hover:opacity-90 transition-opacity flex items-center gap-2"
+                        className="px-3 sm:px-6 py-2 sm:py-3 bg-primary text-on-primary rounded-lg text-[10px] sm:text-body-md font-bold luxury-shadow hover:opacity-90 transition-opacity flex items-center gap-1.5 sm:gap-2"
                       >
-                        <Radio className="w-4 h-4" />
-                        Broadcast Update
+                        <Radio className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        <span className="hidden sm:inline">Broadcast</span>
+                        <span className="sm:hidden">Alert</span>
                       </button>
                     </Tooltip>
                     <Tooltip content="Purge Database" description="Remove all demo/test data">
                       <button 
                         onClick={handlePurgeDatabase}
                         disabled={isProcessing}
-                        className="px-6 py-3 bg-red-600 text-white rounded-lg text-body-md font-bold hover:bg-red-700 transition-colors flex items-center gap-2 disabled:opacity-50"
+                        className="px-3 sm:px-6 py-2 sm:py-3 bg-red-600 text-white rounded-lg text-[10px] sm:text-body-md font-bold hover:bg-red-700 transition-colors flex items-center gap-1.5 sm:gap-2 disabled:opacity-50"
                       >
-                        <Trash2 className="w-4 h-4" />
-                        Purge DB
+                        <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        <span className="hidden sm:inline">Purge DB</span>
+                        <span className="sm:hidden">Purge</span>
                       </button>
                     </Tooltip>
                     <Tooltip content="Flush System" description="Clear system cache">
                       <button 
                         onClick={handleFlushSystem}
                         disabled={isProcessing}
-                        className="px-6 py-3 bg-orange-600 text-white rounded-lg text-body-md font-bold hover:bg-orange-700 transition-colors flex items-center gap-2 disabled:opacity-50"
+                        className="px-3 sm:px-6 py-2 sm:py-3 bg-orange-600 text-white rounded-lg text-[10px] sm:text-body-md font-bold hover:bg-orange-700 transition-colors flex items-center gap-1.5 sm:gap-2 disabled:opacity-50"
                       >
-                        <RefreshCw className="w-4 h-4" />
-                        Flush
+                        <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        <span className="hidden sm:inline">Flush</span>
+                        <span className="sm:hidden">Clear</span>
                       </button>
                     </Tooltip>
                   </div>
                 </div>
 
-                <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
                   {[
                     { label: 'Total Arrivals Today', value: '14', sub: '7 Checked-in, 7 Pending', icon: Plane, iconColor: 'text-primary' },
                     { label: 'VIP Clearances', value: '3', sub: 'Critical Priority', icon: Shield, iconColor: 'text-error', valueColor: 'text-error' },
@@ -608,7 +640,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
               >
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
                   <div>
-                    <h2 className="font-serif text-2xl md:text-3xl text-on-surface">Residence Management</h2>
+                    <h2 className="font-serif text-base sm:text-lg md:text-xl text-on-surface">Residence Management</h2>
                     <p className="text-body-lg text-secondary mt-2">Manage all property listings</p>
                   </div>
                   <div className="flex items-center gap-3">
@@ -708,7 +740,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
               >
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
                   <div>
-                    <h2 className="font-serif text-2xl md:text-3xl text-on-surface">Booking Requests</h2>
+                    <h2 className="font-serif text-base sm:text-lg md:text-xl text-on-surface">Booking Requests</h2>
                     <p className="text-body-lg text-secondary mt-2">Manage and confirm guest reservations</p>
                   </div>
                 </div>
@@ -796,7 +828,10 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                                   </>
                                 )}
                                 <Tooltip content="View Details" description="See full booking info">
-                                  <button className="p-1.5 text-secondary hover:bg-surface-container rounded-lg transition-colors">
+                                  <button 
+                                    onClick={() => { setSelectedBookingDetail(booking); setShowBookingDetailModal(true); }}
+                                    className="p-1.5 text-secondary hover:bg-surface-container rounded-lg transition-colors"
+                                  >
                                     <Eye className="w-4 h-4" />
                                   </button>
                                 </Tooltip>
@@ -863,41 +898,29 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                 transition={{ duration: 0.25 }}
               >
                 <div className="mb-8">
-                  <h2 className="font-serif text-2xl md:text-3xl text-on-surface">Platform Analytics</h2>
+                  <h2 className="font-serif text-base sm:text-lg md:text-xl text-on-surface">Platform Analytics</h2>
                   <p className="text-body-lg text-secondary mt-2">Revenue and performance insights</p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 luxury-shadow">
-                    <TrendingUp className="w-6 h-6 text-green-600 mb-4" />
-                    <p className="text-label-caps text-secondary uppercase">Monthly Revenue</p>
-                    <p className="text-xl font-serif font-bold text-on-surface mt-1">₦{(totalRevenue / 1000000).toFixed(1)}M</p>
-                    <p className="text-xs text-green-600 mt-1">+12% from last month</p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="bg-surface-container-lowest p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-outline-variant/10 luxury-shadow">
+                    <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 mb-3 sm:mb-4" />
+                    <p className="text-label-caps text-secondary uppercase text-[10px] sm:text-xs">Monthly Revenue</p>
+                    <p className="text-base sm:text-xl font-serif font-bold text-on-surface mt-1">₦{(totalRevenue / 1000000).toFixed(1)}M</p>
+                    <p className="text-[10px] sm:text-xs text-green-600 mt-1">+12% from last month</p>
                   </div>
-                  <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 luxury-shadow">
-                    <Calendar className="w-6 h-6 text-primary mb-4" />
-                    <p className="text-label-caps text-secondary uppercase">Bookings This Month</p>
-                    <p className="text-xl font-serif font-bold text-on-surface mt-1">{confirmedBookings.length}</p>
-                    <p className="text-xs text-secondary mt-1">{pendingBookings.length} pending</p>
+                  <div className="bg-surface-container-lowest p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-outline-variant/10 luxury-shadow">
+                    <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-primary mb-3 sm:mb-4" />
+                    <p className="text-label-caps text-secondary uppercase text-[10px] sm:text-xs">Bookings This Month</p>
+                    <p className="text-base sm:text-xl font-serif font-bold text-on-surface mt-1">{confirmedBookings.length}</p>
+                    <p className="text-[10px] sm:text-xs text-secondary mt-1">{pendingBookings.length} pending</p>
                   </div>
-                  <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 luxury-shadow">
-                    <Users className="w-6 h-6 text-blue-600 mb-4" />
-                    <p className="text-label-caps text-secondary uppercase">Active Guests</p>
-                    <p className="text-xl font-serif font-bold text-on-surface mt-1">48</p>
-                    <p className="text-xs text-blue-600 mt-1">+8 new this week</p>
+                  <div className="bg-surface-container-lowest p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-outline-variant/10 luxury-shadow">
+                    <Users className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mb-3 sm:mb-4" />
+                    <p className="text-label-caps text-secondary uppercase text-[10px] sm:text-xs">Active Guests</p>
+                    <p className="text-base sm:text-xl font-serif font-bold text-on-surface mt-1">48</p>
+                    <p className="text-[10px] sm:text-xs text-blue-600 mt-1">+8 new this week</p>
                   </div>
                 </div>
-              </motion.div>
-            )}
-
-            {activeSection === 'tasks' && (
-              <motion.div
-                key="tasks"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.25 }}
-              >
-                <AdminTaskManagement />
               </motion.div>
             )}
 
@@ -995,7 +1018,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
               >
                 <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
                   <div>
-                    <h2 className="font-serif text-2xl md:text-3xl text-on-surface">Payment Ledger</h2>
+                    <h2 className="font-serif text-base sm:text-lg md:text-xl text-on-surface">Payment Ledger</h2>
                     <p className="text-body-lg text-secondary mt-2">Complete transaction history with billing metadata</p>
                   </div>
                   <Tooltip content="Download Ledger" description="Export as CSV">
@@ -1005,17 +1028,17 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                   </Tooltip>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
                   {[
                     { label: 'Total Revenue', value: `₦${(totalRevenue / 1000000).toFixed(1)}M`, icon: DollarSign, color: 'text-green-600' },
-                    { label: 'Pending Payments', value: pendingBookings.length.toString(), icon: Clock, color: 'text-amber-600' },
-                    { label: 'Platform Cut (15%)', value: `₦${(totalRevenue * 0.15 / 1000).toFixed(0)}K`, icon: TrendingUp, color: 'text-primary' },
-                    { label: 'Provider Cut (85%)', value: `₦${(totalRevenue * 0.85 / 1000).toFixed(0)}K`, icon: Users, color: 'text-primary' },
+                    { label: 'Pending', value: pendingBookings.length.toString(), icon: Clock, color: 'text-amber-600' },
+                    { label: 'Platform (15%)', value: `₦${(totalRevenue * 0.15 / 1000).toFixed(0)}K`, icon: TrendingUp, color: 'text-primary' },
+                    { label: 'Provider (85%)', value: `₦${(totalRevenue * 0.85 / 1000).toFixed(0)}K`, icon: Users, color: 'text-primary' },
                   ].map((stat, i) => (
                     <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
-                      className="glass-card luxury-shadow p-6 rounded-xl border-l-4 border-primary">
-                      <p className="text-label-caps text-secondary uppercase mb-2">{stat.label}</p>
-                      <span className={`font-serif text-xl ${stat.color}`}>{stat.value}</span>
+                      className="glass-card luxury-shadow p-4 sm:p-6 rounded-xl border-l-4 border-primary">
+                      <p className="text-label-caps text-secondary uppercase mb-2 text-[10px] sm:text-xs">{stat.label}</p>
+                      <span className={`font-serif text-base sm:text-xl ${stat.color} break-all`}>{stat.value}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -1103,7 +1126,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                 transition={{ duration: 0.25 }}
               >
                 <div className="mb-8">
-                  <h2 className="font-serif text-2xl md:text-3xl text-on-surface capitalize">{activeSection}</h2>
+                  <h2 className="font-serif text-base sm:text-lg md:text-xl text-on-surface capitalize">{activeSection}</h2>
                   <p className="text-body-lg text-secondary mt-2">
                     {activeSection === 'guests' && 'Manage guest profiles and preferences'}
                     {activeSection === 'services' && 'Oversee concierge services and assignments'}
@@ -1125,131 +1148,117 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
         </div>
       </main>
 
-      <AnimatePresence>
-        {showConfirmModal && selectedBooking && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-charcoal/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-parchment rounded-2xl p-6 max-w-md w-full shadow-2xl"
-            >
-              <h3 className="font-serif text-xl font-bold text-charcoal mb-4">Confirm Booking</h3>
-              <div className="bg-white rounded-xl p-4 mb-4 space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-charcoal/60">Guest</span>
-                  <span className="font-bold">{selectedBooking.guestName}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-charcoal/60">Property</span>
-                  <span className="font-bold">{selectedBooking.listingTitle}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-charcoal/60">Amount</span>
-                  <span className="font-bold text-primary">₦{selectedBooking.totalAmount.toLocaleString()}</span>
-                </div>
+      <UniversalModal
+        isOpen={showConfirmModal && !!selectedBooking}
+        onClose={() => { setShowConfirmModal(false); setConfirmNotes(''); }}
+        title="Confirm Booking"
+        size="md"
+        variant="auto"
+      >
+        {selectedBooking && (
+          <div className="space-y-4">
+            <div className="bg-white rounded-xl p-4 space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-charcoal/60">Guest</span>
+                <span className="font-bold">{selectedBooking.guestName}</span>
               </div>
-              <textarea
-                placeholder="Add confirmation notes (optional)..."
-                value={confirmNotes}
-                onChange={(e) => setConfirmNotes(e.target.value)}
-                className="w-full p-3 bg-white border border-charcoal/10 rounded-xl text-sm mb-4 focus:outline-none focus:ring-1 focus:ring-primary"
-                rows={3}
+              <div className="flex justify-between">
+                <span className="text-charcoal/60">Property</span>
+                <span className="font-bold">{selectedBooking.listingTitle}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-charcoal/60">Amount</span>
+                <span className="font-bold text-primary">₦{selectedBooking.totalAmount.toLocaleString()}</span>
+              </div>
+            </div>
+            <textarea
+              placeholder="Add confirmation notes (optional)..."
+              value={confirmNotes}
+              onChange={(e) => setConfirmNotes(e.target.value)}
+              className="w-full p-3 bg-white border border-charcoal/10 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+              rows={3}
+              disabled={isProcessing}
+            />
+            <div className="flex gap-3">
+              <button
+                onClick={() => { setShowConfirmModal(false); setConfirmNotes(''); }}
                 disabled={isProcessing}
-              />
-              <div className="flex gap-3">
-                <button
-                  onClick={() => { setShowConfirmModal(false); setConfirmNotes(''); }}
-                  disabled={isProcessing}
-                  className="flex-1 py-3 text-charcoal/60 font-bold text-xs uppercase tracking-widest hover:text-charcoal transition-colors disabled:opacity-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => handleConfirmBooking(selectedBooking)}
-                  disabled={isProcessing}
-                  className="flex-[2] py-3 bg-green-600 text-white font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-green-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                >
-                  {isProcessing ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    'Confirm Booking'
-                  )}
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
+                className="flex-1 py-3 text-charcoal/60 font-bold text-xs uppercase tracking-widest hover:text-charcoal transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleConfirmBooking(selectedBooking)}
+                disabled={isProcessing}
+                className="flex-[2] py-3 bg-green-600 text-white font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-green-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isProcessing ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  'Confirm Booking'
+                )}
+              </button>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
+      </UniversalModal>
 
-      <AnimatePresence>
-        {showRejectModal && selectedBooking && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-charcoal/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-parchment rounded-2xl p-6 max-w-md w-full shadow-2xl"
-            >
-              <h3 className="font-serif text-xl font-bold text-charcoal mb-4">Reject Booking</h3>
-              <div className="bg-white rounded-xl p-4 mb-4 space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-charcoal/60">Guest</span>
-                  <span className="font-bold">{selectedBooking.guestName}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-charcoal/60">Property</span>
-                  <span className="font-bold">{selectedBooking.listingTitle}</span>
-                </div>
+      <UniversalModal
+        isOpen={showRejectModal && !!selectedBooking}
+        onClose={() => { setShowRejectModal(false); setRejectReason(''); }}
+        title="Reject Booking"
+        size="md"
+        variant="auto"
+      >
+        {selectedBooking && (
+          <div className="space-y-4">
+            <div className="bg-white rounded-xl p-4 space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-charcoal/60">Guest</span>
+                <span className="font-bold">{selectedBooking.guestName}</span>
               </div>
-              <textarea
-                placeholder="Reason for rejection (required)..."
-                value={rejectReason}
-                onChange={(e) => setRejectReason(e.target.value)}
-                className="w-full p-3 bg-white border border-charcoal/10 rounded-xl text-sm mb-4 focus:outline-none focus:ring-1 focus:ring-error"
-                rows={3}
+              <div className="flex justify-between">
+                <span className="text-charcoal/60">Property</span>
+                <span className="font-bold">{selectedBooking.listingTitle}</span>
+              </div>
+            </div>
+            <textarea
+              placeholder="Reason for rejection (required)..."
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+              className="w-full p-3 bg-white border border-charcoal/10 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-error"
+              rows={3}
+              disabled={isProcessing}
+            />
+            <div className="flex gap-3">
+              <button
+                onClick={() => { setShowRejectModal(false); setRejectReason(''); }}
                 disabled={isProcessing}
-              />
-              <div className="flex gap-3">
-                <button
-                  onClick={() => { setShowRejectModal(false); setRejectReason(''); }}
-                  disabled={isProcessing}
-                  className="flex-1 py-3 text-charcoal/60 font-bold text-xs uppercase tracking-widest hover:text-charcoal transition-colors disabled:opacity-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => handleRejectBooking(selectedBooking)}
-                  disabled={isProcessing || !rejectReason.trim()}
-                  className="flex-[2] py-3 bg-red-600 text-white font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-red-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                >
-                  {isProcessing ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    'Reject Booking'
-                  )}
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
+                className="flex-1 py-3 text-charcoal/60 font-bold text-xs uppercase tracking-widest hover:text-charcoal transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleRejectBooking(selectedBooking)}
+                disabled={isProcessing || !rejectReason.trim()}
+                className="flex-[2] py-3 bg-red-600 text-white font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-red-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isProcessing ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  'Reject Booking'
+                )}
+              </button>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
+      </UniversalModal>
 
       <ConfirmDialog
         isOpen={showDeleteListingConfirm}
@@ -1294,187 +1303,288 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
         onClose={() => setShowHelpModal(false)}
       />
 
-      <AnimatePresence>
-        {showBroadcastModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-            onClick={() => setShowBroadcastModal(false)}
-          >
-            <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-lg bg-parchment rounded-3xl overflow-hidden shadow-2xl"
+      <UniversalModal
+        isOpen={showBroadcastModal}
+        onClose={() => { setShowBroadcastModal(false); setBroadcastTitle(''); setBroadcastMessage(''); }}
+        title="Broadcast Update"
+        size="md"
+        variant="auto"
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Title</label>
+            <input
+              type="text"
+              value={broadcastTitle}
+              onChange={(e) => setBroadcastTitle(e.target.value)}
+              placeholder="Enter broadcast title..."
+              className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+              disabled={isProcessing}
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Message</label>
+            <textarea
+              value={broadcastMessage}
+              onChange={(e) => setBroadcastMessage(e.target.value)}
+              placeholder="Enter broadcast message..."
+              rows={4}
+              className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 resize-none"
+              disabled={isProcessing}
+            />
+          </div>
+
+          <div className="bg-gold/5 border border-gold/10 rounded-lg p-3">
+            <p className="text-xs text-charcoal/60">
+              <span className="font-bold">Note:</span> This notification will be sent to all users across the platform.
+            </p>
+          </div>
+
+          <div className="flex gap-3 pt-4">
+            <button
+              onClick={() => { setShowBroadcastModal(false); setBroadcastTitle(''); setBroadcastMessage(''); }}
+              disabled={isProcessing}
+              className="flex-1 py-3 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all disabled:opacity-50"
             >
-              <div className="sticky top-0 bg-parchment border-b border-charcoal/10 px-6 py-4 flex items-center justify-between">
-                <h2 className="font-serif text-xl font-bold text-charcoal">Broadcast Update</h2>
-                <button onClick={() => setShowBroadcastModal(false)} className="p-2 hover:bg-charcoal/5 rounded-lg transition-colors">
-                  <X className="w-5 h-5 text-charcoal/60" />
-                </button>
-              </div>
-
-              <div className="p-6 space-y-4">
-                <div>
-                  <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Title</label>
-                  <input
-                    type="text"
-                    value={broadcastTitle}
-                    onChange={(e) => setBroadcastTitle(e.target.value)}
-                    placeholder="Enter broadcast title..."
-                    className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
-                    disabled={isProcessing}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Message</label>
-                  <textarea
-                    value={broadcastMessage}
-                    onChange={(e) => setBroadcastMessage(e.target.value)}
-                    placeholder="Enter broadcast message..."
-                    rows={4}
-                    className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 resize-none"
-                    disabled={isProcessing}
-                  />
-                </div>
-
-                <div className="bg-gold/5 border border-gold/10 rounded-lg p-3">
-                  <p className="text-xs text-charcoal/60">
-                    <span className="font-bold">Note:</span> This notification will be sent to all users across the platform.
-                  </p>
-                </div>
-
-                <div className="flex gap-3 pt-4">
-                  <button
-                    onClick={() => { setShowBroadcastModal(false); setBroadcastTitle(''); setBroadcastMessage(''); }}
-                    disabled={isProcessing}
-                    className="flex-1 py-3 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all disabled:opacity-50"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleBroadcastUpdate}
-                    disabled={isProcessing || !broadcastTitle.trim() || !broadcastMessage.trim()}
-                    className="flex-[2] py-3 bg-gold text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-gold-dark transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                  >
-                    {isProcessing ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-charcoal/30 border-t-charcoal rounded-full animate-spin" />
-                        Sending...
-                      </>
-                    ) : (
-                      <>
-                        <Radio className="w-4 h-4" />
-                        Send Broadcast
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {showVerifyAccessModal && selectedArrival && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-            onClick={() => setShowVerifyAccessModal(false)}
-          >
-            <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-md bg-parchment rounded-3xl overflow-hidden shadow-2xl"
+              Cancel
+            </button>
+            <button
+              onClick={handleBroadcastUpdate}
+              disabled={isProcessing || !broadcastTitle.trim() || !broadcastMessage.trim()}
+              className="flex-[2] py-3 bg-gold text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-gold-dark transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              <div className="sticky top-0 bg-parchment border-b border-charcoal/10 px-6 py-4 flex items-center justify-between">
-                <h2 className="font-serif text-xl font-bold text-charcoal">Verify Guest Access</h2>
-                <button onClick={() => setShowVerifyAccessModal(false)} className="p-2 hover:bg-charcoal/5 rounded-lg transition-colors">
-                  <X className="w-5 h-5 text-charcoal/60" />
-                </button>
-              </div>
+              {isProcessing ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-charcoal/30 border-t-charcoal rounded-full animate-spin" />
+                  Sending...
+                </>
+              ) : (
+                <>
+                  <Radio className="w-4 h-4" />
+                  Send Broadcast
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </UniversalModal>
 
-              <div className="p-6 space-y-4">
-                <div className="bg-gold/5 border border-gold/10 rounded-lg p-4">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center font-bold text-gold-dark">
-                      {selectedArrival.initials}
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-charcoal">{selectedArrival.guestName}</h3>
-                      <p className="text-xs text-charcoal/60">{selectedArrival.tier.toUpperCase()} Guest</p>
-                    </div>
+      <UniversalModal
+        isOpen={showVerifyAccessModal && !!selectedArrival}
+        onClose={() => setShowVerifyAccessModal(false)}
+        title="Verify Guest Access"
+        size="md"
+        variant="auto"
+      >
+        {selectedArrival && (
+          <div className="space-y-4">
+            <div className="bg-gold/5 border border-gold/10 rounded-lg p-4">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center font-bold text-gold-dark">
+                  {selectedArrival.initials}
+                </div>
+                <div>
+                  <h3 className="font-bold text-charcoal">{selectedArrival.guestName}</h3>
+                  <p className="text-xs text-charcoal/60">{selectedArrival.tier.toUpperCase()} Guest</p>
+                </div>
+              </div>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-charcoal/60">Property:</span>
+                  <span className="font-bold text-charcoal">{selectedArrival.listingTitle}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-charcoal/60">Unit:</span>
+                  <span className="font-bold text-charcoal">{selectedArrival.unitCode}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-charcoal/60">Status:</span>
+                  <span className="font-bold text-primary">{selectedArrival.status}</span>
+                </div>
+                {selectedArrival.eta && (
+                  <div className="flex justify-between">
+                    <span className="text-charcoal/60">ETA:</span>
+                    <span className="font-bold text-charcoal">{selectedArrival.eta}</span>
                   </div>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-charcoal/60">Property:</span>
-                      <span className="font-bold text-charcoal">{selectedArrival.listingTitle}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-charcoal/60">Unit:</span>
-                      <span className="font-bold text-charcoal">{selectedArrival.unitCode}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-charcoal/60">Status:</span>
-                      <span className="font-bold text-primary">{selectedArrival.status}</span>
-                    </div>
-                    {selectedArrival.eta && (
-                      <div className="flex justify-between">
-                        <span className="text-charcoal/60">ETA:</span>
-                        <span className="font-bold text-charcoal">{selectedArrival.eta}</span>
+                )}
+              </div>
+            </div>
+
+            <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
+              <p className="text-xs text-charcoal/60">
+                <span className="font-bold">Verification Process:</span> By confirming access, you verify the guest's identity and grant them entry to the property. This action will be logged in the security system.
+              </p>
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <button
+                onClick={() => setShowVerifyAccessModal(false)}
+                disabled={isProcessing}
+                className="flex-1 py-3 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmAccess}
+                disabled={isProcessing}
+                className="flex-[2] py-3 bg-gold text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-gold-dark transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isProcessing ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-charcoal/30 border-t-charcoal rounded-full animate-spin" />
+                    Verifying...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle className="w-4 h-4" />
+                    Confirm Access
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        )}
+      </UniversalModal>
+
+      <UniversalModal
+        isOpen={showBookingDetailModal && !!selectedBookingDetail}
+        onClose={() => setShowBookingDetailModal(false)}
+        title="Booking Details"
+        size="md"
+        variant="auto"
+      >
+        {selectedBookingDetail && (
+          <div className="space-y-4">
+            <p className="text-[10px] text-charcoal/50 font-mono">{selectedBookingDetail.id?.slice(0, 16)}</p>
+
+            <div className="bg-white rounded-xl p-4 space-y-3">
+              <h3 className="text-[10px] font-bold text-charcoal/50 uppercase tracking-widest">Guest Information</h3>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <p className="text-[10px] text-charcoal/50">Name</p>
+                  <p className="font-bold text-charcoal">{selectedBookingDetail.guestName}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] text-charcoal/50">Email</p>
+                  <p className="font-bold text-charcoal text-xs break-all">{selectedBookingDetail.guestEmail}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-4 space-y-3">
+              <h3 className="text-[10px] font-bold text-charcoal/50 uppercase tracking-widest">Property</h3>
+              <p className="font-bold text-charcoal">{selectedBookingDetail.listingTitle}</p>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <p className="text-[10px] text-charcoal/50">Check-in</p>
+                  <p className="font-semibold text-charcoal">{selectedBookingDetail.checkIn}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] text-charcoal/50">Check-out</p>
+                  <p className="font-semibold text-charcoal">{selectedBookingDetail.checkOut}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] text-charcoal/50">Guests</p>
+                  <p className="font-semibold text-charcoal">{selectedBookingDetail.guestsCount}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] text-charcoal/50">Status</p>
+                  <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
+                    selectedBookingDetail.status === 'confirmed' || selectedBookingDetail.status === 'Confirmed'
+                      ? 'bg-green-100 text-green-700'
+                      : selectedBookingDetail.status === 'cancelled' || selectedBookingDetail.status === 'Cancelled'
+                      ? 'bg-red-100 text-red-700'
+                      : 'bg-amber-100 text-amber-700'
+                  }`}>
+                    {selectedBookingDetail.status}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-4 space-y-3">
+              <h3 className="text-[10px] font-bold text-charcoal/50 uppercase tracking-widest">Cart Selections & Services</h3>
+              {selectedBookingDetail.services && selectedBookingDetail.services.length > 0 ? (
+                <div className="space-y-2">
+                  {selectedBookingDetail.services.map((service: string, i: number) => {
+                    const ServiceIcon = service.toLowerCase().includes('chef') || service.toLowerCase().includes('culinary') ? Utensils
+                      : service.toLowerCase().includes('driver') || service.toLowerCase().includes('car') ? Car
+                      : service.toLowerCase().includes('security') ? Shield
+                      : service.toLowerCase().includes('yacht') || service.toLowerCase().includes('boat') ? Anchor
+                      : Sparkles;
+                    return (
+                      <div key={i} className="flex items-center gap-3 bg-primary/5 rounded-lg p-3">
+                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                          <ServiceIcon className="w-4 h-4 text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-charcoal text-sm truncate">{service}</p>
+                          <p className="text-[10px] text-charcoal/50">Service Provider: Assigned</p>
+                        </div>
+                        <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />
                       </div>
-                    )}
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-sm text-charcoal/50 italic">No additional services selected</p>
+              )}
+            </div>
+
+            <div className="bg-gold/5 border border-gold/10 rounded-xl p-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-charcoal/60">Total Amount</span>
+                <span className="text-lg font-bold text-gold-dark">₦{(selectedBookingDetail.totalAmount || 0).toLocaleString()}</span>
+              </div>
+              {selectedBookingDetail.paymentLedger && (
+                <div className="mt-2 pt-2 border-t border-gold/10 space-y-1">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-charcoal/50">Reference</span>
+                    <span className="font-mono text-charcoal">{selectedBookingDetail.paymentLedger.reference}</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-charcoal/50">Platform (15%)</span>
+                    <span className="font-semibold text-charcoal">₦{selectedBookingDetail.paymentLedger.platformCut?.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-charcoal/50">Provider (85%)</span>
+                    <span className="font-semibold text-green-600">₦{selectedBookingDetail.paymentLedger.providerCut?.toLocaleString()}</span>
                   </div>
                 </div>
+              )}
+            </div>
 
-                <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
-                  <p className="text-xs text-charcoal/60">
-                    <span className="font-bold">Verification Process:</span> By confirming access, you verify the guest's identity and grant them entry to the property. This action will be logged in the security system.
-                  </p>
-                </div>
-
-                <div className="flex gap-3 pt-4">
+            <div className="flex flex-wrap gap-2 pt-2">
+              {(selectedBookingDetail.status === 'pending' || selectedBookingDetail.status === 'Pending') && (
+                <>
                   <button
-                    onClick={() => setShowVerifyAccessModal(false)}
-                    disabled={isProcessing}
-                    className="flex-1 py-3 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all disabled:opacity-50"
+                    onClick={() => { setShowBookingDetailModal(false); setSelectedBooking(selectedBookingDetail); setShowConfirmModal(true); }}
+                    className="flex-1 min-w-[120px] py-2.5 bg-green-600 text-white font-bold text-xs uppercase rounded-xl hover:bg-green-700 transition-all flex items-center justify-center gap-2"
                   >
-                    Cancel
+                    <CheckCircle className="w-4 h-4" />
+                    Confirm
                   </button>
                   <button
-                    onClick={handleConfirmAccess}
-                    disabled={isProcessing}
-                    className="flex-[2] py-3 bg-gold text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-gold-dark transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                    onClick={() => { setShowBookingDetailModal(false); setSelectedBooking(selectedBookingDetail); setShowRejectModal(true); }}
+                    className="flex-1 min-w-[120px] py-2.5 bg-red-600 text-white font-bold text-xs uppercase rounded-xl hover:bg-red-700 transition-all flex items-center justify-center gap-2"
                   >
-                    {isProcessing ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-charcoal/30 border-t-charcoal rounded-full animate-spin" />
-                        Verifying...
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle className="w-4 h-4" />
-                        Confirm Access
-                      </>
-                    )}
+                    <XCircle className="w-4 h-4" />
+                    Reject
                   </button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
+                </>
+              )}
+              <button
+                onClick={() => { handleWhatsAppNotify(selectedBookingDetail); }}
+                className="flex-1 min-w-[120px] py-2.5 bg-[#25D366] text-white font-bold text-xs uppercase rounded-xl hover:bg-[#20bd5a] transition-all flex items-center justify-center gap-2"
+              >
+                <MessageCircle className="w-4 h-4" />
+                WhatsApp
+              </button>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
+      </UniversalModal>
 
       <ToastContainer />
     </div>

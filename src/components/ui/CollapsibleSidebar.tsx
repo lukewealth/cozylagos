@@ -126,10 +126,10 @@ export default function CollapsibleSidebar({ activeTab, setActiveTab, userRole, 
               exit={{ opacity: 0, x: -10 }}
               transition={{ duration: 0.2 }}
             >
-              <h1 className={`font-serif text-xl font-bold ${config.color} tracking-tight`}>
+              <h1 className={`font-serif text-sm sm:text-lg md:text-xl font-bold ${config.color} tracking-tight`}>
                 {config.title}
               </h1>
-              <p className="text-label-caps text-secondary opacity-70 mt-1 uppercase tracking-widest text-[9px]">
+              <p className="text-label-caps text-secondary opacity-70 mt-1 uppercase tracking-widest text-[8px] sm:text-[9px]">
                 {config.subtitle}
               </p>
             </motion.div>

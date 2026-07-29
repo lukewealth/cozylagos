@@ -5,6 +5,7 @@ import {
   X, Edit2, Trash2, Filter, Search, Package, Wrench, Car, Utensils, Camera
 } from 'lucide-react';
 import { useDatabase } from '../hooks/useDatabase';
+import UniversalModal from './ui/UniversalModal';
 
 interface SPTask {
   id: string;
@@ -427,29 +428,13 @@ function SPTaskFormModal({ staff, assets, task, onClose, onSubmit }: {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-charcoal/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
-      onClick={onClose}
+    <UniversalModal
+      isOpen={true}
+      onClose={onClose}
+      title={task ? 'Edit Task' : 'Create New Task'}
+      size="lg"
+      variant="auto"
     >
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-white rounded-xl p-6 max-w-2xl w-full my-8"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-serif text-xl font-bold text-charcoal">
-            {task ? 'Edit Task' : 'Create New Task'}
-          </h3>
-          <button onClick={onClose} className="p-2 text-charcoal/40 hover:text-charcoal transition-colors">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Title</label>
@@ -610,7 +595,6 @@ function SPTaskFormModal({ staff, assets, task, onClose, onSubmit }: {
             </button>
           </div>
         </form>
-      </motion.div>
-    </motion.div>
+    </UniversalModal>
   );
 }

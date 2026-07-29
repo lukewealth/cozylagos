@@ -8,6 +8,7 @@ import { useAuth } from '../auth';
 import { useDatabase } from '../hooks/useDatabase';
 import api from '../services/api';
 import { ToastContainer, showToast } from './ui/Toast';
+import UniversalModal from './ui/UniversalModal';
 
 interface Ticket {
   _id: string;
@@ -152,50 +153,50 @@ export default function CRMView() {
   return (
     <div className="flex-grow bg-parchment">
       <div className="max-w-[1440px] mx-auto">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
           <div>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-charcoal">
+            <h1 className="font-serif text-base sm:text-lg md:text-xl font-bold text-charcoal">
               Support <span className="italic font-light text-gold-dark">Tickets</span>
             </h1>
-            <p className="text-sm text-charcoal/60 mt-1">Manage customer support and booking inquiries</p>
+            <p className="text-xs sm:text-sm text-charcoal/60 mt-1">Manage customer support and booking inquiries</p>
           </div>
           <button
             onClick={() => setShowCreateTicket(true)}
-            className="flex items-center gap-2 px-5 py-2.5 bg-gold text-charcoal font-bold text-sm rounded-xl hover:bg-gold-dark hover:text-parchment transition-colors shadow-lg"
+            className="flex items-center gap-2 px-4 py-2 bg-gold text-charcoal font-bold text-xs sm:text-sm rounded-xl hover:bg-gold-dark hover:text-parchment transition-colors shadow-lg"
           >
             <Plus className="w-4 h-4" />
             <span>New Ticket</span>
           </button>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white rounded-2xl p-5 border border-charcoal/5 shadow-sm">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
-              <MessageSquare className="w-5 h-5" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+          <div className="bg-white rounded-2xl p-3 sm:p-5 border border-charcoal/5 shadow-sm">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-2 sm:mb-3">
+              <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <p className="text-2xl font-bold text-charcoal">{tickets.filter(t => t.status === 'open').length}</p>
-            <p className="text-xs text-charcoal/50 mt-1">Open Tickets</p>
+            <p className="text-xl sm:text-2xl font-bold text-charcoal">{tickets.filter(t => t.status === 'open').length}</p>
+            <p className="text-[10px] sm:text-xs text-charcoal/50 mt-1">Open Tickets</p>
           </div>
-          <div className="bg-white rounded-2xl p-5 border border-charcoal/5 shadow-sm">
-            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-3">
-              <Clock className="w-5 h-5" />
+          <div className="bg-white rounded-2xl p-3 sm:p-5 border border-charcoal/5 shadow-sm">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-2 sm:mb-3">
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <p className="text-2xl font-bold text-charcoal">{tickets.filter(t => t.status === 'in_progress').length}</p>
-            <p className="text-xs text-charcoal/50 mt-1">In Progress</p>
+            <p className="text-xl sm:text-2xl font-bold text-charcoal">{tickets.filter(t => t.status === 'in_progress').length}</p>
+            <p className="text-[10px] sm:text-xs text-charcoal/50 mt-1">In Progress</p>
           </div>
-          <div className="bg-white rounded-2xl p-5 border border-charcoal/5 shadow-sm">
-            <div className="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center mb-3">
-              <CheckCircle className="w-5 h-5" />
+          <div className="bg-white rounded-2xl p-3 sm:p-5 border border-charcoal/5 shadow-sm">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center mb-2 sm:mb-3">
+              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <p className="text-2xl font-bold text-charcoal">{tickets.filter(t => t.status === 'resolved').length}</p>
-            <p className="text-xs text-charcoal/50 mt-1">Resolved</p>
+            <p className="text-xl sm:text-2xl font-bold text-charcoal">{tickets.filter(t => t.status === 'resolved').length}</p>
+            <p className="text-[10px] sm:text-xs text-charcoal/50 mt-1">Resolved</p>
           </div>
-          <div className="bg-white rounded-2xl p-5 border border-charcoal/5 shadow-sm">
-            <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-3">
-              <Tag className="w-5 h-5" />
+          <div className="bg-white rounded-2xl p-3 sm:p-5 border border-charcoal/5 shadow-sm">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-2 sm:mb-3">
+              <Tag className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <p className="text-2xl font-bold text-charcoal">{tickets.length}</p>
-            <p className="text-xs text-charcoal/50 mt-1">Total Tickets</p>
+            <p className="text-xl sm:text-2xl font-bold text-charcoal">{tickets.length}</p>
+            <p className="text-[10px] sm:text-xs text-charcoal/50 mt-1">Total Tickets</p>
           </div>
         </div>
 
@@ -272,42 +273,39 @@ export default function CRMView() {
         )}
       </div>
 
-      <AnimatePresence>
-        {selectedTicket && (
-          <TicketDetailModal
-            ticket={selectedTicket}
-            booking={selectedTicket.bookingId ? getBookingById(selectedTicket.bookingId) : undefined}
-            onClose={() => setSelectedTicket(null)}
-            onUpdate={handleUpdateTicket}
-            onAddResponse={handleAddResponse}
-          />
-        )}
-      </AnimatePresence>
+      <TicketDetailModal
+        isOpen={!!selectedTicket}
+        ticket={selectedTicket}
+        booking={selectedTicket?.bookingId ? getBookingById(selectedTicket.bookingId) : undefined}
+        onClose={() => setSelectedTicket(null)}
+        onUpdate={handleUpdateTicket}
+        onAddResponse={handleAddResponse}
+      />
 
-      <AnimatePresence>
-        {showCreateTicket && (
-          <CreateTicketModal
-            bookings={bookings}
-            onClose={() => setShowCreateTicket(false)}
-            onCreate={handleCreateTicket}
-          />
-        )}
-      </AnimatePresence>
+      <CreateTicketModal
+        isOpen={showCreateTicket}
+        bookings={bookings}
+        onClose={() => setShowCreateTicket(false)}
+        onCreate={handleCreateTicket}
+      />
 
       <ToastContainer />
     </div>
   );
 }
 
-function TicketDetailModal({ ticket, booking, onClose, onUpdate, onAddResponse }: {
-  ticket: Ticket;
+function TicketDetailModal({ isOpen, ticket, booking, onClose, onUpdate, onAddResponse }: {
+  isOpen: boolean;
+  ticket: Ticket | null;
   booking?: Booking;
   onClose: () => void;
   onUpdate: (id: string, updates: any) => void;
   onAddResponse: (ticketId: string, text: string) => void;
 }) {
   const [responseText, setResponseText] = useState('');
-  const [newStatus, setNewStatus] = useState(ticket.status);
+  const [newStatus, setNewStatus] = useState(ticket?.status || 'open');
+
+  if (!ticket) return null;
 
   const handleSubmitResponse = (e: React.FormEvent) => {
     e.preventDefault();
@@ -323,32 +321,14 @@ function TicketDetailModal({ ticket, booking, onClose, onUpdate, onAddResponse }
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[90] flex items-center justify-center p-4"
-      onClick={onClose}
+    <UniversalModal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="lg"
+      variant="auto"
+      title={ticket.title}
     >
-      <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-2xl bg-parchment rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
-      >
-        <div className="sticky top-0 bg-parchment border-b border-charcoal/10 px-6 py-4 flex items-center justify-between">
-          <div>
-            <h2 className="font-serif text-xl font-bold text-charcoal">{ticket.title}</h2>
-            <p className="text-xs text-charcoal/50">{ticket.ticketId}</p>
-          </div>
-          <button onClick={onClose} className="p-2 hover:bg-charcoal/5 rounded-lg transition-colors">
-            <X className="w-5 h-5 text-charcoal/60" />
-          </button>
-        </div>
-
-        <div className="p-6 space-y-6">
+      <div className="space-y-6">
           <div className="flex items-center gap-3">
             <select
               value={newStatus}
@@ -466,13 +446,13 @@ function TicketDetailModal({ ticket, booking, onClose, onUpdate, onAddResponse }
               Send Response
             </button>
           </form>
-        </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </UniversalModal>
   );
 }
 
-function CreateTicketModal({ bookings, onClose, onCreate }: {
+function CreateTicketModal({ isOpen, bookings, onClose, onCreate }: {
+  isOpen: boolean;
   bookings: Booking[];
   onClose: () => void;
   onCreate: (data: any) => void;
@@ -491,29 +471,14 @@ function CreateTicketModal({ bookings, onClose, onCreate }: {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[90] flex items-center justify-center p-4"
-      onClick={onClose}
+    <UniversalModal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="md"
+      variant="auto"
+      title="Create Support Ticket"
     >
-      <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-lg bg-parchment rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
-      >
-        <div className="sticky top-0 bg-parchment border-b border-charcoal/10 px-6 py-4 flex items-center justify-between">
-          <h2 className="font-serif text-xl font-bold text-charcoal">Create Support Ticket</h2>
-          <button onClick={onClose} className="p-2 hover:bg-charcoal/5 rounded-lg transition-colors">
-            <X className="w-5 h-5 text-charcoal/60" />
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Title</label>
             <input
@@ -592,7 +557,6 @@ function CreateTicketModal({ bookings, onClose, onCreate }: {
             </button>
           </div>
         </form>
-      </motion.div>
-    </motion.div>
+    </UniversalModal>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { MessageCircle, X, Clock, CheckCircle, FileText } from 'lucide-react';
+import { MessageCircle, Clock, CheckCircle, FileText } from 'lucide-react';
 import { Listing } from '../types';
+import UniversalModal from './ui/UniversalModal';
 
 interface WhatsAppConciergeProps {
   listing?: Listing;
@@ -159,17 +160,9 @@ export default function WhatsAppConcierge({
       </button>
 
       {/* WhatsApp Modal */}
-      {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-charcoal/60 backdrop-blur-sm">
-          <div className="bg-parchment rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
+      <UniversalModal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Concierge" size="md" variant="auto" showCloseButton={false}>
             {/* Header */}
             <div className="bg-[#25D366] text-white p-5 sm:p-6 relative">
-              <button
-                onClick={() => setIsOpen(false)}
-                className="absolute top-4 right-4 p-1 hover:bg-white/20 rounded-full transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-11 h-11 bg-white/20 rounded-full flex items-center justify-center">
                   <CheckCircle className="w-5 h-5" />
@@ -308,9 +301,7 @@ export default function WhatsAppConcierge({
                 By tapping, you agree to our concierge communication terms.
               </p>
             </div>
-          </div>
-        </div>
-      )}
+      </UniversalModal>
     </>
   );
 }

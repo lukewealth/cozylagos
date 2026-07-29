@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import {
   MapPin, Star, Clock, Waves, TreePine, Building2, Palette, Landmark,
   UtensilsCrossed, Music, ShoppingBag, Compass, Car, Sparkles, Crown,
@@ -9,6 +9,7 @@ import {
 import { useCart } from '../context/CartContext';
 import { useToast } from './Toast';
 import { resolveExploreImage, preloadExploreImages } from '../lib/imageManager';
+import UniversalModal from './ui/UniversalModal';
 
 interface ExploreItem {
   id: string;
@@ -583,11 +584,9 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
       </section>
 
       {/* Detail Modal */}
-      <AnimatePresence>
-        {selectedItem && (
-          <ItemDetailModal item={selectedItem} onClose={() => setSelectedItem(null)} onAddToCart={handleAddToCart} onBookExperience={handleBookExperience} />
-        )}
-      </AnimatePresence>
+      {selectedItem && (
+        <ItemDetailModal item={selectedItem} isOpen={!!selectedItem} onClose={() => setSelectedItem(null)} onAddToCart={handleAddToCart} onBookExperience={handleBookExperience} />
+      )}
     </div>
   );
 }
@@ -698,7 +697,7 @@ function ExperienceCard({ item, index, onClick, onAddToCart }: { item: ExploreIt
   );
 }
 
-function ItemDetailModal({ item, onClose, onAddToCart, onBookExperience }: { item: ExploreItem; onClose: () => void; onAddToCart: (item: ExploreItem) => void; onBookExperience?: () => void }) {
+function ItemDetailModal({ item, isOpen, onClose, onAddToCart, onBookExperience }: { item: ExploreItem; isOpen: boolean; onClose: () => void; onAddToCart: (item: ExploreItem) => void; onBookExperience?: () => void }) {
   const [guests, setGuests] = useState(1);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [detailImageIndex, setDetailImageIndex] = useState(0);
@@ -713,23 +712,8 @@ function ItemDetailModal({ item, onClose, onAddToCart, onBookExperience }: { ite
   }, [detailImages.length]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[80] flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-        onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-lg bg-parchment rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
-      >
-        <div className="relative h-56 overflow-hidden">
+    <UniversalModal isOpen={isOpen} onClose={onClose} title={item.title} size="md" variant="auto">
+      <div className="relative h-56 overflow-hidden">
           {detailImages.length > 0 ? (
             <>
               {detailImages.map((img, idx) => (
@@ -852,7 +836,6 @@ function ItemDetailModal({ item, onClose, onAddToCart, onBookExperience }: { ite
             </button>
           </div>
         </div>
-      </motion.div>
-    </motion.div>
+    </UniversalModal>
   );
 }

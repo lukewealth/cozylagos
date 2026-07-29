@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { X, Save, Edit3 } from 'lucide-react';
+import { Save, Edit3 } from 'lucide-react';
+import UniversalModal from './UniversalModal';
 
 interface EditModalProps {
   isOpen: boolean;
@@ -49,6 +49,7 @@ export default function EditModal({
     setInternalLoading(true);
     try {
       await onSave(formData);
+      onClose();
     } finally {
       setInternalLoading(false);
     }
@@ -124,79 +125,59 @@ export default function EditModal({
   };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-charcoal/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
-          onClick={(e) => { if (e.target === e.currentTarget && !isProcessing) onClose(); }}
+    <UniversalModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={title}
+      size="md"
+      variant="auto"
+    >
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+          <Edit3 className="w-5 h-5 text-primary" />
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        {fields.map(field => (
+          <div key={field.name}>
+            {field.type !== 'toggle' && (
+              <label className="block text-[10px] font-bold text-secondary uppercase tracking-widest mb-1.5">
+                {field.label}
+                {field.required && <span className="text-error ml-1">*</span>}
+              </label>
+            )}
+            {renderField(field)}
+          </div>
+        ))}
+      </div>
+
+      <div className="flex gap-3 pt-6 mt-6 border-t border-outline-variant/10">
+        <button
+          onClick={onClose}
+          disabled={isProcessing}
+          className="flex-1 py-3 text-charcoal/60 font-bold text-xs uppercase tracking-widest hover:text-charcoal transition-colors disabled:opacity-50"
         >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="bg-parchment rounded-2xl p-6 max-w-lg w-full shadow-2xl max-h-[90vh] overflow-y-auto"
-          >
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Edit3 className="w-5 h-5 text-primary" />
-                </div>
-                <h3 className="font-serif text-xl font-bold text-charcoal">{title}</h3>
-              </div>
-              {!isProcessing && (
-                <button onClick={onClose} className="p-1 rounded-lg hover:bg-surface-container transition-colors">
-                  <X className="w-4 h-4 text-secondary" />
-                </button>
-              )}
-            </div>
-
-            <div className="space-y-4">
-              {fields.map(field => (
-                <div key={field.name}>
-                  {field.type !== 'toggle' && (
-                    <label className="block text-[10px] font-bold text-secondary uppercase tracking-widest mb-1.5">
-                      {field.label}
-                      {field.required && <span className="text-error ml-1">*</span>}
-                    </label>
-                  )}
-                  {renderField(field)}
-                </div>
-              ))}
-            </div>
-
-            <div className="flex gap-3 pt-6 mt-6 border-t border-outline-variant/10">
-              <button
-                onClick={onClose}
-                disabled={isProcessing}
-                className="flex-1 py-3 text-charcoal/60 font-bold text-xs uppercase tracking-widest hover:text-charcoal transition-colors disabled:opacity-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSave}
-                disabled={isProcessing}
-                className="flex-[2] py-3 bg-primary text-white font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-primary-dark transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {isProcessing ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4" />
-                    Save Changes
-                  </>
-                )}
-              </button>
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          Cancel
+        </button>
+        <button
+          onClick={handleSave}
+          disabled={isProcessing}
+          className="flex-[2] py-3 bg-primary text-white font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-primary-dark transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+        >
+          {isProcessing ? (
+            <>
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              Saving...
+            </>
+          ) : (
+            <>
+              <Save className="w-4 h-4" />
+              Save Changes
+            </>
+          )}
+        </button>
+      </div>
+    </UniversalModal>
   );
 }

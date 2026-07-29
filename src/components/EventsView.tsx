@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Calendar, MapPin, Clock, Ticket, Filter, ChevronRight, Star, Users, Music, Theater, Briefcase, Utensils, Baby, Trophy, Waves, X, Check, CreditCard } from 'lucide-react';
+import { motion } from 'motion/react';
+import { Calendar, MapPin, Clock, Ticket, Filter, ChevronRight, Star, Users, Music, Theater, Briefcase, Utensils, Baby, Trophy, Waves, Check, CreditCard } from 'lucide-react';
 import { CalendarIcon, MusicalNoteIcon, FireIcon, PaintBrushIcon, BriefcaseIcon, MoonIcon, ArrowPathIcon, ClockIcon, SparklesIcon, FlagIcon } from '@heroicons/react/24/outline';
 import { LAGOS_EVENTS, LagosEvent } from '../data-new-sections';
 import TrendingEventsSlider from './TrendingEventsSlider';
+import UniversalModal from './ui/UniversalModal';
 
 interface PurchasedTicket {
   id: string;
@@ -245,21 +246,8 @@ function TicketPurchaseModal({ event, onClose }: { event: LagosEvent; onClose: (
 
   if (purchaseComplete) {
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-        onClick={onClose}
-      >
-        <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-md bg-parchment rounded-3xl overflow-hidden shadow-2xl p-8 text-center"
-        >
+      <UniversalModal isOpen={true} onClose={onClose} title="Purchase Tickets" size="md" variant="auto">
+        <div className="p-8 text-center">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Check className="w-10 h-10 text-green-600" />
           </div>
@@ -270,126 +258,104 @@ function TicketPurchaseModal({ event, onClose }: { event: LagosEvent; onClose: (
           <p className="text-xs text-charcoal/50">
             {ticketCount} {ticketCount === 1 ? 'ticket' : 'tickets'} • ₦{totalPrice.toLocaleString()}
           </p>
-        </motion.div>
-      </motion.div>
+        </div>
+      </UniversalModal>
     );
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-lg bg-parchment rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
-      >
-        <div className="sticky top-0 bg-parchment border-b border-charcoal/10 px-6 py-4 flex items-center justify-between">
-          <h2 className="font-serif text-xl font-bold text-charcoal">Purchase Tickets</h2>
-          <button onClick={onClose} className="p-2 hover:bg-charcoal/5 rounded-lg transition-colors">
-            <X className="w-5 h-5 text-charcoal/60" />
-          </button>
+    <UniversalModal isOpen={true} onClose={onClose} title="Purchase Tickets" size="md" variant="auto">
+      <div className="p-6">
+        <div className="mb-6 p-4 bg-charcoal/5 rounded-xl">
+          <h3 className="font-serif text-lg font-bold text-charcoal mb-1">{event.title}</h3>
+          <div className="space-y-1 text-xs text-charcoal/60">
+            <div className="flex items-center gap-2">
+              <Calendar className="w-3.5 h-3.5" />
+              <span>{event.date}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <MapPin className="w-3.5 h-3.5" />
+              <span>{event.location}</span>
+            </div>
+          </div>
         </div>
 
-        <div className="p-6">
-          <div className="mb-6 p-4 bg-charcoal/5 rounded-xl">
-            <h3 className="font-serif text-lg font-bold text-charcoal mb-1">{event.title}</h3>
-            <div className="space-y-1 text-xs text-charcoal/60">
-              <div className="flex items-center gap-2">
-                <Calendar className="w-3.5 h-3.5" />
-                <span>{event.date}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-3.5 h-3.5" />
-                <span>{event.location}</span>
-              </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Full Name</label>
+            <input
+              type="text"
+              value={attendeeName}
+              onChange={(e) => setAttendeeName(e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/30"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Email</label>
+            <input
+              type="email"
+              value={attendeeEmail}
+              onChange={(e) => setAttendeeEmail(e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/30"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Number of Tickets</label>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setTicketCount(Math.max(1, ticketCount - 1))}
+                className="w-10 h-10 bg-charcoal/5 rounded-lg flex items-center justify-center hover:bg-charcoal/10 transition-colors"
+              >
+                -
+              </button>
+              <span className="text-lg font-bold text-charcoal w-12 text-center">{ticketCount}</span>
+              <button
+                type="button"
+                onClick={() => setTicketCount(Math.min(10, ticketCount + 1))}
+                className="w-10 h-10 bg-charcoal/5 rounded-lg flex items-center justify-center hover:bg-charcoal/10 transition-colors"
+              >
+                +
+              </button>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Full Name</label>
-              <input
-                type="text"
-                value={attendeeName}
-                onChange={(e) => setAttendeeName(e.target.value)}
-                className="w-full px-3 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/30"
-                required
-              />
+          <div className="pt-4 border-t border-charcoal/10">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm text-charcoal/60">Total Price</span>
+              <span className="text-2xl font-bold text-gold-dark">₦{totalPrice.toLocaleString()}</span>
             </div>
 
-            <div>
-              <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Email</label>
-              <input
-                type="email"
-                value={attendeeEmail}
-                onChange={(e) => setAttendeeEmail(e.target.value)}
-                className="w-full px-3 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/30"
-                required
-              />
+            <div className="flex items-center gap-3">
+              <button type="button" onClick={onClose} className="flex-1 py-3 bg-charcoal/5 text-charcoal font-bold text-sm rounded-xl hover:bg-charcoal/10 transition-colors">
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isProcessing}
+                className="flex-1 py-3 bg-gold text-charcoal font-bold text-sm rounded-xl hover:bg-gold-dark hover:text-parchment transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {isProcessing ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-charcoal/30 border-t-charcoal rounded-full animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="w-4 h-4" />
+                    Purchase
+                  </>
+                )}
+              </button>
             </div>
-
-            <div>
-              <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-1.5 block">Number of Tickets</label>
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => setTicketCount(Math.max(1, ticketCount - 1))}
-                  className="w-10 h-10 bg-charcoal/5 rounded-lg flex items-center justify-center hover:bg-charcoal/10 transition-colors"
-                >
-                  -
-                </button>
-                <span className="text-lg font-bold text-charcoal w-12 text-center">{ticketCount}</span>
-                <button
-                  type="button"
-                  onClick={() => setTicketCount(Math.min(10, ticketCount + 1))}
-                  className="w-10 h-10 bg-charcoal/5 rounded-lg flex items-center justify-center hover:bg-charcoal/10 transition-colors"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-charcoal/10">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-sm text-charcoal/60">Total Price</span>
-                <span className="text-2xl font-bold text-gold-dark">₦{totalPrice.toLocaleString()}</span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <button type="button" onClick={onClose} className="flex-1 py-3 bg-charcoal/5 text-charcoal font-bold text-sm rounded-xl hover:bg-charcoal/10 transition-colors">
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isProcessing}
-                  className="flex-1 py-3 bg-gold text-charcoal font-bold text-sm rounded-xl hover:bg-gold-dark hover:text-parchment transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-                >
-                  {isProcessing ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-charcoal/30 border-t-charcoal rounded-full animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <CreditCard className="w-4 h-4" />
-                      Purchase
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </motion.div>
-    </motion.div>
+          </div>
+        </form>
+      </div>
+    </UniversalModal>
   );
 }
 
@@ -605,17 +571,15 @@ export default function EventsView() {
         )}
       </section>
 
-      <AnimatePresence>
-        {showTicketModal && selectedEvent && (
-          <TicketPurchaseModal
-            event={selectedEvent}
-            onClose={() => {
-              setShowTicketModal(false);
-              setSelectedEvent(null);
-            }}
-          />
-        )}
-      </AnimatePresence>
+      {showTicketModal && selectedEvent && (
+        <TicketPurchaseModal
+          event={selectedEvent}
+          onClose={() => {
+            setShowTicketModal(false);
+            setSelectedEvent(null);
+          }}
+        />
+      )}
     </div>
   );
 }

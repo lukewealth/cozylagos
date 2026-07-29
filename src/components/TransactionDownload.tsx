@@ -143,64 +143,66 @@ export default function TransactionDownload() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-serif font-bold text-charcoal">Transaction Reports</h2>
-          <p className="text-sm text-charcoal/60 mt-1">Download and manage financial transactions</p>
+          <h2 className="text-sm sm:text-base md:text-lg font-serif font-bold text-charcoal">Transaction Reports</h2>
+          <p className="text-xs sm:text-sm text-charcoal/60 mt-1">Download and manage financial transactions</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={handleDownloadCSV}
-            className="flex items-center gap-2 px-4 py-2 bg-charcoal text-parchment font-bold text-xs tracking-wider uppercase rounded-lg hover:bg-gold-dark transition-all"
+            className="flex items-center gap-2 px-3 py-2 bg-charcoal text-parchment font-bold text-[10px] sm:text-xs tracking-wider uppercase rounded-lg hover:bg-gold-dark transition-all"
           >
-            <Download className="w-4 h-4" />
-            Export CSV
+            <Download className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Export CSV</span>
+            <span className="sm:hidden">CSV</span>
           </button>
           <button
             onClick={handleDownloadPDF}
-            className="flex items-center gap-2 px-4 py-2 bg-gold text-charcoal font-bold text-xs tracking-wider uppercase rounded-lg hover:bg-gold-dark transition-all"
+            className="flex items-center gap-2 px-3 py-2 bg-gold text-charcoal font-bold text-[10px] sm:text-xs tracking-wider uppercase rounded-lg hover:bg-gold-dark transition-all"
           >
-            <FileText className="w-4 h-4" />
-            Export Report
+            <FileText className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Export Report</span>
+            <span className="sm:hidden">PDF</span>
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="bg-white p-3 sm:p-4 rounded-xl border border-charcoal/5">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs text-charcoal/60 uppercase tracking-wider">Total Revenue</p>
-            <TrendingUp className="w-5 h-5 text-green-600" />
+            <p className="text-[10px] sm:text-xs text-charcoal/60 uppercase tracking-wider">Revenue</p>
+            <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
           </div>
-          <p className="text-2xl font-bold text-green-600">₦{totalRevenue.toLocaleString()}</p>
+          <p className="text-lg sm:text-2xl font-bold text-green-600 break-all">₦{totalRevenue.toLocaleString()}</p>
         </div>
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
+        <div className="bg-white p-3 sm:p-4 rounded-xl border border-charcoal/5">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs text-charcoal/60 uppercase tracking-wider">Total Payouts</p>
-            <TrendingDown className="w-5 h-5 text-red-600" />
+            <p className="text-[10px] sm:text-xs text-charcoal/60 uppercase tracking-wider">Payouts</p>
+            <TrendingDown className="w-4 h-4 sm:w-5 sm:h-5 text-red-600" />
           </div>
-          <p className="text-2xl font-bold text-red-600">₦{totalPayouts.toLocaleString()}</p>
+          <p className="text-lg sm:text-2xl font-bold text-red-600 break-all">₦{totalPayouts.toLocaleString()}</p>
         </div>
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
+        <div className="bg-white p-3 sm:p-4 rounded-xl border border-charcoal/5">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs text-charcoal/60 uppercase tracking-wider">Total Refunds</p>
-            <XCircle className="w-5 h-5 text-orange-600" />
+            <p className="text-[10px] sm:text-xs text-charcoal/60 uppercase tracking-wider">Refunds</p>
+            <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600" />
           </div>
-          <p className="text-2xl font-bold text-orange-600">₦{totalRefunds.toLocaleString()}</p>
+          <p className="text-lg sm:text-2xl font-bold text-orange-600 break-all">₦{totalRefunds.toLocaleString()}</p>
         </div>
-        <div className="bg-white p-4 rounded-xl border border-charcoal/5">
+        <div className="bg-white p-3 sm:p-4 rounded-xl border border-charcoal/5">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs text-charcoal/60 uppercase tracking-wider">Net Amount</p>
-            <DollarSign className="w-5 h-5 text-gold-dark" />
+            <p className="text-[10px] sm:text-xs text-charcoal/60 uppercase tracking-wider">Net</p>
+            <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-gold-dark" />
           </div>
-          <p className="text-2xl font-bold text-gold-dark">
+          <p className="text-lg sm:text-2xl font-bold text-gold-dark break-all">
             ₦{(totalRevenue - totalPayouts - totalRefunds).toLocaleString()}
           </p>
         </div>
       </div>
 
-      <div className="bg-white p-4 rounded-xl border border-charcoal/5">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+      <div className="bg-white p-3 sm:p-4 rounded-xl border border-charcoal/5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/40" />
             <input
@@ -233,7 +235,7 @@ export default function TransactionDownload() {
               </option>
             ))}
           </select>
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
               type="date"
               value={dateRange.start}

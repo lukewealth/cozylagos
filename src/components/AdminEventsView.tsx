@@ -81,10 +81,10 @@ export default function AdminEvents({ onClose }: AdminEventsProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-serif font-bold text-charcoal">Events Management</h2>
-          <p className="text-sm text-charcoal/60 mt-1">Create and manage Lagos events</p>
+          <h2 className="text-sm sm:text-base md:text-lg font-serif font-bold text-charcoal">Events Management</h2>
+          <p className="text-xs sm:text-sm text-charcoal/60 mt-1">Create and manage Lagos events</p>
         </div>
         <AdminButton
           variant="primary"
@@ -95,7 +95,7 @@ export default function AdminEvents({ onClose }: AdminEventsProps) {
         </AdminButton>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <AdminStatCard
           title="Total Events"
           value={events.length}

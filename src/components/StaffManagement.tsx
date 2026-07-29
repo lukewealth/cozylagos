@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useState } from 'react';
 import {
   Users, Plus, Edit3, Trash2, Search, Filter, X, Check,
   Mail, Phone, Calendar, Shield, Star, Briefcase, Clock
@@ -9,6 +8,7 @@ import { useAuth } from '../auth';
 import api from '../services/api';
 import { ToastContainer, showToast } from './ui/Toast';
 import { AdminCard, AdminButton, AdminStatCard, AdminBadge, AdminSearch, AdminEmptyState, AdminModal } from './ui';
+import UniversalModal from './ui/UniversalModal';
 
 interface StaffMember {
   id: string;
@@ -108,10 +108,10 @@ export default function StaffManagement() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-serif font-bold text-charcoal">Staff Management</h2>
-          <p className="text-sm text-charcoal/60 mt-1">Manage your team members and their roles</p>
+          <h2 className="text-sm sm:text-base md:text-lg font-serif font-bold text-charcoal">Staff Management</h2>
+          <p className="text-xs sm:text-sm text-charcoal/60 mt-1">Manage your team members and their roles</p>
         </div>
         <AdminButton
           variant="primary"
@@ -122,7 +122,7 @@ export default function StaffManagement() {
         </AdminButton>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <AdminStatCard
           title="Total Staff"
           value={staff.length}
@@ -273,55 +273,42 @@ export default function StaffManagement() {
         />
       )}
 
-      <AnimatePresence>
-        {showCreateModal && (
-          <StaffFormModal
-            onClose={() => setShowCreateModal(false)}
-            onSubmit={handleCreateStaff}
-          />
-        )}
-        {editingStaff && (
-          <StaffFormModal
-            staff={editingStaff}
-            onClose={() => setEditingStaff(null)}
-            onSubmit={(data) => handleUpdateStaff(editingStaff.id, data)}
-          />
-        )}
-        {showDeleteConfirm && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-charcoal/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      {showCreateModal && (
+        <StaffFormModal
+          onClose={() => setShowCreateModal(false)}
+          onSubmit={handleCreateStaff}
+        />
+      )}
+      {editingStaff && (
+        <StaffFormModal
+          staff={editingStaff}
+          onClose={() => setEditingStaff(null)}
+          onSubmit={(data) => handleUpdateStaff(editingStaff.id, data)}
+        />
+      )}
+      <UniversalModal
+        isOpen={!!showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(null)}
+        size="sm"
+        variant="auto"
+        title="Remove Staff Member?"
+      >
+        <p className="text-sm text-charcoal/60 mb-6">This action cannot be undone. All associated data will be lost.</p>
+        <div className="flex gap-3">
+          <button
             onClick={() => setShowDeleteConfirm(null)}
+            className="flex-1 px-4 py-2 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all"
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-xl p-6 max-w-md w-full"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h3 className="font-serif text-xl font-bold text-charcoal mb-2">Remove Staff Member?</h3>
-              <p className="text-sm text-charcoal/60 mb-6">This action cannot be undone. All associated data will be lost.</p>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setShowDeleteConfirm(null)}
-                  className="flex-1 px-4 py-2 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => handleDeleteStaff(showDeleteConfirm)}
-                  className="flex-1 px-4 py-2 bg-red-500 text-white font-bold text-xs uppercase rounded-lg hover:bg-red-600 transition-all"
-                >
-                  Remove
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            Cancel
+          </button>
+          <button
+            onClick={() => handleDeleteStaff(showDeleteConfirm!)}
+            className="flex-1 px-4 py-2 bg-red-500 text-white font-bold text-xs uppercase rounded-lg hover:bg-red-600 transition-all"
+          >
+            Remove
+          </button>
+        </div>
+      </UniversalModal>
 
       <ToastContainer />
     </div>
@@ -369,29 +356,13 @@ function StaffFormModal({ staff, onClose, onSubmit }: {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-charcoal/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
-      onClick={onClose}
+    <UniversalModal
+      isOpen={true}
+      onClose={onClose}
+      size="lg"
+      variant="auto"
+      title={staff ? 'Edit Staff Member' : 'Add New Staff Member'}
     >
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-white rounded-xl p-6 max-w-2xl w-full my-8"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-serif text-xl font-bold text-charcoal">
-            {staff ? 'Edit Staff Member' : 'Add New Staff Member'}
-          </h3>
-          <button onClick={onClose} className="p-2 text-charcoal/40 hover:text-charcoal transition-colors">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Full Name</label>
@@ -502,7 +473,6 @@ function StaffFormModal({ staff, onClose, onSubmit }: {
             </button>
           </div>
         </form>
-      </motion.div>
-    </motion.div>
+    </UniversalModal>
   );
 }
