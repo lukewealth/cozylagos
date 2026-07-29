@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { ShieldCheck, Plus, ArrowRight, ArrowLeft, Upload, CheckSquare, Sparkles, Home, DollarSign, Image } from 'lucide-react';
+import React, { useState, useMemo, useRef, DragEvent, ChangeEvent } from 'react';
+import { ShieldCheck, Plus, ArrowRight, ArrowLeft, Upload, CheckSquare, Sparkles, Home, DollarSign, Image, X, AlertCircle } from 'lucide-react';
 import { Listing } from '../types';
 
 interface ListingWizardProps {
@@ -19,8 +19,13 @@ export default function ListingWizardView({ onPublishListing, onCancel }: Listin
   const [bathrooms, setBathrooms] = useState(3.5);
   const [maxGuests, setMaxGuests] = useState(6);
 
-  // Step 2 photo preview simulated state
-  const [showPrebuiltPhotos, setShowPrebuiltPhotos] = useState(true);
+  // Step 2 photo upload states
+  const [uploadedImages, setUploadedImages] = useState<Array<{ id: string; file: File; preview: string; label: string }>>([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Room label options
+  const roomLabels = ['Living Room', 'Kitchen', 'Bedroom', 'Bathroom', 'Balcony', 'Dining Area', 'Pool', 'Garden', 'Other'];
 
   // Step 3 pricing states
   const [nightlyRate, setNightlyRate] = useState<number>(450000);
@@ -46,6 +51,75 @@ export default function ListingWizardView({ onPublishListing, onCancel }: Listin
     );
   };
 
+  // Step 2: Image upload handlers
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    const files = Array.from(e.dataTransfer.files);
+    handleFiles(files);
+  };
+
+  const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      handleFiles(files);
+    }
+  };
+
+  const handleFiles = (files: File[]) => {
+    const validFiles = files.filter(file => {
+      const isValidType = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'].includes(file.type);
+      const isValidSize = file.size <= 10 * 1024 * 1024; // 10MB limit
+      
+      if (!isValidType) {
+        alert(`Invalid file type: ${file.name}. Please upload PNG, JPG, or WEBP files.`);
+        return false;
+      }
+      
+      if (!isValidSize) {
+        alert(`File too large: ${file.name}. Maximum size is 10MB.`);
+        return false;
+      }
+      
+      return true;
+    });
+
+    validFiles.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const newImage = {
+          id: `img-${Date.now()}-${Math.random()}`,
+          file,
+          preview: e.target?.result as string,
+          label: 'Other'
+        };
+        setUploadedImages(prev => [...prev, newImage]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleRemoveImage = (id: string) => {
+    setUploadedImages(prev => prev.filter(img => img.id !== id));
+  };
+
+  const handleUpdateLabel = (id: string, label: string) => {
+    setUploadedImages(prev => prev.map(img => 
+      img.id === id ? { ...img, label } : img
+    ));
+  };
+
   const calculatedEarnings = useMemo(() => {
     const fee = nightlyRate * 0.15;
     return nightlyRate - fee;
@@ -54,6 +128,11 @@ export default function ListingWizardView({ onPublishListing, onCancel }: Listin
       const handleFinalPublish = () => {
         if (!acceptTerms) {
           alert("Please accept the Host Terms & Conditions to publish.");
+          return;
+        }
+
+        if (uploadedImages.length === 0) {
+          alert("Please upload at least one image for your property.");
           return;
         }
 
@@ -71,10 +150,8 @@ export default function ListingWizardView({ onPublishListing, onCancel }: Listin
           weekendPremium: 15,
           cleaningFee: 25000,
           securityDeposit: Number(securityDeposit),
-          image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBJ2GGWFNwuBO2JM2bYf-QFEBP5nlp9knwLAIEbuxzj4ld_7CfhmUboRV3Ih7CVn_cIyrr_4X1CctHurZYPJbDxPLcuNMAlgZ8E7GyLfuIZd0L6TiIH6JL4qxE0S6LH3dMbrqgFBA03tV_nv4ZYAyrn6SxvsPQIXQbaDeHNvc4U7p0dKE_MVLgA3pA2eXUVxVCT1kqKk61Iy5V8EtXhKI2oGFsLpYuJKl_0DR9wGJZd3pAuZVlzm1NLpNPC1R-jcDjf_0MBaI235ER6",
-          images: [
-            "https://lh3.googleusercontent.com/aida-public/AB6AXuBJ2GGWFNwuBO2JM2bYf-QFEBP5nlp9knwLAIEbuxzj4ld_7CfhmUboRV3Ih7CVn_cIyrr_4X1CctHurZYPJbDxPLcuNMAlgZ8E7GyLfuIZd0L6TiIH6JL4qxE0S6LH3dMbrqgFBA03tV_nv4ZYAyrn6SxvsPQIXQbaDeHNvc4U7p0dKE_MVLgA3pA2eXUVxVCT1kqKk61Iy5V8EtXhKI2oGFsLpYuJKl_0DR9wGJZd3pAuZVlzm1NLpNPC1R-jcDjf_0MBaI235ER6"
-          ],
+          image: uploadedImages[0]?.preview || "https://lh3.googleusercontent.com/aida-public/AB6AXuBJ2GGWFNwuBO2JM2bYf-QFEBP5nlp9knwLAIEbuxzj4ld_7CfhmUboRV3Ih7CVn_cIyrr_4X1CctHurZYPJbDxPLcuNMAlgZ8E7GyLfuIZd0L6TiIH6JL4qxE0S6LH3dMbrqgFBA03tV_nv4ZYAyrn6SxvsPQIXQbaDeHNvc4U7p0dKE_MVLgA3pA2eXUVxVCT1kqKk61Iy5V8EtXhKI2oGFsLpYuJKl_0DR9wGJZd3pAuZVlzm1NLpNPC1R-jcDjf_0MBaI235ER6",
+          images: uploadedImages.map(img => img.preview),
           amenities: selectedAmenities,
           ownerId: "emeka-anene",
           isActive: isPublic,
@@ -250,33 +327,123 @@ export default function ListingWizardView({ onPublishListing, onCancel }: Listin
           {step === 2 && (
             <div className="bg-white border border-charcoal/5 rounded-3xl p-6 md:p-8 space-y-8 shadow-sm animate-fade-in-up">
               
-              {/* Drag drop zone simulation */}
-              <div className="border-2 border-dashed border-gold/40 bg-gold/5 rounded-2xl p-10 text-center hover:bg-gold/10 transition-colors cursor-pointer flex flex-col items-center justify-center">
-                <Upload className="w-12 h-12 text-gold-dark mb-4" />
+              {/* Drag drop zone */}
+              <div 
+                className={`border-2 border-dashed rounded-2xl p-10 text-center transition-all cursor-pointer flex flex-col items-center justify-center ${
+                  isDragging 
+                    ? 'border-gold bg-gold/15 scale-[1.02]' 
+                    : 'border-gold/40 bg-gold/5 hover:bg-gold/10'
+                }`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <Upload className={`w-12 h-12 mb-4 transition-colors ${isDragging ? 'text-gold' : 'text-gold-dark'}`} />
                 <h4 className="font-serif text-lg font-bold text-charcoal">Select High-Res Image files</h4>
-                <p className="text-xs text-charcoal-light mt-1.5 max-w-sm">Drag PNG, WEBP, JPG archives here or clicks to load camera roll.</p>
-                <span className="text-[10px] text-charcoal/40 font-mono tracking-widest mt-3">RECOMMENDED: 1920X1080 AT NATURAL sunset</span>
+                <p className="text-xs text-charcoal-light mt-1.5 max-w-sm">
+                  Drag PNG, WEBP, JPG archives here or click to load camera roll.
+                </p>
+                <span className="text-[10px] text-charcoal/40 font-mono tracking-widest mt-3">
+                  RECOMMENDED: 1920X1080 AT NATURAL SUNSET
+                </span>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  accept="image/png,image/jpeg,image/jpg,image/webp"
+                  onChange={handleFileSelect}
+                  className="hidden"
+                />
               </div>
 
-              {/* Prebuilt thumbnails */}
-              {showPrebuiltPhotos && (
+              {/* Uploaded images grid */}
+              {uploadedImages.length > 0 && (
                 <div className="space-y-4">
-                  <h4 className="font-serif text-sm font-bold text-charcoal uppercase tracking-wider">Uploaded Photos (2)</h4>
-                  <div className="grid grid-cols-2 gap-4">
-                    
-                    <div className="relative aspect-[16/10] rounded-xl overflow-hidden group shadow-sm bg-charcoal">
-                      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4o0J2sntRKKtlIAQcqEGEnhUK3mrPA8CVUTwMfbsLSeKTCUzpz34O8PkqYCfWFTq0u_gBZcP1d4PzMfGdqfmma1J2-Et5LvNk_re7iVH0T0Npi-xZqHHoX6holOvcgV_aBzvssTj1UTrDrlUhBL0PqFuMmhf0IM_NmCN-inLB25j_EMwUMM-jkqwwXp5woFWVn6SNOWB-P1w5AaWxdc5fX2fDNUxJi7SSOop-NAhkJr9-k1X1-oiZbEM0q3TgEd4EdWRCixJFNac5" alt="Uploaded interior" className="w-full h-full object-cover" />
-                      <div className="absolute top-2 left-2 bg-parchment text-charcoal p-1.5 rounded-full text-[9px] font-bold uppercase tracking-wider">LIVING</div>
-                    </div>
-
-                    <div className="relative aspect-[16/10] rounded-xl overflow-hidden group shadow-sm bg-charcoal">
-                      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAA8t5V_fEJnqfX-s0st_QTUpG8OPvmoyv3facqIFD88_ZEpoxhcUUMtURnFh7mz_KUXWYzXeLDyFRUHP23hTNFDPUwmVFHhmIBFhIg6XNIujaI1Uz7w-Jc040fwP3F2W7dQUQt-uKcmXyafAK5c6Q3Qdk9F9MB0jRIz9w7kFCGqFHKcYIByfWuWx8tmhpFVIEX0Srl-RlSboTfFGH9hM2MLdvV4Nyz5_Yif7RgcvqfqYMdMYSkAVjHu0iGRw3Xt6ostMwAkDBfXnm" alt="Uploaded kitchen" className="w-full h-full object-cover" />
-                      <div className="absolute top-2 left-2 bg-parchment text-charcoal p-1.5 rounded-full text-[9px] font-bold uppercase tracking-wider">MARBLE COOK</div>
-                    </div>
-
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-serif text-sm font-bold text-charcoal uppercase tracking-wider">
+                      Uploaded Photos ({uploadedImages.length})
+                    </h4>
+                    <span className="text-[10px] text-charcoal/50">
+                      {uploadedImages.length}/20 images
+                    </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {uploadedImages.map((image) => (
+                      <div key={image.id} className="relative aspect-[16/10] rounded-xl overflow-hidden group shadow-sm bg-charcoal">
+                        <img 
+                          src={image.preview} 
+                          alt={image.label} 
+                          className="w-full h-full object-cover" 
+                        />
+                        
+                        {/* Label badge */}
+                        <div className="absolute top-2 left-2 bg-parchment/95 backdrop-blur-sm text-charcoal px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-wider shadow-sm">
+                          {image.label}
+                        </div>
+                        
+                        {/* Remove button */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveImage(image.id);
+                          }}
+                          className="absolute top-2 right-2 bg-red-500/90 backdrop-blur-sm text-white p-1.5 rounded-full hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                        
+                        {/* Label selector */}
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <select
+                            value={image.label}
+                            onChange={(e) => handleUpdateLabel(image.id, e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-full bg-white/95 backdrop-blur-sm text-charcoal text-[10px] font-bold uppercase tracking-wider rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-gold"
+                          >
+                            {roomLabels.map(label => (
+                              <option key={label} value={label}>{label}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
+
+              {/* Empty state */}
+              {uploadedImages.length === 0 && (
+                <div className="text-center py-8">
+                  <AlertCircle className="w-12 h-12 text-charcoal/20 mx-auto mb-3" />
+                  <p className="text-sm text-charcoal/60">No images uploaded yet</p>
+                  <p className="text-xs text-charcoal/40 mt-1">Upload at least 3 high-quality images for best results</p>
+                </div>
+              )}
+
+              {/* Image requirements info */}
+              <div className="bg-parchment/50 border border-charcoal/5 rounded-xl p-4 space-y-2">
+                <h5 className="text-[10px] font-bold text-charcoal uppercase tracking-wider">Image Requirements</h5>
+                <ul className="text-[10px] text-charcoal/60 space-y-1">
+                  <li className="flex items-start gap-2">
+                    <span className="text-gold-dark mt-0.5">•</span>
+                    <span>Minimum resolution: 1920x1080 pixels</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-gold-dark mt-0.5">•</span>
+                    <span>Accepted formats: PNG, JPG, WEBP</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-gold-dark mt-0.5">•</span>
+                    <span>Maximum file size: 10MB per image</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-gold-dark mt-0.5">•</span>
+                    <span>Natural lighting preferred (golden hour recommended)</span>
+                  </li>
+                </ul>
+              </div>
 
             </div>
           )}
