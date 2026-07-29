@@ -73,6 +73,7 @@ export default function Hero({ children }: HeroProps) {
 
     const handleLoadedData = () => {
       setVideoLoaded(true);
+      setVideoReady(true);
     };
 
     const handleCanPlay = () => {
@@ -105,7 +106,7 @@ export default function Hero({ children }: HeroProps) {
         console.warn('Video autoplay failed:', err);
         setVideoError(true);
       });
-    } else {
+    } else if (!showVideo) {
       video.pause();
       video.currentTime = 0;
     }
@@ -197,7 +198,7 @@ export default function Hero({ children }: HeroProps) {
                 setVideoReady(false);
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 via-charcoal/20 to-charcoal/70" />
+            <div className="absolute inset-0 bg-gradient-to-b from-charcoal/20 via-charcoal/10 to-charcoal/40" />
           </motion.div>
         )}
       </AnimatePresence>
