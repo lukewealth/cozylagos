@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Home, MapPin, Star, Sun, Moon } from 'lucide-react';
 
@@ -6,9 +6,21 @@ interface HeroProps {
   children?: React.ReactNode;
 }
 
+const VIDEO_URL = '/assets/lagos-hero-video.mp4';
+const VIDEO_DURATION = 16000;
+const FADE_DURATION = 1200;
+const AUTOPLAY_DELAY = 5000;
+const CYCLE_DELAY = 3000;
+
 export default function Hero({ children }: HeroProps) {
   const [isNight, setIsNight] = useState(false);
   const [imgError, setImgError] = useState({ day: false, night: false });
+  const [showVideo, setShowVideo] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const cycleTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const dayImg = imgError.day
     ? 'assets/images/horizontal/CozyLagos.jpeg'
@@ -22,6 +34,83 @@ export default function Hero({ children }: HeroProps) {
     setIsNight(hour >= 19 || hour < 6);
   }, []);
 
+  const startVideoCycle = useCallback(() => {
+    if (videoError) return;
+    
+    setShowVideo(true);
+    
+    if (cycleTimerRef.current) {
+      clearTimeout(cycleTimerRef.current);
+    }
+    
+    cycleTimerRef.current = setTimeout(() => {
+      setShowVideo(false);
+      
+      cycleTimerRef.current = setTimeout(() => {
+        startVideoCycle();
+      }, CYCLE_DELAY);
+    }, VIDEO_DURATION);
+  }, [videoError]);
+
+  useEffect(() => {
+    const autoplayTimer = setTimeout(() => {
+      if (!videoError && videoLoaded) {
+        startVideoCycle();
+      }
+    }, AUTOPLAY_DELAY);
+
+    return () => {
+      clearTimeout(autoplayTimer);
+      if (cycleTimerRef.current) {
+        clearTimeout(cycleTimerRef.current);
+      }
+    };
+  }, [videoError, videoLoaded, startVideoCycle]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleLoadedData = () => {
+      setVideoLoaded(true);
+    };
+
+    const handleCanPlay = () => {
+      setVideoReady(true);
+    };
+
+    const handleError = () => {
+      setVideoError(true);
+      setVideoLoaded(false);
+      setVideoReady(false);
+    };
+
+    video.addEventListener('loadeddata', handleLoadedData);
+    video.addEventListener('canplay', handleCanPlay);
+    video.addEventListener('error', handleError);
+
+    return () => {
+      video.removeEventListener('loadeddata', handleLoadedData);
+      video.removeEventListener('canplay', handleCanPlay);
+      video.removeEventListener('error', handleError);
+    };
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (showVideo && videoReady) {
+      video.play().catch((err) => {
+        console.warn('Video autoplay failed:', err);
+        setVideoError(true);
+      });
+    } else {
+      video.pause();
+      video.currentTime = 0;
+    }
+  }, [showVideo, videoReady]);
+
   return (
     <section className="relative w-full h-[70vh] sm:h-[80vh] md:h-[85vh] min-h-[450px] sm:min-h-[500px] md:min-h-[600px] flex items-center justify-center overflow-hidden">
       {/* Day Image */}
@@ -34,11 +123,19 @@ export default function Hero({ children }: HeroProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 1.5, ease: [0.4, 0, 0.2, 1] }}
           >
-            <img
+            <motion.img
               className="w-full h-full object-cover"
               src={dayImg}
               alt="Lagos Day View"
               onError={() => setImgError(prev => ({ ...prev, day: true }))}
+              animate={{
+                scale: showVideo ? 1.05 : 1,
+                opacity: showVideo ? 0 : 1
+              }}
+              transition={{
+                scale: { duration: FADE_DURATION / 1000, ease: [0.4, 0, 0.2, 1] },
+                opacity: { duration: FADE_DURATION / 1000, ease: [0.4, 0, 0.2, 1] }
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-charcoal/30 via-transparent to-charcoal/70" />
           </motion.div>
@@ -55,13 +152,52 @@ export default function Hero({ children }: HeroProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 1.5, ease: [0.4, 0, 0.2, 1] }}
           >
-            <img
+            <motion.img
               className="w-full h-full object-cover brightness-75"
               src={nightImg}
               alt="Lagos Night View"
               onError={() => setImgError(prev => ({ ...prev, night: true }))}
+              animate={{
+                scale: showVideo ? 1.05 : 1,
+                opacity: showVideo ? 0 : 1
+              }}
+              transition={{
+                scale: { duration: FADE_DURATION / 1000, ease: [0.4, 0, 0.2, 1] },
+                opacity: { duration: FADE_DURATION / 1000, ease: [0.4, 0, 0.2, 1] }
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-charcoal/60 via-charcoal/30 to-charcoal/90" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Video Overlay */}
+      <AnimatePresence>
+        {showVideo && !videoError && (
+          <motion.div
+            className="absolute inset-0 z-[1]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: FADE_DURATION / 1000, ease: [0.4, 0, 0.2, 1] }}
+          >
+            <video
+              ref={videoRef}
+              className="w-full h-full object-cover"
+              src={VIDEO_URL}
+              muted
+              playsInline
+              loop={false}
+              preload="auto"
+              onLoadedData={() => setVideoLoaded(true)}
+              onCanPlay={() => setVideoReady(true)}
+              onError={() => {
+                setVideoError(true);
+                setVideoLoaded(false);
+                setVideoReady(false);
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 via-charcoal/20 to-charcoal/70" />
           </motion.div>
         )}
       </AnimatePresence>
