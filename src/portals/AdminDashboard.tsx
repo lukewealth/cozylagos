@@ -1597,7 +1597,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
               )}
               <button
                 onClick={() => { handleWhatsAppNotify(selectedBookingDetail); }}
-                className="flex-1 min-w-[120px] py-2.5 bg-[#25D366] text-white font-bold text-xs uppercase rounded-xl hover:bg-[#20bd5a] transition-all flex items-center justify-center gap-2"
+                className="flex-1 min-w-[100px] sm:min-w-[120px] py-2.5 bg-[#25D366] text-white font-bold text-xs uppercase rounded-xl hover:bg-[#20bd5a] transition-all flex items-center justify-center gap-2"
               >
                 <MessageCircle className="w-4 h-4" />
                 WhatsApp
