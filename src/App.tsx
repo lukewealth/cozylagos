@@ -65,7 +65,7 @@ function AppContent() {
   const { pageState, updatePageState } = usePageState();
   const { logError, logWarning } = useErrorLogger();
   useCloudSync();
-  useAnalytics();
+  const { trackEvent, trackBooking, trackBookingComplete, trackAddToCart, trackSearch, trackLogin, trackSignup, trackShare } = useAnalytics();
 
   // Global error handler
   useEffect(() => {
@@ -150,12 +150,14 @@ function AppContent() {
 
   // Handle logout with redirect
   const handleLogout = useCallback(() => {
+    trackEvent('logout', 'authentication', currentUser?.role || 'guest');
     logout();
     setActiveTab('home');
     addToast({ type: 'info', title: 'Logged out', message: 'You have been successfully logged out' });
-  }, [logout, addToast]);
+  }, [logout, addToast, trackEvent, currentUser]);
 
   const handleTabChange = (tab: any) => {
+    trackEvent('tab_change', 'navigation', tab);
     setSelectedListing(null);
     setActiveTab(tab);
     updatePageState({ activeTab: tab });
@@ -196,6 +198,9 @@ function AppContent() {
     const bookingId = `booking-${Date.now()}`;
     const ledgerId = `ledger-${Date.now()}`;
     const reference = `CL-${Date.now().toString(36).toUpperCase()}`;
+
+    // Track booking initiation
+    trackBooking(bookingData.listingId, bookingData.listingTitle, bookingData.totalAmount || bookingData.grandTotal || 0);
 
     const lineItems: any[] = [];
     let cartItemCount = 0;
@@ -453,6 +458,9 @@ function AppContent() {
       cleaningFee: bookingData.cleaningFee,
       totalNights: bookingData.totalNights,
     });
+
+    // Track booking completion
+    trackBookingComplete(bookingId, totalAmount);
 
     addToast({ type: 'success', title: 'Booking Submitted!', message: `Ref: ${reference}. Admin will confirm via WhatsApp.` });
   };

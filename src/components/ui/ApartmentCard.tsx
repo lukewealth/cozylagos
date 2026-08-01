@@ -3,6 +3,7 @@ import { Bed, Bath, Star, MapPin, ArrowRight, Wifi, Shield, Waves, Coffee, Dumbb
 import { Listing } from '../../types';
 import GlassCard from './GlassCard';
 import { useCart } from '../../context/CartContext';
+import { useAnalytics } from '../../hooks/useAnalytics';
 
 interface ApartmentCardProps {
   listing: Listing;
@@ -12,6 +13,7 @@ interface ApartmentCardProps {
 
 export default function ApartmentCard({ listing, onClick }: ApartmentCardProps) {
   const { addToCart } = useCart();
+  const { trackAddToCart } = useAnalytics();
 
   const getAmenityIcon = (amenity: string) => {
     const a = amenity.toLowerCase();
@@ -96,6 +98,7 @@ export default function ApartmentCard({ listing, onClick }: ApartmentCardProps) 
             onClick={(e) => {
               e.stopPropagation();
               addToCart(listing);
+              trackAddToCart(listing.id, listing.title, 'property');
             }}
             title="Add to Cart"
           >

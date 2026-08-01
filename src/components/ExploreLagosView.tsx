@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useToast } from './Toast';
+import { useAnalytics } from '../hooks/useAnalytics';
 import { resolveExploreImage, preloadExploreImages } from '../lib/imageManager';
 import UniversalModal from './ui/UniversalModal';
 
@@ -220,6 +221,7 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
   const videoRef = useRef<HTMLVideoElement>(null);
   const { addExperienceToCart, experienceCart } = useCart();
   const { addToast } = useToast();
+  const { trackAddToCart, trackSearch } = useAnalytics();
 
   useEffect(() => {
     preloadExploreImages();
@@ -271,6 +273,7 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
       image: item.image,
       duration: item.duration,
     });
+    trackAddToCart(item.id, item.title, 'explore-lagos');
     addToast({ type: 'success', title: 'Added to Cart', message: `${item.title} added to your experience cart.` });
   };
 
@@ -291,6 +294,12 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
         item.location.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : null;
+
+  useEffect(() => {
+    if (searchQuery && searchedItems) {
+      trackSearch(searchQuery, searchedItems.length);
+    }
+  }, [searchQuery]);
 
   const displayItems = searchedItems ?? (activeCategory ? allItems : null);
 
