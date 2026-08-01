@@ -241,14 +241,20 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
           {/* Right Side Actions */}
           <div className="flex items-center gap-4">
             {!isAuthenticated && (
-              <button onClick={onOpenCart} className="relative p-2 bg-charcoal/5 hover:bg-gold/10 rounded-full transition-colors">
-                <ShoppingCart className="w-5 h-5 text-charcoal/70" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-gold text-parchment text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
+              <Tooltip 
+                content="View your cart and checkout" 
+                title="Shopping Cart" 
+                position="bottom"
+              >
+                <button onClick={onOpenCart} className="cart-button relative p-2 bg-charcoal/5 hover:bg-gold/10 rounded-full transition-colors">
+                  <ShoppingCart className="w-5 h-5 text-charcoal/70" />
+                  {cartCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-gold text-parchment text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                      {cartCount}
+                    </span>
+                  )}
+                </button>
+              </Tooltip>
             )}
 
             <button
@@ -259,13 +265,19 @@ export default function TopNavBar({ activeTab, setActiveTab, cartCount, onOpenCa
             </button>
 
             {!isAuthenticated ? (
-              <button
-                onClick={openLoginModal}
-                className="flex items-center gap-2 px-4 py-2 bg-charcoal text-parchment hover:bg-gold-dark rounded-full text-[10px] font-bold tracking-wider uppercase transition-colors"
+              <Tooltip 
+                content="Sign in to access your account and bookings" 
+                title="Member Login" 
+                position="bottom"
               >
-                <LogIn className="w-3.5 h-3.5" />
-                <span>Login</span>
-              </button>
+                <button
+                  onClick={openLoginModal}
+                  className="signup-button flex items-center gap-2 px-4 py-2 bg-charcoal text-parchment hover:bg-gold-dark rounded-full text-[10px] font-bold tracking-wider uppercase transition-colors"
+                >
+                  <LogIn className="w-3.5 h-3.5" />
+                  <span>Login</span>
+                </button>
+              </Tooltip>
             ) : (
               <>
                 <button

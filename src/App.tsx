@@ -8,6 +8,8 @@ import { Listing, Booking, Transaction } from './types';
 import { CartProvider, useCart } from './context/CartContext';
 import { AuthProvider, useAuth } from './auth';
 import { ToastProvider, useToast } from './components/Toast';
+import { OnboardingProvider, useOnboarding } from './context/OnboardingContext';
+import OnboardingCards from './components/ui/OnboardingCards';
 import { usePageState } from './hooks/usePageState';
 import { useCloudSync } from './hooks/useCloudSync';
 import { useAnalytics } from './hooks/useAnalytics';
@@ -66,6 +68,17 @@ function AppContent() {
   const { logError, logWarning } = useErrorLogger();
   useCloudSync();
   const { trackEvent, trackBooking, trackBookingComplete, trackAddToCart, trackSearch, trackLogin, trackSignup, trackShare } = useAnalytics();
+  const { hasSeenOnboarding, startOnboarding } = useOnboarding();
+
+  // Auto-start onboarding for first-time users
+  useEffect(() => {
+    if (!hasSeenOnboarding && !isAuthenticated) {
+      const timer = setTimeout(() => {
+        startOnboarding();
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [hasSeenOnboarding, isAuthenticated, startOnboarding]);
 
   // Global error handler
   useEffect(() => {
@@ -717,6 +730,8 @@ function AppContent() {
           />
         )}
       </AnimatePresence>
+
+      <OnboardingCards />
     </div>
     </ErrorBoundary>
   );
@@ -727,7 +742,9 @@ export default function App() {
     <AuthProvider>
       <CartProvider>
         <ToastProvider>
-          <AppContent />
+          <OnboardingProvider>
+            <AppContent />
+          </OnboardingProvider>
         </ToastProvider>
       </CartProvider>
     </AuthProvider>
