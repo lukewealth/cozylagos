@@ -12,31 +12,56 @@ export default defineConfig(() => {
       },
     },
     build: {
-      // Optimize chunk splitting for better loading
       rollupOptions: {
         output: {
-          manualChunks: {
-            // Split vendor libraries into separate chunks
-            'vendor-motion': ['motion'],
-            'vendor-charts': ['recharts'],
-            'vendor-icons': ['lucide-react'],
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              // React core - must be checked first to avoid circular deps
+              if (id.includes('/react/') || id.includes('/react-dom/') || id.includes('/scheduler/')) {
+                return 'vendor-react';
+              }
+              // Animation
+              if (id.includes('/motion/') || id.includes('/framer-motion/') || id.includes('/popmotion/')) {
+                return 'vendor-motion';
+              }
+              // Charts
+              if (id.includes('/recharts/') || id.includes('/d3-')) {
+                return 'vendor-charts';
+              }
+              // Icons
+              if (id.includes('/lucide-react/')) {
+                return 'vendor-icons';
+              }
+              // PDF generation
+              if (id.includes('/jspdf/') || id.includes('/html2canvas/')) {
+                return 'vendor-pdf';
+              }
+              // Firebase
+              if (id.includes('/firebase/') || id.includes('/@firebase/')) {
+                return 'vendor-firebase';
+              }
+              // Database
+              if (id.includes('/mongodb/') || id.includes('/bson/')) {
+                return 'vendor-db';
+              }
+              // State management and utilities
+              if (id.includes('/zustand/') || id.includes('/@tanstack/') || id.includes('/lottie-react/')) {
+                return 'vendor-utils';
+              }
+              // Everything else from node_modules
+              return 'vendor-misc';
+            }
           },
         },
       },
-      // Reduce chunk size warning limit
-      chunkSizeWarningLimit: 1000,
-      // Enable source maps for production (optional, can be disabled for smaller builds)
+      chunkSizeWarningLimit: 700,
       sourcemap: false,
-      // Minify CSS
       cssCodeSplit: true,
-      // Target modern browsers for smaller output
       target: 'es2015',
+      minify: 'esbuild',
     },
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
-      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
     test: {

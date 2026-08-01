@@ -13,48 +13,47 @@ import { useCloudSync } from './hooks/useCloudSync';
 import { useAnalytics } from './hooks/useAnalytics';
 import { useErrorLogger } from './hooks/useErrorLogger';
 import ErrorBoundary from './components/ErrorBoundary';
-import UniversalSidebar from './components/UniversalSidebar';
-import CollapsibleSidebar from './components/ui/CollapsibleSidebar';
 import TopNavBar from './components/TopNavBar';
 import LandingPage from './components/LandingPage';
 import CartDrawer from './components/CartDrawer';
-import ExplorerView from './components/ExplorerView';
-import ExploreLagosView from './components/ExploreLagosView';
-import VIPServicesView from './components/VIPServicesView';
 import ListingDetailView from './components/ListingDetailView';
 import CheckoutView from './components/CheckoutView';
-import GuestDashboard from './components/GuestDashboard';
-import OwnerDashboardView from './components/OwnerDashboardView';
-import ListingWizardView from './components/ListingWizardView';
-import ConciergeHubView from './components/ConciergeHubView';
-import SmartRecommendationsView from './components/SmartRecommendationsView';
-import ServiceBundlesView from './components/ServiceBundlesView';
-import SignatureExperiencesView from './components/SignatureExperiencesView';
-import YachtExperienceView from './components/YachtExperienceView';
-import BusinessLagosView from './components/BusinessLagosView';
-import EventsView from './components/EventsView';
-import FavoritesView from './components/FavoritesView';
 import WhatsAppConcierge from './components/WhatsAppConcierge';
 import CookiesAlert from './components/PrivacyPolicy';
-import AccountSettingsView from './components/AccountSettingsView';
-import NotificationsView from './components/NotificationsView';
-import PropertyListingView from './components/PropertyListingView';
-import AdminCMSView from './components/AdminCMSView';
-import SPCMSView from './components/SPCMSView';
-import CRMView from './components/CRMView';
-import NotificationCenter from './components/NotificationCenter';
-import PrivacyPolicyView from './components/PrivacyPolicyView';
-import TermsOfServiceView from './components/TermsOfServiceView';
-import AboutCozyView from './components/AboutCozyView';
-import ContactView from './components/ContactView';
-import SecurityView from './components/SecurityView';
-import CookiesView from './components/CookiesView';
 import Footer from './components/Footer';
 import BottomNavBar from './components/ui/BottomNavBar';
 import { useDatabase } from './hooks/useDatabase';
 import { seedDatabase, getListingsWithFallback, syncToLocalStorage } from './db';
 import DashboardSkeleton from './components/ui/DashboardSkeleton';
 
+const ExplorerView = lazy(() => import('./components/ExplorerView'));
+const ExploreLagosView = lazy(() => import('./components/ExploreLagosView'));
+const VIPServicesView = lazy(() => import('./components/VIPServicesView'));
+const GuestDashboard = lazy(() => import('./components/GuestDashboard'));
+const OwnerDashboardView = lazy(() => import('./components/OwnerDashboardView'));
+const ListingWizardView = lazy(() => import('./components/ListingWizardView'));
+const ConciergeHubView = lazy(() => import('./components/ConciergeHubView'));
+const SmartRecommendationsView = lazy(() => import('./components/SmartRecommendationsView'));
+const ServiceBundlesView = lazy(() => import('./components/ServiceBundlesView'));
+const SignatureExperiencesView = lazy(() => import('./components/SignatureExperiencesView'));
+const YachtExperienceView = lazy(() => import('./components/YachtExperienceView'));
+const BusinessLagosView = lazy(() => import('./components/BusinessLagosView'));
+const EventsView = lazy(() => import('./components/EventsView'));
+const FavoritesView = lazy(() => import('./components/FavoritesView'));
+const AccountSettingsView = lazy(() => import('./components/AccountSettingsView'));
+const NotificationsView = lazy(() => import('./components/NotificationsView'));
+const PropertyListingView = lazy(() => import('./components/PropertyListingView'));
+const AdminCMSView = lazy(() => import('./components/AdminCMSView'));
+const SPCMSView = lazy(() => import('./components/SPCMSView'));
+const CRMView = lazy(() => import('./components/CRMView'));
+const NotificationCenter = lazy(() => import('./components/NotificationCenter'));
+const PrivacyPolicyView = lazy(() => import('./components/PrivacyPolicyView'));
+const TermsOfServiceView = lazy(() => import('./components/TermsOfServiceView'));
+const AboutCozyView = lazy(() => import('./components/AboutCozyView'));
+const ContactView = lazy(() => import('./components/ContactView'));
+const SecurityView = lazy(() => import('./components/SecurityView'));
+const CookiesView = lazy(() => import('./components/CookiesView'));
+const CollapsibleSidebar = lazy(() => import('./components/ui/CollapsibleSidebar'));
 const UserDashboard = lazy(() => import('./portals/UserDashboard'));
 const ServiceProviderDashboard = lazy(() => import('./portals/ServiceProviderDashboard'));
 const AdminDashboard = lazy(() => import('./portals/AdminDashboard'));
@@ -483,15 +482,17 @@ function AppContent() {
         <main className={`flex-grow flex flex-col relative ${isAuthenticated && currentUser?.role === 'user' ? 'pb-20 lg:pb-0' : ''} ${isAuthenticated && currentUser?.role === 'user' ? (userSidebarCollapsed ? 'lg:ml-[80px]' : 'lg:ml-[280px]') : ''} transition-all duration-300`}>
           {/* Collapsible Sidebar for user role */}
           {isAuthenticated && currentUser?.role === 'user' && (
-            <CollapsibleSidebar
-              activeTab={activeTab}
-              setActiveTab={(tab) => { setActiveTab(tab as any); setUserSidebarMobileOpen(false); }}
-              userRole="user"
-              onLogout={handleLogout}
-              onCollapse={setUserSidebarCollapsed}
-              isMobileOpen={userSidebarMobileOpen}
-              onMobileClose={() => setUserSidebarMobileOpen(false)}
-            />
+            <Suspense fallback={null}>
+              <CollapsibleSidebar
+                activeTab={activeTab}
+                setActiveTab={(tab) => { setActiveTab(tab as any); setUserSidebarMobileOpen(false); }}
+                userRole="user"
+                onLogout={handleLogout}
+                onCollapse={setUserSidebarCollapsed}
+                isMobileOpen={userSidebarMobileOpen}
+                onMobileClose={() => setUserSidebarMobileOpen(false)}
+              />
+            </Suspense>
           )}
           {/* Mobile menu button for user sidebar */}
           {isAuthenticated && currentUser?.role === 'user' && !userSidebarMobileOpen && (
@@ -504,6 +505,7 @@ function AppContent() {
               </svg>
             </button>
           )}
+        <Suspense fallback={<DashboardSkeleton />}>
         <AnimatePresence mode="wait">
           {isCheckoutOpen ? (
             <motion.div
@@ -683,6 +685,7 @@ function AppContent() {
             </motion.div>
           )}
         </AnimatePresence>
+        </Suspense>
       </main>
 
       {isAuthenticated && currentUser?.role === 'user' && (

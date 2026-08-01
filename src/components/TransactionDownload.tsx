@@ -6,8 +6,6 @@ import {
 } from 'lucide-react';
 import { useDatabase } from '../hooks/useDatabase';
 import { useAuth } from '../auth';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
 
 interface Transaction {
   id: string;
@@ -85,7 +83,11 @@ export default function TransactionDownload() {
     window.URL.revokeObjectURL(url);
   };
 
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
+    const [{ default: jsPDF }, autoTable] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable'),
+    ]);
     const doc = new jsPDF();
     
     // Add title
@@ -138,7 +140,11 @@ export default function TransactionDownload() {
     doc.save(`transaction_report_${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
-  const handleDownloadBalancePDF = () => {
+  const handleDownloadBalancePDF = async () => {
+    const [{ default: jsPDF }] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable'),
+    ]);
     const doc = new jsPDF();
     
     // Add header with logo/branding
