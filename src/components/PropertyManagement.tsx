@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import {
   Home, Plus, Edit3, Trash2, Search, Filter, X, Check,
-  MapPin, DollarSign, Users, Bed, Bath, Image, Eye, EyeOff
+  MapPin, DollarSign, Users, Bed, Bath, Image, Eye, EyeOff, RefreshCw
 } from 'lucide-react';
 import { useDatabase } from '../hooks/useDatabase';
 import { useAuth } from '../auth';
 import { Listing } from '../types';
 import { ToastContainer, showToast } from './ui/Toast';
 import UniversalModal from './ui/UniversalModal';
+import api from '../services/api';
+import { syncNow } from '../lib/syncEngine';
 
 export default function PropertyManagement() {
   const { currentUser } = useAuth();
@@ -19,6 +21,7 @@ export default function PropertyManagement() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingListing, setEditingListing] = useState<Listing | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
+  const [isSyncing, setIsSyncing] = useState(false);
 
   const filteredListings = (listings as any[]).filter(listing => {
     const matchesSearch = listing.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -27,6 +30,17 @@ export default function PropertyManagement() {
     const matchesLocation = locationFilter === 'all' || listing.location === locationFilter;
     return matchesSearch && matchesCategory && matchesLocation;
   });
+
+  const handleSync = async () => {
+    setIsSyncing(true);
+    try {
+      await syncNow('bidirectional');
+      showToast({ type: 'success', title: 'Synced', message: 'Properties synced with cloud' });
+    } catch (error) {
+      showToast({ type: 'error', title: 'Sync Failed', message: 'Could not sync with cloud' });
+    }
+    setIsSyncing(false);
+  };
 
   const handleCreateListing = async (listingData: any) => {
     try {
@@ -43,6 +57,9 @@ export default function PropertyManagement() {
       };
 
       await addRecord(newListing);
+      try {
+        await api.listings.create(newListing).catch(() => {});
+      } catch {}
       setShowCreateModal(false);
       showToast({ type: 'success', title: 'Property Created', message: `${newListing.title} has been added` });
     } catch (error) {
@@ -52,7 +69,11 @@ export default function PropertyManagement() {
 
   const handleUpdateListing = async (listingId: string, updates: any) => {
     try {
-      await updateRecord(listingId, { ...updates, updatedAt: new Date().toISOString() });
+      const updated = { ...updates, updatedAt: new Date().toISOString() };
+      await updateRecord(listingId, updated);
+      try {
+        await api.listings.update({ id: listingId, ...updated }).catch(() => {});
+      } catch {}
       setEditingListing(null);
       showToast({ type: 'success', title: 'Property Updated', message: 'Changes saved successfully' });
     } catch (error) {
@@ -63,6 +84,9 @@ export default function PropertyManagement() {
   const handleDeleteListing = async (listingId: string) => {
     try {
       await removeRecord(listingId);
+      try {
+        await api.listings.delete(listingId).catch(() => {});
+      } catch {}
       setShowDeleteConfirm(null);
       showToast({ type: 'success', title: 'Property Removed', message: 'Property has been removed' });
     } catch (error) {
@@ -128,13 +152,23 @@ export default function PropertyManagement() {
           <h2 className="text-2xl font-serif font-bold text-charcoal">Property Management</h2>
           <p className="text-sm text-charcoal/60 mt-1">Manage all properties and listings</p>
         </div>
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gold text-charcoal font-bold text-xs tracking-wider uppercase rounded-lg hover:bg-gold-dark transition-all"
-        >
-          <Plus className="w-4 h-4" />
-          Add Property
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleSync}
+            disabled={isSyncing}
+            className="flex items-center gap-2 px-3 py-2 border border-charcoal/10 text-charcoal font-bold text-xs tracking-wider uppercase rounded-lg hover:bg-charcoal/5 transition-all disabled:opacity-50"
+          >
+            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+            {isSyncing ? 'Syncing...' : 'Sync'}
+          </button>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-gold text-charcoal font-bold text-xs tracking-wider uppercase rounded-lg hover:bg-gold-dark transition-all"
+          >
+            <Plus className="w-4 h-4" />
+            Add Property
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

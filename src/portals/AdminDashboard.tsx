@@ -90,12 +90,16 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
   const [showDeleteListingConfirm, setShowDeleteListingConfirm] = useState(false);
   const [showEditListingModal, setShowEditListingModal] = useState(false);
   const [showAssignStaffModal, setShowAssignStaffModal] = useState(false);
-  const [selectedListingForAction, setSelectedListingForAction] = useState<Listing | null>(null);
   const [selectedBookingForAssign, setSelectedBookingForAssign] = useState<any>(null);
+  const [showCreateTaskFromBooking, setShowCreateTaskFromBooking] = useState(false);
+  const [selectedBookingForTask, setSelectedBookingForTask] = useState<any>(null);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showBroadcastModal, setShowBroadcastModal] = useState(false);
   const [broadcastMessage, setBroadcastMessage] = useState('');
   const [broadcastTitle, setBroadcastTitle] = useState('');
+  const [broadcastTarget, setBroadcastTarget] = useState<'all' | 'role' | 'selected'>('all');
+  const [broadcastRole, setBroadcastRole] = useState<string>('guest');
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [showVerifyAccessModal, setShowVerifyAccessModal] = useState(false);
   const [selectedArrival, setSelectedArrival] = useState<any>(null);
   const [showBookingDetailModal, setShowBookingDetailModal] = useState(false);
@@ -104,6 +108,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
   const backendHealth = useBackendHealth();
 
   const { data: bookings, addRecord: updateBooking } = useDatabase('bookings');
+  const { data: allUsers } = useDatabase('users');
 
   const pendingBookings = (bookings as any[]).filter(
     (b: any) => b.status === 'pending' || b.status === 'Pending'
@@ -176,12 +181,23 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
 
     setIsProcessing(true);
     try {
+      let targetRole: string = 'all';
+      let userIds: string[] = [];
+
+      if (broadcastTarget === 'role') {
+        targetRole = broadcastRole;
+      } else if (broadcastTarget === 'selected') {
+        userIds = selectedUsers;
+        targetRole = 'selected';
+      }
+
       const notification = {
         id: `notif-${Date.now()}`,
         title: broadcastTitle,
         message: broadcastMessage,
         type: 'broadcast',
-        targetRole: 'all',
+        targetRole,
+        userIds,
         read: false,
         sentBy: currentUser?.id || 'admin',
         sentAt: new Date().toISOString(),
@@ -189,10 +205,17 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
       };
 
       await api.crm.sendNotification(notification);
-      showToast({ type: 'success', title: 'Broadcast Sent', message: 'Notification sent to all users' });
+      
+      const targetText = broadcastTarget === 'all' ? 'all users' : 
+                         broadcastTarget === 'role' ? `all ${broadcastRole}s` : 
+                         `${selectedUsers.length} selected user(s)`;
+      
+      showToast({ type: 'success', title: 'Broadcast Sent', message: `Notification sent to ${targetText}` });
       setShowBroadcastModal(false);
       setBroadcastTitle('');
       setBroadcastMessage('');
+      setBroadcastTarget('all');
+      setSelectedUsers([]);
     } catch (error) {
       showToast({ type: 'error', title: 'Error', message: 'Failed to send broadcast notification' });
     }
@@ -324,6 +347,29 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
     showToast({ type: 'success', title: 'Staff Assigned & Booking Confirmed', message: `Booking for ${selectedBookingForAssign.guestName} confirmed` });
     setShowAssignStaffModal(false);
     setSelectedBookingForAssign(null);
+  };
+
+  const handleCreateTaskFromBooking = async (taskData: any) => {
+    if (!selectedBookingForTask) return;
+    const newTask = {
+      ...taskData,
+      id: `task-${Date.now()}`,
+      bookingId: selectedBookingForTask.id,
+      listingId: selectedBookingForTask.listingId,
+      listingTitle: selectedBookingForTask.listingTitle,
+      guestName: selectedBookingForTask.guestName,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    try {
+      const { dbPut } = await import('../db');
+      await dbPut('tasks', newTask);
+      showToast({ type: 'success', title: 'Task Created', message: `Task assigned to ${taskData.assignedToName}` });
+      setShowCreateTaskFromBooking(false);
+      setSelectedBookingForTask(null);
+    } catch (error) {
+      showToast({ type: 'error', title: 'Error', message: 'Failed to create task' });
+    }
   };
 
   const listingEditFields: EditField[] = [
@@ -726,6 +772,14 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
                                     className="p-1.5 text-secondary hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
                                   >
                                     <UserCheck className="w-4 h-4" />
+                                  </button>
+                                </Tooltip>
+                                <Tooltip content="Create Task" description="Create task for this booking">
+                                  <button
+                                    onClick={() => { setSelectedBookingForTask({ listingTitle: listing.title, listingId: listing.id, guestName: 'Guest', id: listing.id }); setShowCreateTaskFromBooking(true); }}
+                                    className="p-1.5 text-secondary hover:text-gold-dark hover:bg-gold/10 rounded-lg transition-colors"
+                                  >
+                                    <ClipboardList className="w-4 h-4" />
                                   </button>
                                 </Tooltip>
                               </div>
@@ -1319,6 +1373,21 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
         } : undefined}
       />
 
+      <UniversalModal
+        isOpen={showCreateTaskFromBooking}
+        onClose={() => { setShowCreateTaskFromBooking(false); setSelectedBookingForTask(null); }}
+        title="Create Task from Booking"
+        size="md"
+        variant="auto"
+      >
+        <CreateTaskFromBookingForm
+          booking={selectedBookingForTask}
+          staff={MOCK_ADMIN_STAFF}
+          onClose={() => { setShowCreateTaskFromBooking(false); setSelectedBookingForTask(null); }}
+          onSubmit={handleCreateTaskFromBooking}
+        />
+      </UniversalModal>
+
       <HelpSupportModal
         isOpen={showHelpModal}
         onClose={() => setShowHelpModal(false)}
@@ -1326,9 +1395,9 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
 
       <UniversalModal
         isOpen={showBroadcastModal}
-        onClose={() => { setShowBroadcastModal(false); setBroadcastTitle(''); setBroadcastMessage(''); }}
+        onClose={() => { setShowBroadcastModal(false); setBroadcastTitle(''); setBroadcastMessage(''); setBroadcastTarget('all'); setSelectedUsers([]); }}
         title="Broadcast Update"
-        size="md"
+        size="lg"
         variant="auto"
       >
         <div className="space-y-4">
@@ -1356,15 +1425,86 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
             />
           </div>
 
+          <div>
+            <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Target Audience</label>
+            <div className="flex gap-2 mb-3">
+              <button
+                onClick={() => setBroadcastTarget('all')}
+                className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold uppercase transition-all ${
+                  broadcastTarget === 'all' ? 'bg-gold text-charcoal' : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
+                }`}
+              >
+                All Users
+              </button>
+              <button
+                onClick={() => setBroadcastTarget('role')}
+                className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold uppercase transition-all ${
+                  broadcastTarget === 'role' ? 'bg-gold text-charcoal' : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
+                }`}
+              >
+                By Role
+              </button>
+              <button
+                onClick={() => setBroadcastTarget('selected')}
+                className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold uppercase transition-all ${
+                  broadcastTarget === 'selected' ? 'bg-gold text-charcoal' : 'bg-charcoal/5 text-charcoal/60 hover:bg-charcoal/10'
+                }`}
+              >
+                Select Users
+              </button>
+            </div>
+
+            {broadcastTarget === 'role' && (
+              <select
+                value={broadcastRole}
+                onChange={(e) => setBroadcastRole(e.target.value)}
+                className="w-full px-4 py-2 bg-white border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                disabled={isProcessing}
+              >
+                <option value="guest">Guests</option>
+                <option value="service_provider">Service Providers</option>
+                <option value="admin">Admins</option>
+              </select>
+            )}
+
+            {broadcastTarget === 'selected' && (
+              <div className="max-h-48 overflow-y-auto border border-charcoal/10 rounded-lg p-2 space-y-1">
+                {(allUsers as any[]).filter(u => u.role !== 'super_admin').map((user) => (
+                  <label key={user.id} className="flex items-center gap-2 p-2 hover:bg-charcoal/5 rounded cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedUsers.includes(user.id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedUsers([...selectedUsers, user.id]);
+                        } else {
+                          setSelectedUsers(selectedUsers.filter(id => id !== user.id));
+                        }
+                      }}
+                      className="rounded text-gold focus:ring-0 border-charcoal/20"
+                    />
+                    <div className="flex-1">
+                      <span className="text-sm font-medium text-charcoal">{user.name}</span>
+                      <span className="text-xs text-charcoal/50 ml-2">({user.role})</span>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+
           <div className="bg-gold/5 border border-gold/10 rounded-lg p-3">
             <p className="text-xs text-charcoal/60">
-              <span className="font-bold">Note:</span> This notification will be sent to all users across the platform.
+              <span className="font-bold">Recipients:</span>{' '}
+              {broadcastTarget === 'all' ? 'All users across the platform' :
+               broadcastTarget === 'role' ? `All ${broadcastRole}s` :
+               `${selectedUsers.length} selected user(s)`}
             </p>
           </div>
 
           <div className="flex gap-3 pt-4">
             <button
-              onClick={() => { setShowBroadcastModal(false); setBroadcastTitle(''); setBroadcastMessage(''); }}
+              onClick={() => { setShowBroadcastModal(false); setBroadcastTitle(''); setBroadcastMessage(''); setBroadcastTarget('all'); setSelectedUsers([]); }}
               disabled={isProcessing}
               className="flex-1 py-3 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all disabled:opacity-50"
             >
@@ -1372,7 +1512,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
             </button>
             <button
               onClick={handleBroadcastUpdate}
-              disabled={isProcessing || !broadcastTitle.trim() || !broadcastMessage.trim()}
+              disabled={isProcessing || !broadcastTitle.trim() || !broadcastMessage.trim() || (broadcastTarget === 'selected' && selectedUsers.length === 0)}
               className="flex-[2] py-3 bg-gold text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-gold-dark transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isProcessing ? (
@@ -1610,5 +1750,124 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
       <ToastContainer />
     </div>
     </DashboardErrorBoundary>
+  );
+}
+
+function CreateTaskFromBookingForm({ booking, staff, onClose, onSubmit }: {
+  booking: any;
+  staff: any[];
+  onClose: () => void;
+  onSubmit: (data: any) => void;
+}) {
+  const [formData, setFormData] = useState({
+    title: `Task for ${booking?.listingTitle || 'Booking'}`,
+    description: `Task created for booking: ${booking?.listingTitle || 'N/A'}\nGuest: ${booking?.guestName || 'Guest'}`,
+    assignedTo: '',
+    assignedToName: '',
+    priority: 'medium' as const,
+    status: 'pending' as const,
+    checklist: [{ id: '1', text: 'Review booking details', completed: false }],
+    dueDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+    tags: ['booking'],
+    category: 'general',
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const selectedStaff = staff.find(s => s.id === formData.assignedTo);
+    onSubmit({
+      ...formData,
+      assignedToName: selectedStaff?.name || 'Unassigned',
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="bg-gold/5 border border-gold/10 rounded-lg p-3 mb-4">
+        <p className="text-xs text-charcoal/60">
+          <span className="font-bold">Booking:</span> {booking?.listingTitle || 'N/A'}<br />
+          <span className="font-bold">Guest:</span> {booking?.guestName || 'Guest'}
+        </p>
+      </div>
+
+      <div>
+        <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Task Title</label>
+        <input
+          type="text"
+          required
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          className="w-full px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+        />
+      </div>
+
+      <div>
+        <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Description</label>
+        <textarea
+          value={formData.description}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          rows={3}
+          className="w-full px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 resize-none"
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Assign To</label>
+          <select
+            required
+            value={formData.assignedTo}
+            onChange={(e) => setFormData({ ...formData, assignedTo: e.target.value })}
+            className="w-full px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+          >
+            <option value="">Select staff...</option>
+            {staff.map(s => (
+              <option key={s.id} value={s.id}>{s.name}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Priority</label>
+          <select
+            value={formData.priority}
+            onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
+            className="w-full px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+          >
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+            <option value="urgent">Urgent</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Due Date</label>
+        <input
+          type="date"
+          required
+          value={formData.dueDate}
+          onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+          className="w-full px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+        />
+      </div>
+
+      <div className="flex gap-3 pt-4">
+        <button
+          type="button"
+          onClick={onClose}
+          className="flex-1 px-4 py-2 border border-charcoal/10 text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-charcoal/5 transition-all"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          className="flex-1 px-4 py-2 bg-gold text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-gold-dark transition-all flex items-center justify-center gap-2"
+        >
+          <CheckSquare className="w-4 h-4" />
+          Create Task
+        </button>
+      </div>
+    </form>
   );
 }

@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Cloud, CloudOff, RefreshCw, CheckCircle, AlertCircle } from 'lucide-react';
+import { syncNow, onSyncStatusChange, getSyncStatus, SyncStatus } from '../../lib/syncEngine';
 
 interface CloudSyncIndicatorProps {
   className?: string;
+  showRefresh?: boolean;
 }
 
-export default function CloudSyncIndicator({ className = '' }: CloudSyncIndicatorProps) {
+export default function CloudSyncIndicator({ className = '', showRefresh = true }: CloudSyncIndicatorProps) {
   const [syncStatus, setSyncStatus] = useState<'synced' | 'syncing' | 'error' | 'offline'>('synced');
   const [lastSync, setLastSync] = useState<Date | null>(new Date());
+  const [isManualSyncing, setIsManualSyncing] = useState(false);
 
   useEffect(() => {
-    // Check online status
     const handleOnline = () => {
       setSyncStatus('synced');
       setLastSync(new Date());
@@ -24,28 +26,46 @@ export default function CloudSyncIndicator({ className = '' }: CloudSyncIndicato
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    // Simulate sync every 30 seconds
-    const syncInterval = setInterval(() => {
-      if (navigator.onLine) {
+    const unsubscribe = onSyncStatusChange((status: SyncStatus) => {
+      if (status === 'syncing') {
         setSyncStatus('syncing');
-        setTimeout(() => {
-          setSyncStatus('synced');
-          setLastSync(new Date());
-        }, 1000);
+      } else if (status === 'idle') {
+        setSyncStatus('synced');
+        setLastSync(new Date());
+        setIsManualSyncing(false);
+      } else if (status === 'error') {
+        setSyncStatus('error');
+        setIsManualSyncing(false);
+      } else if (status === 'offline') {
+        setSyncStatus('offline');
       }
-    }, 30000);
+    });
 
-    // Initial status check
-    if (!navigator.onLine) {
+    const currentStatus = getSyncStatus();
+    if (currentStatus === 'offline' || !navigator.onLine) {
       setSyncStatus('offline');
     }
 
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
-      clearInterval(syncInterval);
+      unsubscribe();
     };
   }, []);
+
+  const handleManualSync = async () => {
+    if (isManualSyncing || syncStatus === 'offline') return;
+    setIsManualSyncing(true);
+    setSyncStatus('syncing');
+    try {
+      await syncNow('bidirectional');
+      setSyncStatus('synced');
+      setLastSync(new Date());
+    } catch (error) {
+      setSyncStatus('error');
+    }
+    setIsManualSyncing(false);
+  };
 
   const getStatusIcon = () => {
     switch (syncStatus) {
@@ -98,6 +118,16 @@ export default function CloudSyncIndicator({ className = '' }: CloudSyncIndicato
         <span className="text-charcoal/40">
           {lastSync.toLocaleTimeString()}
         </span>
+      )}
+      {showRefresh && syncStatus !== 'offline' && (
+        <button
+          onClick={handleManualSync}
+          disabled={isManualSyncing}
+          className="p-1 rounded hover:bg-charcoal/5 transition-colors disabled:opacity-50"
+          title="Sync now"
+        >
+          <RefreshCw className={`w-3.5 h-3.5 ${isManualSyncing ? 'animate-spin' : ''}`} />
+        </button>
       )}
     </motion.div>
   );

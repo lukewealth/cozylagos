@@ -92,7 +92,7 @@ export default async function handler(req: any, res: any) {
         }
 
         const sanitized: any = { updatedAt: new Date().toISOString() };
-        const allowedFields = ['title', 'description', 'category', 'location', 'bedrooms', 'bathrooms', 'maxGuests', 'nightlyRate', 'weekendPremium', 'cleaningFee', 'securityDeposit', 'image', 'images', 'amenities', 'isActive'];
+        const allowedFields = ['title', 'description', 'category', 'location', 'bedrooms', 'bathrooms', 'maxGuests', 'nightlyRate', 'weekendPremium', 'cleaningFee', 'securityDeposit', 'image', 'images', 'amenities', 'isActive', 'videoUrl', 'squareFootage', 'packageDetails', 'keywords', 'lat', 'lng'];
         
         for (const field of allowedFields) {
           if (updateData[field] !== undefined) {

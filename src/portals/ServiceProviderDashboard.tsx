@@ -34,10 +34,11 @@ import StaffManagement from '../components/StaffManagement';
 import TransactionDownload from '../components/TransactionDownload';
 import { Listing } from '../types';
 import SPTaskManagement from '../components/SPTaskManagement';
+import NotificationCenter from '../components/NotificationCenter';
 import { generateId } from '../db';
 import WithdrawalRequestModal, { WithdrawalHistory } from '../components/WithdrawalRequestModal';
 
-type ProviderSection = 'overview' | 'service-dashboard' | 'listings' | 'my-services' | 'schedule' | 'calendar' | 'earnings' | 'inventory' | 'booking-requests' | 'wizard' | 'tasks' | 'staff' | 'transactions';
+type ProviderSection = 'overview' | 'service-dashboard' | 'listings' | 'my-services' | 'schedule' | 'calendar' | 'earnings' | 'inventory' | 'booking-requests' | 'wizard' | 'tasks' | 'staff' | 'transactions' | 'notifications';
 
 interface StaffMember {
   id: string;
@@ -512,10 +513,7 @@ export default function ServiceProviderDashboard({ onLogout }: ServiceProviderDa
               </div>
             </Tooltip>
             <Tooltip content="Notifications" description="View alerts and updates">
-              <button className="p-2 text-secondary hover:text-primary cursor-pointer transition-colors relative">
-                <Bell className="w-5 h-5" />
-                {pendingBookings.length > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-error rounded-full animate-pulse" />}
-              </button>
+              <NotificationCenter />
             </Tooltip>
             <Tooltip content="Help & Support">
               <button onClick={() => setShowHelpModal(true)} className="p-2 text-secondary hover:text-primary cursor-pointer transition-colors">
@@ -1313,6 +1311,16 @@ export default function ServiceProviderDashboard({ onLogout }: ServiceProviderDa
             {activeSection === 'transactions' && (
               <motion.div key="transactions" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
                 <TransactionDownload />
+              </motion.div>
+            )}
+
+            {activeSection === 'notifications' && (
+              <motion.div key="notifications" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
+                <div className="mb-8">
+                  <h2 className="font-serif text-headline-md text-on-surface mb-2">Notifications</h2>
+                  <p className="text-secondary body-lg">Manage your notifications and alerts</p>
+                </div>
+                <NotificationCenter />
               </motion.div>
             )}
           </AnimatePresence>

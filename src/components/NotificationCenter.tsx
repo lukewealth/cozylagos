@@ -20,7 +20,7 @@ interface Notification {
 
 export default function NotificationCenter() {
   const { currentUser } = useAuth();
-  const { data: notifications, updateRecord } = useDatabase('notifications');
+  const { data: notifications, updateRecord, removeRecord } = useDatabase('notifications');
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState<'all' | 'unread' | 'read'>('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -58,8 +58,12 @@ export default function NotificationCenter() {
 
   const handleDelete = async (notificationId: string) => {
     try {
-      // In a real app, this would call an API to delete
-      console.log('Delete notification:', notificationId);
+      await removeRecord(notificationId);
+      try {
+        await import('../services/api').then(api => api.default.crm.deleteNotification(notificationId));
+      } catch (error) {
+        console.error('API sync failed:', error);
+      }
     } catch (error) {
       console.error('Failed to delete notification:', error);
     }

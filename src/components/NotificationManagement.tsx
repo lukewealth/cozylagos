@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Bell, Send, Search, Filter, Check, Mail, Phone, Calendar,
-  MessageSquare, AlertCircle, CheckCircle, Clock, Trash2, Eye
+  MessageSquare, AlertCircle, CheckCircle, Clock, Trash2, Eye, Users
 } from 'lucide-react';
 import { useDatabase } from '../hooks/useDatabase';
 import { useAuth } from '../auth';
@@ -265,16 +265,24 @@ function SendNotificationForm({ onClose, onSend }: {
   onClose: () => void;
   onSend: (data: any) => void;
 }) {
+  const { data: allUsers } = useDatabase('users');
   const [formData, setFormData] = useState({
     title: '',
     message: '',
     type: 'info',
     targetRole: 'all',
   });
+  const [targetMode, setTargetMode] = useState<'all' | 'role' | 'selected'>('all');
+  const [selectedRole, setSelectedRole] = useState<string>('guest');
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSend(formData);
+    onSend({
+      ...formData,
+      targetRole: targetMode === 'selected' ? 'selected' : targetMode === 'role' ? selectedRole : 'all',
+      userIds: targetMode === 'selected' ? selectedUsers : undefined,
+    });
   };
 
   return (
@@ -320,17 +328,61 @@ function SendNotificationForm({ onClose, onSend }: {
             <div>
               <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Target</label>
               <select
-                value={formData.targetRole}
-                onChange={(e) => setFormData({ ...formData, targetRole: e.target.value })}
+                value={targetMode}
+                onChange={(e) => setTargetMode(e.target.value as any)}
                 className="w-full px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
               >
                 <option value="all">All Users</option>
-                <option value="user">Guests</option>
+                <option value="role">By Role</option>
+                <option value="selected">Select Users</option>
+              </select>
+            </div>
+          </div>
+
+          {targetMode === 'role' && (
+            <div>
+              <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">Select Role</label>
+              <select
+                value={selectedRole}
+                onChange={(e) => setSelectedRole(e.target.value)}
+                className="w-full px-4 py-2 border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+              >
+                <option value="guest">Guests</option>
                 <option value="service_provider">Service Providers</option>
                 <option value="admin">Admins</option>
               </select>
             </div>
-          </div>
+          )}
+
+          {targetMode === 'selected' && (
+            <div>
+              <label className="block text-xs font-bold text-charcoal/60 uppercase tracking-wider mb-2">
+                Select Users ({selectedUsers.length} selected)
+              </label>
+              <div className="max-h-48 overflow-y-auto border border-charcoal/10 rounded-lg p-2 space-y-1">
+                {(allUsers as any[]).filter(u => u.role !== 'super_admin').map((user) => (
+                  <label key={user.id} className="flex items-center gap-2 p-2 hover:bg-charcoal/5 rounded cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedUsers.includes(user.id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedUsers([...selectedUsers, user.id]);
+                        } else {
+                          setSelectedUsers(selectedUsers.filter(id => id !== user.id));
+                        }
+                      }}
+                      className="rounded text-gold focus:ring-0 border-charcoal/20"
+                    />
+                    <div className="flex-1">
+                      <span className="text-sm font-medium text-charcoal">{user.name}</span>
+                      <span className="text-xs text-charcoal/50 ml-2">({user.role})</span>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="flex gap-3 pt-4">
             <button
@@ -342,7 +394,8 @@ function SendNotificationForm({ onClose, onSend }: {
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-gold text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-gold-dark transition-all flex items-center justify-center gap-2"
+              disabled={targetMode === 'selected' && selectedUsers.length === 0}
+              className="flex-1 px-4 py-2 bg-gold text-charcoal font-bold text-xs uppercase rounded-lg hover:bg-gold-dark transition-all flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <Send className="w-4 h-4" />
               Send

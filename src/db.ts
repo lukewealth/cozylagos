@@ -63,6 +63,12 @@ export interface ListingRecord {
   image: string;
   images: string[];
   amenities: string[];
+  videoUrl?: string;
+  squareFootage?: number;
+  packageDetails?: string[];
+  keywords?: string[];
+  lat?: number;
+  lng?: number;
   ownerId: string;
   isActive: boolean;
   reviewsCount: number;
@@ -196,6 +202,10 @@ export interface TaskRecord {
   assetId?: string;
   assetName?: string;
   category?: string;
+  bookingId?: string;
+  listingId?: string;
+  listingTitle?: string;
+  guestName?: string;
   createdAt: string;
   updatedAt: string;
 }

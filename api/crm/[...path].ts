@@ -69,7 +69,7 @@ export default async function handler(req: any, res: any) {
         const path = req.url || '';
 
         if (path.includes('/notifications')) {
-          const { title, message, userId, type, targetRole, sendEmail } = req.body;
+          const { title, message, userId, type, targetRole, userIds, sendEmail } = req.body;
           if (!title || !message) {
             return res.status(400).json({ success: false, message: 'Title and message are required' });
           }
@@ -80,7 +80,9 @@ export default async function handler(req: any, res: any) {
 
           let targetUsers: any[] = [];
           
-          if (userId) {
+          if (userIds && Array.isArray(userIds) && userIds.length > 0) {
+            targetUsers = await usersCollection.find({ _id: { $in: userIds.map(id => new ObjectId(id)) } }).toArray();
+          } else if (userId) {
             targetUsers = [{ _id: new ObjectId(userId) }];
           } else if (targetRole && targetRole !== 'all') {
             targetUsers = await usersCollection.find({ role: targetRole }).toArray();
