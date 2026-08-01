@@ -17,6 +17,7 @@ export const INITIAL_LISTINGS: Listing[] = [
     securityDeposit: 150000,
     image: "/assets/images/vertical/IMG-20260621-WA0039.jpg",
     images: ["/assets/images/horizontal/IMG-20260621-WA0164.jpg", "/assets/images/vertical/IMG-20260621-WA0039.jpg"],
+    videoUrl: "https://youtube.com/shorts/3lhmpd4QB80",
     amenities: ["24/7 Power", "Infinity Pool", "Private Chef", "Concierge", "High-Speed Wi-Fi", "Private Gym"],
     keywords: ["penthouse", "duplex", "ikoyi", "panoramic", "lagoon", "skyline", "luxury", "futuristic", "glass", "sunset", "pool", "gym", "chef", "concierge", "high-rise", "executive", "premium", "bourdillon"],
     ownerId: "emeka-anene",

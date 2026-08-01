@@ -3,7 +3,7 @@ import { ArrowLeft, Star, Bed, Bath, Users, ShieldCheck, Heart, Share2, Clipboar
 import { Listing } from '../types';
 import ImageGallery from './ui/ImageGallery';
 import BookingFlow from './BookingFlow';
-import VideoPlayer from './ui/VideoPlayer';
+import VideoPreviewCard from './ui/VideoPreviewCard';
 import { motion, AnimatePresence } from 'motion/react';
 import FavoriteButton from './ui/FavoriteButton';
 
@@ -269,6 +269,13 @@ export default function ListingDetailView({ listing, onBack, onConfirmBooking, o
         </div>
       </section>
 
+      {/* 1.5 VIDEO PREVIEW CARD - Shows after hero images */}
+      {listing.videoUrl && (
+        <section className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20 py-8 sm:py-12">
+          <VideoPreviewCard videoUrl={listing.videoUrl} title={listing.title} />
+        </section>
+      )}
+
       {/* 2. DETAILS GRID */}
       <section className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 xl:px-20 py-8 sm:py-12 md:py-20 grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-16">
         
@@ -329,11 +336,6 @@ export default function ListingDetailView({ listing, onBack, onConfirmBooking, o
               </p>
             </div>
           </motion.div>
-
-          {/* Video Tour Section */}
-          {listing.videoUrl && (
-            <VideoPlayer videoUrl={listing.videoUrl} title={listing.title} />
-          )}
 
           {/* Amenities Section */}
           <motion.div 
