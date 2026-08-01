@@ -141,7 +141,7 @@ export default function UniversalModal({
             resolvedVariant === 'drawer-right' ? 'justify-end' :
             resolvedVariant === 'drawer-left' ? 'justify-start' :
             'justify-center'
-          }`}
+          } ${resolvedVariant === 'centered' ? 'overflow-y-auto py-4' : ''}`}
           style={{ zIndex }}
           role="dialog"
           aria-modal="true"
@@ -295,7 +295,7 @@ export default function UniversalModal({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className={`relative bg-parchment w-full rounded-3xl shadow-2xl overflow-hidden flex flex-col mx-4 ${SIZE_MAP[size]} ${className}`}
+              className={`relative bg-parchment w-full rounded-3xl shadow-2xl overflow-hidden flex flex-col mx-4 my-4 ${SIZE_MAP[size]} ${className}`}
               style={{ maxHeight: 'min(90vh, calc(100dvh - 2rem))' }}
             >
               {title && (

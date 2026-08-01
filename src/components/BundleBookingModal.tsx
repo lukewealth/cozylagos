@@ -82,7 +82,7 @@ export default function BundleBookingModal({ bundle, selectedTier, tierIndex, on
 
   if (bookingComplete) {
     return (
-      <UniversalModal isOpen={true} onClose={onClose} title="Booking Submitted" size="md" variant="auto">
+      <UniversalModal isOpen={true} onClose={onClose} title="Booking Submitted" size="md" variant="centered">
         <div className="py-4 text-center">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Check className="w-10 h-10 text-green-600" />
@@ -100,7 +100,7 @@ export default function BundleBookingModal({ bundle, selectedTier, tierIndex, on
   }
 
   return (
-    <UniversalModal isOpen={true} onClose={onClose} title="Book Bundle" size="lg" variant="auto">
+    <UniversalModal isOpen={true} onClose={onClose} title="Book Bundle" size="lg" variant="centered">
       <div className="relative h-32 overflow-hidden shrink-0 -mx-4 sm:-mx-6">
         <img
           src={bundle.image}

@@ -123,7 +123,7 @@ function BundleDetailPanel({ bundle, onClose }: { bundle: ServiceBundle; onClose
       onClose={onClose}
       title={bundle.title}
       size="lg"
-      variant="auto"
+      variant="centered"
     >
         {/* Header */}
         <div className="relative h-40 sm:h-48 overflow-hidden shrink-0">
