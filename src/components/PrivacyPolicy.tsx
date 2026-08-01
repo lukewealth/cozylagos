@@ -13,13 +13,20 @@ interface CookiesAlertProps {
 export default function CookiesAlert({ onAccept, onDecline, onPreferences, onNavigatePrivacy }: CookiesAlertProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 100 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 100 }}
-      transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-      className="fixed bottom-0 left-0 right-0 z-[150] p-4 sm:p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-[150] flex items-center justify-center p-4 sm:p-6"
     >
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl border border-charcoal/10 p-5 sm:p-6">
+      <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+        className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl border border-charcoal/10 p-5 sm:p-6 max-h-[90vh] overflow-y-auto"
+      >
         <div className="flex flex-col sm:flex-row items-start gap-4">
           <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center shrink-0">
             <Cookie className="w-6 h-6 text-gold-dark" />
@@ -59,7 +66,7 @@ export default function CookiesAlert({ onAccept, onDecline, onPreferences, onNav
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }
