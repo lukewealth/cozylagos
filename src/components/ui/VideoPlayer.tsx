@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'motion/react';
 interface VideoPlayerProps {
   videoUrl: string;
   title?: string;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 function parseVideoUrl(url: string): { type: 'youtube' | 'vimeo' | 'direct'; id?: string; url: string } | null {
@@ -35,7 +37,7 @@ function parseVideoUrl(url: string): { type: 'youtube' | 'vimeo' | 'direct'; id?
   return null;
 }
 
-export default function VideoPlayer({ videoUrl, title }: VideoPlayerProps) {
+export default function VideoPlayer({ videoUrl, title, isOpen, onClose }: VideoPlayerProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const videoData = parseVideoUrl(videoUrl);
 
@@ -43,12 +45,16 @@ export default function VideoPlayer({ videoUrl, title }: VideoPlayerProps) {
     return null;
   }
 
+  const isModalMode = isOpen !== undefined;
+  const showPlayer = isModalMode ? isOpen : isExpanded;
+  const handleClose = isModalMode ? onClose! : () => setIsExpanded(false);
+
   const getEmbedUrl = () => {
     if (videoData.type === 'youtube') {
-      return `https://www.youtube.com/embed/${videoData.id}?rel=0&modestbranding=1`;
+      return `https://www.youtube.com/embed/${videoData.id}?rel=0&modestbranding=1&autoplay=1`;
     }
     if (videoData.type === 'vimeo') {
-      return `https://player.vimeo.com/video/${videoData.id}`;
+      return `https://player.vimeo.com/video/${videoData.id}?autoplay=1`;
     }
     return videoData.url;
   };
@@ -61,6 +67,61 @@ export default function VideoPlayer({ videoUrl, title }: VideoPlayerProps) {
   };
 
   const thumbnailUrl = getThumbnailUrl();
+
+  if (isModalMode) {
+    return (
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 md:p-8"
+            onClick={handleClose}
+          >
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              onClick={handleClose}
+              className="absolute top-6 right-6 z-10 w-12 h-12 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </motion.button>
+
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="relative w-full max-w-6xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {videoData.type === 'direct' ? (
+                <video
+                  src={videoData.url}
+                  controls
+                  autoPlay
+                  className="w-full h-full"
+                  controlsList="nodownload"
+                >
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <iframe
+                  src={getEmbedUrl()}
+                  title={title || 'Property video tour'}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  frameBorder="0"
+                />
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    );
+  }
 
   return (
     <>

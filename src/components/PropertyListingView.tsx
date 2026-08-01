@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
-import { Search, MapPin, Star, SlidersHorizontal, Grid3X3, List, X, Heart, Bed, Bath, Users } from 'lucide-react';
+import { Search, MapPin, Star, SlidersHorizontal, Grid3X3, List, X, Heart, Bed, Bath, Users, Play } from 'lucide-react';
 import { Listing } from '../types';
 import GemCard from './ui/GemCard';
+import VideoPlayer from './ui/VideoPlayer';
 
 interface PropertyListingViewProps {
   listings: Listing[];
@@ -17,6 +18,7 @@ export default function PropertyListingView({ listings, onSelectListing }: Prope
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState<'price-asc' | 'price-desc' | 'rating' | 'newest'>('rating');
+  const [videoPreviewListing, setVideoPreviewListing] = useState<Listing | null>(null);
 
   const locations = useMemo(() => {
     const locs = new Set(listings.map(l => l.location));
@@ -236,8 +238,20 @@ export default function PropertyListingView({ listings, onSelectListing }: Prope
                 onClick={() => onSelectListing(listing)}
                 className="bg-white rounded-2xl border border-charcoal/5 overflow-hidden shadow-sm hover:shadow-lg transition-all cursor-pointer flex"
               >
-                <div className="w-48 h-40 bg-gradient-to-br from-gold/20 to-charcoal/10 flex items-center justify-center shrink-0">
+                <div className="w-48 h-40 bg-gradient-to-br from-gold/20 to-charcoal/10 flex items-center justify-center shrink-0 relative">
                   <MapPin className="w-8 h-8 text-charcoal/20" />
+                  {listing.videoUrl && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setVideoPreviewListing(listing);
+                      }}
+                      className="absolute top-2 right-2 bg-gold/90 backdrop-blur-md hover:bg-gold text-charcoal p-1.5 rounded-full shadow-lg transition-all"
+                      title="Watch Video Tour"
+                    >
+                      <Play className="w-3 h-3 fill-current" />
+                    </button>
+                  )}
                 </div>
                 <div className="flex-1 p-5">
                   <div className="flex items-start justify-between mb-2">
@@ -268,6 +282,15 @@ export default function PropertyListingView({ listings, onSelectListing }: Prope
           </div>
         )}
       </section>
+
+      {videoPreviewListing && videoPreviewListing.videoUrl && (
+        <VideoPlayer
+          videoUrl={videoPreviewListing.videoUrl}
+          title={videoPreviewListing.title}
+          isOpen={true}
+          onClose={() => setVideoPreviewListing(null)}
+        />
+      )}
     </div>
   );
 }
