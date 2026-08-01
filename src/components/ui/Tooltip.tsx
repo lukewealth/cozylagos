@@ -155,18 +155,18 @@ export default function Tooltip({
               top: coords.top,
               left: coords.left,
               maxWidth,
-              zIndex: 9999,
+              zIndex: 99999,
               pointerEvents: 'none',
             }}
             role="tooltip"
           >
-            <div className="relative bg-[#1c1c1e]/95 backdrop-blur-xl rounded-xl shadow-2xl px-4 py-3 border border-white/10">
+            <div className="relative bg-[#1c1c1e]/98 backdrop-blur-2xl rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.3)] px-5 py-4 border border-white/20">
               {title && (
-                <h4 className="text-white/90 text-sm font-semibold mb-1 tracking-tight">
+                <h4 className="text-white text-sm font-semibold mb-2 tracking-tight">
                   {title}
                 </h4>
               )}
-              <p className="text-white/70 text-xs leading-relaxed">
+              <p className="text-white/80 text-sm leading-relaxed">
                 {content}
               </p>
               {showArrow && (
