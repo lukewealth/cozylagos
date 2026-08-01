@@ -31,10 +31,24 @@ export interface ExperienceCartItem {
   duration?: string;
 }
 
+export interface BundleCartItem {
+  id: string;
+  title: string;
+  tierLabel: string;
+  price: number;
+  nights: number;
+  duration: string;
+  image?: string;
+  checkIn?: string;
+  checkOut?: string;
+  guestsCount: number;
+}
+
 interface CartContextType {
   cart: CartItem[];
   serviceCart: ServiceCartItem[];
   experienceCart: ExperienceCartItem[];
+  bundleCart: BundleCartItem[];
   addToCart: (listing: Listing, guestsCount?: number, checkIn?: string, checkOut?: string) => void;
   removeFromCart: (listingId: string, checkIn: string, checkOut: string) => void;
   addServiceToCart: (service: Omit<ServiceCartItem, 'quantity'>) => void;
@@ -42,12 +56,16 @@ interface CartContextType {
   updateServiceQuantity: (serviceId: string, quantity: number) => void;
   addExperienceToCart: (experience: ExperienceCartItem) => void;
   removeExperienceFromCart: (experienceId: string, date: string) => void;
+  addBundleToCart: (bundle: BundleCartItem) => void;
+  removeBundleFromCart: (bundleId: string) => void;
   clearCart: () => void;
   clearServiceCart: () => void;
   clearExperienceCart: () => void;
+  clearBundleCart: () => void;
   getTotalAmount: () => number;
   getServiceTotal: () => number;
   getExperienceTotal: () => number;
+  getBundleTotal: () => number;
   getGrandTotal: () => number;
   getTotalItemCount: () => number;
 }
@@ -58,11 +76,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [cart, setCart] = useState<CartItem[]>([]);
   const [serviceCart, setServiceCart] = useState<ServiceCartItem[]>([]);
   const [experienceCart, setExperienceCart] = useState<ExperienceCartItem[]>([]);
+  const [bundleCart, setBundleCart] = useState<BundleCartItem[]>([]);
 
   useEffect(() => {
     const savedCart = localStorage.getItem('cozy_lagos_cart');
     const savedServiceCart = localStorage.getItem('cozy_lagos_service_cart');
     const savedExperienceCart = localStorage.getItem('cozy_lagos_experience_cart');
+    const savedBundleCart = localStorage.getItem('cozy_lagos_bundle_cart');
     if (savedCart) {
       try { setCart(JSON.parse(savedCart)); } catch (e) { console.error('Failed to parse cart', e); }
     }
@@ -72,11 +92,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (savedExperienceCart) {
       try { setExperienceCart(JSON.parse(savedExperienceCart)); } catch (e) { console.error('Failed to parse experience cart', e); }
     }
+    if (savedBundleCart) {
+      try { setBundleCart(JSON.parse(savedBundleCart)); } catch (e) { console.error('Failed to parse bundle cart', e); }
+    }
   }, []);
 
   useEffect(() => { localStorage.setItem('cozy_lagos_cart', JSON.stringify(cart)); }, [cart]);
   useEffect(() => { localStorage.setItem('cozy_lagos_service_cart', JSON.stringify(serviceCart)); }, [serviceCart]);
   useEffect(() => { localStorage.setItem('cozy_lagos_experience_cart', JSON.stringify(experienceCart)); }, [experienceCart]);
+  useEffect(() => { localStorage.setItem('cozy_lagos_bundle_cart', JSON.stringify(bundleCart)); }, [bundleCart]);
 
   const addToCart = (listing: Listing, guestsCount = 1, checkIn = new Date().toISOString().split('T')[0], checkOut = new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0]) => {
     setCart((prev) => {
@@ -124,9 +148,22 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setExperienceCart((prev) => prev.filter(e => !(e.id === experienceId && e.date === date)));
   };
 
+  const addBundleToCart = (bundle: BundleCartItem) => {
+    setBundleCart((prev) => {
+      const exists = prev.find(b => b.id === bundle.id);
+      if (exists) return prev;
+      return [...prev, bundle];
+    });
+  };
+
+  const removeBundleFromCart = (bundleId: string) => {
+    setBundleCart((prev) => prev.filter(b => b.id !== bundleId));
+  };
+
   const clearCart = () => setCart([]);
   const clearServiceCart = () => setServiceCart([]);
   const clearExperienceCart = () => setExperienceCart([]);
+  const clearBundleCart = () => setBundleCart([]);
 
   const getTotalAmount = () => {
     return cart.reduce((sum, item) => {
@@ -147,22 +184,27 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return experienceCart.reduce((sum, item) => sum + (item.price * item.guestsCount), 0);
   };
 
+  const getBundleTotal = () => {
+    return bundleCart.reduce((sum, item) => sum + item.price, 0);
+  };
+
   const getGrandTotal = () => {
-    return getTotalAmount() + getServiceTotal() + getExperienceTotal();
+    return getTotalAmount() + getServiceTotal() + getExperienceTotal() + getBundleTotal();
   };
 
   const getTotalItemCount = () => {
-    return cart.length + serviceCart.reduce((sum, item) => sum + item.quantity, 0) + experienceCart.length;
+    return cart.length + serviceCart.reduce((sum, item) => sum + item.quantity, 0) + experienceCart.length + bundleCart.length;
   };
 
   return (
     <CartContext.Provider value={{
-      cart, serviceCart, experienceCart,
+      cart, serviceCart, experienceCart, bundleCart,
       addToCart, removeFromCart,
       addServiceToCart, removeServiceFromCart, updateServiceQuantity,
       addExperienceToCart, removeExperienceFromCart,
-      clearCart, clearServiceCart, clearExperienceCart,
-      getTotalAmount, getServiceTotal, getExperienceTotal, getGrandTotal, getTotalItemCount
+      addBundleToCart, removeBundleFromCart,
+      clearCart, clearServiceCart, clearExperienceCart, clearBundleCart,
+      getTotalAmount, getServiceTotal, getExperienceTotal, getBundleTotal, getGrandTotal, getTotalItemCount
     }}>
       {children}
     </CartContext.Provider>

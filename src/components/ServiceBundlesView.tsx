@@ -111,7 +111,7 @@ function ActivityItem({ activity, index }: { activity: BundleActivity; index: nu
   );
 }
 
-function BundleDetailPanel({ bundle, onClose }: { bundle: ServiceBundle; onClose: () => void }) {
+function BundleDetailPanel({ bundle, onClose, onCheckout }: { bundle: ServiceBundle; onClose: () => void; onCheckout?: () => void }) {
   const [selectedTier, setSelectedTier] = useState<number>(1);
   const [activeTab, setActiveTab] = useState<'overview' | 'activities' | 'breakdown'>('overview');
   const [showBookingModal, setShowBookingModal] = useState(false);
@@ -307,6 +307,7 @@ function BundleDetailPanel({ bundle, onClose }: { bundle: ServiceBundle; onClose
             selectedTier={tier}
             tierIndex={selectedTier}
             onClose={() => setShowBookingModal(false)}
+            onCheckout={onCheckout}
           />
         )}
       </AnimatePresence>
@@ -459,7 +460,7 @@ function BundleCard({ bundle, index, onSelect }: { bundle: ServiceBundle; index:
   );
 }
 
-export default function ServiceBundlesView() {
+export default function ServiceBundlesView({ onOpenCart }: { onOpenCart?: () => void } = {}) {
   const [selectedBundle, setSelectedBundle] = useState<ServiceBundle | null>(null);
 
   return (
@@ -587,6 +588,7 @@ export default function ServiceBundlesView() {
         <BundleDetailPanel
           bundle={selectedBundle}
           onClose={() => setSelectedBundle(null)}
+          onCheckout={onOpenCart}
         />
       )}
     </div>

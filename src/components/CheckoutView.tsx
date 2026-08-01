@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft, ShoppingBag, Sparkles, Crown, Package, Calendar, Users, CheckCircle, MessageCircle } from 'lucide-react';
-import { CartItem, ServiceCartItem, ExperienceCartItem } from '../context/CartContext';
+import { CartItem, ServiceCartItem, ExperienceCartItem, BundleCartItem } from '../context/CartContext';
 import { useToast } from './Toast';
 
 interface CheckoutViewProps {
   cart: CartItem[];
   serviceCart: ServiceCartItem[];
   experienceCart: ExperienceCartItem[];
+  bundleCart: BundleCartItem[];
   listingTotal: number;
   serviceTotal: number;
   experienceTotal: number;
+  bundleTotal: number;
   grandTotal: number;
   onBack: () => void;
   onConfirm: (bookingData: any) => void;
 }
 
 export default function CheckoutView({
-  cart, serviceCart, experienceCart,
-  listingTotal, serviceTotal, experienceTotal, grandTotal,
+  cart, serviceCart, experienceCart, bundleCart,
+  listingTotal, serviceTotal, experienceTotal, bundleTotal, grandTotal,
   onBack, onConfirm
 }: CheckoutViewProps) {
   const [step, setStep] = useState<'review' | 'confirm'>('review');
@@ -33,7 +35,7 @@ export default function CheckoutView({
   const tax = Math.round(grandTotal * 0.075);
   const finalTotal = grandTotal + serviceFee + tax;
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!guestName || !guestEmail) {
       addToast({ type: 'error', title: 'Missing Information', message: 'Please fill in your name and email.' });
       return;
@@ -41,18 +43,21 @@ export default function CheckoutView({
 
     setIsProcessing(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
       const bookingData = {
-        listingId: cart[0]?.listing.id || 'service-booking',
-        listingTitle: cart[0]?.listing.title || 'VIP Services Package',
-        checkIn: cart[0]?.checkIn || new Date().toISOString().split('T')[0],
-        checkOut: cart[0]?.checkOut || new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
+        listingId: cart[0]?.listing.id || bundleCart[0]?.id || 'service-booking',
+        listingTitle: cart.length > 0
+          ? cart.map(c => c.listing.title).join(', ')
+          : bundleCart.length > 0
+            ? bundleCart.map(b => `${b.title} (${b.tierLabel})`).join(', ')
+            : 'VIP Services Package',
+        checkIn: cart[0]?.checkIn || bundleCart[0]?.checkIn || new Date().toISOString().split('T')[0],
+        checkOut: cart[0]?.checkOut || bundleCart[0]?.checkOut || new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
         totalAmount: finalTotal,
         guestName,
         guestEmail,
         guestPhone,
-        guestsCount: cart[0]?.guestsCount || 1,
+        guestsCount: cart[0]?.guestsCount || bundleCart[0]?.guestsCount || 1,
         nightlyTotal: listingTotal,
         serviceFee,
         tax,
@@ -63,16 +68,21 @@ export default function CheckoutView({
         services: serviceCart.map(s => s.title),
         selectedServiceIds: serviceCart.map(s => s.id),
         experiences: experienceCart.map(e => e.title),
+        bundles: bundleCart.map(b => `${b.title} (${b.tierLabel})`),
       };
 
       onConfirm(bookingData);
-      setIsProcessing(false);
       addToast({ 
         type: 'success', 
         title: 'Booking Submitted!', 
-        message: 'Admin will review and confirm via WhatsApp.' 
+        message: 'Confirmation email sent. Admin will review via WhatsApp.' 
       });
-    }, 1500);
+    } catch (error) {
+      console.error('Booking failed:', error);
+      addToast({ type: 'error', title: 'Booking Failed', message: 'Please try again or contact support.' });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const generateWhatsAppMessage = () => {
@@ -111,10 +121,19 @@ export default function CheckoutView({
       lines.push('');
     }
 
+    if (bundleCart.length > 0) {
+      lines.push('*— Bundles —*');
+      bundleCart.forEach(item => {
+        lines.push(`• ${item.title} (${item.tierLabel}) = ₦${item.price.toLocaleString()}`);
+      });
+      lines.push('');
+    }
+
     lines.push('*— Bill Summary —*');
     if (listingTotal > 0) lines.push(`Accommodations: ₦${listingTotal.toLocaleString()}`);
     if (serviceTotal > 0) lines.push(`VIP Services: ₦${serviceTotal.toLocaleString()}`);
     if (experienceTotal > 0) lines.push(`Experiences: ₦${experienceTotal.toLocaleString()}`);
+    if (bundleTotal > 0) lines.push(`Bundles: ₦${bundleTotal.toLocaleString()}`);
     lines.push(`Service Fee (5%): ₦${serviceFee.toLocaleString()}`);
     lines.push(`VAT (7.5%): ₦${tax.toLocaleString()}`);
     lines.push('');
@@ -304,6 +323,19 @@ export default function CheckoutView({
                     <p className="text-sm font-bold text-primary">₦{(item.price * item.guestsCount).toLocaleString()}</p>
                   </div>
                 ))}
+
+                {bundleCart.map((item) => (
+                  <div key={item.id} className="flex items-center gap-3 pb-4 border-b border-charcoal/5 last:border-0">
+                    <div className="w-10 h-10 rounded-lg bg-primary-container/15 flex items-center justify-center shrink-0">
+                      <Package className="w-4 h-4 text-primary" />
+                    </div>
+                    <div className="flex-grow">
+                      <h3 className="font-semibold text-charcoal text-sm">{item.title}</h3>
+                      <p className="text-[10px] text-charcoal/50">{item.tierLabel} • {item.duration}</p>
+                    </div>
+                    <p className="text-sm font-bold text-primary">₦{item.price.toLocaleString()}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -333,6 +365,12 @@ export default function CheckoutView({
                   <div className="flex justify-between text-charcoal/70">
                     <span>Experiences</span>
                     <span className="font-semibold">₦{experienceTotal.toLocaleString()}</span>
+                  </div>
+                )}
+                {bundleTotal > 0 && (
+                  <div className="flex justify-between text-charcoal/70">
+                    <span>Bundles</span>
+                    <span className="font-semibold">₦{bundleTotal.toLocaleString()}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-charcoal/70 pt-3 border-t border-charcoal/10">

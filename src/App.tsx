@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense, useCallback } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense, useCallback } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ShieldAlert } from 'lucide-react';
 import {
@@ -100,7 +100,7 @@ function AppContent() {
   const [bookingContext, setBookingContext] = useState<{}>({});
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  const { cartCount, cart, serviceCart, experienceCart, getGrandTotal, getTotalAmount, getServiceTotal, getExperienceTotal, getTotalItemCount } = useCart();
+  const { cartCount, cart, serviceCart, experienceCart, bundleCart, getGrandTotal, getTotalAmount, getServiceTotal, getExperienceTotal, getBundleTotal, getTotalItemCount } = useCart();
   const totalCartCount = getTotalItemCount();
   const [showCookies, setShowCookies] = useState(() => {
     return !localStorage.getItem('cozy_lagos_cookies_accepted');
@@ -132,9 +132,13 @@ function AppContent() {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
 
-  // Scroll to top on tab change
+  // Scroll to top on tab change (only when tab actually changes, not on initial render)
+  const prevTabRef = useRef(activeTab);
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (prevTabRef.current !== activeTab) {
+      prevTabRef.current = activeTab;
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
   }, [activeTab]);
 
   // Route protection: redirect to home if not authenticated on protected tabs
@@ -156,7 +160,6 @@ function AppContent() {
     setSelectedListing(null);
     setActiveTab(tab);
     updatePageState({ activeTab: tab });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   
   const handlePublishListing = (newListing: Listing) => {
@@ -190,7 +193,7 @@ function AppContent() {
     addToast({ type: 'success', title: 'Listing Updated' });
   };
   
-  const handleConfirmBooking = (bookingData: any) => {
+  const handleConfirmBooking = async (bookingData: any) => {
     const bookingId = `booking-${Date.now()}`;
     const ledgerId = `ledger-${Date.now()}`;
     const reference = `CL-${Date.now().toString(36).toUpperCase()}`;
@@ -260,6 +263,19 @@ function AppContent() {
           id: `li-exp-${Date.now()}-${i}`,
           description: e,
           category: 'experience',
+          quantity: 1,
+          unitPrice: 0,
+          total: 0,
+        });
+        cartItemCount++;
+      });
+    }
+    if (bookingData.bundles && bookingData.bundles.length > 0) {
+      bookingData.bundles.forEach((b: string, i: number) => {
+        lineItems.push({
+          id: `li-bundle-${Date.now()}-${i}`,
+          description: b,
+          category: 'bundle',
           quantity: 1,
           unitPrice: 0,
           total: 0,
@@ -382,6 +398,7 @@ function AppContent() {
     adminLines.push(`Cart Items: ${cartItemCount}`);
     adminLines.push(`Services: ${(bookingData.services || []).join(', ') || 'None'}`);
     adminLines.push(`Experiences: ${(bookingData.experiences || []).join(', ') || 'None'}`);
+    adminLines.push(`Bundles: ${(bookingData.bundles || []).join(', ') || 'None'}`);
     if (bookingData.specialRequests) adminLines.push(`Requests: ${bookingData.specialRequests}`);
     adminLines.push('');
     adminLines.push('Status: PENDING CONFIRMATION');
@@ -392,6 +409,32 @@ function AppContent() {
     setTimeout(() => {
       window.open(adminWhatsAppUrl, '_blank');
     }, 1000);
+
+    if (bookingData.guestEmail) {
+      try {
+        await fetch('/api/email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'booking_confirmation',
+            to: bookingData.guestEmail,
+            guestName: bookingData.guestName,
+            bookingData: {
+              reference,
+              listingTitle: bookingData.listingTitle,
+              checkIn: bookingData.checkIn,
+              checkOut: bookingData.checkOut,
+              totalAmount,
+              services: bookingData.services || [],
+              experiences: bookingData.experiences || [],
+              bundles: bookingData.bundles || [],
+            },
+          }),
+        });
+      } catch (emailError) {
+        console.error('Failed to send confirmation email:', emailError);
+      }
+    }
 
     setBookingContext({
       listing: selectedListing || undefined,
@@ -474,9 +517,11 @@ function AppContent() {
                 cart={cart}
                 serviceCart={serviceCart}
                 experienceCart={experienceCart}
+                bundleCart={bundleCart}
                 listingTotal={getTotalAmount()}
                 serviceTotal={getServiceTotal()}
                 experienceTotal={getExperienceTotal()}
+                bundleTotal={getBundleTotal()}
                 grandTotal={getGrandTotal()}
                 onBack={() => setIsCheckoutOpen(false)}
                 onConfirm={(bookingData) => {
@@ -518,7 +563,7 @@ function AppContent() {
               {activeTab === 'explore-lagos' && (
                 <ExploreLagosView onNavigateBundles={() => setActiveTab('bundles')} onNavigateCheckout={() => setIsCheckoutOpen(true)} />
               )}
-              {activeTab === 'bundles' && <ServiceBundlesView />}
+              {activeTab === 'bundles' && <ServiceBundlesView onOpenCart={() => setIsCartOpen(true)} />}
               {activeTab === 'signature-experiences' && <SignatureExperiencesView />}
               {activeTab === 'yacht-experience' && <YachtExperienceView onNavigate={(tab) => setActiveTab(tab as any)} />}
               {activeTab === 'vip-services' && <VIPServicesView />}

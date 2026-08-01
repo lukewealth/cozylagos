@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import UniversalModal from './ui/UniversalModal';
-import { Trash2, ShoppingBag, Minus, Plus, Crown, Anchor, Sparkles, CheckCircle2, MessageCircle, ArrowRight } from 'lucide-react';
+import { Trash2, ShoppingBag, Minus, Plus, Crown, Anchor, Sparkles, CheckCircle2, MessageCircle, ArrowRight, Package, Mail } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../auth';
 
@@ -15,33 +15,104 @@ type CartView = 'main' | 'checkout' | 'confirmation';
 
 export default function CartDrawer({ isOpen, onClose, onCheckout }: CartDrawerProps) {
   const {
-    cart, serviceCart, experienceCart,
-    removeFromCart, removeServiceFromCart, updateServiceQuantity, removeExperienceFromCart,
-    clearCart, clearServiceCart, clearExperienceCart,
-    getTotalAmount, getServiceTotal, getExperienceTotal, getGrandTotal, getTotalItemCount
+    cart, serviceCart, experienceCart, bundleCart,
+    removeFromCart, removeServiceFromCart, updateServiceQuantity, removeExperienceFromCart, removeBundleFromCart,
+    clearCart, clearServiceCart, clearExperienceCart, clearBundleCart,
+    getTotalAmount, getServiceTotal, getExperienceTotal, getBundleTotal, getGrandTotal, getTotalItemCount
   } = useCart();
   const { isAuthenticated, currentUser } = useAuth();
   const [view, setView] = useState<CartView>('main');
-  const [activeTab, setActiveTab] = useState<'stays' | 'services' | 'experiences'>('stays');
+  const [activeTab, setActiveTab] = useState<'stays' | 'services' | 'experiences' | 'bundles'>('stays');
+  const [guestName, setGuestName] = useState('');
+  const [guestEmail, setGuestEmail] = useState('');
+  const [guestPhone, setGuestPhone] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const stayTotal = getTotalAmount();
   const serviceTotal = getServiceTotal();
   const experienceTotal = getExperienceTotal();
+  const bundleTotal = getBundleTotal();
   const grandTotal = getGrandTotal();
   const serviceFee = Math.round(grandTotal * 0.05);
   const tax = Math.round(grandTotal * 0.075);
   const finalTotal = grandTotal + serviceFee + tax;
 
   const handleCheckout = () => {
-    if (!isAuthenticated) {
-      setView('checkout');
-      return;
-    }
     setView('checkout');
   };
 
-  const handleConfirmBooking = () => {
-    setView('confirmation');
+  const handleConfirmBooking = async () => {
+    const name = isAuthenticated ? (currentUser?.name || '') : guestName;
+    const email = isAuthenticated ? (currentUser?.email || '') : guestEmail;
+    const phone = isAuthenticated ? (currentUser?.phone || '') : guestPhone;
+
+    if (!name || !email) {
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      const bookingData = {
+        listingId: cart[0]?.listing.id || bundleCart[0]?.id || 'cart-booking',
+        listingTitle: cart.length > 0
+          ? cart.map(c => c.listing.title).join(', ')
+          : bundleCart.length > 0
+            ? bundleCart.map(b => `${b.title} (${b.tierLabel})`).join(', ')
+            : 'Cozy Lagos Booking',
+        checkIn: cart[0]?.checkIn || bundleCart[0]?.checkIn || new Date().toISOString().split('T')[0],
+        checkOut: cart[0]?.checkOut || bundleCart[0]?.checkOut || new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
+        totalAmount: finalTotal,
+        guestName: name,
+        guestEmail: email,
+        guestPhone: phone,
+        guestsCount: cart[0]?.guestsCount || bundleCart[0]?.guestsCount || 2,
+        nightlyTotal: stayTotal,
+        serviceFee,
+        tax,
+        grandTotal: finalTotal,
+        cleaningFee: cart[0]?.listing.cleaningFee || 0,
+        totalNights: cart[0] ? Math.ceil((new Date(cart[0].checkOut).getTime() - new Date(cart[0].checkIn).getTime()) / (1000 * 60 * 60 * 24)) : 0,
+        services: serviceCart.map(s => s.title),
+        selectedServiceIds: serviceCart.map(s => s.id),
+        experiences: experienceCart.map(e => e.title),
+        bundles: bundleCart.map(b => `${b.title} (${b.tierLabel})`),
+      };
+
+      try {
+        await fetch('/api/email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'booking_confirmation',
+            to: email,
+            guestName: name,
+            bookingData: {
+              reference: `CL-${Date.now().toString(36).toUpperCase()}`,
+              listingTitle: bookingData.listingTitle,
+              checkIn: bookingData.checkIn,
+              checkOut: bookingData.checkOut,
+              totalAmount: finalTotal,
+              services: serviceCart.map(s => s.title),
+              experiences: experienceCart.map(e => e.title),
+              bundles: bundleCart.map(b => `${b.title} (${b.tierLabel})`),
+            },
+          }),
+        });
+      } catch (emailError) {
+        console.error('Email send failed:', emailError);
+      }
+
+      setView('confirmation');
+      clearCart();
+      clearServiceCart();
+      clearExperienceCart();
+      clearBundleCart();
+    } catch (error) {
+      console.error('Booking failed:', error);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleWhatsAppConfirm = () => {
@@ -70,6 +141,14 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }: CartDrawerPr
         lines.push(`• ${item.title} (${item.date}) — ₦${(item.price * item.guestsCount).toLocaleString()}`);
       });
       lines.push(`Experience Total: ₦${experienceTotal.toLocaleString()}`);
+      lines.push(``);
+    }
+    if (bundleCart.length > 0) {
+      lines.push(`*— Bundles —*`);
+      bundleCart.forEach(item => {
+        lines.push(`• ${item.title} (${item.tierLabel}) — ₦${item.price.toLocaleString()}`);
+      });
+      lines.push(`Bundle Total: ₦${bundleTotal.toLocaleString()}`);
       lines.push(``);
     }
     lines.push(`*— Cost Breakdown —*`);
@@ -105,6 +184,7 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }: CartDrawerPr
                     { id: 'stays' as const, label: 'Stays', count: cart.length, icon: <ShoppingBag className="w-3.5 h-3.5" /> },
                     { id: 'services' as const, label: 'Services', count: serviceCart.length, icon: <Sparkles className="w-3.5 h-3.5" /> },
                     { id: 'experiences' as const, label: 'Experiences', count: experienceCart.length, icon: <Anchor className="w-3.5 h-3.5" /> },
+                    { id: 'bundles' as const, label: 'Bundles', count: bundleCart.length, icon: <Package className="w-3.5 h-3.5" /> },
                   ].map(tab => (
                     <button
                       key={tab.id}
@@ -259,6 +339,50 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }: CartDrawerPr
                       )}
                     </>
                   )}
+
+                  {activeTab === 'bundles' && (
+                    <>
+                      {bundleCart.length === 0 ? (
+                        <div className="h-full flex flex-col items-center justify-center text-center">
+                          <div className="w-20 h-20 bg-charcoal/5 rounded-full flex items-center justify-center mb-4">
+                            <Package className="w-10 h-10 text-charcoal/20" />
+                          </div>
+                          <p className="font-serif text-xl text-charcoal/40">No bundles added</p>
+                          <p className="text-sm text-charcoal/30 mt-2">Browse curated experience bundles!</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          {bundleCart.map((item) => (
+                            <div key={item.id} className="flex gap-4 group bg-white p-3 rounded-xl border border-charcoal/5">
+                              {item.image && (
+                                <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0">
+                                  <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                                </div>
+                              )}
+                              <div className="flex-grow min-w-0">
+                                <h3 className="font-bold text-charcoal text-sm truncate">{item.title}</h3>
+                                <p className="text-[10px] text-charcoal/50">{item.tierLabel} • {item.duration}</p>
+                                {item.checkIn && (
+                                  <p className="text-[10px] text-charcoal/40">{item.checkIn} → {item.checkOut}</p>
+                                )}
+                                <div className="flex items-center justify-between mt-2">
+                                  <span className="text-gold-dark font-bold text-xs">
+                                    ₦{item.price.toLocaleString()}
+                                  </span>
+                                  <button
+                                    onClick={() => removeBundleFromCart(item.id)}
+                                    className="text-charcoal/30 hover:text-red-500 transition-colors"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
 
                 {getTotalItemCount() > 0 && (
@@ -282,6 +406,12 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }: CartDrawerPr
                           <span className="font-bold text-charcoal">₦{experienceTotal.toLocaleString()}</span>
                         </div>
                       )}
+                      {bundleTotal > 0 && (
+                        <div className="flex justify-between text-xs">
+                          <span className="text-charcoal/60">Bundles</span>
+                          <span className="font-bold text-charcoal">₦{bundleTotal.toLocaleString()}</span>
+                        </div>
+                      )}
                       <div className="flex justify-between text-xs">
                         <span className="text-charcoal/60">Service Fee (5%)</span>
                         <span className="font-bold text-charcoal">₦{serviceFee.toLocaleString()}</span>
@@ -300,7 +430,7 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }: CartDrawerPr
 
                     <div className="flex gap-3">
                       <button
-                        onClick={() => { clearCart(); clearServiceCart(); clearExperienceCart(); }}
+                        onClick={() => { clearCart(); clearServiceCart(); clearExperienceCart(); clearBundleCart(); }}
                         className="flex-1 py-4 text-charcoal/40 hover:text-red-500 font-bold text-xs uppercase tracking-widest transition-colors"
                       >
                         Clear
@@ -343,6 +473,12 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }: CartDrawerPr
                         <span className="font-bold text-charcoal shrink-0">₦{(item.price * item.guestsCount).toLocaleString()}</span>
                       </div>
                     ))}
+                    {bundleCart.map(item => (
+                      <div key={item.id} className="flex justify-between">
+                        <span className="text-charcoal/60 truncate mr-2">{item.title} ({item.tierLabel})</span>
+                        <span className="font-bold text-charcoal shrink-0">₦{item.price.toLocaleString()}</span>
+                      </div>
+                    ))}
                   </div>
                   <div className="border-t border-charcoal/10 pt-3 space-y-2">
                     <div className="flex justify-between text-xs">
@@ -365,9 +501,59 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }: CartDrawerPr
                 </div>
 
                 {!isAuthenticated && (
-                  <div className="bg-gold/5 border border-gold/20 rounded-2xl p-5 text-center space-y-3">
-                    <p className="text-sm text-charcoal/70">Please login to complete your booking</p>
-                    <p className="text-[10px] text-charcoal/40">Your cart will be saved for later</p>
+                  <div className="bg-white border border-charcoal/5 rounded-2xl p-5 space-y-4">
+                    <h3 className="font-serif text-lg font-bold text-charcoal border-b border-charcoal/5 pb-3 flex items-center gap-2">
+                      <Mail className="w-5 h-5 text-gold-dark" />
+                      Guest Checkout
+                    </h3>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-[10px] font-bold text-charcoal/60 uppercase tracking-widest mb-1.5">Full Name *</label>
+                        <input
+                          type="text"
+                          value={guestName}
+                          onChange={(e) => setGuestName(e.target.value)}
+                          className="w-full px-3 py-2 bg-parchment border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/30"
+                          placeholder="John Doe"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-charcoal/60 uppercase tracking-widest mb-1.5">Email Address *</label>
+                        <input
+                          type="email"
+                          value={guestEmail}
+                          onChange={(e) => setGuestEmail(e.target.value)}
+                          className="w-full px-3 py-2 bg-parchment border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/30"
+                          placeholder="john@example.com"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-charcoal/60 uppercase tracking-widest mb-1.5">Phone Number</label>
+                        <input
+                          type="tel"
+                          value={guestPhone}
+                          onChange={(e) => setGuestPhone(e.target.value)}
+                          className="w-full px-3 py-2 bg-parchment border border-charcoal/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/30"
+                          placeholder="+234 800 000 0000"
+                        />
+                      </div>
+                    </div>
+                    <p className="text-[10px] text-charcoal/40">
+                      A confirmation email will be sent to your email address.
+                    </p>
+                  </div>
+                )}
+
+                {isAuthenticated && (
+                  <div className="bg-gold/5 border border-gold/20 rounded-2xl p-4">
+                    <p className="text-xs text-charcoal/70">
+                      Booking as: <strong>{currentUser?.name}</strong> ({currentUser?.email})
+                    </p>
+                    <p className="text-[10px] text-charcoal/50 mt-1">
+                      A confirmation email will be sent to your registered email.
+                    </p>
                   </div>
                 )}
 
@@ -380,9 +566,20 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }: CartDrawerPr
                   </button>
                   <button
                     onClick={handleConfirmBooking}
-                    className="flex-[2] py-4 bg-gold text-charcoal font-bold text-xs uppercase tracking-widest rounded shadow-lg hover:bg-gold-dark hover:text-parchment transition-all"
+                    disabled={isProcessing || (!isAuthenticated && (!guestName || !guestEmail))}
+                    className="flex-[2] py-4 bg-gold text-charcoal font-bold text-xs uppercase tracking-widest rounded shadow-lg hover:bg-gold-dark hover:text-parchment transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    Confirm Booking
+                    {isProcessing ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-charcoal/30 border-t-charcoal rounded-full animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 className="w-4 h-4" />
+                        Confirm Booking
+                      </>
+                    )}
                   </button>
                 </div>
 
@@ -411,7 +608,7 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }: CartDrawerPr
                 <div className="space-y-2">
                   <h3 className="font-serif text-2xl font-bold text-charcoal">Booking Submitted!</h3>
                   <p className="text-sm text-charcoal/60 max-w-xs">
-                    Your reservation has been sent to our admin team for confirmation. You'll receive a WhatsApp message shortly.
+                    Your reservation has been sent to our admin team. A confirmation email has been sent to your inbox. You'll receive a WhatsApp message shortly.
                   </p>
                 </div>
                 <div className="bg-white border border-charcoal/5 rounded-2xl p-5 w-full space-y-2 text-sm">

@@ -21,6 +21,7 @@ To transition from the current offline-first prototype to a full-scale productio
 | `/{id}` | `PUT` | `{isActive, ...}` | Update listing status/details |
 | `/{id}` | `DELETE` | - | Remove listing (Owner/Admin) |
 
+
 ## 3. Booking & Transaction Service (`/api/bookings`)
 
 | Endpoint | Method | Payload | Description |
@@ -58,3 +59,4 @@ To transition from the current offline-first prototype to a full-scale productio
 | `/users/{id}/role`| `PATCH` | `{role}` | Update user privileges |
 | `/system/health` | `GET` | - | Return infrastructure status |
 | `/system/lock` | `POST` | `{mode: 'maintenance' \| 'lockdown'}` | Trigger global emergency protocols |
+§   
