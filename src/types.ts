@@ -45,6 +45,7 @@ export interface Listing {
   amenities: string[];
   packageDetails?: string[];
   keywords?: string[];
+  videoUrl?: string;
   ownerId: string;
   isActive: boolean;
   reviewsCount: number;

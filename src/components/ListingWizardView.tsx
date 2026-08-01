@@ -31,6 +31,7 @@ export default function ListingWizardView({ onPublishListing, onCancel }: Listin
   const [nightlyRate, setNightlyRate] = useState<number>(450000);
   const [securityDeposit, setSecurityDeposit] = useState<number>(150000);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>(["24/7 Power", "High-Speed Wi-Fi", "Infinity Pool", "Concierge"]);
+  const [videoUrl, setVideoUrl] = useState<string>('');
 
   // Step 4 final state
   const [acceptTerms, setAcceptTerms] = useState(false);
@@ -153,6 +154,7 @@ export default function ListingWizardView({ onPublishListing, onCancel }: Listin
           image: uploadedImages[0]?.preview || "https://lh3.googleusercontent.com/aida-public/AB6AXuBJ2GGWFNwuBO2JM2bYf-QFEBP5nlp9knwLAIEbuxzj4ld_7CfhmUboRV3Ih7CVn_cIyrr_4X1CctHurZYPJbDxPLcuNMAlgZ8E7GyLfuIZd0L6TiIH6JL4qxE0S6LH3dMbrqgFBA03tV_nv4ZYAyrn6SxvsPQIXQbaDeHNvc4U7p0dKE_MVLgA3pA2eXUVxVCT1kqKk61Iy5V8EtXhKI2oGFsLpYuJKl_0DR9wGJZd3pAuZVlzm1NLpNPC1R-jcDjf_0MBaI235ER6",
           images: uploadedImages.map(img => img.preview),
           amenities: selectedAmenities,
+          videoUrl: videoUrl || undefined,
           ownerId: "emeka-anene",
           isActive: isPublic,
           reviewsCount: 0,
@@ -479,6 +481,18 @@ export default function ListingWizardView({ onPublishListing, onCancel }: Listin
                       className="w-full bg-parchment/30 border-0 border-b border-charcoal/15 pb-2 text-sm font-mono text-charcoal pl-6 focus:ring-0 focus:border-gold outline-none"
                     />
                   </div>
+                </div>
+
+                <div className="space-y-4 pt-4 border-t border-charcoal/5">
+                  <label className="block text-[9px] font-bold text-charcoal-light/60 uppercase tracking-widest">Video Tour URL (Optional)</label>
+                  <input 
+                    type="url"
+                    value={videoUrl}
+                    onChange={(e) => setVideoUrl(e.target.value)}
+                    placeholder="https://youtube.com/watch?v=... or Vimeo URL"
+                    className="w-full bg-parchment/30 border-0 border-b border-charcoal/15 pb-2 text-sm font-mono text-charcoal focus:ring-0 focus:border-gold outline-none placeholder:text-charcoal/30"
+                  />
+                  <p className="text-[10px] text-charcoal-light/60 font-medium">Add a YouTube, Vimeo, or direct video link for potential guests</p>
                 </div>
 
                 {/* Amenities grid */}

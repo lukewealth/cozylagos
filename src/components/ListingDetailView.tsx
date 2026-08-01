@@ -3,6 +3,7 @@ import { ArrowLeft, Star, Bed, Bath, Users, ShieldCheck, Heart, Share2, Clipboar
 import { Listing } from '../types';
 import ImageGallery from './ui/ImageGallery';
 import BookingFlow from './BookingFlow';
+import VideoPlayer from './ui/VideoPlayer';
 import { motion, AnimatePresence } from 'motion/react';
 import FavoriteButton from './ui/FavoriteButton';
 
@@ -328,6 +329,11 @@ export default function ListingDetailView({ listing, onBack, onConfirmBooking, o
               </p>
             </div>
           </motion.div>
+
+          {/* Video Tour Section */}
+          {listing.videoUrl && (
+            <VideoPlayer videoUrl={listing.videoUrl} title={listing.title} />
+          )}
 
           {/* Amenities Section */}
           <motion.div 

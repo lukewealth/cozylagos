@@ -37,6 +37,7 @@ export default function ListingEditorView({ listing, onCancel, onSave }: Listing
           securityDeposit: formData.securityDeposit,
           images: formData.images,
           amenities: formData.amenities,
+          videoUrl: formData.videoUrl,
         });
       } catch {}
       onSave(formData);
@@ -244,6 +245,18 @@ export default function ListingEditorView({ listing, onCancel, onSave }: Listing
               </div>
               <h3 className="font-serif text-2xl font-bold text-charcoal">Visual Assets</h3>
             </div>
+          </div>
+
+          <div className="space-y-4">
+            <label className="text-xs font-bold text-charcoal/40 uppercase tracking-widest">Video Tour URL (Optional)</label>
+            <input 
+              type="url"
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:ring-2 focus:ring-gold/20 transition-all font-medium"
+              value={formData.videoUrl || ''}
+              onChange={(e) => handleChange('videoUrl', e.target.value)}
+              placeholder="https://youtube.com/watch?v=... or Vimeo URL"
+            />
+            <p className="text-[10px] text-charcoal/40">Add a YouTube, Vimeo, or direct video link for potential guests</p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

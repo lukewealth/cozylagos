@@ -217,7 +217,8 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState<ExploreItem | null>(null);
-  const [showVideo, setShowVideo] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const { addExperienceToCart, experienceCart } = useCart();
   const { addToast } = useToast();
@@ -227,38 +228,34 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
     preloadExploreImages();
   }, []);
 
+  // Attempt to play video on mount
   useEffect(() => {
     if (!showHero) return;
-    const videoTimer = setTimeout(() => {
-      setShowVideo(true);
-    }, 1500);
-    return () => clearTimeout(videoTimer);
-  }, [showHero]);
-
-  useEffect(() => {
-    if (!showVideo || !videoRef.current) return;
     const video = videoRef.current;
-    
+    if (!video) return;
+
     const playVideo = async () => {
       try {
         video.muted = true;
+        video.playsInline = true;
         await video.play();
       } catch (error) {
         console.warn('Video autoplay failed:', error);
-        setShowVideo(false);
+        setVideoError(true);
       }
     };
-    
+
+    // Try to play immediately if ready
     if (video.readyState >= 2) {
       playVideo();
     } else {
       video.addEventListener('canplay', playVideo, { once: true });
     }
-    
+
     return () => {
       video.removeEventListener('canplay', playVideo);
     };
-  }, [showVideo]);
+  }, [showHero]);
 
   const handleAddToCart = (item: ExploreItem) => {
     const priceNum = parseInt(item.price.replace(/[^\d]/g, '')) || 0;
@@ -313,14 +310,14 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
               key="hero-image"
               initial={{ scale: 1.1, opacity: 1 }}
               animate={{ 
-                scale: showVideo ? 1.05 : 1, 
-                opacity: showVideo ? 0 : 1 
+                scale: 1,
+                opacity: videoError ? 1 : 0.35
               }}
               transition={{ 
                 scale: { duration: 10, ease: [0.16, 1, 0.3, 1] },
                 opacity: { duration: 2, ease: "easeInOut" }
               }}
-              className="w-full h-full object-cover opacity-35 select-none pointer-events-none"
+              className="w-full h-full object-cover select-none pointer-events-none"
               src="/assets/bundles/bundles-hero-background.jpeg"
               alt="Explore Lagos"
             />
@@ -329,8 +326,8 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
               key="hero-video"
               initial={{ opacity: 0, scale: 1.1 }}
               animate={{ 
-                opacity: showVideo ? 1 : 0,
-                scale: showVideo ? 1 : 1.1
+                opacity: videoLoaded ? 1 : 0,
+                scale: 1
               }}
               transition={{ 
                 opacity: { duration: 2, ease: "easeInOut" },
@@ -340,20 +337,12 @@ export default function ExploreLagosView({ onNavigateBundles, showHero = true, o
               src="/assets/lagos-hero-video.mp4"
               muted
               playsInline
-              autoPlay
-              loop={false}
+              loop
               preload="auto"
-              onLoadedData={() => {
-                if (videoRef.current) {
-                  videoRef.current.play().catch(() => {});
-                }
-              }}
-              onEnded={() => {
-                setShowVideo(false);
-              }}
+              onLoadedData={() => setVideoLoaded(true)}
               onError={() => {
                 console.warn('Video failed to load, falling back to image');
-                setShowVideo(false);
+                setVideoError(true);
               }}
               style={{
                 maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
