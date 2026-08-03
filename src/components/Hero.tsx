@@ -1,20 +1,43 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Home, MapPin, Star, Sun, Moon } from 'lucide-react';
+import { useVideoAutoplay } from '../hooks/useVideoAutoplay';
 
 interface HeroProps {
   children?: React.ReactNode;
 }
 
-const VIDEO_URL = '/assets/lagos-hero-video.mp4';
-const FADE_DURATION = 1200;
+const PRIMARY_VIDEO_URL = '/assets/lagos-hero-video.mp4';
+const SECONDARY_VIDEO_URL = '/assets/lagos-secondary-video.mp4';
+const FADE_DURATION = 1500;
+const VIDEO_ROTATION_INTERVAL = 15000;
 
 export default function Hero({ children }: HeroProps) {
   const [isNight, setIsNight] = useState(false);
   const [imgError, setImgError] = useState({ day: false, night: false });
-  const [videoError, setVideoError] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [activeVideoIndex, setActiveVideoIndex] = useState(0);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const primaryVideo = useVideoAutoplay({
+    muted: true,
+    loop: true,
+    playsInline: true,
+    preload: 'auto',
+    playbackRate: playbackSpeed,
+    pauseOnHidden: true,
+    lowPowerMode: true,
+  });
+
+  const secondaryVideo = useVideoAutoplay({
+    muted: true,
+    loop: true,
+    playsInline: true,
+    preload: 'metadata',
+    playbackRate: playbackSpeed,
+    pauseOnHidden: true,
+    lowPowerMode: true,
+  });
 
   const dayImg = imgError.day
     ? 'assets/images/horizontal/CozyLagos.jpeg'
@@ -28,33 +51,31 @@ export default function Hero({ children }: HeroProps) {
     setIsNight(hour >= 19 || hour < 6);
   }, []);
 
-  // Attempt to play video on mount
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const interval = setInterval(() => {
+      setActiveVideoIndex((prev) => (prev + 1) % 2);
+    }, VIDEO_ROTATION_INTERVAL);
 
-    const playVideo = async () => {
-      try {
-        video.muted = true;
-        video.playsInline = true;
-        await video.play();
-      } catch (error) {
-        console.warn('Video autoplay failed:', error);
-        setVideoError(true);
-      }
-    };
-
-    // Try to play immediately if ready
-    if (video.readyState >= 2) {
-      playVideo();
-    } else {
-      video.addEventListener('canplay', playVideo, { once: true });
-    }
-
-    return () => {
-      video.removeEventListener('canplay', playVideo);
-    };
+    return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolled = window.scrollY;
+      const maxScroll = window.innerHeight;
+      const progress = Math.min(scrolled / maxScroll, 1);
+      setScrollProgress(progress);
+
+      const newSpeed = 1 + (progress * 0.5);
+      setPlaybackSpeed(newSpeed);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const isPrimaryVideoActive = activeVideoIndex === 0;
+  const hasVideoError = primaryVideo.hasError && secondaryVideo.hasError;
 
   return (
     <section className="relative w-full h-[70vh] sm:h-[80vh] md:h-[85vh] min-h-[450px] sm:min-h-[500px] md:min-h-[600px] flex items-center justify-center overflow-hidden">
@@ -75,7 +96,7 @@ export default function Hero({ children }: HeroProps) {
               onError={() => setImgError(prev => ({ ...prev, day: true }))}
               animate={{
                 scale: 1,
-                opacity: videoError ? 1 : 0
+                opacity: hasVideoError ? 1 : 0
               }}
               transition={{
                 scale: { duration: FADE_DURATION / 1000, ease: [0.4, 0, 0.2, 1] },
@@ -104,7 +125,7 @@ export default function Hero({ children }: HeroProps) {
               onError={() => setImgError(prev => ({ ...prev, night: true }))}
               animate={{
                 scale: 1,
-                opacity: videoError ? 1 : 0
+                opacity: hasVideoError ? 1 : 0
               }}
               transition={{
                 scale: { duration: FADE_DURATION / 1000, ease: [0.4, 0, 0.2, 1] },
@@ -116,31 +137,58 @@ export default function Hero({ children }: HeroProps) {
         )}
       </AnimatePresence>
 
-      {/* Video Background - Continuous Autoplay */}
-      {!videoError && (
+      {/* Primary Video Background */}
+      {!primaryVideo.hasError && (
         <motion.div
           className="absolute inset-0 z-[1]"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: videoLoaded ? 1 : 0 }}
-          transition={{ duration: FADE_DURATION / 1000, ease: [0.4, 0, 0.2, 1] }}
+          animate={{
+            opacity: isPrimaryVideoActive && primaryVideo.isLoaded ? 1 : 0,
+            scale: 1 + (scrollProgress * 0.1),
+          }}
+          transition={{
+            opacity: { duration: FADE_DURATION / 1000, ease: [0.4, 0, 0.2, 1] },
+            scale: { duration: 0.3, ease: 'easeOut' },
+          }}
         >
           <video
-            ref={videoRef}
+            ref={primaryVideo.videoRef}
             className="w-full h-full object-cover"
-            src={VIDEO_URL}
+            src={PRIMARY_VIDEO_URL}
             muted
             playsInline
             loop
             preload="auto"
-            onLoadedData={() => setVideoLoaded(true)}
-            onError={() => {
-              setVideoError(true);
-              setVideoLoaded(false);
-            }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-charcoal/20 via-charcoal/10 to-charcoal/40" />
         </motion.div>
       )}
+
+      {/* Secondary Video Background - Crossfade */}
+      {!secondaryVideo.hasError && (
+        <motion.div
+          className="absolute inset-0 z-[2]"
+          animate={{
+            opacity: !isPrimaryVideoActive && secondaryVideo.isLoaded ? 1 : 0,
+            scale: 1 + (scrollProgress * 0.1),
+          }}
+          transition={{
+            opacity: { duration: FADE_DURATION / 1000, ease: [0.4, 0, 0.2, 1] },
+            scale: { duration: 0.3, ease: 'easeOut' },
+          }}
+        >
+          <video
+            ref={secondaryVideo.videoRef}
+            className="w-full h-full object-cover"
+            src={SECONDARY_VIDEO_URL}
+            muted
+            playsInline
+            loop
+            preload="metadata"
+          />
+        </motion.div>
+      )}
+
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 z-[3] bg-gradient-to-b from-charcoal/20 via-charcoal/10 to-charcoal/40 pointer-events-none" />
 
       {/* Animated Background Elements */}
       <motion.div
