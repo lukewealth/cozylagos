@@ -89,6 +89,7 @@ export default function AdminDashboard({ listings, onToggleStatus, onDeleteListi
   const [isProcessing, setIsProcessing] = useState(false);
   const [showDeleteListingConfirm, setShowDeleteListingConfirm] = useState(false);
   const [showEditListingModal, setShowEditListingModal] = useState(false);
+  const [selectedListingForAction, setSelectedListingForAction] = useState<Listing | null>(null);
   const [showAssignStaffModal, setShowAssignStaffModal] = useState(false);
   const [selectedBookingForAssign, setSelectedBookingForAssign] = useState<any>(null);
   const [showCreateTaskFromBooking, setShowCreateTaskFromBooking] = useState(false);
